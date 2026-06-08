@@ -38,6 +38,8 @@
       <div v-if="result" class="results-container">
         <SummaryCards :summary="result.summary" />
 
+        <ExecutiveSummary :summary="result.executive_summary" />
+
         <SeverityDistribution 
           :findingSeverityCounts="result.summary.finding_severity_counts"
           :incidentSeverityCounts="result.summary.incident_severity_counts"
@@ -83,6 +85,7 @@
 import { useAnalysisState } from './composables/useAnalysisState'
 import FileUpload from './components/FileUpload.vue'
 import SummaryCards from './components/SummaryCards.vue'
+import ExecutiveSummary from './components/ExecutiveSummary.vue'
 import TopList from './components/TopList.vue'
 import FindingsList from './components/FindingsList.vue'
 import MarkdownReport from './components/MarkdownReport.vue'

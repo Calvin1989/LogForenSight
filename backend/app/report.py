@@ -15,10 +15,43 @@ def generate_markdown_report(result: AnalysisResult) -> str:
     findings = result.findings
     incidents = result.incidents
     stats = result.parse_stats
+    exe_summary = result.executive_summary
 
     report = [
         "# AI Log Security Analysis Report",
         f"\nGenerated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+    ]
+
+    if exe_summary:
+        severity_icon = {
+            "informational": "ℹ️",
+            "low": "🔵",
+            "medium": "🟠",
+            "high": "🔴",
+            "critical": "🔥"
+        }.get(exe_summary.overall_risk_level.lower(), "❓")
+
+        report.extend([
+            "\n## Executive Summary",
+            f"### {severity_icon} {exe_summary.headline}",
+            f"\n**Overall Risk Level:** {exe_summary.overall_risk_level.upper()} ({exe_summary.risk_score}/100)",
+            f"\n{exe_summary.overview}",
+            "\n#### Key Metrics",
+        ])
+        for metric in exe_summary.key_metrics:
+            report.append(f"- {metric}")
+
+        report.append("\n#### Top Risks")
+        for risk in exe_summary.top_risks:
+            report.append(f"- {risk}")
+
+        report.append("\n#### Recommended Next Steps")
+        for step in exe_summary.recommended_next_steps:
+            report.append(f"- {step}")
+
+        report.append(f"\n> **Methodology:** {exe_summary.methodology}")
+
+    report.extend([
         "\n## 1. Overview Statistics",
         f"- **Total Requests:** {summary.total_requests}",
         f"- **Unique IPs:** {summary.unique_ips}",
@@ -43,7 +76,7 @@ def generate_markdown_report(result: AnalysisResult) -> str:
         f"- **Skipped Lines:** {stats.skipped_lines}",
         f"- **Parse Rate:** {stats.parse_rate * 100:.2f}%",
         f"- **Log Format:** {stats.detected_format} (requested: {stats.requested_format})",
-    ]
+    ])
 
     # Section 4: Attack Timeline
     report.append("\n## 4. Attack Timeline")

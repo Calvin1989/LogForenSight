@@ -73,6 +73,17 @@ class SkippedLineSample(BaseModel):
     content: str
     reason: str
 
+class ExecutiveSummary(BaseModel):
+    overall_risk_level: str
+    risk_score: int
+    headline: str
+    overview: str
+    key_metrics: List[str]
+    key_affected_ips: List[str]
+    top_risks: List[str]
+    recommended_next_steps: List[str]
+    methodology: str
+
 class AnalysisResult(BaseModel):
     summary: AnalysisSummary
     findings: List[Finding]
@@ -80,6 +91,7 @@ class AnalysisResult(BaseModel):
     timeline_events: List[TimelineEvent] = []
     parse_stats: ParseStats
     report_markdown: str
+    executive_summary: ExecutiveSummary | None = None
 
 class ErrorResponse(BaseModel):
     detail: str

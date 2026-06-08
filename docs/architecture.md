@@ -11,6 +11,7 @@ The backend is structured into several layers, each with a specific responsibili
 - **`app/config_loader.py`**: Responsible for loading and merging security rules from external YAML files into the `DetectorConfig` object used by the engine.
 - **`app/incident.py`**: The aggregation layer. It groups related `Findings` by source IP and behavioral patterns to create high-level `Incidents`. This layer provides context, intent analysis, and unified recommendations for security analysts.
 - **`app/timeline.py`**: The timeline generation layer. It builds a chronological sequence of security events (`TimelineEvent`) by correlating logs, findings, and incidents, providing a narrative of the attack progression.
+- **`app/executive_summary.py`**: The high-level summarization layer (v1.6). It generates a deterministic, rule-based summary including risk scores and level (critical to informational) for management presentation, without using LLMs or external APIs.
 - **`app/sanitizer.py`**: The data redaction layer. It provides functions to sanitize IP addresses, query parameters, and Authorization headers from analysis results, enabling safe sharing of security reports.
 - **`app/report.py`**: A dedicated rendering layer that takes the analysis results (Summary, Incidents, Findings) and formats them into a structured Markdown report.
 - **`app/schemas.py`**: Defines data contracts using Pydantic models. These models ensure consistent data structures between the backend and frontend.
@@ -45,6 +46,9 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
       |
       v
 [ app/timeline.py ] --> ( Chronological Timeline Events )
+      |
+      v
+[ app/executive_summary.py ] --> ( Risk Score & Level )
       |
       v
 [ app/service.py ] ---> ( Final AnalysisResult )

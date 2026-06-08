@@ -132,13 +132,48 @@ Returns an `AnalysisResult` JSON object.
       "matched_values": ["1.2.3.4", "404"]
     }
   ],
+  "executive_summary": {
+    "overall_risk_level": "high",
+    "risk_score": 75,
+    "headline": "High-risk suspicious access patterns detected",
+    "overview": "Security analysis identified 1 incidents and 1 risk findings across 23 requests. Immediate attention is recommended to address high-severity threats and prevent potential compromise.",
+    "key_metrics": [
+      "Total Requests Analyzed: 23",
+      "Unique Source IPs: 5",
+      "Security Incidents Detected: 1",
+      "Individual Security Risks: 1",
+      "Timeline Events Recorded: 1"
+    ],
+    "key_affected_ips": ["1.2.3.4"],
+    "top_risks": ["Directory Scanning Incident (Incident)", "Path Scanning Detected (Finding)"],
+    "recommended_next_steps": [
+      "Review and investigate all critical/high severity incidents immediately.",
+      "Block top offending source IPs at the firewall or WAF level.",
+      "Inspect affected application paths for vulnerabilities or misconfigurations.",
+      "Rotate exposed tokens or credentials if sensitive parameters appeared in logs.",
+      "Preserve analyzed logs for further incident response and auditing."
+    ],
+    "methodology": "Deterministic summary generated from local rule findings, incidents, severity distribution, and timeline events. No LLM or external API is used."
+  },
   "report_markdown": "# AI Log Security Analysis Report\n..."
 }
 ```
 
 ## Data Models
 
-### Incident (New)
+### Executive Summary (New v1.6)
+A high-level deterministic summary designed for management or portfolio presentation.
+- `overall_risk_level`: `informational`, `low`, `medium`, `high`, or `critical`.
+- `risk_score`: Integer (0-100) representing the aggregated risk level.
+- `headline`: A concise headline describing the security status.
+- `overview`: A human-readable summary of the analysis results.
+- `key_metrics`: List of important metrics (counts of requests, IPs, incidents, etc.).
+- `key_affected_ips`: List of top source IPs involved in security findings.
+- `top_risks`: List of the most significant incidents or findings detected.
+- `recommended_next_steps`: List of actionable remediation items.
+- `methodology`: Fixed statement explaining the deterministic nature of the summary (no LLM).
+
+### Incident
 Aggregated security events grouped by Source IP.
 - `incident_id`: Unique identifier for the incident.
 - `title`: High-level title of the incident.

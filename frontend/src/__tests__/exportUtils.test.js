@@ -70,7 +70,8 @@ describe('exportUtils', () => {
         incidents: [{ id: 1 }, { id: 2 }],
         findings: [
           { rule_id: 'r1', evidence: ['very long evidence line'] }
-        ]
+        ],
+        executive_summary: { risk_score: 50, overall_risk_level: 'medium' }
       }
 
       const exported = buildAnalysisSummaryExport(mockResult)
@@ -79,6 +80,7 @@ describe('exportUtils', () => {
       expect(exported.parse_stats.parsed_lines).toBe(90)
       expect(exported.incident_count).toBe(2)
       expect(exported.finding_count).toBe(1)
+      expect(exported.executive_summary.risk_score).toBe(50)
       expect(exported.exported_at).toBeDefined()
       // Ensure we don't accidentally include the full findings array if we didn't mean to,
       // though the requirement just says "should not contain full evidence".

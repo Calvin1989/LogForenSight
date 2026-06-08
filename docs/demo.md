@@ -46,7 +46,7 @@ If you prefer Docker, you can start both the backend and frontend with a single 
 2. Once the containers are running, access the application at [http://localhost:5173](http://localhost:5173).
 3. To stop the services, run `docker compose down`.
 
-## Step 3: 5-Minute Demo Script (Release v1.5 Ready)
+## Step 3: 5-Minute Demo Script (Release v1.6 Ready)
 
 1. **Launch with Docker**:
    - Run `docker compose up --build`.
@@ -55,7 +55,12 @@ If you prefer Docker, you can start both the backend and frontend with a single 
    - Click **"Choose a .log or .txt file"**.
    - Select `samples/nginx_access_sample.log`.
    - Click **"Analyze"**.
-3. **Review Metrics & Quality**:
+3. **Review Executive Summary (v1.6)**:
+   - Notice the **Executive Summary** card at the top.
+   - Point out the **Risk Score (0-100)** and **Risk Level** (e.g., Critical/High).
+   - Highlight that this summary is **deterministic and rule-based** (No LLM/External API).
+   - Click **"Download MD"** to save the executive summary separately.
+4. **Review Metrics & Quality**:
    - Check **Parse Stats**: Notice the 90%+ success rate.
    - Expand **Skipped Line Samples**: See the malformed line identified by the parser.
 4. **Prioritize Risks**:

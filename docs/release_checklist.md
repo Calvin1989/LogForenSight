@@ -23,7 +23,12 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 
 ## 4. Manual UI/UX Verification
 - [ ] **File Upload**: Test uploading valid and invalid (too large, wrong extension) files.
-- [ ] **Analysis View**: Verify Summary Cards, Incidents List, Top IPs/Paths, and Findings List are rendered correctly.
+- [ ] **Analysis View**: Verify Summary Cards, Executive Summary (v1.6), Incidents List, Top IPs/Paths, and Findings List are rendered correctly.
+- [ ] **Executive Summary (v1.6)**:
+    - [ ] Verify Risk Score (0-100) and Risk Level are calculated correctly based on findings.
+    - [ ] Verify "Download MD" button generates a separate Markdown file.
+    - [ ] Verify the summary is deterministic (same input -> same output).
+    - [ ] Verify methodology note explicitly mentions "No LLM".
 - [ ] **Rule Match Details**: Verify that Findings show matched details (Count, Fields, Values) and expansion/collapse works.
 - [ ] **Legacy Data Compatibility**: Verify that Recent Analyses records without matched_* fields still render safely (no UI crashes).
 - [ ] **Parse Stats**: Verify that the Parsing Quality card shows correct stats (Total/Parsed/Skipped).
@@ -43,8 +48,8 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 - [ ] **Clear Current Result**: Verify "Clear Current Result" works as expected (resets UI but preserves local history).
 
 ## 5. Security & Privacy (Sanitization)
-- [ ] **IP Redaction**: Ensure public IPs are masked (e.g., `1.2.x.x`) in the sanitized report.
-- [ ] **Secret Redaction**: Ensure `token`, `password`, and `Authorization` headers are masked in the sanitized report.
+- [ ] **IP Redaction**: Ensure public IPs are masked (e.g., `1.2.x.x`) in the sanitized report and Executive Summary.
+- [ ] **Secret Redaction**: Ensure `token`, `password`, and `Authorization` headers are masked in the sanitized report and Executive Summary.
 - [ ] **Rule Match Sanitization**: Ensure `matched_values` are properly sanitized in the sanitized report.
 - [ ] **Skipped Sample Sanitization**: Verify that the sanitized report does not expose full IPs or secrets in the "Skipped Line Samples" section.
 
@@ -52,9 +57,9 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 - [ ] **Project Identity**:
     - [ ] `README.md` positioning is clear and professional.
     - [ ] `Why this project is different` section highlights local-first and rule-based approach.
-    - [ ] `Current local milestone` is updated to `v1.4-local`.
+    - [ ] `Current local milestone` is updated to `v1.6-local`.
 - [ ] **Standard Files**:
-    - [ ] `CHANGELOG.md` exists and covers v1.0 to v1.4.
+    - [ ] `CHANGELOG.md` exists and covers v1.0 to v1.6.
     - [ ] `LICENSE` (MIT) exists with correct copyright holder.
     - [ ] `.gitattributes` is configured for LF line endings.
 - [ ] **Documentation completeness**:

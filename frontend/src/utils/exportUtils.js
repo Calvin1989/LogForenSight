@@ -127,6 +127,7 @@ export function buildAnalysisSummaryExport(result) {
     parse_stats: result.parse_stats,
     finding_severity_counts: result.summary.finding_severity_counts || {},
     incident_severity_counts: result.summary.incident_severity_counts || {},
+    executive_summary: result.executive_summary || null,
     incident_count: (result.incidents || []).length,
     finding_count: (result.findings || []).length,
     exported_at: new Date().toISOString()

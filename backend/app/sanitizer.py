@@ -68,6 +68,19 @@ def _sanitize_timeline_event_in_place(event: TimelineEvent) -> None:
     if event.evidence:
         event.evidence = sanitize_text(event.evidence)
 
+def _sanitize_executive_summary_in_place(result: AnalysisResult) -> None:
+    """Modifies the ExecutiveSummary in AnalysisResult in-place with sanitized data."""
+    if not result.executive_summary:
+        return
+
+    exe = result.executive_summary
+    exe.headline = sanitize_text(exe.headline)
+    exe.overview = sanitize_text(exe.overview)
+    exe.key_affected_ips = [sanitize_ip(ip) for ip in exe.key_affected_ips]
+    exe.top_risks = [sanitize_text(risk) for risk in exe.top_risks]
+    exe.recommended_next_steps = [sanitize_text(step) for step in exe.recommended_next_steps]
+    exe.key_metrics = [sanitize_text(metric) for metric in exe.key_metrics]
+
 def sanitize_analysis_result(result: AnalysisResult) -> AnalysisResult:
     """
     Creates a new AnalysisResult with all sensitive data redacted.
@@ -95,7 +108,10 @@ def sanitize_analysis_result(result: AnalysisResult) -> AnalysisResult:
     for event in sanitized.timeline_events:
         _sanitize_timeline_event_in_place(event)
     
-    # 6. Regenerate the markdown report based on sanitized data
+    # 6. Sanitize executive summary
+    _sanitize_executive_summary_in_place(sanitized)
+
+    # 7. Regenerate the markdown report based on sanitized data
     from .report import generate_markdown_report
     sanitized.report_markdown = generate_markdown_report(sanitized)
     

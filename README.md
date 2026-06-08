@@ -10,13 +10,14 @@ Local-first Web log security analysis with rule-based findings, aggregated incid
 - **Rule-based findings**: Every security risk is identified by transparent, configurable rules, not a "black box" model.
 - **Aggregated incidents**: Automatically groups individual suspicious events into high-level security incidents (e.g., "Reconnaissance") for better context.
 - **Attack timeline**: Provides a chronological narrative of the attack, helping you understand the sequence of events.
+- **Executive Summary (v1.6)**: Generates a high-level, deterministic security summary with risk scores and levels, perfect for management presentation. **No LLM or external APIs used.**
 - **Sanitized sharing**: Built-in engine to redact sensitive information like IPs and tokens, making it safe to share reports with stakeholders.
 - **Analyst exports**: Supports exporting filtered data to CSV and JSON for further investigation in external tools.
 - **No database / no external API**: Zero infrastructure overhead. Just run the app and start analyzing.
 
 ## Current Status
 
-**Current local milestone: v1.4-local**
+**Current local milestone: v1.6-local**
 
 | Feature | Status |
 | :--- | :--- |
@@ -46,6 +47,7 @@ Local-first Web log security analysis with rule-based findings, aggregated incid
 - **Severity Distribution**: 提供直观的风险等级分布统计，分别展示 Findings 和 Incidents 的 High/Medium/Low 数量。
 - **智能聚合**: 自动将同一 IP 的多个可疑行为聚合成高级别的安全事件（如 Reconnaissance, Directory Scanning）。
 - **Attack Timeline View**: 按照时间顺序展示关键安全事件，帮助分析师还原攻击全过程，支持按严重程度和 IP 进行本地过滤。
+- **Executive Summary (v1.6)**: 自动生成面向管理层或 Portfolio 的高层级、确定性安全摘要。包含风险评分（0-100）、风险等级（Critical 到 Informational）、核心指标、顶级风险点及修复建议。**完全基于规则，不依赖 LLM 或外部 API。**
 - **隐私保护**: 提供“脱敏报告”功能，自动隐藏 IP 后两段及敏感 Query 参数，支持安全地分享分析结论。
     *   **注意**：脱敏基于正则表达式，为 Best-effort 尝试（包括对报告中的解析错误样本进行脱敏），分享前仍建议人工检查敏感信息是否完全清除。
 - **结构化展示**: 现代化的 Web 界面，包含统计看板、当前规则展示、事件视图和风险卡片。

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6-local] - 2026-06-08
+### Added
+- **Executive Summary**: A high-level, deterministic security summary designed for management or portfolio presentation.
+- **Deterministic Risk Scoring**: A rule-based risk score (0-100) and risk level (Critical to Informational).
+- **Executive Report Integration**: The summary is now included at the top of the Markdown report and can be downloaded separately.
+- **Sanitized Summary**: Full support for redaction of sensitive data in the executive summary.
+
 ## [v1.4-local] - 2026-06-08
 ### Added
 - **Attack Timeline View**: A chronological narrative of security events, allowing analysts to trace attacker movements.

@@ -24,6 +24,9 @@ def test_analyze_valid_log():
     assert "parse_stats" in data
     assert "skipped_samples" in data["parse_stats"]
     assert "report_markdown" in data
+    assert "executive_summary" in data
+    assert data["executive_summary"] is not None
+    assert data["executive_summary"]["overall_risk_level"] == "informational"
     assert data["summary"]["total_requests"] > 0
     assert data["parse_stats"]["parsed_lines"] == 1
     # Verify severity counts in API response
