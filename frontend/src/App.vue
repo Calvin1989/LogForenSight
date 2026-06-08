@@ -42,7 +42,7 @@
         @reset="handleResetTuning"
       />
 
-      <div v-if="displayResult && displayResult.rule_coverage" class="coverage-section">
+      <div v-if="displayResult && displayResult.rule_coverage" id="rule-coverage" class="coverage-section">
         <RuleCoverage :ruleCoverage="displayResult.rule_coverage" />
       </div>
 
@@ -54,7 +54,7 @@
         {{ t('app.error', 'Error: {error}').replace('{error}', error) }}
       </div>
 
-      <div v-if="displayResult" class="results-container">
+      <div v-if="displayResult" id="analysis-results" class="results-container">
         <SummaryCards :summary="displayResult.summary" />
 
         <ExecutiveSummary :summary="displayResult.executive_summary" />

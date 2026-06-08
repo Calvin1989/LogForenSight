@@ -254,7 +254,17 @@ const messages = {
       warnings: "调优警告",
       invalidThreshold: "阈值必须大于等于 1",
       placeholderPaths: "/admin\n/.env",
-      placeholderUserAgents: "sqlmap\nnikto"
+      placeholderUserAgents: "sqlmap\nnikto",
+      rules: {
+        high_frequency_ip: "高频访问请求",
+        path_scanning: "路径扫描检测",
+        sensitive_path_probe: "敏感路径探测",
+        suspicious_user_agent: "可疑 User-Agent"
+      },
+      currentSummary: "当前调优摘要",
+      activeRules: "个活跃规则",
+      disabledRulesCount: "个已禁用规则",
+      memoryOnly: "调优仅影响当前页面内存，不写入 rules.yaml"
     }
   },
   en: {
@@ -505,10 +515,20 @@ const messages = {
       warnings: "Tuning Warnings",
       invalidThreshold: "Threshold must be at least 1",
       placeholderPaths: "/admin\n/.env",
-      placeholderUserAgents: "sqlmap\nnikto"
+      placeholderUserAgents: "sqlmap\nnikto",
+      rules: {
+        high_frequency_ip: "High Frequency Request",
+        path_scanning: "Path Scanning Detected",
+        sensitive_path_probe: "Sensitive Path Probing",
+        suspicious_user_agent: "Suspicious User Agent"
+      },
+      currentSummary: "Current Tuning Summary",
+      activeRules: "active rules",
+      disabledRulesCount: "disabled rules",
+      memoryOnly: "Tuning only affects current session and is not saved to rules.yaml"
     }
   }
-}
+};
 
 export function setLanguage(lang) {
   if (messages[lang]) {

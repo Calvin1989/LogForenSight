@@ -1,4 +1,4 @@
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import {
   analyzeLogFile,
   analyzeLogFileSanitized,
@@ -90,6 +90,14 @@ export function useAnalysisState() {
           is_tuned: true
         })
       }
+
+      // Auto scroll to results
+      nextTick(() => {
+        const el = document.getElementById('analysis-results') || document.getElementById('rule-coverage')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      })
     } catch (err) {
       error.value = err.message
     } finally {

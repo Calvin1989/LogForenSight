@@ -34,12 +34,23 @@ const sensitivePathsText = ref(props.initialConfig.sensitive_paths.join('\n'));
 const suspiciousUserAgentsText = ref(props.initialConfig.suspicious_user_agents.join('\n'));
 const disabledRules = ref([]);
 
-const availableRules = [
-  { id: 'high_frequency_ip', label: 'High Frequency Request' },
-  { id: 'path_scanning', label: 'Path Scanning Detected' },
-  { id: 'sensitive_path_probe', label: 'Sensitive Path Probing' },
-  { id: 'suspicious_user_agent', label: 'Suspicious User Agent' }
-];
+const availableRules = computed(() => [
+  { id: 'high_frequency_ip', label: t('ruleTuning.rules.high_frequency_ip') },
+  { id: 'path_scanning', label: t('ruleTuning.rules.path_scanning') },
+  { id: 'sensitive_path_probe', label: t('ruleTuning.rules.sensitive_path_probe') },
+  { id: 'suspicious_user_agent', label: t('ruleTuning.rules.suspicious_user_agent') }
+]);
+
+const tuningSummary = computed(() => {
+  const disabledCount = disabledRules.value.length;
+  const activeCount = availableRules.value.length - disabledCount;
+  return {
+    highFreq: highFrequencyThreshold.value,
+    pathScan: pathScanningThreshold.value,
+    activeCount,
+    disabledCount
+  };
+});
 
 watch(() => props.initialConfig, (newConfig) => {
   highFrequencyThreshold.value = newConfig.high_frequency_threshold;
@@ -91,6 +102,20 @@ const isValid = computed(() => {
         <div class="notice">
           <span class="icon">ℹ️</span>
           {{ t('ruleTuning.temporaryNotice') }}
+          <br />
+          <small>{{ t('ruleTuning.memoryOnly') }}</small>
+        </div>
+
+        <div class="tuning-summary-box">
+          <strong>{{ t('ruleTuning.currentSummary') }}:</strong>
+          <div class="summary-items">
+            <span>{{ t('ruleTuning.highFrequencyThreshold') }}: {{ tuningSummary.highFreq }}</span>
+            <span>{{ t('ruleTuning.pathScanningThreshold') }}: {{ tuningSummary.pathScan }}</span>
+            <span>{{ tuningSummary.activeCount }} {{ t('ruleTuning.activeRules') }}</span>
+            <span v-if="tuningSummary.disabledCount > 0" class="disabled-count">
+              {{ tuningSummary.disabledCount }} {{ t('ruleTuning.disabledRulesCount') }}
+            </span>
+          </div>
         </div>
 
         <div v-if="warnings.length > 0" class="warnings-box">
@@ -204,6 +229,34 @@ const isValid = computed(() => {
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
   border-radius: 4px;
+}
+
+.notice small {
+  display: block;
+  margin-top: 0.25rem;
+  opacity: 0.8;
+}
+
+.tuning-summary-box {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.summary-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  color: var(--text-light);
+}
+
+.disabled-count {
+  color: var(--danger-color);
+  font-weight: 600;
 }
 
 .warnings-box {

@@ -29,6 +29,7 @@
           <span v-if="record.incidents_count > 0" class="stat-tag incident">{{ record.incidents_count }} {{ t('history.incidents') }}</span>
           <span v-if="record.findings_count > 0" class="stat-tag finding">{{ record.findings_count }} {{ t('history.findings') }}</span>
           <span v-if="record.skipped_lines > 0" class="stat-tag skip">{{ record.skipped_lines }} {{ t('history.skipped') }}</span>
+          <span v-if="record.is_tuned" class="stat-tag tuned">{{ t('history.tuned') }}</span>
           <span v-if="record.sanitized_result" class="stat-tag cached">{{ t('history.sanitizedCached') }}</span>
         </div>
       </div>
@@ -162,4 +163,5 @@ const formatDate = (isoString) => {
 .stat-tag.finding { background: #fff9db; color: #f08c00; }
 .stat-tag.skip { background: #fff0f6; color: #c2255c; }
 .stat-tag.cached { background: #e3fafc; color: #0b7285; }
+.stat-tag.tuned { background: #e7f5ff; color: #1971c2; border: 1px solid #a5d8ff; }
 </style>
