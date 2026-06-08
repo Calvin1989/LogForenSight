@@ -16,6 +16,8 @@ backend/security_report.md
 backend/security_report_sanitized.md
 security_report.md
 security_report_sanitized.md
+backend/apache_sanitized.md
+*.md.generated
 .vscode/
 .idea/
 *.log
