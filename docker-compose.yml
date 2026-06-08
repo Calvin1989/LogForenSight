@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ai-log-analyzer-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./samples:/samples:ro
+      - ./config:/config:ro
+    environment:
+      - RULES_FILE=/config/rules.yaml
+
+  frontend:
+    build: ./frontend
+    container_name: ai-log-analyzer-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

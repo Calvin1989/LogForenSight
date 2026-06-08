@@ -1,0 +1,25 @@
+# Security Detection Rules Configuration
+
+# High frequency threshold: Total requests from a single IP
+high_frequency_threshold: 10
+
+# Path scanning threshold: Total 404 errors from a single IP
+path_scanning_404_threshold: 5
+
+# List of sensitive paths to monitor
+sensitive_paths:
+  - /.env
+  - /admin
+  - /wp-login.php
+  - /phpmyadmin
+  - /config.php
+  - /.git
+
+# List of suspicious User-Agent keywords
+suspicious_user_agents:
+  - sqlmap
+  - curl
+  - python-requests
+  - nikto
+  - nmap
+  - zgrab
