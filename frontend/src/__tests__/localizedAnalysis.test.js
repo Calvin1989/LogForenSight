@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { localizeAnalysisForDisplay, localizeFinding, localizeIncident, localizeExecutiveSummary } from '../utils/localizedAnalysis';
+import { localizeAnalysisForDisplay, localizeFinding, localizeIncident, localizeExecutiveSummary, localizeRuleCoverage } from '../utils/localizedAnalysis';
 
 describe('localizedAnalysis', () => {
   const mockAnalysis = {
@@ -17,8 +17,18 @@ describe('localizedAnalysis', () => {
     ],
     timeline_events: [
       { title: 'High Frequency Activity', timestamp: '2026-06-08 10:00:00', source_ip: '1.2.3.4', severity: 'High', description: 'detected' }
+    ],
+    rule_coverage: [
+      { rule_id: 'high_frequency_ip', title: 'High Frequency Request', explanation: 'Original explanation', severity: 'medium' }
     ]
   };
+
+  it('should localize rule coverage for Chinese', () => {
+    const item = mockAnalysis.rule_coverage[0];
+    const localized = localizeRuleCoverage(item, 'zh');
+    expect(localized.title).toBe('高频访问请求');
+    expect(localized.explanation).toBe('检测在当前日志中请求量异常偏高的来源 IP。');
+  });
 
   it('should localize findings for Chinese', () => {
     const finding = mockAnalysis.findings[0];
@@ -33,6 +43,10 @@ describe('localizedAnalysis', () => {
     const localized = localizeIncident(incident, 'zh');
     expect(localized.title).toBe('异常高频访问流量');
     expect(localized.summary).toContain('1.2.3.4');
+
+    const intensiveIncident = { title: 'Intensive Directory Scanning', source_ip: '1.2.3.4', related_rule_ids: [], confidence: 'High', severity: 'High' };
+    const localizedIntensive = localizeIncident(intensiveIncident, 'zh');
+    expect(localizedIntensive.title).toBe('密集目录扫描');
   });
 
   it('should localize executive summary for Chinese', () => {

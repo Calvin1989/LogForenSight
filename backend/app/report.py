@@ -179,8 +179,28 @@ def generate_markdown_report(result: AnalysisResult) -> str:
                 for line in finding.evidence[:2]:
                     report.append(f"```\n{line}\n```")
 
+    # Section 8: Rule Coverage
+    report.append("\n## 8. Rule Coverage")
+    rule_coverage = result.rule_coverage
+    if not rule_coverage:
+        report.append("\nNo rule coverage information available.")
+    else:
+        report.extend([
+            "\n| Rule | Enabled | Triggered | Findings | Incidents | Matched Fields | Explanation |",
+            "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |"
+        ])
+        for item in rule_coverage:
+            enabled_str = "✅ Yes" if item.enabled else "❌ No"
+            triggered_str = "🎯 Yes" if item.triggered else "⚪ No"
+            matched_fields_str = ", ".join(item.matched_fields) if item.matched_fields else "-"
+
+            report.append(
+                f"| {item.title} | {enabled_str} | {triggered_str} | {item.finding_count} | "
+                f"{item.incident_count} | {matched_fields_str} | {item.explanation} |"
+            )
+
     report.extend([
-        "\n## 8. Remediation Suggestions",
+        "\n## 9. Remediation Suggestions",
         "- **Block High Risk IPs:** Consider blocking IPs that are scanning for sensitive paths or have excessive 404s.",
         "- **Rate Limiting:** Implement rate limiting for IPs showing high frequency behavior.",
         "- **Web Application Firewall (WAF):** Deploy a WAF to filter out suspicious User-Agents and known attack patterns.",

@@ -80,13 +80,23 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
     - [ ] `demo.md` includes the 5-minute demo script.
 - [ ] **Verification**:
     - [ ] All CI checks are passing locally.
-    - [ ] Docker compose configuration is valid (`docker compose config`).
+    - [ ] `docker compose config` is valid.
     - [ ] Frontend production build is successful (`npm run build`).
+    - [ ] `rule_coverage` API field is present in responses.
+    - [ ] Untriggered rules are visible in Rule Coverage panel.
+    - [ ] Sample evidence in Rule Coverage is correctly sanitized.
+    - [ ] Chinese/English toggle works for Rule Coverage UI and report section.
 - [ ] **Sanitized Review**:
     - [ ] Manually review a generated sanitized report to ensure no leaks of real IPs or secrets from the sample logs.
 - [ ] **Git Hygiene**:
-    - [ ] Ensure no `*.md.generated` or `dist/` files are accidentally tracked.
-    - [ ] Run `git status` to ensure a clean working directory (excluding untracked files intended for the next step).
+    - [ ] No large files or `__pycache__` committed.
+    - [ ] Local commit only (no push).
+
+## Post-Commit Check (v1.8)
+
+- [ ] `git status` shows clean.
+- [ ] `git log` shows `feat: add rule coverage explainability`.
+- [ ] All tests pass in clean environment.
 
 ## 8. Post-Release (Future)
 - [ ] Create GitHub Release tag.

@@ -1,4 +1,5 @@
 import { t, translateSeverity, translateRiskLevel } from '../i18n'
+import { localizeFinding, localizeIncident } from './localizedAnalysis'
 
 /**
  * Utility functions for comparing two analysis results.
@@ -163,14 +164,14 @@ export function compareAnalyses(base, target, options = { language: 'zh' }) {
     },
     severityChanges,
     findingChanges: {
-      added: findingChanges.added.map(f => ({ rule_id: f.rule_id, title: f.title, severity: f.severity })),
-      removed: findingChanges.removed.map(f => ({ rule_id: f.rule_id, title: f.title, severity: f.severity })),
-      unchanged: findingChanges.unchanged.map(f => ({ rule_id: f.rule_id, title: f.title, severity: f.severity }))
+      added: findingChanges.added.map(f => ({ rule_id: f.rule_id, title: localizeFinding(f, options.language).title, severity: f.severity })),
+      removed: findingChanges.removed.map(f => ({ rule_id: f.rule_id, title: localizeFinding(f, options.language).title, severity: f.severity })),
+      unchanged: findingChanges.unchanged.map(f => ({ rule_id: f.rule_id, title: localizeFinding(f, options.language).title, severity: f.severity }))
     },
     incidentChanges: {
-      added: incidentChanges.added.map(inc => ({ title: inc.title, severity: inc.severity, source_ip: inc.source_ip })),
-      removed: incidentChanges.removed.map(inc => ({ title: inc.title, severity: inc.severity, source_ip: inc.source_ip })),
-      unchanged: incidentChanges.unchanged.map(inc => ({ title: inc.title, severity: inc.severity, source_ip: inc.source_ip }))
+      added: incidentChanges.added.map(inc => ({ title: localizeIncident(inc, options.language).title, severity: inc.severity, source_ip: inc.source_ip })),
+      removed: incidentChanges.removed.map(inc => ({ title: localizeIncident(inc, options.language).title, severity: inc.severity, source_ip: inc.source_ip })),
+      unchanged: incidentChanges.unchanged.map(inc => ({ title: localizeIncident(inc, options.language).title, severity: inc.severity, source_ip: inc.source_ip }))
     },
     topIpChanges,
     topPathChanges,

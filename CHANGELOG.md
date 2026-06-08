@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.8-local] - 2026-06-08
+### Added
+- Rule Coverage section to show which rules were applied and triggered.
+- Detection Explainability with detailed explanations for each rule.
+- `rule_coverage` field in `AnalysisResult` API response.
+- Frontend `RuleCoverage` component with filtering and export options.
+- Sanitized rule coverage evidence and matched values.
+- Localized Rule Coverage section in Chinese reports.
+
 ## [v1.7.1-local] - 2026-06-08
 ### Added
 - **Frontend Bilingual UI Toggle**: Support for switching between Chinese and English UI.

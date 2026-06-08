@@ -188,14 +188,32 @@ Use this script for a quick and effective demonstration of the project.
     *   **Findings**: Scroll down to show individual findings with specific evidence and recommendations.
     *   **Evidence**: Point out the raw log snippets attached to each finding to show transparency.
 
-4.  **Reporting & Sharing (1m)**:
+4.  **Rule Coverage & Explainability**:
+    *   Open the "Rule Coverage & Detection Explainability" section.
+    *   Show the list of all rules (triggered and not triggered).
+    *   Explain why a specific rule like `sensitive_path_probe` was triggered (show matched paths).
+    *   Highlight that users can see exactly what the tool is looking for.
+
+5.  **Reporting & Sharing (1m)**:
     *   Show the Markdown preview at the bottom.
     *   Download the **Raw Report** for internal records.
     *   Explain the privacy risk of sharing raw logs, then click **Download Sanitized**.
     *   Show the sanitized report to demonstrate how IPs and tokens are automatically masked.
 
-5. **Bonus: Docker Deployment (Optional)**:
+6. **Bilingual Toggle (v1.7.1)**:
+    *   Click the language toggle (CN/EN) in the header.
+    *   Show how the entire UI, including the Executive Summary and Rule Coverage, localizes instantly.
+
+7. **Bonus: Docker Deployment (Optional)**:
     *   Mention that the entire stack can be launched with `docker compose up --build` for consistent environment setup.
+
+### Key Takeaways for the Demo
+
+- **Local-First**: No data leaves the browser/machine.
+- **Explainability**: Users know *why* a rule was triggered and *what* it covers.
+- **Actionable**: Clear recommendations for each incident.
+- **Professional**: Clean, localized UI and ready-to-share Markdown reports.
+- **Lightweight**: No database, no LLM, just efficient rule-based analysis.
 
 ## Customizing Rules (rules.yaml)
 

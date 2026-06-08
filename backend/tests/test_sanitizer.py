@@ -54,13 +54,13 @@ def test_sanitize_analysis_result_immutability():
         evidence="1.2.3.4 - GET /?token=secret"
     )
     result = AnalysisResult(
-        summary=summary, findings=[finding], incidents=[incident], 
+        summary=summary, findings=[finding], incidents=[incident],
         timeline_events=[event],
         parse_stats=stats, report_markdown="IP: 1.2.3.4 and token=secret"
     )
-    
+
     sanitized = sanitize_analysis_result(result)
-    
+
     # Original should be untouched
     assert result.summary.top_ips[0]["ip"] == "1.2.3.4"
     assert "token=secret" in result.summary.top_paths[0]["path"]
@@ -69,7 +69,7 @@ def test_sanitize_analysis_result_immutability():
     assert result.incidents[0].source_ip == "1.2.3.4"
     assert result.timeline_events[0].source_ip == "1.2.3.4"
     assert result.report_markdown == "IP: 1.2.3.4 and token=secret"
-    
+
     # Sanitized should be redacted
     assert sanitized.summary.top_ips[0]["ip"] == "1.2.x.x"
     assert "token=<redacted>" in sanitized.summary.top_paths[0]["path"]
@@ -82,15 +82,52 @@ def test_sanitize_analysis_result_immutability():
     assert "1.2.x.x" in sanitized.incidents[0].summary
     assert "1.2.x.x" in sanitized.incidents[0].evidence[0]
     assert "1.2.x.x" in sanitized.incidents[0].recommendations[0]
-    
+
     # Timeline event sanitization
     assert sanitized.timeline_events[0].source_ip == "1.2.x.x"
     assert "1.2.x.x" in sanitized.timeline_events[0].description
     assert "token=<redacted>" in sanitized.timeline_events[0].description
     assert "1.2.x.x" in sanitized.timeline_events[0].evidence
     assert "token=<redacted>" in sanitized.timeline_events[0].evidence
-    
+
     assert "1.2.x.x" in sanitized.report_markdown
     assert "token=<redacted>" in sanitized.report_markdown
     assert "1.2.3.4" not in sanitized.report_markdown
     assert "token=secret" not in sanitized.report_markdown
+
+def test_sanitize_rule_coverage():
+    from app.schemas import RuleCoverageItem
+
+    summary = AnalysisSummary(
+        total_requests=1, unique_ips=1, total_4xx=0, total_5xx=0,
+        top_ips=[], top_paths=[]
+    )
+    stats = ParseStats(
+        total_lines=1, parsed_lines=1, skipped_lines=0,
+        parse_rate=1.0, requested_format="auto", detected_format="nginx"
+    )
+
+    item = RuleCoverageItem(
+        rule_id="test", title="Test Rule", description="IP 1.2.3.4",
+        severity="high", enabled=True, triggered=True,
+        finding_count=1, incident_count=0, matched_count=1,
+        matched_fields=["ip"],
+        sample_matched_values=["1.2.3.4"],
+        sample_evidence=["1.2.3.4 - token=secret"],
+        related_incident_ids=[],
+        explanation="Detected IP 1.2.3.4"
+    )
+
+    result = AnalysisResult(
+        summary=summary, findings=[], incidents=[],
+        parse_stats=stats, report_markdown="",
+        rule_coverage=[item]
+    )
+
+    sanitized = sanitize_analysis_result(result)
+
+    s_item = sanitized.rule_coverage[0]
+    assert s_item.description == "IP 1.2.x.x"
+    assert s_item.explanation == "Detected IP 1.2.x.x"
+    assert s_item.sample_matched_values == ["1.2.x.x"]
+    assert s_item.sample_evidence == ["1.2.x.x - token=<redacted>"]

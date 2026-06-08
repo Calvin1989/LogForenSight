@@ -214,6 +214,29 @@ const messages = {
       mdConclusionSummary: "变化总结",
       mdActions: "推荐后续行动",
       mdGeneratedAt: "报告生成于"
+    },
+    ruleCoverage: {
+      title: "规则覆盖与检测解释",
+      subtitle: "展示分析中使用的安全检测规则及其命中情况。",
+      totalRules: "总规则数",
+      enabledRules: "已启用",
+      triggeredRules: "已触发",
+      notTriggeredRules: "未触发",
+      findings: "风险点",
+      incidents: "安全事件",
+      matchedFields: "命中字段",
+      matchedValues: "示例匹配值",
+      sampleEvidence: "证据样例",
+      explanation: "检测原理",
+      copyJson: "复制 JSON",
+      downloadJson: "下载 JSON",
+      downloadMarkdown: "下载 Markdown",
+      noData: "暂无规则覆盖数据",
+      showEvidence: "显示证据",
+      hideEvidence: "隐藏证据",
+      filterAll: "全部规则",
+      filterTriggered: "仅已触发",
+      filterNotTriggered: "仅未触发"
     }
   },
   en: {
@@ -424,6 +447,29 @@ const messages = {
       mdConclusionSummary: "Summary of Changes",
       mdActions: "Recommended Actions",
       mdGeneratedAt: "Report generated at"
+    },
+    ruleCoverage: {
+      title: "Rule Coverage & Detection Explainability",
+      subtitle: "Overview of security rules applied and their detection status.",
+      totalRules: "Total Rules",
+      enabledRules: "Enabled",
+      triggeredRules: "Triggered",
+      notTriggeredRules: "Not Triggered",
+      findings: "Findings",
+      incidents: "Incidents",
+      matchedFields: "Matched Fields",
+      matchedValues: "Sample Matched Values",
+      sampleEvidence: "Sample Evidence",
+      explanation: "Detection Explanation",
+      copyJson: "Copy JSON",
+      downloadJson: "Download JSON",
+      downloadMarkdown: "Download Markdown",
+      noData: "No rule coverage data available",
+      showEvidence: "Show Evidence",
+      hideEvidence: "Hide Evidence",
+      filterAll: "All Rules",
+      filterTriggered: "Triggered Only",
+      filterNotTriggered: "Not Triggered Only"
     }
   }
 }

@@ -96,7 +96,20 @@ export function buildLocalizedMarkdownReport(analysis, language) {
     });
   }
 
-  // 8. Traffic Analysis (Top IPs/Paths)
+  // 8. Rule Coverage
+  if (displayData.rule_coverage && displayData.rule_coverage.length > 0) {
+    md += `## 规则覆盖与检测解释\n\n`;
+    md += `| 规则 | 严重程度 | 是否启用 | 是否触发 | 风险点 | 安全事件 | 解释 |\n`;
+    md += `| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n`;
+    displayData.rule_coverage.forEach(item => {
+      const enabled = item.enabled ? '✅ 是' : '❌ 否';
+      const triggered = item.triggered ? '🎯 是' : '⚪ 否';
+      md += `| ${item.title} | ${translateSeverity(item.severity).toUpperCase()} | ${enabled} | ${triggered} | ${item.finding_count} | ${item.incident_count} | ${item.explanation} |\n`;
+    });
+    md += `\n`;
+  }
+
+  // 9. Traffic Analysis (Top IPs/Paths)
   md += `## 流量分析\n\n`;
   md += `### Top 5 IP\n\n`;
   md += `| IP 地址 | 请求数 |\n`;

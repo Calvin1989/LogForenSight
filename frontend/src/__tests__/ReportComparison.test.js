@@ -66,6 +66,42 @@ describe('ReportComparison.vue', () => {
     expect(wrapper.find('.narrative-summary h4').text()).toBe('安全风险显著上升')
   })
 
+  it('localizes finding and incident titles in Chinese mode', async () => {
+    const zhHistory = [
+      {
+        id: '1',
+        file_name: 'log1.log',
+        result: {
+          findings: [],
+          incidents: []
+        }
+      },
+      {
+        id: '2',
+        file_name: 'log2.log',
+        result: {
+          findings: [{ rule_id: 'path_scanning', title: 'Path Scanning Detected', severity: 'high' }],
+          incidents: [{ title: 'Anomalous High Frequency Traffic', severity: 'high', source_ip: '1.2.3.4' }]
+        }
+      }
+    ]
+
+    const wrapper = mount(ReportComparison, {
+      props: { history: zhHistory }
+    })
+
+    const selects = wrapper.findAll('select')
+    await selects[0].setValue('1')
+    await selects[1].setValue('2')
+    await wrapper.find('.compare-btn').trigger('click')
+
+    const addedFindings = wrapper.find('.change-group.added')
+    expect(addedFindings.text()).toContain('检测到路径扫描')
+
+    const addedIncidents = wrapper.findAll('.change-group.added')[1]
+    expect(addedIncidents.text()).toContain('异常高频访问流量')
+  })
+
   it('triggers download when download button is clicked', async () => {
     // Mock download logic
     const createObjectURLMock = vi.fn(() => 'blob:abc')

@@ -84,6 +84,22 @@ class ExecutiveSummary(BaseModel):
     recommended_next_steps: List[str]
     methodology: str
 
+class RuleCoverageItem(BaseModel):
+    rule_id: str
+    title: str
+    description: str
+    severity: str
+    enabled: bool
+    triggered: bool
+    finding_count: int
+    incident_count: int
+    matched_count: int
+    matched_fields: List[str]
+    sample_matched_values: List[str]
+    sample_evidence: List[str]
+    related_incident_ids: List[str]
+    explanation: str
+
 class AnalysisResult(BaseModel):
     summary: AnalysisSummary
     findings: List[Finding]
@@ -92,6 +108,7 @@ class AnalysisResult(BaseModel):
     parse_stats: ParseStats
     report_markdown: str
     executive_summary: ExecutiveSummary | None = None
+    rule_coverage: List[RuleCoverageItem] = []
 
 class ErrorResponse(BaseModel):
     detail: str

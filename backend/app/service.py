@@ -8,6 +8,7 @@ from .timeline import build_timeline_events
 from .report import generate_markdown_report
 from .sanitizer import sanitize_analysis_result
 from .executive_summary import generate_executive_summary
+from .rule_coverage import build_rule_coverage
 
 def _calculate_summary(logs: List[LogEntry], findings: List[Finding] = None, incidents: List[Incident] = None) -> AnalysisSummary:
     """Calculates summary statistics from logs."""
@@ -71,6 +72,9 @@ def analyze_log_text(log_text: str, config: Optional[DetectorConfig] = None, log
     incidents = build_incidents(findings)
     summary = _calculate_summary(logs, findings, incidents)
     timeline_events = build_timeline_events(logs, findings, incidents)
+
+    # Build Rule Coverage
+    rule_coverage = build_rule_coverage(config or DetectorConfig(), findings, incidents)
     
     result = AnalysisResult(
         summary=summary,
@@ -79,7 +83,8 @@ def analyze_log_text(log_text: str, config: Optional[DetectorConfig] = None, log
         timeline_events=timeline_events,
         parse_stats=stats,
         report_markdown="", # Placeholder
-        executive_summary=None # Placeholder
+        executive_summary=None, # Placeholder
+        rule_coverage=rule_coverage
     )
     
     # Generate Executive Summary

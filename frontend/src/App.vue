@@ -32,6 +32,10 @@
         <RuleConfigPanel :rules="rules" />
       </div>
 
+      <div v-if="displayResult && displayResult.rule_coverage" class="coverage-section">
+        <RuleCoverage :ruleCoverage="displayResult.rule_coverage" />
+      </div>
+
       <div v-if="rulesError" class="mini-warning">
         {{ t('app.rulesError', 'Note: Could not load rule configuration ({error}). Using defaults.').replace('{error}', rulesError) }}
       </div>
@@ -99,6 +103,7 @@ import TopList from './components/TopList.vue'
 import FindingsList from './components/FindingsList.vue'
 import MarkdownReport from './components/MarkdownReport.vue'
 import IncidentsList from './components/IncidentsList.vue'
+import RuleCoverage from './components/RuleCoverage.vue'
 import RuleConfigPanel from './components/RuleConfigPanel.vue'
 import ParseStatsCard from './components/ParseStatsCard.vue'
 import SeverityDistribution from './components/SeverityDistribution.vue'

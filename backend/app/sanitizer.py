@@ -81,6 +81,18 @@ def _sanitize_executive_summary_in_place(result: AnalysisResult) -> None:
     exe.recommended_next_steps = [sanitize_text(step) for step in exe.recommended_next_steps]
     exe.key_metrics = [sanitize_text(metric) for metric in exe.key_metrics]
 
+def _sanitize_rule_coverage_in_place(result: AnalysisResult) -> None:
+    """Modifies the RuleCoverage in AnalysisResult in-place with sanitized data."""
+    if not result.rule_coverage:
+        return
+
+    for item in result.rule_coverage:
+        item.title = sanitize_text(item.title)
+        item.description = sanitize_text(item.description)
+        item.explanation = sanitize_text(item.explanation)
+        item.sample_matched_values = [sanitize_text(v) for v in item.sample_matched_values]
+        item.sample_evidence = [sanitize_text(e) for e in item.sample_evidence]
+
 def sanitize_analysis_result(result: AnalysisResult) -> AnalysisResult:
     """
     Creates a new AnalysisResult with all sensitive data redacted.
@@ -111,7 +123,10 @@ def sanitize_analysis_result(result: AnalysisResult) -> AnalysisResult:
     # 6. Sanitize executive summary
     _sanitize_executive_summary_in_place(sanitized)
 
-    # 7. Regenerate the markdown report based on sanitized data
+    # 7. Sanitize rule coverage
+    _sanitize_rule_coverage_in_place(sanitized)
+
+    # 8. Regenerate the markdown report based on sanitized data
     from .report import generate_markdown_report
     sanitized.report_markdown = generate_markdown_report(sanitized)
     

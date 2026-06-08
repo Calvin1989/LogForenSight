@@ -25,6 +25,9 @@ def test_analyze_valid_log():
     assert "skipped_samples" in data["parse_stats"]
     assert "report_markdown" in data
     assert "executive_summary" in data
+    assert "rule_coverage" in data
+    assert isinstance(data["rule_coverage"], list)
+    assert len(data["rule_coverage"]) == 4
     assert data["executive_summary"] is not None
     assert data["executive_summary"]["overall_risk_level"] == "informational"
     assert data["summary"]["total_requests"] > 0

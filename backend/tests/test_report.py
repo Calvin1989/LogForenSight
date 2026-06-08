@@ -1,5 +1,5 @@
 import pytest
-from app.schemas import AnalysisResult, AnalysisSummary, Finding, ParseStats, SkippedLineSample
+from app.schemas import AnalysisResult, AnalysisSummary, Finding, ParseStats, SkippedLineSample, RuleCoverageItem
 from app.report import generate_markdown_report
 
 def test_generate_markdown_report():
@@ -38,13 +38,34 @@ def test_generate_markdown_report():
             SkippedLineSample(line_number=5, content="malformed line", reason="unmatched_log_format")
         ]
     )
+
+    rule_coverage = [
+        RuleCoverageItem(
+            rule_id="test_rule",
+            title="Test Rule Coverage",
+            description="Coverage description",
+            severity="high",
+            enabled=True,
+            triggered=True,
+            finding_count=1,
+            incident_count=0,
+            matched_count=1,
+            matched_fields=["ip"],
+            sample_matched_values=["1.1.1.1"],
+            sample_evidence=["log line 1"],
+            related_incident_ids=[],
+            explanation="Explanation"
+        )
+    ]
+
     result = AnalysisResult(
         summary=summary,
         findings=findings,
         incidents=[], # Added incidents field
         timeline_events=[],
         parse_stats=stats,
-        report_markdown=""
+        report_markdown="",
+        rule_coverage=rule_coverage
     )
     
     report = generate_markdown_report(result)
@@ -64,3 +85,7 @@ def test_generate_markdown_report():
     assert "**Matched Fields:** ip" in report
     assert "**Matched Values:** 1.1.1.1" in report
     assert "log line 1" in report
+    assert "## 8. Rule Coverage" in report
+    assert "Test Rule Coverage" in report
+    assert "🎯 Yes" in report
+    assert "## 9. Remediation Suggestions" in report

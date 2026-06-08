@@ -59,4 +59,14 @@ describe('i18n tool', () => {
     setLanguage('en')
     expect(translateRiskLevel('critical')).toBe('Critical')
   })
+
+  it('should have ruleCoverage translations', () => {
+    setLanguage('zh')
+    expect(t('ruleCoverage.title')).toBe('规则覆盖与检测解释')
+    expect(t('ruleCoverage.totalRules')).toBe('总规则数')
+
+    setLanguage('en')
+    expect(t('ruleCoverage.title')).toBe('Rule Coverage & Detection Explainability')
+    expect(t('ruleCoverage.totalRules')).toBe('Total Rules')
+  })
 })
