@@ -1,103 +1,34 @@
-# Release Checklist
+# Release Checklist (v1.8.1 Portfolio Edition)
 
-This checklist ensures that the **AI Log Security Analyzer** is stable and ready for release.
+本清单用于确保 **AI Log Security Analyzer** 的版本发布达到 Portfolio 展示级别。
 
-## 1. Backend Verification
-- [ ] **Unit & API Tests**: Run `python -m pytest` in `backend/` and ensure all tests pass.
-- [ ] **CLI Tool (Raw)**: Run `python -m app.cli ../samples/nginx_access_sample.log` and verify `security_report.md` is generated.
-- [ ] **CLI Tool (Sanitized)**: Run `python -m app.cli ../samples/nginx_access_sample.log --sanitized --output security_report_sanitized.md` and verify the output.
-- [ ] **Dependencies**: Ensure `backend/requirements.txt` is up to date.
+---
 
-## 2. Frontend Verification
-- [ ] **Unit Tests**: Run `npm run test` in `frontend/` and ensure all tests pass.
-- [ ] **Build Process**: Run `npm run build` in `frontend/` and ensure it completes without errors.
-- [ ] **Vite Proxy**: Verify that `npm run dev` correctly proxies requests to the local backend (8000).
+## 1. 核心逻辑验证
+- [ ] **后端测试**: `cd backend && python -m pytest` (预期 49 passed)。
+- [ ] **前端测试**: `cd frontend && npm run test` (预期 77 passed)。
+- [ ] **构建校验**: `cd frontend && npm run build` (确保生产环境静态资源生成无误)。
+- [ ] **容器验证**: `docker compose config` 无语法错误，`docker compose up` 可正常启动。
 
-## 3. Docker Verification
-- [ ] **Docker Compose Build**: Run `docker compose build` to ensure all images build correctly.
-- [ ] **Docker Compose Run**: Run `docker compose up` and verify:
-    - Frontend is accessible at `http://localhost:5173`.
-    - Backend is accessible at `http://localhost:8000`.
-    - Log analysis works correctly via the Web UI.
-- [ ] **Docker Config**: Run `docker compose config` to check for syntax errors.
+## 2. 国际化与渲染 (Bilingual & Render)
+- [ ] **中英文切换**: 首页、统计卡片、Findings/Incidents 列表实时翻译切换正常。
+- [ ] **Markdown 预览**: 页面底部的 Markdown 报告预览不包含 `#`、`**` 等源码符号，表格和列表渲染美观。
+- [ ] **持久化**: 刷新页面后，语言偏好和本地历史记录 (Recent Analyses) 依然存在。
 
-## 4. Manual UI/UX Verification
-- [ ] **File Upload**: Test uploading valid and invalid (too large, wrong extension) files.
-- [ ] **Analysis View**: Verify Summary Cards, Executive Summary (v1.6), Report Comparison (v1.7), Incidents List, Top IPs/Paths, and Findings List are rendered correctly.
-- [ ] **Report Comparison (v1.7)**:
-    - [ ] Verify that comparison can be performed between any two Recent Analyses.
-    - [ ] Verify that Risk Score Delta, Severity Changes, and Finding/Incident Changes are calculated correctly.
-    - [ ] Verify that "Download Comparison MD" generates a valid Markdown file.
-    - [ ] Verify that comparison works even if one report is missing fields (executive_summary, incidents, etc.).
-- [ ] **Executive Summary (v1.6)**:
-    - [ ] Verify Risk Score (0-100) and Risk Level are calculated correctly based on findings.
-    - [ ] Verify "Download MD" button generates a separate Markdown file.
-    - [ ] Verify the summary is deterministic (same input -> same output).
-    - [ ] Verify methodology note explicitly mentions "No LLM".
-- [ ] **Rule Match Details**: Verify that Findings show matched details (Count, Fields, Values) and expansion/collapse works.
-- [ ] **Legacy Data Compatibility**: Verify that Recent Analyses records without matched_* fields still render safely (no UI crashes).
-- [ ] **Parse Stats**: Verify that the Parsing Quality card shows correct stats (Total/Parsed/Skipped).
-- [ ] **Attack Timeline**: 
-    - [ ] Verify Timeline View renders events in chronological order.
-    - [ ] Verify Severity and IP filters work correctly.
-    - [ ] Verify Evidence expansion in the timeline.
-    - [ ] Verify timeline events are properly sanitized in the sanitized report.
-- [ ] **Skipped Samples**: Verify that Skipped Line Samples are displayed if the log contains malformed lines (use `nginx_access_sample.log`).
-- [ ] **Markdown Report**: Verify the "Show/Hide Preview" button works.
-- [ ] **Downloads**: Verify both "Download Report" and "Download Sanitized" trigger correct file downloads.
-- [ ] **Analyst Workflow Exports**:
-    - [ ] Export Filtered Incidents (JSON/CSV)
-    - [ ] Export Filtered Findings (JSON/CSV)
-    - [ ] Export Analysis Summary (JSON)
-    - [ ] Check CSV formatting (correct columns, escaping of special characters)
-- [ ] **Clear Current Result**: Verify "Clear Current Result" works as expected (resets UI but preserves local history).
-- [ ] **Bilingual UI (v1.7.1)**:
-    - [ ] Verify that clicking "中文" switches UI to Chinese.
-    - [ ] Verify that clicking "English" switches UI to English.
-    - [ ] Verify that the language preference persists after page refresh (via `localStorage`).
-    - [ ] Verify that all major components (Summary, Findings, Incidents, Timeline, etc.) are translated.
-    - [ ] Verify that "Report Comparison" narrative and Markdown export are correctly localized.
-    - [ ] Verify that severity levels (High/Medium/Low) and risk levels are translated.
-    - [ ] Verify that recent analyses statistics (parsed, incidents, findings) are translated.
+## 3. 功能完整性 (Portfolio Features)
+- [ ] **Executive Summary**: 包含风险评分、风险等级、核心指标和 methodology 说明。
+- [ ] **Report Comparison**: 能够成功对比两个历史记录，并导出对比 Markdown。
+- [ ] **Rule Coverage**: 显示所有预设规则的状态，命中证据已脱敏。
+- [ ] **脱敏引擎**: 下载的 Sanitized Report 中 IP 地址已部分掩码 (如 `1.2.x.x`)。
 
-## 5. Security & Privacy (Sanitization)
-- [ ] **IP Redaction**: Ensure public IPs are masked (e.g., `1.2.x.x`) in the sanitized report and Executive Summary.
-- [ ] **Secret Redaction**: Ensure `token`, `password`, and `Authorization` headers are masked in the sanitized report and Executive Summary.
-- [ ] **Rule Match Sanitization**: Ensure `matched_values` are properly sanitized in the sanitized report.
-- [ ] **Skipped Sample Sanitization**: Verify that the sanitized report does not expose full IPs or secrets in the "Skipped Line Samples" section.
+## 4. 仓库质量 (Repo Polish)
+- [ ] **README.md**: 包含最新的 GitHub Actions badge，项目定位清晰。
+- [ ] **CHANGELOG.md**: 记录了从 v1.0 到 v1.8.1 的所有重要变更。
+- [ ] **Portfolio Docs**: `docs/portfolio.md` 和 `docs/release_notes.md` 已就绪。
+- [ ] **Git Hygiene**: `git show --check HEAD` 干净（无 trailing whitespace）。
+- [ ] **Samples**: `samples/` 目录下包含有效的 Nginx 和 Apache 示例日志。
 
-## 7. Pre-GitHub Release (Final Polish)
-- [ ] **Project Identity**:
-    - [ ] `README.md` positioning is clear and professional.
-    - [ ] `Why this project is different` section highlights local-first and rule-based approach.
-    - [ ] `Current local milestone` is updated to `v1.7-local`.
-- [ ] **Standard Files**:
-    - [ ] `CHANGELOG.md` exists and covers v1.0 to v1.7.
-    - [ ] `LICENSE` (MIT) exists with correct copyright holder.
-    - [ ] `.gitattributes` is configured for LF line endings.
-- [ ] **Documentation completeness**:
-    - [ ] `architecture.md` includes the data flow diagram.
-    - [ ] `demo.md` includes the 5-minute demo script.
-- [ ] **Verification**:
-    - [ ] All CI checks are passing locally.
-    - [ ] `docker compose config` is valid.
-    - [ ] Frontend production build is successful (`npm run build`).
-    - [ ] `rule_coverage` API field is present in responses.
-    - [ ] Untriggered rules are visible in Rule Coverage panel.
-    - [ ] Sample evidence in Rule Coverage is correctly sanitized.
-    - [ ] Chinese/English toggle works for Rule Coverage UI and report section.
-- [ ] **Sanitized Review**:
-    - [ ] Manually review a generated sanitized report to ensure no leaks of real IPs or secrets from the sample logs.
-- [ ] **Git Hygiene**:
-    - [ ] No large files or `__pycache__` committed.
-    - [ ] Local commit only (no push).
-
-## Post-Commit Check (v1.8)
-
-- [ ] `git status` shows clean.
-- [ ] `git log` shows `feat: add rule coverage explainability`.
-- [ ] All tests pass in clean environment.
-
-## 8. Post-Release (Future)
-- [ ] Create GitHub Release tag.
-- [ ] Upload Docker images to Registry (optional).
+## 5. 发布后确认
+- [ ] 标签指向正确的提交。
+- [ ] 远程分支与本地同步。
+- [ ] GitHub 首页展示效果符合预期。

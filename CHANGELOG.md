@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [v1.8.1-local] - 2026-06-08
+### Changed
+- **Repository Polish**: Enhanced README with professional badges and structured project positioning.
+- **Documentation Overhaul**: Added `docs/portfolio.md` for technical deep-dives and `docs/release_notes.md` for version history.
+- **Demo Script Refinement**: Updated `docs/demo.md` with a complete 5-8 minute showcase walkthrough.
+- **Presentation Improvements**: Refined project descriptions to highlight local-first and zero-infra advantages.
+
 ## [v1.8-local] - 2026-06-08
 ### Added
 - Rule Coverage section to show which rules were applied and triggered.
