@@ -1,7 +1,11 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
-from .service import analyze_log_text, analyze_log_text_sanitized
-from .schemas import AnalysisResult, ErrorResponse, RuleConfigResponse
+from .service import analyze_log_text, analyze_log_text_sanitized, analyze_log_text_with_overrides
+from .schemas import (
+    AnalysisResult, ErrorResponse, RuleConfigResponse,
+    RuleTuningOverride, RuleTuningPreviewResponse
+)
+import json
 from .config_loader import load_detector_config
 import traceback
 import os
@@ -96,6 +100,44 @@ async def analyze_log(
         config = get_config()
         return analyze_log_text(log_text, config=config, log_format=log_format)
     except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal analysis error: {str(e)}")
+
+@app.post(
+    "/api/analyze/tuned",
+    response_model=RuleTuningPreviewResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid file type, empty file, file too large, or invalid JSON"},
+        500: {"model": ErrorResponse, "description": "Internal analysis error"}
+    }
+)
+async def analyze_log_tuned(
+    file: UploadFile = File(...),
+    log_format: str = Form("auto"),
+    overrides_json: str = Form("{}")
+):
+    """
+    Analyzes an uploaded log file with temporary rule overrides.
+    """
+    log_text = await _read_uploaded_log_file(file)
+
+    try:
+        overrides_dict = json.loads(overrides_json)
+        overrides = RuleTuningOverride(**overrides_dict)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON in overrides_json")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid overrides data: {str(e)}")
+
+    try:
+        config = get_config()
+        return analyze_log_text_with_overrides(
+            log_text,
+            log_format=log_format,
+            overrides=overrides,
+            config=config
+        )
+    except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Internal analysis error: {str(e)}")
 
 @app.post(

@@ -1,5 +1,10 @@
 import { ref, onMounted, computed } from 'vue'
-import { analyzeLogFile, analyzeLogFileSanitized, fetchRuleConfig } from '../api'
+import {
+  analyzeLogFile,
+  analyzeLogFileSanitized,
+  fetchRuleConfig,
+  analyzeLogWithTuning
+} from '../api'
 import { getRecentAnalyses, saveAnalysisRecord, updateAnalysisRecord, clearRecentAnalyses } from '../utils/historyStorage'
 
 export function useAnalysisState() {
@@ -13,6 +18,7 @@ export function useAnalysisState() {
   const rules = ref(null)
   const rulesError = ref(null)
   const recentAnalyses = ref([])
+  const tuningWarnings = ref([])
 
   onMounted(async () => {
     // Load history
@@ -62,6 +68,41 @@ export function useAnalysisState() {
     }
   }
 
+  const handleApplyTuning = async (overrides) => {
+    if (!selectedFile.value) {
+      error.value = "Please upload a log file before tuning rules"
+      return
+    }
+
+    loading.value = true
+    error.value = null
+    tuningWarnings.value = []
+
+    try {
+      const data = await analyzeLogWithTuning(selectedFile.value, selectedLogFormat.value, overrides)
+      result.value = data.result
+      tuningWarnings.value = data.warnings
+
+      // Update history with tuned result (optional, but good for UX)
+      if (selectedRecordId.value) {
+        recentAnalyses.value = updateAnalysisRecord(selectedRecordId.value, {
+          result: data.result,
+          is_tuned: true
+        })
+      }
+    } catch (err) {
+      error.value = err.message
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const handleResetTuning = () => {
+    if (selectedFile.value) {
+      handleAnalyze(selectedFile.value, selectedLogFormat.value)
+    }
+  }
+
   const handleRestoreRecord = (record) => {
     result.value = record.result
     selectedLogFormat.value = record.log_format
@@ -88,6 +129,7 @@ export function useAnalysisState() {
     selectedLogFormat.value = 'auto'
     selectedRecordId.value = null
     sanitizingReport.value = false
+    tuningWarnings.value = []
   }
 
   const triggerDownload = (content, filename) => {
@@ -151,7 +193,10 @@ export function useAnalysisState() {
     rules,
     rulesError,
     recentAnalyses,
+    tuningWarnings,
     handleAnalyze,
+    handleApplyTuning,
+    handleResetTuning,
     handleRestoreRecord,
     handleClearHistory,
     clearCurrentResult,

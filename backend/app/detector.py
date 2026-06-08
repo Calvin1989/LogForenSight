@@ -14,6 +14,7 @@ class DetectorConfig:
     suspicious_ua_keywords: Set[str] = field(default_factory=lambda: {
         'sqlmap', 'curl', 'python-requests', 'nikto', 'nmap', 'zgrab'
     })
+    disabled_rules: Set[str] = field(default_factory=set)
 
 def detect(
     logs: List[LogEntry], 
@@ -82,73 +83,77 @@ def detect(
                 uas_by_ip[ip].add(ua_display)
 
     # High Frequency IPs
-    for ip, count in ip_counts.items():
-        if count >= config.freq_threshold:
-            findings.append(Finding(
-                rule_id="high_frequency_ip",
-                title="High Frequency Request",
-                severity="medium",
-                description=f"IP {ip} made {count} requests, exceeding threshold of {config.freq_threshold}.",
-                recommendation="Implement rate limiting or block the IP if behavior persists.",
-                evidence=[f"Total requests from this IP: {count}"],
-                metadata={"ip": ip, "count": count},
-                matched_count=count,
-                matched_fields=["ip"],
-                matched_values=[ip]
-            ))
+    if "high_frequency_ip" not in config.disabled_rules:
+        for ip, count in ip_counts.items():
+            if count >= config.freq_threshold:
+                findings.append(Finding(
+                    rule_id="high_frequency_ip",
+                    title="High Frequency Request",
+                    severity="medium",
+                    description=f"IP {ip} made {count} requests, exceeding threshold of {config.freq_threshold}.",
+                    recommendation="Implement rate limiting or block the IP if behavior persists.",
+                    evidence=[f"Total requests from this IP: {count}"],
+                    metadata={"ip": ip, "count": count},
+                    matched_count=count,
+                    matched_fields=["ip"],
+                    matched_values=[ip]
+                ))
 
     # Path Scanning
-    for ip, count in ip_404_counts.items():
-        if count >= config.scan_threshold:
-            findings.append(Finding(
-                rule_id="path_scanning",
-                title="Path Scanning Detected",
-                severity="high",
-                description=f"IP {ip} generated {count} 404 errors, indicating potential directory scanning.",
-                recommendation="Block this IP and investigate the target paths.",
-                evidence=[f"Total 404 errors from this IP: {count}"],
-                metadata={"ip": ip, "count": count},
-                matched_count=count,
-                matched_fields=["ip", "status"],
-                matched_values=[ip, "404"]
-            ))
+    if "path_scanning" not in config.disabled_rules:
+        for ip, count in ip_404_counts.items():
+            if count >= config.scan_threshold:
+                findings.append(Finding(
+                    rule_id="path_scanning",
+                    title="Path Scanning Detected",
+                    severity="high",
+                    description=f"IP {ip} generated {count} 404 errors, indicating potential directory scanning.",
+                    recommendation="Block this IP and investigate the target paths.",
+                    evidence=[f"Total 404 errors from this IP: {count}"],
+                    metadata={"ip": ip, "count": count},
+                    matched_count=count,
+                    matched_fields=["ip", "status"],
+                    matched_values=[ip, "404"]
+                ))
 
     # Sensitive Path Probes
-    for ip, evidence_list in sensitive_probes_by_ip.items():
-        findings.append(Finding(
-            rule_id="sensitive_path_probe",
-            title="Sensitive Path Probing",
-            severity="high",
-            description=f"IP {ip} attempted to access sensitive configuration or admin paths.",
-            recommendation="Immediate block recommended. Verify if any probes were successful.",
-            evidence=evidence_list[:5],
-            metadata={
-                "ip": ip, 
-                "probe_count": len(evidence_list),
-                "paths": list(probed_paths_by_ip[ip])
-            },
-            matched_count=len(probed_paths_by_ip[ip]),
-            matched_fields=["path"],
-            matched_values=sorted(list(probed_paths_by_ip[ip]))
-        ))
+    if "sensitive_path_probe" not in config.disabled_rules:
+        for ip, evidence_list in sensitive_probes_by_ip.items():
+            findings.append(Finding(
+                rule_id="sensitive_path_probe",
+                title="Sensitive Path Probing",
+                severity="high",
+                description=f"IP {ip} attempted to access sensitive configuration or admin paths.",
+                recommendation="Immediate block recommended. Verify if any probes were successful.",
+                evidence=evidence_list[:5],
+                metadata={
+                    "ip": ip,
+                    "probe_count": len(evidence_list),
+                    "paths": list(probed_paths_by_ip[ip])
+                },
+                matched_count=len(probed_paths_by_ip[ip]),
+                matched_fields=["path"],
+                matched_values=sorted(list(probed_paths_by_ip[ip]))
+            ))
 
     # Suspicious User Agents
-    for ip, evidence_list in suspicious_ua_by_ip.items():
-        findings.append(Finding(
-            rule_id="suspicious_user_agent",
-            title="Suspicious User Agent",
-            severity="low",
-            description=f"IP {ip} is using a suspicious or automated User-Agent.",
-            recommendation="Monitor traffic from this IP. Consider blocking if it's not a legitimate crawler.",
-            evidence=evidence_list[:5],
-            metadata={
-                "ip": ip, 
+    if "suspicious_user_agent" not in config.disabled_rules:
+        for ip, evidence_list in suspicious_ua_by_ip.items():
+            findings.append(Finding(
+                rule_id="suspicious_user_agent",
+                title="Suspicious User Agent",
+                severity="low",
+                description=f"IP {ip} is using a suspicious or automated User-Agent.",
+                recommendation="Monitor traffic from this IP. Consider blocking if it's not a legitimate crawler.",
+                evidence=evidence_list[:5],
+                metadata={
+                "ip": ip,
                 "ua_count": len(evidence_list),
-                "user_agents": list(uas_by_ip[ip])
-            },
-            matched_count=len(uas_by_ip[ip]),
-            matched_fields=["user_agent"],
-            matched_values=sorted(list(uas_by_ip[ip]))
-        ))
+                    "user_agents": list(uas_by_ip[ip])
+                },
+                matched_count=len(uas_by_ip[ip]),
+                matched_fields=["user_agent"],
+                matched_values=sorted(list(uas_by_ip[ip]))
+            ))
 
     return findings

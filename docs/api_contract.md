@@ -46,6 +46,32 @@ Analyzes Nginx log content via file upload and returns a sanitized result (IPs a
 - **Max File Size:** 5MB
 - **Response Structure:** Identical to `/api/analyze`, but content is redacted.
 
+## 4. Analyze Log (Tuned)
+Analyzes Nginx log content via file upload with temporary rule overrides.
+
+- **Endpoint:** `POST /api/analyze/tuned`
+- **Content-Type:** `multipart/form-data`
+- **Accepted Extensions:** `.log`, `.txt`
+- **Max File Size:** 5MB
+- **Form Parameters:**
+    - `file`: The log file to be analyzed.
+    - `log_format`: (Optional) `auto`, `nginx`, or `apache`. Default is `auto`.
+    - `overrides_json`: (Optional) A JSON string representing `RuleTuningOverride`. Default is `{}`.
+- **Response Structure:**
+```json
+{
+  "applied_overrides": {
+    "high_frequency_threshold": 20,
+    "path_scanning_404_threshold": 10,
+    "sensitive_paths": ["/admin"],
+    "suspicious_user_agents": ["sqlmap"],
+    "disabled_rules": ["suspicious_user_agent"]
+  },
+  "result": { ... AnalysisResult ... },
+  "warnings": ["Warning message if any invalid override was provided"]
+}
+```
+
 ### Request Parameters
 - `file`: The log file to be analyzed (Field name: `file`).
 
@@ -172,6 +198,14 @@ A high-level deterministic summary designed for management or portfolio presenta
 - `top_risks`: List of the most significant incidents or findings detected.
 - `recommended_next_steps`: List of actionable remediation items.
 - `methodology`: Fixed statement explaining the deterministic nature of the summary (no LLM).
+
+### RuleTuningOverride (New v1.9)
+Temporary configuration to override default detection rules for a single request.
+- `high_frequency_threshold`: (int) Total requests from a single IP to trigger a finding.
+- `path_scanning_404_threshold`: (int) Total 404 errors from a single IP to trigger a finding.
+- `sensitive_paths`: (List[str]) Custom list of sensitive paths to monitor.
+- `suspicious_user_agents`: (List[str]) Custom list of User-Agent keywords to monitor.
+- `disabled_rules`: (List[str]) List of rule IDs to disable for this analysis.
 
 ### Incident
 Aggregated security events grouped by Source IP.

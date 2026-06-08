@@ -69,4 +69,14 @@ describe('i18n tool', () => {
     expect(t('ruleCoverage.title')).toBe('Rule Coverage & Detection Explainability')
     expect(t('ruleCoverage.totalRules')).toBe('Total Rules')
   })
+
+  it('should have ruleTuning translations', () => {
+    setLanguage('zh')
+    expect(t('ruleTuning.title')).toBe('临时规则调优')
+    expect(t('ruleTuning.highFrequencyThreshold')).toBe('高频访问阈值')
+
+    setLanguage('en')
+    expect(t('ruleTuning.title')).toBe('Temporary Rule Tuning')
+    expect(t('ruleTuning.highFrequencyThreshold')).toBe('High Frequency Threshold')
+  })
 })

@@ -1,6 +1,7 @@
 // Use relative paths to support both Vite proxy and Nginx proxy
 const API_ENDPOINTS = {
   ANALYZE: '/api/analyze',
+  ANALYZE_TUNED: '/api/analyze/tuned',
   ANALYZE_SANITIZED: '/api/analyze/sanitized',
   RULES: '/api/rules'
 };
@@ -28,6 +29,34 @@ export async function analyzeLogFile(file, logFormat = 'auto') {
   if (!response.ok) {
     // Return the detail error message from FastAPI
     throw new Error(data.detail || 'Analysis failed');
+  }
+
+  return data;
+}
+
+/**
+ * Sends a log file to the backend for security analysis with rule overrides.
+ *
+ * @param {File} file - The .log or .txt file to analyze.
+ * @param {string} logFormat - The format of the log ("auto", "nginx", "apache").
+ * @param {Object} overrides - Rule tuning overrides.
+ * @returns {Promise<Object>} - The RuleTuningPreviewResponse from the backend.
+ */
+export async function analyzeLogWithTuning(file, logFormat = 'auto', overrides = {}) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('log_format', logFormat);
+  formData.append('overrides_json', JSON.stringify(overrides));
+
+  const response = await fetch(API_ENDPOINTS.ANALYZE_TUNED, {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || 'Tuned analysis failed');
   }
 
   return data;

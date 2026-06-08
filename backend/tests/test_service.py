@@ -67,3 +67,28 @@ def test_analyze_apache_sample():
         assert any(f.rule_id == "path_scanning" for f in result.findings)
         # 9.10.11.12 has 11 requests -> High frequency
         assert any(f.rule_id == "high_frequency_ip" for f in result.findings)
+
+def test_analyze_log_text_with_overrides():
+    from app.service import analyze_log_text_with_overrides
+    from app.schemas import RuleTuningOverride
+
+    log_content = '192.168.1.1 - - [07/Jun/2026:10:00:01 +0000] "GET / HTTP/1.1" 200 1024 "-" "UA"\n' * 5
+
+    # 1. Without overrides
+    response_no_overrides = analyze_log_text_with_overrides(log_content)
+    assert len(response_no_overrides.result.findings) == 0
+    assert len(response_no_overrides.warnings) == 0
+
+    # 2. With overrides
+    overrides = RuleTuningOverride(high_frequency_threshold=3)
+    response_with_overrides = analyze_log_text_with_overrides(log_content, overrides=overrides)
+    assert len(response_with_overrides.result.findings) == 1
+    assert response_with_overrides.result.findings[0].rule_id == "high_frequency_ip"
+    assert response_with_overrides.applied_overrides.high_frequency_threshold == 3
+
+    # 3. With invalid overrides
+    invalid_overrides = RuleTuningOverride(high_frequency_threshold=0)
+    response_invalid = analyze_log_text_with_overrides(log_content, overrides=invalid_overrides)
+    assert len(response_invalid.warnings) > 0
+    # Should fallback to default threshold (10), so no finding for 5 requests
+    assert len(response_invalid.result.findings) == 0

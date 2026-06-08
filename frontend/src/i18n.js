@@ -237,6 +237,24 @@ const messages = {
       filterAll: "全部规则",
       filterTriggered: "仅已触发",
       filterNotTriggered: "仅未触发"
+    },
+    ruleTuning: {
+      title: "临时规则调优",
+      subtitle: "调整参数并重新分析当前日志以观察结果变化。",
+      temporaryNotice: "注意：此处修改仅影响本次预览，不会保存到 rules.yaml。",
+      highFrequencyThreshold: "高频访问阈值",
+      pathScanningThreshold: "路径扫描 404 阈值",
+      sensitivePaths: "敏感路径列表 (每行一个，须以 / 开头)",
+      suspiciousUserAgents: "可疑 User-Agent 列表 (每行一个)",
+      disabledRules: "禁用规则",
+      apply: "应用调优并重新分析",
+      reset: "重置为默认",
+      noFile: "请先上传日志后再进行规则调优",
+      loading: "正在重新分析...",
+      warnings: "调优警告",
+      invalidThreshold: "阈值必须大于等于 1",
+      placeholderPaths: "/admin\n/.env",
+      placeholderUserAgents: "sqlmap\nnikto"
     }
   },
   en: {
@@ -470,6 +488,24 @@ const messages = {
       filterAll: "All Rules",
       filterTriggered: "Triggered Only",
       filterNotTriggered: "Not Triggered Only"
+    },
+    ruleTuning: {
+      title: "Temporary Rule Tuning",
+      subtitle: "Adjust parameters and re-analyze current log to observe changes.",
+      temporaryNotice: "Note: Changes here only affect this preview and are not saved to rules.yaml.",
+      highFrequencyThreshold: "High Frequency Threshold",
+      pathScanningThreshold: "Path Scanning 404 Threshold",
+      sensitivePaths: "Sensitive Paths (one per line, must start with /)",
+      suspiciousUserAgents: "Suspicious User-Agents (one per line)",
+      disabledRules: "Disabled Rules",
+      apply: "Apply Tuning & Re-analyze",
+      reset: "Reset to Defaults",
+      noFile: "Please upload a log file before tuning rules",
+      loading: "Re-analyzing...",
+      warnings: "Tuning Warnings",
+      invalidThreshold: "Threshold must be at least 1",
+      placeholderPaths: "/admin\n/.env",
+      placeholderUserAgents: "sqlmap\nnikto"
     }
   }
 }

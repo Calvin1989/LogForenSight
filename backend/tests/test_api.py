@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 import io
+import json
 
 client = TestClient(app)
 
@@ -111,3 +112,55 @@ def test_analyze_with_log_format():
     assert response.status_code == 200
     # No direct way to check internal log_format without changing response, 
     # but we verify it doesn't crash.
+
+def test_analyze_tuned():
+    """Test the tuned analysis endpoint."""
+    log_content = '192.168.1.1 - - [07/Jun/2026:10:00:01 +0000] "GET / HTTP/1.1" 200 1024 "-" "UA"\n' * 5
+    files = {"file": ("test.log", io.BytesIO(log_content.encode("utf-8")), "text/plain")}
+    # Set threshold lower than total requests to trigger finding
+    overrides = {
+        "high_frequency_threshold": 3
+    }
+    data = {
+        "log_format": "auto",
+        "overrides_json": json.dumps(overrides)
+    }
+
+    response = client.post("/api/analyze/tuned", files=files, data=data)
+
+    assert response.status_code == 200
+    res_data = response.json()
+    assert "applied_overrides" in res_data
+    assert "result" in res_data
+    assert res_data["applied_overrides"]["high_frequency_threshold"] == 3
+
+    # Check if finding was triggered due to override
+    findings = res_data["result"]["findings"]
+    assert any(f["rule_id"] == "high_frequency_ip" for f in findings)
+
+def test_analyze_tuned_disabled_rule():
+    """Test the tuned analysis endpoint with a disabled rule."""
+    log_content = '192.168.1.1 - - [07/Jun/2026:10:00:01 +0000] "GET / HTTP/1.1" 200 1024 "-" "UA"\n' * 5
+    files = {"file": ("test.log", io.BytesIO(log_content.encode("utf-8")), "text/plain")}
+    # Set threshold lower but disable the rule
+    overrides = {
+        "high_frequency_threshold": 3,
+        "disabled_rules": ["high_frequency_ip"]
+    }
+    data = {
+        "log_format": "auto",
+        "overrides_json": json.dumps(overrides)
+    }
+
+    response = client.post("/api/analyze/tuned", files=files, data=data)
+    assert response.status_code == 200
+    res_data = response.json()
+
+    # Check if finding was NOT triggered
+    findings = res_data["result"]["findings"]
+    assert not any(f["rule_id"] == "high_frequency_ip" for f in findings)
+
+    # Check rule coverage enabled status
+    coverage = res_data["result"]["rule_coverage"]
+    high_freq_rule = next(r for r in coverage if r["rule_id"] == "high_frequency_ip")
+    assert high_freq_rule["enabled"] is False

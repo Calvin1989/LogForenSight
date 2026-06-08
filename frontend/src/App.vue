@@ -32,6 +32,16 @@
         <RuleConfigPanel :rules="rules" />
       </div>
 
+      <RuleTuningPanel
+        v-if="rules"
+        :initialConfig="rules"
+        :isAnalyzing="loading"
+        :hasFile="!!selectedFile"
+        :warnings="tuningWarnings"
+        @apply="handleApplyTuning"
+        @reset="handleResetTuning"
+      />
+
       <div v-if="displayResult && displayResult.rule_coverage" class="coverage-section">
         <RuleCoverage :ruleCoverage="displayResult.rule_coverage" />
       </div>
@@ -105,6 +115,7 @@ import MarkdownReport from './components/MarkdownReport.vue'
 import IncidentsList from './components/IncidentsList.vue'
 import RuleCoverage from './components/RuleCoverage.vue'
 import RuleConfigPanel from './components/RuleConfigPanel.vue'
+import RuleTuningPanel from './components/RuleTuningPanel.vue'
 import ParseStatsCard from './components/ParseStatsCard.vue'
 import SeverityDistribution from './components/SeverityDistribution.vue'
 import TimelineView from './components/TimelineView.vue'
@@ -120,7 +131,10 @@ const {
   rules,
   rulesError,
   recentAnalyses,
+  tuningWarnings,
   handleAnalyze,
+  handleApplyTuning,
+  handleResetTuning,
   handleRestoreRecord,
   handleClearHistory,
   clearCurrentResult,

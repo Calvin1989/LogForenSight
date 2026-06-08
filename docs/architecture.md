@@ -11,6 +11,7 @@ The backend is structured into several layers, each with a specific responsibili
 - **`app/config_loader.py`**: Responsible for loading and merging security rules from external YAML files into the `DetectorConfig` object used by the engine.
 - **`app/incident.py`**: The aggregation layer. It groups related `Findings` by source IP and behavioral patterns to create high-level `Incidents`. This layer provides context, intent analysis, and unified recommendations for security analysts.
 - **`app/rule_coverage.py`**: Summarizes rule application, triggered status, and provides detection explanations for transparency.
+- **`app/rule_tuning.py`**: The temporary configuration layer (v1.9). It handles per-request rule overrides, validating and applying them to a copy of the detection config without modifying local files.
 - **`app/timeline.py`**: The timeline generation layer. It builds a chronological sequence of security events (`TimelineEvent`) by correlating logs, findings, and incidents, providing a narrative of the attack progression.
 - **`app/executive_summary.py`**: The high-level summarization layer (v1.6). It generates a deterministic, rule-based summary including risk scores and level (critical to informational) for management presentation, without using LLMs or external APIs.
 - **`app/sanitizer.py`**: The data redaction layer. It provides functions to sanitize IP addresses, query parameters, and Authorization headers from analysis results, enabling safe sharing of security reports.

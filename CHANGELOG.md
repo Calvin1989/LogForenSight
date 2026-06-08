@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.9-local] - 2026-06-08
+### Added
+- **Rule Tuning UI**: A new panel to temporarily adjust rule parameters (thresholds, sensitive paths, user-agents) in the frontend.
+- **Per-request Rule Overrides**: Backend support for overriding detection rules for a single analysis request without modifying config files.
+- **Tuned Analysis Endpoint**: Added `POST /api/analyze/tuned` to handle multipart uploads with rule overrides.
+- **Rule Coverage Integration**: Tuned rules are reflected in the Rule Coverage view, including enabled/disabled status.
+- **Interactive UI**: Real-time feedback and re-analysis capabilities to observe the impact of threshold changes.
+
 ## [v1.8.1-local] - 2026-06-08
 ### Changed
 - **Repository Polish**: Enhanced README with professional badges and structured project positioning.

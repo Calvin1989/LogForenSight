@@ -41,7 +41,7 @@ def build_rule_coverage(
 
     # Rules are currently always enabled as they are hardcoded in detector.py
     # If we add toggles in config, we should reflect it here.
-    enabled_rules = set(rule_definitions.keys())
+    enabled_rules = set(rule_definitions.keys()) - config.disabled_rules
 
     coverage: List[RuleCoverageItem] = []
 

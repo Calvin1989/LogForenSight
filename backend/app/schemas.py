@@ -119,3 +119,20 @@ class RuleConfigResponse(BaseModel):
     sensitive_paths: List[str]
     suspicious_user_agents: List[str]
     source: str
+
+class RuleTuningOverride(BaseModel):
+    high_frequency_threshold: int | None = None
+    path_scanning_404_threshold: int | None = None
+    sensitive_paths: List[str] | None = None
+    suspicious_user_agents: List[str] | None = None
+    disabled_rules: List[str] = []
+
+class RuleTuningPreviewRequest(BaseModel):
+    log_text: str
+    log_format: str = "auto"
+    overrides: RuleTuningOverride = RuleTuningOverride()
+
+class RuleTuningPreviewResponse(BaseModel):
+    applied_overrides: RuleTuningOverride
+    result: AnalysisResult
+    warnings: List[str] = []

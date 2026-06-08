@@ -1,6 +1,9 @@
 from collections import Counter
 from typing import List, Optional
-from .schemas import LogEntry, Finding, AnalysisSummary, AnalysisResult, Incident, ParseStats
+from .schemas import (
+    LogEntry, Finding, AnalysisSummary, AnalysisResult, Incident, ParseStats,
+    RuleTuningOverride, RuleTuningPreviewResponse
+)
 from .parser import parse_lines, parse_file, parse_lines_with_stats
 from .detector import detect, DetectorConfig
 from .incident import build_incidents
@@ -9,6 +12,7 @@ from .report import generate_markdown_report
 from .sanitizer import sanitize_analysis_result
 from .executive_summary import generate_executive_summary
 from .rule_coverage import build_rule_coverage
+from .rule_tuning import apply_rule_overrides, validate_rule_overrides
 
 def _calculate_summary(logs: List[LogEntry], findings: List[Finding] = None, incidents: List[Incident] = None) -> AnalysisSummary:
     """Calculates summary statistics from logs."""
@@ -100,6 +104,35 @@ def analyze_log_text_sanitized(log_text: str, config: Optional[DetectorConfig] =
     """
     result = analyze_log_text(log_text, config, log_format=log_format)
     return sanitize_analysis_result(result)
+
+def analyze_log_text_with_overrides(
+    log_text: str,
+    log_format: str = "auto",
+    overrides: Optional[RuleTuningOverride] = None,
+    config: Optional[DetectorConfig] = None
+) -> RuleTuningPreviewResponse:
+    """
+    Analyzes log text with temporary rule overrides.
+    """
+    if config is None:
+        from .config_loader import load_detector_config
+        config = load_detector_config()
+
+    warnings = []
+    applied_overrides = overrides or RuleTuningOverride()
+
+    if overrides:
+        warnings = validate_rule_overrides(overrides)
+        config = apply_rule_overrides(config, overrides)
+        applied_overrides = overrides
+
+    result = analyze_log_text(log_text, config=config, log_format=log_format)
+
+    return RuleTuningPreviewResponse(
+        applied_overrides=applied_overrides,
+        result=result,
+        warnings=warnings
+    )
 
 def analyze_log_file(file_path: str, config: Optional[DetectorConfig] = None, log_format: str = "auto") -> AnalysisResult:
     """

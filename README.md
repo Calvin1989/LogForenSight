@@ -3,7 +3,7 @@
 **本地优先、零信任、高可解释性的 Web 日志安全分析工具。**
 
 [![CI Status](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-v1.8.1--local-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v1.9--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web 日志分析引擎。它能够快速解析 Nginx 与 Apache 访问日志，通过确定性的规则引擎识别安全风险，并将其聚合成高层级的安全事件。
@@ -51,6 +51,7 @@ npm run dev
 
 ### 1. 智能检测与解释
 - **Rule-driven Detection**: 涵盖高频扫描、敏感路径探测、异常客户端检测。
+- **Rule Tuning UI (v1.9)**: 支持在 UI 界面临时调整规则阈值、黑名单列表和启用状态，实时观察分析结果变化。
 - **Rule Coverage (v1.8)**: 实时展示系统规则覆盖情况，清晰告知哪些规则被触发，哪些未触发。
 - **Rule Match Details**: 展示命中字段、命中值列表及命中频次。
 
@@ -82,9 +83,9 @@ npm run dev
 
 | 项目 | 状态说明 |
 | :--- | :--- |
-| **当前版本** | `v1.8.1-local` (Stable) |
-| **后端测试** | ![Pytest](https://img.shields.io/badge/Pytest-49%20passed-green.svg) |
-| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-77%20passed-green.svg) |
+| **当前版本** | `v1.9-local` (Stable) |
+| **后端测试** | ![Pytest](https://img.shields.io/badge/Pytest-58%20passed-green.svg) |
+| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-84%20passed-green.svg) |
 | **Docker** | ![Docker](https://img.shields.io/badge/Docker--Compose-passed-blue.svg) |
 | **多语言** | 支持 中文 / English 实时切换 |
 
