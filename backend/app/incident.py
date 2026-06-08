@@ -48,10 +48,19 @@ def build_incidents(findings: List[Finding]) -> List[Incident]:
     for ip, ip_findings in findings_by_ip.items():
         rule_ids = {f.rule_id for f in ip_findings}
         
-        # Collect metadata from all related findings
+        # Collect matched values and metadata
         all_metadata: Dict[str, Any] = {}
+        paths = []
+        uas = []
         for f in ip_findings:
             all_metadata.update(f.metadata)
+            if f.rule_id == "sensitive_path_probe":
+                paths.extend(f.matched_values)
+            elif f.rule_id == "suspicious_user_agent":
+                uas.extend(f.matched_values)
+        
+        paths = sorted(list(set(paths)))
+        uas = sorted(list(set(uas)))
             
         incident_id = str(uuid.uuid4())[:8]
         evidence: List[str] = []
@@ -60,9 +69,6 @@ def build_incidents(findings: List[Finding]) -> List[Incident]:
         
         # 1. Reconnaissance (Sensitive Path Probe + Suspicious UA)
         if "sensitive_path_probe" in rule_ids and "suspicious_user_agent" in rule_ids:
-            paths = all_metadata.get("paths", [])
-            uas = all_metadata.get("user_agents", [])
-            
             incidents.append(Incident(
                 incident_id=incident_id,
                 source_ip=ip,
@@ -134,7 +140,6 @@ def build_incidents(findings: List[Finding]) -> List[Incident]:
 
         # 4. Automated Client
         if "suspicious_user_agent" in rule_ids:
-            uas = all_metadata.get("user_agents", [])
             incidents.append(Incident(
                 incident_id=incident_id,
                 source_ip=ip,
@@ -157,7 +162,6 @@ def build_incidents(findings: List[Finding]) -> List[Incident]:
             
         # 5. Fallback for other single probes
         if "sensitive_path_probe" in rule_ids:
-            paths = all_metadata.get("paths", [])
             incidents.append(Incident(
                 incident_id=incident_id,
                 source_ip=ip,

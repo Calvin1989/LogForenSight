@@ -28,7 +28,10 @@ def test_build_incident_private_ip():
             description="UA",
             recommendation="Monitor",
             evidence=["ev2"],
-            metadata={"ip": "192.168.1.10", "user_agents": ["curl/7.68"]}
+            metadata={"ip": "192.168.1.10", "user_agents": ["curl/7.68"]},
+            matched_count=1,
+            matched_fields=["user_agent"],
+            matched_values=["curl/7.68"]
         )
     ]
     incidents = build_incidents(findings)
@@ -47,7 +50,10 @@ def test_build_reconnaissance_incident_polished():
             description="Probe",
             recommendation="Block",
             evidence=["ev1"],
-            metadata={"ip": "1.1.1.1", "paths": ["/.env"]}
+            metadata={"ip": "1.1.1.1", "paths": ["/.env"]},
+            matched_count=1,
+            matched_fields=["path"],
+            matched_values=["/.env"]
         ),
         Finding(
             rule_id="suspicious_user_agent",
@@ -56,7 +62,10 @@ def test_build_reconnaissance_incident_polished():
             description="UA",
             recommendation="Monitor",
             evidence=["ev2"],
-            metadata={"ip": "1.1.1.1", "user_agents": ["sqlmap/1.5"]}
+            metadata={"ip": "1.1.1.1", "user_agents": ["sqlmap/1.5"]},
+            matched_count=1,
+            matched_fields=["user_agent"],
+            matched_values=["sqlmap/1.5"]
         )
     ]
     incidents = build_incidents(findings)
@@ -79,7 +88,10 @@ def test_build_automated_client_incident_with_fp_hint():
             description="UA",
             recommendation="Monitor",
             evidence=["ev2"],
-            metadata={"ip": "2.2.2.2", "user_agents": ["python-requests/2.25"]}
+            metadata={"ip": "2.2.2.2", "user_agents": ["python-requests/2.25"]},
+            matched_count=1,
+            matched_fields=["user_agent"],
+            matched_values=["python-requests/2.25"]
         )
     ]
     incidents = build_incidents(findings)

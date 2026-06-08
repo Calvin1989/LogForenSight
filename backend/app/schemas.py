@@ -22,6 +22,9 @@ class Finding(BaseModel):
     recommendation: str
     evidence: List[str]
     metadata: Dict[str, Any]
+    matched_count: int = 0
+    matched_fields: List[str] = []
+    matched_values: List[str] = []
 
 class AnalysisSummary(BaseModel):
     total_requests: int

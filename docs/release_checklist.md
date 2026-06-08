@@ -24,6 +24,8 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 ## 4. Manual UI/UX Verification
 - [ ] **File Upload**: Test uploading valid and invalid (too large, wrong extension) files.
 - [ ] **Analysis View**: Verify Summary Cards, Incidents List, Top IPs/Paths, and Findings List are rendered correctly.
+- [ ] **Rule Match Details**: Verify that Findings show matched details (Count, Fields, Values) and expansion/collapse works.
+- [ ] **Legacy Data Compatibility**: Verify that Recent Analyses records without matched_* fields still render safely (no UI crashes).
 - [ ] **Parse Stats**: Verify that the Parsing Quality card shows correct stats (Total/Parsed/Skipped).
 - [ ] **Skipped Samples**: Verify that Skipped Line Samples are displayed if the log contains malformed lines (use `nginx_access_sample.log`).
 - [ ] **Markdown Report**: Verify the "Show/Hide Preview" button works.
@@ -32,6 +34,7 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 ## 5. Security & Privacy (Sanitization)
 - [ ] **IP Redaction**: Ensure public IPs are masked (e.g., `1.2.x.x`) in the sanitized report.
 - [ ] **Secret Redaction**: Ensure `token`, `password`, and `Authorization` headers are masked in the sanitized report.
+- [ ] **Rule Match Sanitization**: Ensure `matched_values` are properly sanitized in the sanitized report.
 - [ ] **Skipped Sample Sanitization**: Verify that the sanitized report does not expose full IPs or secrets in the "Skipped Line Samples" section.
 
 ## 6. Pre-GitHub Cleanup

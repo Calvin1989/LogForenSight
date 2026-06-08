@@ -7,7 +7,7 @@ The **AI Log Security Analyzer** is built with a clean, layered architecture to 
 The backend is structured into several layers, each with a specific responsibility:
 
 - **`app/parser.py`**: Handles log parsing. It supports both Nginx and Apache Combined log formats, with built-in auto-detection logic. It converts raw lines into structured `LogEntry` objects, skipping lines that don't match the expected patterns. It also provides parsing quality metrics (e.g., parse rate, skipped lines).
-- **`app/detector.py`**: The core detection engine. It evaluates `LogEntry` objects against rule-based logic (frequency, sensitive paths, suspicious UAs, etc.) and generates granular `Finding` objects.
+- **`app/detector.py`**: The core detection engine. It evaluates `LogEntry` objects against rule-based logic (frequency, sensitive paths, suspicious UAs, etc.) and generates granular `Finding` objects. Each finding includes structured match details (count, fields, and values) for better explainability.
 - **`app/config_loader.py`**: Responsible for loading and merging security rules from external YAML files into the `DetectorConfig` object used by the engine.
 - **`app/incident.py`**: The aggregation layer. It groups related `Findings` by source IP and behavioral patterns to create high-level `Incidents`. This layer provides context, intent analysis, and unified recommendations for security analysts.
 - **`app/sanitizer.py`**: The data redaction layer. It provides functions to sanitize IP addresses, query parameters, and Authorization headers from analysis results, enabling safe sharing of security reports.

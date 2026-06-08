@@ -60,7 +60,8 @@ If you prefer Docker, you can start both the backend and frontend with a single 
 - **Parsing Quality**: Check the **"Parsing Quality"** card to see the success rate of the log parser. If some lines are skipped, it might indicate an incompatible log format. You can see **Skipped Line Samples** (up to 5) with their original line numbers and content to help you troubleshoot the log format or identify corrupt log entries.
 - **Traffic Analysis**: Check Top 5 IPs and Paths.
 - **Security Findings**: Review identified risks like "Sensitive Path Probing" or "Suspicious User Agent". Each card shows a description, recommendation, and evidence.
-- **Markdown Report**: Scroll to the bottom to see the full Markdown report.
+- **Rule Match Details**: In the **"Security Findings"** section, notice that each card now includes a **"Matched Details"** area. This shows the total number of rule matches (`Count`), which fields were used for matching (`Fields`), and a list of specific values (`Values`). For findings with many matched values (e.g., multiple sensitive paths), click **"Show all matched values"** to see the full list or **"Show less"** to collapse.
+- **Markdown Report**: Scroll to the bottom to see the full Markdown report. Each finding in the report also includes its structured "Matched Details".
 - **Download**: Click **"Download Report (.md)"** to save the analysis locally as5. Click the **"Analyze"** button.
 
 ## Step 5: Recent Analyses

@@ -7,6 +7,7 @@ Local-first Web log security analysis with rule-based findings, aggregated incid
 ## 核心差异化优势
 
 - **Rule-based Findings**: 基于精准规则的底层检测，确保每一个风险点都有据可查。
+- **Rule Match Details**: 每个风险点均包含结构化的命中详情（命中次数、命中字段、命中值列表），提供透明的检测逻辑解释。
 - **Aggregated Incidents**: 智能聚合相关风险点为“安全事件”，为分析师提供行为意图层面的深度洞察。
 - **Evidence-driven Analysis**: 每一个结论都附带原始日志证据，拒绝“黑盒”分析，方便人工二次校验。
 - **Sanitized Sharing**: 内置脱敏引擎，支持一键生成隐藏敏感信息（IP/Token）的安全报告，方便合规分享。
@@ -19,6 +20,7 @@ Local-first Web log security analysis with rule-based findings, aggregated incid
 - **解析质量统计**: 提供详细的解析成功率、跳过行数统计及**跳过行样本预览**，帮助用户快速定位并修复日志格式不兼容问题。
     *   *注：`samples/nginx_access_sample.log` 故意包含一条错误行用于演示此功能。*
 - **威胁检测**: 涵盖高频访问、路径扫描、敏感路径探测、异常 User-Agent 等多维度检测。
+- **Explainable Detection**: 增强的检测结果可解释性，每个 Finding 包含命中次数、命中字段和命中值列表，并支持前端展开/收起查看。
 - **智能聚合**: 自动将同一 IP 的多个可疑行为聚合成高级别的安全事件（如 Reconnaissance, Directory Scanning）。
 - **隐私保护**: 提供“脱敏报告”功能，自动隐藏 IP 后两段及敏感 Query 参数，支持安全地分享分析结论。
     *   **注意**：脱敏基于正则表达式，为 Best-effort 尝试（包括对报告中的解析错误样本进行脱敏），分享前仍建议人工检查敏感信息是否完全清除。

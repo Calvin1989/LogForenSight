@@ -102,7 +102,10 @@ Returns an `AnalysisResult` JSON object.
       "description": "IP 1.2.3.4 generated 6 404 errors, indicating potential directory scanning.",
       "recommendation": "Block this IP and investigate the target paths.",
       "evidence": ["Total 404 errors from this IP: 6"],
-      "metadata": { "ip": "1.2.3.4", "count": 6 }
+      "metadata": { "ip": "1.2.3.4", "count": 6 },
+      "matched_count": 6,
+      "matched_fields": ["ip", "status"],
+      "matched_values": ["1.2.3.4", "404"]
     }
   ],
   "report_markdown": "# AI Log Security Analysis Report\n..."
@@ -131,6 +134,9 @@ Aggregated security events grouped by Source IP.
 - `recommendation`: Suggested remediation steps.
 - `evidence`: List of strings providing proof for the finding. 
 - `metadata`: Key-value pairs containing structured data (e.g., `ip`, `count`).
+- `matched_count`: Total number of occurrences for this finding.
+- `matched_fields`: List of fields that triggered the rule (e.g., `["ip"]`).
+- `matched_values`: List of values that triggered the rule (e.g., `["1.2.3.4"]`).
 
 ### ErrorResponse
 - `detail`: A descriptive error message explaining what went wrong.

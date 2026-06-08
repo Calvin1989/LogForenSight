@@ -73,6 +73,37 @@
         </div>
         <p class="finding-desc"><strong>Description:</strong> {{ finding.description }}</p>
         <p class="finding-rec"><strong>Recommendation:</strong> {{ finding.recommendation }}</p>
+        
+        <div v-if="hasMatchedDetails(finding)" class="finding-matched-details">
+          <div class="matched-details-header">
+            <strong>Matched Details:</strong>
+          </div>
+          <div class="matched-info">
+            <span class="matched-stat">Count: <strong>{{ finding.matched_count || 0 }}</strong></span>
+            <span class="matched-stat">Fields: <code>{{ (finding.matched_fields || []).join(', ') }}</code></span>
+          </div>
+          <div class="matched-values-list" v-if="finding.matched_values && finding.matched_values.length > 0">
+            <div class="matched-values-header">
+              <span class="values-label">Values:</span>
+              <button 
+                v-if="finding.matched_values.length > 5" 
+                @click="toggleMatchedValues(index)" 
+                class="toggle-matched-btn"
+              >
+                {{ expandedMatchedValues.has(index) ? 'Show less' : 'Show all matched values' }}
+              </button>
+            </div>
+            <div class="matched-tags">
+              <span v-for="(val, vIdx) in getVisibleMatchedValues(finding, index)" :key="vIdx" class="matched-tag">
+                {{ val }}
+              </span>
+              <span v-if="finding.matched_values.length > 5 && !expandedMatchedValues.has(index)" class="matched-tag-more">
+                +{{ finding.matched_values.length - 5 }} more
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div class="finding-evidence">
           <div class="evidence-header">
             <strong>Evidence:</strong>
@@ -110,6 +141,7 @@ const ruleFilter = ref('all')
 const textSearch = ref('')
 const copyStatus = ref('')
 const expandedFindings = ref(new Set())
+const expandedMatchedValues = ref(new Set())
 
 const availableRules = computed(() => {
   const rules = new Set(props.findings.map(f => f.rule_id))
@@ -156,6 +188,29 @@ const getVisibleEvidence = (finding, index) => {
     return finding.evidence
   }
   return finding.evidence.slice(0, 2)
+}
+
+const hasMatchedDetails = (finding) => {
+  return (finding.matched_fields && finding.matched_fields.length > 0) || 
+         (finding.matched_values && finding.matched_values.length > 0)
+}
+
+const toggleMatchedValues = (index) => {
+  const newSet = new Set(expandedMatchedValues.value)
+  if (newSet.has(index)) {
+    newSet.delete(index)
+  } else {
+    newSet.add(index)
+  }
+  expandedMatchedValues.value = newSet
+}
+
+const getVisibleMatchedValues = (finding, index) => {
+  const values = finding.matched_values || []
+  if (expandedMatchedValues.value.has(index)) {
+    return values
+  }
+  return values.slice(0, 5)
 }
 
 const copyJson = async () => {
@@ -352,6 +407,80 @@ const copyJson = async () => {
 .finding-desc, .finding-rec {
   margin: 0.5rem 0;
   font-size: 0.95rem;
+}
+
+.finding-matched-details {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #f1f3f5;
+  border-radius: 4px;
+  border-left: 4px solid #adb5bd;
+}
+
+.matched-details-header {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.matched-info {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.matched-stat code {
+  background: #e9ecef;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  color: #495057;
+}
+
+.matched-values-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.values-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.toggle-matched-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.matched-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.matched-tag {
+  font-size: 0.75rem;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: #495057;
+  font-family: monospace;
+}
+
+.matched-tag-more {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-style: italic;
+  align-self: center;
 }
 
 .finding-evidence {

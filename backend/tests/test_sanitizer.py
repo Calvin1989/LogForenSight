@@ -32,7 +32,10 @@ def test_sanitize_analysis_result_immutability():
         rule_id="test", title="Test Finding", severity="high",
         description="Found 1.2.3.4", recommendation="Fix 1.2.3.4",
         evidence=["1.2.3.4 - GET /api?token=secret"],
-        metadata={"ip": "1.2.3.4"}
+        metadata={"ip": "1.2.3.4"},
+        matched_count=1,
+        matched_fields=["ip"],
+        matched_values=["1.2.3.4"]
     )
     incident = Incident(
         incident_id="inc-1", title="Test Incident", severity="high",
@@ -66,6 +69,7 @@ def test_sanitize_analysis_result_immutability():
     assert "1.2.x.x" in sanitized.findings[0].evidence[0]
     assert "token=<redacted>" in sanitized.findings[0].evidence[0]
     assert sanitized.findings[0].metadata["ip"] == "1.2.x.x"
+    assert sanitized.findings[0].matched_values == ["1.2.x.x"]
     assert sanitized.incidents[0].source_ip == "1.2.x.x"
     assert "1.2.x.x" in sanitized.incidents[0].summary
     assert "1.2.x.x" in sanitized.incidents[0].evidence[0]

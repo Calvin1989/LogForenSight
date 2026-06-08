@@ -91,7 +91,10 @@ def detect(
                 description=f"IP {ip} made {count} requests, exceeding threshold of {config.freq_threshold}.",
                 recommendation="Implement rate limiting or block the IP if behavior persists.",
                 evidence=[f"Total requests from this IP: {count}"],
-                metadata={"ip": ip, "count": count}
+                metadata={"ip": ip, "count": count},
+                matched_count=count,
+                matched_fields=["ip"],
+                matched_values=[ip]
             ))
 
     # Path Scanning
@@ -104,7 +107,10 @@ def detect(
                 description=f"IP {ip} generated {count} 404 errors, indicating potential directory scanning.",
                 recommendation="Block this IP and investigate the target paths.",
                 evidence=[f"Total 404 errors from this IP: {count}"],
-                metadata={"ip": ip, "count": count}
+                metadata={"ip": ip, "count": count},
+                matched_count=count,
+                matched_fields=["ip", "status"],
+                matched_values=[ip, "404"]
             ))
 
     # Sensitive Path Probes
@@ -120,7 +126,10 @@ def detect(
                 "ip": ip, 
                 "probe_count": len(evidence_list),
                 "paths": list(probed_paths_by_ip[ip])
-            }
+            },
+            matched_count=len(probed_paths_by_ip[ip]),
+            matched_fields=["path"],
+            matched_values=sorted(list(probed_paths_by_ip[ip]))
         ))
 
     # Suspicious User Agents
@@ -136,7 +145,10 @@ def detect(
                 "ip": ip, 
                 "ua_count": len(evidence_list),
                 "user_agents": list(uas_by_ip[ip])
-            }
+            },
+            matched_count=len(uas_by_ip[ip]),
+            matched_fields=["user_agent"],
+            matched_values=sorted(list(uas_by_ip[ip]))
         ))
 
     return findings

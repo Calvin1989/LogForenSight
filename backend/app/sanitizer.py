@@ -41,6 +41,7 @@ def _sanitize_finding_in_place(finding: Finding) -> None:
     finding.description = sanitize_text(finding.description)
     finding.recommendation = sanitize_text(finding.recommendation)
     finding.evidence = [sanitize_text(e) for e in finding.evidence]
+    finding.matched_values = [sanitize_text(v) for v in finding.matched_values]
     
     # Sanitize metadata values if they are strings
     new_metadata = {}

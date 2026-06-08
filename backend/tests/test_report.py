@@ -19,7 +19,10 @@ def test_generate_markdown_report():
             description="A test finding",
             recommendation="Fix it",
             evidence=["log line 1"],
-            metadata={}
+            metadata={},
+            matched_count=1,
+            matched_fields=["ip"],
+            matched_values=["1.1.1.1"]
         )
     ]
     stats = ParseStats(
@@ -49,4 +52,8 @@ def test_generate_markdown_report():
     assert "Line 5" in report
     assert "malformed line" in report
     assert "Test Finding" in report
+    assert "**Matched Details:**" in report
+    assert "**Matched Count:** 1" in report
+    assert "**Matched Fields:** ip" in report
+    assert "**Matched Values:** 1.1.1.1" in report
     assert "log line 1" in report

@@ -100,6 +100,11 @@ def generate_markdown_report(result: AnalysisResult) -> str:
             report.append(f"- **Rule ID:** {finding.rule_id}")
             report.append(f"- **Description:** {finding.description}")
             
+            report.append("\n**Matched Details:**")
+            report.append(f"- **Matched Count:** {finding.matched_count}")
+            report.append(f"- **Matched Fields:** {', '.join(finding.matched_fields)}")
+            report.append(f"- **Matched Values:** {', '.join(finding.matched_values)}")
+            
             if finding.evidence:
                 report.append("\n**Evidence (Sample):**")
                 for line in finding.evidence[:2]:
