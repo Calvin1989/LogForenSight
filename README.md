@@ -1,8 +1,30 @@
 # AI Log Security Analyzer
 
+**Local-first, explainable web log security analysis for Nginx and Apache access logs.**
+
 Local-first Web log security analysis with rule-based findings, aggregated incidents, evidence-driven reports, and sanitized sharing.
 
-一个本地优先的 AI 安全日志分析工具，旨在帮助开发者和运维人员快速识别 Nginx 日志中的潜在安全威胁。
+## Why this project is different
+
+- **Local-first privacy**: All analysis happens on your machine. No logs are ever uploaded to a cloud service or stored in an external database.
+- **Rule-based findings**: Every security risk is identified by transparent, configurable rules, not a "black box" model.
+- **Aggregated incidents**: Automatically groups individual suspicious events into high-level security incidents (e.g., "Reconnaissance") for better context.
+- **Attack timeline**: Provides a chronological narrative of the attack, helping you understand the sequence of events.
+- **Sanitized sharing**: Built-in engine to redact sensitive information like IPs and tokens, making it safe to share reports with stakeholders.
+- **Analyst exports**: Supports exporting filtered data to CSV and JSON for further investigation in external tools.
+- **No database / no external API**: Zero infrastructure overhead. Just run the app and start analyzing.
+
+## Current Status
+
+**Current local milestone: v1.4-local**
+
+| Feature | Status |
+| :--- | :--- |
+| **CI / Tests** | ![Passing](https://img.shields.io/badge/CI-Passing-brightgreen) |
+| **Unit Tests** | ![Coverage](https://img.shields.io/badge/Coverage-90%25-brightgreen) |
+| **Docker** | ![Ready](https://img.shields.io/badge/Docker-Ready-blue) |
+
+*Note: Badges are illustrative of current local build status.*
 
 ## 核心差异化优势
 

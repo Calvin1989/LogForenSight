@@ -48,15 +48,28 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 - [ ] **Rule Match Sanitization**: Ensure `matched_values` are properly sanitized in the sanitized report.
 - [ ] **Skipped Sample Sanitization**: Verify that the sanitized report does not expose full IPs or secrets in the "Skipped Line Samples" section.
 
-## 6. Pre-GitHub Cleanup
-- [ ] **Exclusion Check**: Ensure the following are NOT committed:
-    - `frontend/node_modules/`
-    - `frontend/dist/`
-    - `backend/__pycache__/`
-    - `backend/.pytest_cache/`
-    - `backend/.venv/`
-    - `backend/security_report.md`
-    - `backend/security_report_sanitized.md`
-    - `.env` files
-- [ ] **CI Status**: Ensure GitHub Actions CI workflow (if applicable) is passing for the latest commit.
-- [ ] **Documentation**: Ensure `README.md` and `docs/` are clear and professional.
+## 7. Pre-GitHub Release (Final Polish)
+- [ ] **Project Identity**:
+    - [ ] `README.md` positioning is clear and professional.
+    - [ ] `Why this project is different` section highlights local-first and rule-based approach.
+    - [ ] `Current local milestone` is updated to `v1.4-local`.
+- [ ] **Standard Files**:
+    - [ ] `CHANGELOG.md` exists and covers v1.0 to v1.4.
+    - [ ] `LICENSE` (MIT) exists with correct copyright holder.
+    - [ ] `.gitattributes` is configured for LF line endings.
+- [ ] **Documentation completeness**:
+    - [ ] `architecture.md` includes the data flow diagram.
+    - [ ] `demo.md` includes the 5-minute demo script.
+- [ ] **Verification**:
+    - [ ] All CI checks are passing locally.
+    - [ ] Docker compose configuration is valid (`docker compose config`).
+    - [ ] Frontend production build is successful (`npm run build`).
+- [ ] **Sanitized Review**:
+    - [ ] Manually review a generated sanitized report to ensure no leaks of real IPs or secrets from the sample logs.
+- [ ] **Git Hygiene**:
+    - [ ] Ensure no `*.md.generated` or `dist/` files are accidentally tracked.
+    - [ ] Run `git status` to ensure a clean working directory (excluding untracked files intended for the next step).
+
+## 8. Post-Release (Future)
+- [ ] Create GitHub Release tag.
+- [ ] Upload Docker images to Registry (optional).

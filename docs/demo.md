@@ -46,7 +46,38 @@ If you prefer Docker, you can start both the backend and frontend with a single 
 2. Once the containers are running, access the application at [http://localhost:5173](http://localhost:5173).
 3. To stop the services, run `docker compose down`.
 
-## Step 3: Perform Analysis
+## Step 3: 5-Minute Demo Script (Release v1.5 Ready)
+
+1. **Launch with Docker**:
+   - Run `docker compose up --build`.
+   - Open `http://localhost:5173`.
+2. **Upload & Analyze**:
+   - Click **"Choose a .log or .txt file"**.
+   - Select `samples/nginx_access_sample.log`.
+   - Click **"Analyze"**.
+3. **Review Metrics & Quality**:
+   - Check **Parse Stats**: Notice the 90%+ success rate.
+   - Expand **Skipped Line Samples**: See the malformed line identified by the parser.
+4. **Prioritize Risks**:
+   - Check **Severity Distribution**: See the High/Medium/Low counts for Incidents.
+5. **Investigate Timeline**:
+   - Scroll to **Attack Timeline**.
+   - Filter by **Severity: HIGH**.
+   - Expand **Evidence** for a "Directory Scanning" event to see the exact URI.
+6. **Deep Dive Findings**:
+   - Scroll to **Security Findings**.
+   - Search for `sqlmap` in the search box.
+   - Expand **Matched Details** to see the specific counts and values.
+7. **Analyst Export**:
+   - Filter Findings by **Severity: MEDIUM**.
+   - Click **"Download CSV"** to export the filtered list.
+   - Click **"Download Summary (.json)"** for the metrics-only export.
+8. **Sanitized Sharing**:
+   - Scroll to the **Markdown Report** section.
+   - Click **"Download Sanitized (.md)"**.
+   - Verify (manually) that IPs are masked and sensitive paths are redacted.
+
+## Step 4: Perform Analysis (Manual Steps)
 1. Open your browser and go to [http://localhost:5173](http://localhost:5173).
 2. **Check Active Rules**: Before uploading, look at the **"Active Rule Configuration"** section. It shows the current thresholds and sensitive patterns being used for detection.
 3. Click the **"Choose a .log or .txt file"** button.

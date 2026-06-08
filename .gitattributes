@@ -1,0 +1,31 @@
+# Set default behavior to handle line endings.
+* text=auto eol=lf
+
+# Explicitly set line endings for specific file types.
+*.md text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.vue text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.log text eol=lf
+*.txt text eol=lf
+
+# Documentation
+LICENSE text eol=lf
+CHANGELOG.md text eol=lf
+README.md text eol=lf
+
+# Project configuration
+.gitignore text eol=lf
+.gitattributes text eol=lf
+docker-compose.yml text eol=lf
+Dockerfile text eol=lf
+requirements.txt text eol=lf
+package.json text eol=lf
+package-lock.json text eol=lf
+vite.config.js text eol=lf
+pytest.ini text eol=lf

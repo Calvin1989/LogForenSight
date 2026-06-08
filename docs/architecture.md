@@ -31,6 +31,48 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
 
 ## Data Flow
 
+```text
+[ Log File ] 
+      |
+      v
+[ app/parser.py ] ----> ( LogEntry Objects + Metrics )
+      |
+      v
+[ app/detector.py ] --> ( Rule-based Findings )
+      |
+      v
+[ app/incident.py ] --> ( Aggregated Incidents )
+      |
+      v
+[ app/timeline.py ] --> ( Chronological Timeline Events )
+      |
+      v
+[ app/service.py ] ---> ( Final AnalysisResult )
+      |
+      +----------------------------+----------------------------+
+      |                            |                            |
+      v                            v                            v
+[ app/report.py ]          [ app/sanitizer.py ]          [ app/main.py ]
+      |                            |                            |
+      v                            v                            v
+( Markdown Report )       ( Redacted Results )          ( REST API JSON )
+      |                            |                            |
+      +----------------------------+----------------------------+
+                                   |
+                                   v
+                          [ Frontend (Vue 3) ]
+                                   |
+                +------------------+------------------+
+                |                  |                  |
+                v                  v                  v
+          [ components ]    [ composables ]    [ utils/exportUtils ]
+          ( UI Display )    ( State Mgmt )     ( CSV/JSON Export )
+                                   |
+                                   v
+                         [ utils/historyStorage ]
+                          ( Local Persistence )
+```
+
 1. **Upload**: User selects a log file in the Vue frontend.
 2. **Request**: Frontend sends the file to the FastAPI `/api/analyze` endpoint.
 3. **Orchestration**: `main.py` calls `service.py` to start the analysis.
