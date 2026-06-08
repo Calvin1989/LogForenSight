@@ -24,6 +24,14 @@
         >
           {{ sanitizing ? 'Processing...' : 'Download Sanitized (.md)' }}
         </button>
+        <button 
+          v-if="result" 
+          @click="downloadSummaryJson" 
+          class="download-btn summary"
+          title="Download summary metrics as JSON"
+        >
+          Download Summary (.json)
+        </button>
       </div>
     </div>
     
@@ -41,8 +49,13 @@
 
 <script setup>
 import { ref } from 'vue'
+import { downloadJson, buildAnalysisSummaryExport } from '../utils/exportUtils'
 
 const props = defineProps({
+  result: {
+    type: Object,
+    default: null
+  },
   reportMarkdown: {
     type: String,
     required: true
@@ -76,6 +89,13 @@ const triggerDownload = (content, filename) => {
 const downloadRawReport = () => {
   if (!props.reportMarkdown) return
   triggerDownload(props.reportMarkdown, 'security_report.md')
+}
+
+const downloadSummaryJson = () => {
+  if (!props.result) return
+  const summaryData = buildAnalysisSummaryExport(props.result)
+  const dateStr = new Date().toISOString().split('T')[0]
+  downloadJson(`analysis_summary_${dateStr}.json`, summaryData)
 }
 </script>
 
@@ -154,6 +174,13 @@ const downloadRawReport = () => {
 .download-btn.sanitized:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
+}
+
+.download-btn.summary {
+  background-color: #6f42c1;
+}
+.download-btn.summary:hover {
+  background-color: #5a32a3;
 }
 
 .mini-error {

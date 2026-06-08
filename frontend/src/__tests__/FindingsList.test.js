@@ -42,6 +42,16 @@ describe('FindingsList.vue', () => {
     expect(hfFinding.text()).toContain('1.1.1.1')
   })
 
+  it('renders export buttons', () => {
+    const wrapper = mount(FindingsList, {
+      props: { findings: mockFindings }
+    })
+
+    expect(wrapper.find('.export-btn[title*="JSON"]').exists()).toBe(true)
+    expect(wrapper.find('.export-btn[title*="CSV"]').exists()).toBe(true)
+    expect(wrapper.find('.export-warning').exists()).toBe(true)
+  })
+
   it('handles more than 5 matched values with toggle', async () => {
     const wrapper = mount(FindingsList, {
       props: { findings: mockFindings }

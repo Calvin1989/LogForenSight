@@ -25,6 +25,7 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
 - **State Management**: Uses Vue 3's Composition API. Analysis-related state and methods are encapsulated in `src/composables/useAnalysisState.js` to keep `App.vue` clean and focused on layout.
 - **API Client**: `src/api.js` centralizes all HTTP communication with the backend.
 - **Local History**: `src/utils/historyStorage.js` manages persistent storage of recent analysis results in `localStorage`.
+- **Export Utilities**: `src/utils/exportUtils.js` provides pure frontend functions for converting data to CSV/JSON and triggering browser downloads.
 - **Responsive Design**: Uses plain CSS with Flexbox and Grid to ensure the interface works well across different screen sizes.
 
 ## Data Flow

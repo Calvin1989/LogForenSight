@@ -82,9 +82,14 @@ When dealing with many findings, use the built-in filters:
 4.  Scroll to **"Security Findings"**.
 5. Try the **Search** box to find specific keywords (e.g., "sqlmap" or ".env").
 6. Filter by **Rule** to see all instances of a specific detection rule.
-7. Click **"Copy Filtered JSON"** to quickly export the current view to your clipboard for use in other tools.
-8. Look for an incident or finding with many evidence samples. Click **"Show all evidence"** to expand the full list and **"Show less"** to collapse it back.
-9. Click **"Clear"** or **"Clear Filters"** to reset.
+7. **Analyst Workflow - Exporting**:
+    - After filtering, notice the **"Download JSON"** and **"Download CSV"** buttons.
+    - Click **"Download CSV"** for a filtered list of High-severity incidents. You can open this file in Excel or Google Sheets for further tracking.
+    - Notice the **security warning** badge: "Raw JSON/CSV exports may contain sensitive log evidence. Review before sharing."
+8. Click **"Copy Filtered JSON"** to quickly export the current view to your clipboard for use in other tools.
+9. Look for an incident or finding with many evidence samples. Click **"Show all evidence"** to expand the full list and **"Show less"** to collapse it back.
+10. Scroll to the **Markdown Report** section and click **"Download Summary (.json)"**. This provides a machine-readable summary of the entire analysis (metrics only, no raw logs).
+11. Click **"Clear"** or **"Clear Filters"** to reset.
 
 ## Step 7: Safe Sharing with Sanitization
 One of the key features of the analyzer is the ability to share results without leaking sensitive data.

@@ -55,7 +55,27 @@
         >
           {{ copyStatus || 'Copy JSON' }}
         </button>
+        <button 
+          @click="exportJson" 
+          :disabled="filteredFindings.length === 0"
+          class="export-btn"
+          title="Download filtered findings as JSON"
+        >
+          Download JSON
+        </button>
+        <button 
+          @click="exportCsv" 
+          :disabled="filteredFindings.length === 0"
+          class="export-btn"
+          title="Download filtered findings as CSV"
+        >
+          Download CSV
+        </button>
       </div>
+    </div>
+
+    <div v-if="filteredFindings.length > 0" class="export-warning">
+      ⚠️ Raw JSON/CSV exports may contain sensitive log evidence. Review before sharing.
     </div>
 
     <div v-if="filteredFindings.length === 0" class="empty-state">
@@ -128,6 +148,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { downloadJson, downloadTextFile, convertFindingsToCsv } from '../utils/exportUtils'
 
 const props = defineProps({
   findings: {
@@ -233,6 +254,23 @@ const copyJson = async () => {
     }, 2000)
   }
 }
+
+const exportJson = () => {
+  if (filteredFindings.value.length === 0) return
+  const filename = `findings_export_${new_date_str()}.json`
+  downloadJson(filename, filteredFindings.value)
+}
+
+const exportCsv = () => {
+  if (filteredFindings.value.length === 0) return
+  const filename = `findings_export_${new_date_str()}.csv`
+  const csv = convertFindingsToCsv(filteredFindings.value)
+  downloadTextFile(filename, csv, 'text/csv')
+}
+
+const new_date_str = () => {
+  return new Date().toISOString().split('T')[0]
+}
 </script>
 
 <style scoped>
@@ -324,27 +362,49 @@ const copyJson = async () => {
   margin-left: auto;
 }
 
-.copy-btn {
+.copy-btn, .export-btn {
   padding: 0.35rem 0.75rem;
-  background-color: #212529;
-  color: white;
-  border: none;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  white-space: nowrap;
+}
+
+.copy-btn {
+  background-color: #e9ecef;
+  border: 1px solid #dee2e6;
+  color: #495057;
 }
 
 .copy-btn:hover:not(:disabled) {
-  background-color: #343a40;
+  background-color: #dee2e6;
 }
 
-.copy-btn:disabled {
-  background-color: #adb5bd;
+.export-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  color: #495057;
+}
+
+.export-btn:hover:not(:disabled) {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.copy-btn:disabled, .export-btn:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
-  opacity: 0.6;
+}
+
+.export-warning {
+  font-size: 0.8rem;
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
 }
 
 .empty-state {

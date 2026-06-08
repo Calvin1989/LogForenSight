@@ -30,6 +30,12 @@ This checklist ensures that the **AI Log Security Analyzer** is stable and ready
 - [ ] **Skipped Samples**: Verify that Skipped Line Samples are displayed if the log contains malformed lines (use `nginx_access_sample.log`).
 - [ ] **Markdown Report**: Verify the "Show/Hide Preview" button works.
 - [ ] **Downloads**: Verify both "Download Report" and "Download Sanitized" trigger correct file downloads.
+- [ ] **Analyst Workflow Exports**:
+    - [ ] Export Filtered Incidents (JSON/CSV)
+    - [ ] Export Filtered Findings (JSON/CSV)
+    - [ ] Export Analysis Summary (JSON)
+    - [ ] Check CSV formatting (correct columns, escaping of special characters)
+- [ ] **Clear Current Result**: Verify "Clear Current Result" works as expected (resets UI but preserves local history).
 
 ## 5. Security & Privacy (Sanitization)
 - [ ] **IP Redaction**: Ensure public IPs are masked (e.g., `1.2.x.x`) in the sanitized report.

@@ -31,6 +31,10 @@ Local-first Web log security analysis with rule-based findings, aggregated incid
 - **最近分析记录**: 自动在浏览器本地保存最近 5 次分析结果（存储于 `localStorage`），支持快速回溯历史分析，无需重复上传。
     *   **注意**：脱敏报告下载在历史回溯场景下，若未缓存脱敏结果且没有原始文件，可能需要重新上传日志文件。
 - **Markdown 报告**: 自动生成专业安全报告，支持在线预览及本地下载。
+- **分析师工作流导出**:
+    - **Filtered CSV/JSON Export**: 支持将当前筛选后的“安全事件”或“风险点”直接导出为 CSV 或 JSON 文件，方便导入 Excel 或其他分析工具。
+    - **Summary JSON Export**: 支持导出包含核心统计指标、严重程度分布和解析质量的摘要 JSON 文件，不含冗长的原始日志证据。
+    - **安全提示**: 所有导出功能均附带安全提醒，防止在分享原始导出数据时泄露敏感信息。
 
 ## 技术栈
 

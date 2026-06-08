@@ -65,6 +65,7 @@
         <FindingsList :findings="result.findings" />
 
         <MarkdownReport 
+          :result="result"
           :reportMarkdown="result.report_markdown" 
           :file="selectedFile"
           :sanitizing="sanitizingReport"
