@@ -3,7 +3,7 @@ import * as storage from '../utils/triageStorage'
 
 describe('triageStorage', () => {
   const caseId = 'test-case-123';
-  const STORAGE_KEY = `ai-log-security-analyzer:triage:v1:${caseId}`;
+  const STORAGE_KEY = `LogForenSight:triage:v1:${caseId}`;
 
   beforeEach(() => {
     localStorage.clear()

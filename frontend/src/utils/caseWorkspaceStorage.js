@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'ai-log-security-analyzer:case-workspace:v1';
+const STORAGE_KEY = 'LogForenSight:case-workspace:v1';
 
 /**
  * Validates that a case record does not contain any File objects or raw log content.

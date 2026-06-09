@@ -16,8 +16,8 @@ import traceback
 import os
 
 app = FastAPI(
-    title="AI Log Security Analyzer API",
-    description="Backend API for AI Log Security Analyzer, providing log parsing and security detection.",
+    title="LogForenSight API",
+    description="Backend API for LogForenSight, providing log parsing and security detection.",
     version="1.0.0"
 )
 

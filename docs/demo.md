@@ -1,6 +1,6 @@
 # 演示指南 (Demo Guide)
 
-本指南旨在帮助您在 5-8 分钟内向面试官或团队展示 **AI Log Security Analyzer** 的完整功能。
+本指南旨在帮助您在 5-8 分钟内向面试官或团队展示 **LogForenSight** 的完整功能。
 
 ---
 

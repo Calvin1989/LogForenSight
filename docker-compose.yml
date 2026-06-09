@@ -1,7 +1,7 @@
 services:
   backend:
     build: ./backend
-    container_name: ai-log-analyzer-backend
+    container_name: log-forensight-backend
     ports:
       - "8000:8000"
     volumes:
@@ -12,7 +12,7 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: ai-log-analyzer-frontend
+    container_name: log-forensight-frontend
     ports:
       - "5173:80"
     depends_on:
