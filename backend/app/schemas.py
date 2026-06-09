@@ -1,5 +1,6 @@
-from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, Field
 
 class LogEntry(BaseModel):
     ip: str
@@ -13,6 +14,7 @@ class LogEntry(BaseModel):
     user_agent: str
     raw: str
     log_format: str = "unknown"
+    source_file: str = ""
 
 class Finding(BaseModel):
     rule_id: str
@@ -66,12 +68,21 @@ class ParseStats(BaseModel):
     parse_rate: float
     requested_format: str
     detected_format: str
-    skipped_samples: List['SkippedLineSample'] = []
+    skipped_samples: List["SkippedLineSample"] = Field(default_factory=list)
 
 class SkippedLineSample(BaseModel):
     line_number: int
     content: str
     reason: str
+
+class SourceFileStats(BaseModel):
+    filename: str = ""
+    total_lines: int = 0
+    parsed_lines: int = 0
+    skipped_lines: int = 0
+    parse_rate: float = 0.0
+    detected_format: str = "unknown"
+    skipped_samples: List[SkippedLineSample] = Field(default_factory=list)
 
 class ExecutiveSummary(BaseModel):
     overall_risk_level: str
@@ -109,6 +120,8 @@ class AnalysisResult(BaseModel):
     report_markdown: str
     executive_summary: ExecutiveSummary | None = None
     rule_coverage: List[RuleCoverageItem] = []
+    analysis_mode: str = "single"
+    source_files: List[SourceFileStats] = Field(default_factory=list)
 
 class ErrorResponse(BaseModel):
     detail: str

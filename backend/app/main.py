@@ -1,6 +1,11 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
-from .service import analyze_log_text, analyze_log_text_sanitized, analyze_log_text_with_overrides
+from .service import (
+    analyze_log_files,
+    analyze_log_text,
+    analyze_log_text_sanitized,
+    analyze_log_text_with_overrides,
+)
 from .schemas import (
     AnalysisResult, ErrorResponse, RuleConfigResponse,
     RuleTuningOverride, RuleTuningPreviewResponse
@@ -99,6 +104,41 @@ async def analyze_log(
     try:
         config = get_config()
         return analyze_log_text(log_text, config=config, log_format=log_format)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal analysis error: {str(e)}")
+
+@app.post(
+    "/api/analyze/batch",
+    response_model=AnalysisResult,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid files, empty file, or file too large"},
+        500: {"model": ErrorResponse, "description": "Internal analysis error"}
+    }
+)
+async def analyze_log_batch(
+    files: list[UploadFile] = File(...),
+    log_format: str = Form("auto")
+):
+    """
+    Analyzes multiple uploaded log files as one combined case.
+    """
+    if not files:
+        raise HTTPException(status_code=400, detail="At least one file is required.")
+
+    if len(files) > 10:
+        raise HTTPException(status_code=400, detail="Too many files. Maximum is 10.")
+
+    uploaded_files = []
+    for file in files:
+        log_text = await _read_uploaded_log_file(file)
+        uploaded_files.append({
+            "filename": file.filename or "",
+            "content": log_text
+        })
+
+    try:
+        config = get_config()
+        return analyze_log_files(uploaded_files, config=config, log_format=log_format)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal analysis error: {str(e)}")
 

@@ -1,6 +1,5 @@
 import re
-from typing import List, Any
-from .schemas import Finding, Incident, AnalysisResult, AnalysisSummary, TimelineEvent
+from .schemas import AnalysisResult, Finding, Incident, TimelineEvent
 
 # Regex for IPv4
 IP_PATTERN = re.compile(r'(\d{1,3}\.\d+)\.\d+\.\d+')
@@ -93,6 +92,16 @@ def _sanitize_rule_coverage_in_place(result: AnalysisResult) -> None:
         item.sample_matched_values = [sanitize_text(v) for v in item.sample_matched_values]
         item.sample_evidence = [sanitize_text(e) for e in item.sample_evidence]
 
+def _sanitize_source_files_in_place(result: AnalysisResult) -> None:
+    """Modifies batch source file stats in-place with sanitized data."""
+    if not result.source_files:
+        return
+
+    for source_file in result.source_files:
+        source_file.filename = sanitize_text(source_file.filename)
+        for sample in source_file.skipped_samples:
+            sample.content = sanitize_text(sample.content)
+
 def sanitize_analysis_result(result: AnalysisResult) -> AnalysisResult:
     """
     Creates a new AnalysisResult with all sensitive data redacted.
@@ -126,7 +135,10 @@ def sanitize_analysis_result(result: AnalysisResult) -> AnalysisResult:
     # 7. Sanitize rule coverage
     _sanitize_rule_coverage_in_place(sanitized)
 
-    # 8. Regenerate the markdown report based on sanitized data
+    # 8. Sanitize batch source file details
+    _sanitize_source_files_in_place(sanitized)
+
+    # 9. Regenerate the markdown report based on sanitized data
     from .report import generate_markdown_report
     sanitized.report_markdown = generate_markdown_report(sanitized)
     

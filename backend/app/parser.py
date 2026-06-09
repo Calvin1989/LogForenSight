@@ -12,7 +12,7 @@ COMBINED_PATTERN = re.compile(
     r'(?P<status>\d+) (?P<bytes_sent>\S+) "(?P<referer>.*?)" "(?P<user_agent>.*?)"'
 )
 
-def parse_line(line: str, log_format: str = "auto") -> Optional[LogEntry]:
+def parse_line(line: str, log_format: str = "auto", source_file: str = "") -> Optional[LogEntry]:
     """
     Parses a single line of access log into a LogEntry model.
     Supports Nginx and Apache combined formats.
@@ -51,17 +51,22 @@ def parse_line(line: str, log_format: str = "auto") -> Optional[LogEntry]:
         referer=data['referer'],
         user_agent=data['user_agent'],
         raw=line,
-        log_format=detected_format
+        log_format=detected_format,
+        source_file=source_file
     )
 
-def parse_lines(lines: List[str], log_format: str = "auto") -> List[LogEntry]:
+def parse_lines(lines: List[str], log_format: str = "auto", source_file: str = "") -> List[LogEntry]:
     """
     Parses multiple lines of access log.
     """
-    logs, _ = parse_lines_with_stats(lines, log_format=log_format)
+    logs, _ = parse_lines_with_stats(lines, log_format=log_format, source_file=source_file)
     return logs
 
-def parse_lines_with_stats(lines: List[str], log_format: str = "auto") -> Tuple[List[LogEntry], ParseStats]:
+def parse_lines_with_stats(
+    lines: List[str],
+    log_format: str = "auto",
+    source_file: str = ""
+) -> Tuple[List[LogEntry], ParseStats]:
     """
     Parses multiple lines of access log and returns statistics.
     """
@@ -75,7 +80,7 @@ def parse_lines_with_stats(lines: List[str], log_format: str = "auto") -> Tuple[
     detected_format = "unknown"
     
     for line_num, line in non_empty_line_data:
-        parsed = parse_line(line, log_format=log_format)
+        parsed = parse_line(line, log_format=log_format, source_file=source_file)
         if parsed:
             results.append(parsed)
             # If auto, we pick up the format from the first successful parse

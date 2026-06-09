@@ -78,6 +78,18 @@ def generate_markdown_report(result: AnalysisResult) -> str:
         f"- **Log Format:** {stats.detected_format} (requested: {stats.requested_format})",
     ])
 
+    if result.analysis_mode == "batch" and result.source_files:
+        report.extend([
+            "\n### Source Files Parsing Details",
+            "| File | Total Lines | Parsed | Skipped | Parse Rate | Format |",
+            "| :--- | :--- | :--- | :--- | :--- | :--- |"
+        ])
+        for source_file in result.source_files:
+            report.append(
+                f"| {source_file.filename} | {source_file.total_lines} | {source_file.parsed_lines} | "
+                f"{source_file.skipped_lines} | {source_file.parse_rate * 100:.2f}% | {source_file.detected_format} |"
+            )
+
     # Section 4: Attack Timeline
     report.append("\n## 4. Attack Timeline")
     timeline_events = result.timeline_events

@@ -1,8 +1,8 @@
 from collections import Counter
-from typing import List, Optional
+from typing import Any, List, Optional
 from .schemas import (
     LogEntry, Finding, AnalysisSummary, AnalysisResult, Incident, ParseStats,
-    RuleTuningOverride, RuleTuningPreviewResponse
+    RuleTuningOverride, RuleTuningPreviewResponse, SourceFileStats
 )
 from .parser import parse_lines, parse_file, parse_lines_with_stats
 from .detector import detect, DetectorConfig
@@ -57,6 +57,36 @@ def _calculate_summary(logs: List[LogEntry], findings: List[Finding] = None, inc
         incident_severity_counts=incident_severity_counts
     )
 
+def _build_analysis_result(
+    logs: List[LogEntry],
+    stats: ParseStats,
+    config: Optional[DetectorConfig] = None,
+    analysis_mode: str = "single",
+    source_files: Optional[List[SourceFileStats]] = None
+) -> AnalysisResult:
+    findings = detect(logs, config)
+    incidents = build_incidents(findings)
+    summary = _calculate_summary(logs, findings, incidents)
+    timeline_events = build_timeline_events(logs, findings, incidents)
+    rule_coverage = build_rule_coverage(config or DetectorConfig(), findings, incidents)
+
+    result = AnalysisResult(
+        summary=summary,
+        findings=findings,
+        incidents=incidents,
+        timeline_events=timeline_events,
+        parse_stats=stats,
+        report_markdown="",  # Placeholder
+        executive_summary=None,  # Placeholder
+        rule_coverage=rule_coverage,
+        analysis_mode=analysis_mode,
+        source_files=source_files or []
+    )
+
+    result.executive_summary = generate_executive_summary(result)
+    result.report_markdown = generate_markdown_report(result)
+    return result
+
 def analyze_log_text(log_text: str, config: Optional[DetectorConfig] = None, log_format: str = "auto") -> AnalysisResult:
     """
     Analyzes log content from a string.
@@ -71,32 +101,62 @@ def analyze_log_text(log_text: str, config: Optional[DetectorConfig] = None, log
     """
     lines = log_text.strip().split('\n')
     logs, stats = parse_lines_with_stats(lines, log_format=log_format)
-    
-    findings = detect(logs, config)
-    incidents = build_incidents(findings)
-    summary = _calculate_summary(logs, findings, incidents)
-    timeline_events = build_timeline_events(logs, findings, incidents)
+    return _build_analysis_result(logs, stats, config=config)
 
-    # Build Rule Coverage
-    rule_coverage = build_rule_coverage(config or DetectorConfig(), findings, incidents)
-    
-    result = AnalysisResult(
-        summary=summary,
-        findings=findings,
-        incidents=incidents,
-        timeline_events=timeline_events,
-        parse_stats=stats,
-        report_markdown="", # Placeholder
-        executive_summary=None, # Placeholder
-        rule_coverage=rule_coverage
+def analyze_log_files(
+    files: List[dict[str, Any]],
+    config: Optional[DetectorConfig] = None,
+    log_format: str = "auto"
+) -> AnalysisResult:
+    """
+    Analyzes multiple uploaded log files as one logical case while
+    preserving per-source parsing statistics.
+    """
+    all_logs: List[LogEntry] = []
+    source_files: List[SourceFileStats] = []
+
+    for file_data in files:
+        filename = str(file_data.get("filename", ""))
+        content = str(file_data.get("content", ""))
+        lines = content.splitlines()
+        logs, stats = parse_lines_with_stats(lines, log_format=log_format, source_file=filename)
+
+        all_logs.extend(logs)
+        source_files.append(SourceFileStats(
+            filename=filename,
+            total_lines=stats.total_lines,
+            parsed_lines=stats.parsed_lines,
+            skipped_lines=stats.skipped_lines,
+            parse_rate=stats.parse_rate,
+            detected_format=stats.detected_format,
+            skipped_samples=stats.skipped_samples
+        ))
+
+    total_lines = sum(item.total_lines for item in source_files)
+    parsed_lines = sum(item.parsed_lines for item in source_files)
+    skipped_lines = sum(item.skipped_lines for item in source_files)
+    parse_rate = round((parsed_lines / total_lines), 4) if total_lines > 0 else 0.0
+    detected_formats = [item.detected_format for item in source_files if item.detected_format != "unknown"]
+    detected_format = detected_formats[0] if detected_formats else "unknown"
+    skipped_samples = [sample for item in source_files for sample in item.skipped_samples][:5]
+
+    aggregate_stats = ParseStats(
+        total_lines=total_lines,
+        parsed_lines=parsed_lines,
+        skipped_lines=skipped_lines,
+        parse_rate=parse_rate,
+        requested_format=log_format,
+        detected_format=detected_format,
+        skipped_samples=skipped_samples
     )
-    
-    # Generate Executive Summary
-    result.executive_summary = generate_executive_summary(result)
 
-    # Generate markdown and update result
-    result.report_markdown = generate_markdown_report(result)
-    return result
+    return _build_analysis_result(
+        all_logs,
+        aggregate_stats,
+        config=config,
+        analysis_mode="batch",
+        source_files=source_files
+    )
 
 def analyze_log_text_sanitized(log_text: str, config: Optional[DetectorConfig] = None, log_format: str = "auto") -> AnalysisResult:
     """
