@@ -124,9 +124,21 @@ describe('i18n tool', () => {
     setLanguage('zh')
     expect(t('report.downloadEvidencePack')).toBe('下载证据包')
     expect(t('evidencePack.notAvailable')).toBe('暂无数据')
+    expect(t('evidencePack.investigationEntities')).toBe('调查实体')
 
     setLanguage('en')
     expect(t('report.downloadEvidencePack')).toBe('Download Evidence Pack')
     expect(t('evidencePack.notAvailable')).toBe('Not available')
+    expect(t('evidencePack.investigationEntities')).toBe('Investigation entities')
+  })
+
+  it('should have investigation entity translations', () => {
+    setLanguage('zh')
+    expect(t('entities.title')).toBe('调查实体')
+    expect(t('entities.types.http_status')).toBe('HTTP 状态码')
+
+    setLanguage('en')
+    expect(t('entities.title')).toBe('Investigation Entities')
+    expect(t('entities.types.source_file')).toBe('Source File')
   })
 })

@@ -202,10 +202,29 @@ const messages = {
       totalTriagedItems: "已处置条目总数",
       statusDistribution: "状态分布",
       priorityDistribution: "优先级分布",
+      investigationEntities: "调查实体",
       enabled: "已启用",
       yes: "是",
       no: "否",
       notAvailable: "暂无数据"
+    },
+    entities: {
+      title: "调查实体",
+      intro: "从当前分析结果中提取可调查的 IP、账号、URL、路径、HTTP 方法、状态码和来源文件。",
+      type: "实体类型",
+      value: "实体值",
+      firstSeen: "首次出现",
+      lastSeen: "最后出现",
+      relatedSourceFiles: "相关来源文件",
+      types: {
+        account: "账号",
+        http_method: "HTTP 方法",
+        http_status: "HTTP 状态码",
+        ip: "IP 地址",
+        path: "路径",
+        source_file: "来源文件",
+        url: "URL"
+      }
     },
     ruleConfig: {
       title: "当前生效的规则配置",
@@ -559,10 +578,29 @@ const messages = {
       totalTriagedItems: "Total triaged items",
       statusDistribution: "Status distribution",
       priorityDistribution: "Priority distribution",
+      investigationEntities: "Investigation entities",
       enabled: "Enabled",
       yes: "Yes",
       no: "No",
       notAvailable: "Not available"
+    },
+    entities: {
+      title: "Investigation Entities",
+      intro: "Extracted local-first investigation entities from the current analysis result, including IPs, accounts, URLs, paths, HTTP methods, status codes, and source files.",
+      type: "Entity Type",
+      value: "Value",
+      firstSeen: "First Seen",
+      lastSeen: "Last Seen",
+      relatedSourceFiles: "Related Source Files",
+      types: {
+        account: "Account",
+        http_method: "HTTP Method",
+        http_status: "HTTP Status",
+        ip: "IP Address",
+        path: "Path",
+        source_file: "Source File",
+        url: "URL"
+      }
     },
     ruleConfig: {
       title: "Active Rule Configuration",

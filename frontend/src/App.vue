@@ -77,6 +77,8 @@
 
         <ParseStatsCard :stats="displayResult.parse_stats" />
 
+        <InvestigationEntities :analysisResult="result" />
+
         <IncidentsList :incidents="displayResult.incidents" />
 
         <div class="side-by-side">
@@ -117,7 +119,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, nextTick } from 'vue'
 import { t, currentLanguage } from './i18n'
 import { localizeAnalysisForDisplay } from './utils/localizedAnalysis'
 import LanguageToggle from './components/LanguageToggle.vue'
@@ -139,6 +141,7 @@ import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
 import CaseWorkspace from './components/CaseWorkspace.vue'
 import TriagePanel from './components/TriagePanel.vue'
+import InvestigationEntities from './components/InvestigationEntities.vue'
 
 const {
   loading,
