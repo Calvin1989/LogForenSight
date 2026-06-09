@@ -173,4 +173,124 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Investigation entities')
     expect(markdown).toContain('## Triage summary')
   })
+
+  it('includes a Detection Explainability chapter with per-finding rule context, rationale and recommended action', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {
+        total_requests: 120,
+        unique_ips: 4,
+        finding_severity_counts: { high: 1 }
+      },
+      findings: [
+        {
+          rule_id: 'high_frequency_ip',
+          title: 'High Frequency IP',
+          severity: 'high',
+          description: 'A source IP exceeded the threshold for user=alice.',
+          recommendation: 'Rate limit the source.',
+          matched_count: 25,
+          matched_fields: ['source_ip'],
+          matched_values: ['1.2.3.4'],
+          evidence: ['1.2.3.4 - GET /login HTTP/1.1" 401 src_user=alice'],
+          metadata: {
+            source_ip: '1.2.3.4',
+            path: '/login',
+            method: 'GET',
+            status: '401',
+            source_file: 'web-1.log'
+          }
+        }
+      ],
+      incidents: [],
+      rule_coverage: [
+        {
+          rule_id: 'high_frequency_ip',
+          title: 'High Frequency IP',
+          severity: 'high',
+          enabled: true,
+          triggered: true,
+          finding_count: 1,
+          incident_count: 0,
+          explanation: 'Detects unusually high request volumes from the same source.'
+        }
+      ]
+    }, {
+      caseId: 'case-2',
+      triageState: {},
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Detection Explainability')
+    expect(markdown).toContain('**Rule ID**: high_frequency_ip')
+    expect(markdown).toContain('**Rule Name**: High Frequency IP')
+    expect(markdown).toContain('Detects unusually high request volumes')
+    expect(markdown).toContain('HIGH')
+    expect(markdown).toContain('**Recommended Analyst Action**')
+    expect(markdown).toContain('Prioritize review')
+    expect(markdown).toContain('**Related IOCs / Investigation Entities**')
+    expect(markdown).toContain('1.2.3.4')
+    expect(markdown).toContain('**Matched Indicator / Keyword / Regex Hints**')
+  })
+
+  it('renders a Chinese explainability chapter when language is zh', () => {
+    setLanguage('zh')
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [
+        {
+          rule_id: 'high_frequency_ip',
+          title: '高频访问',
+          severity: 'high',
+          description: '超出阈值',
+          recommendation: '限流',
+          matched_count: 10,
+          matched_fields: ['source_ip'],
+          matched_values: ['1.2.3.4'],
+          evidence: ['1.2.3.4 - GET /login HTTP/1.1" 401'],
+          metadata: { source_ip: '1.2.3.4' }
+        }
+      ],
+      incidents: []
+    }, {
+      caseId: 'case-zh',
+      triageState: {},
+      language: 'zh'
+    })
+
+    expect(markdown).toContain('## 检测可解释性 (Detection Explainability)')
+    expect(markdown).toContain('**规则 ID**')
+    expect(markdown).toContain('**规则名称**')
+    expect(markdown).toContain('**严重程度判定依据**')
+    expect(markdown).toContain('**推荐分析师操作**')
+    expect(markdown).toContain('**相关调查实体 (Related IOCs / Entities)**')
+  })
+
+  it('falls back to Not available inside the explainability chapter when finding data is missing', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [
+        {
+          rule_id: '',
+          title: '',
+          severity: 'low',
+          description: '',
+          recommendation: '',
+          evidence: [],
+          matched_count: 0,
+          matched_fields: [],
+          matched_values: []
+        }
+      ],
+      incidents: []
+    }, {
+      caseId: 'case-empty',
+      triageState: {},
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Detection Explainability')
+    expect(markdown).toContain('**Severity Rationale**')
+    expect(markdown).toContain('**Recommended Analyst Action**')
+    expect(markdown).toContain('Document the observation')
+  })
 })
