@@ -1,1 +1,1 @@
-# AI Log Security Analyzer Backend Package
+# LogForenSight Backend Package

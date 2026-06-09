@@ -1,6 +1,6 @@
 # 版本演进 (Release Notes)
 
-本文档记录了 **AI Log Security Analyzer** 从原型到成熟工具的演进过程。
+本文档记录了 **LogForenSight** 从原型到成熟工具的演进过程。
 
 ---
 

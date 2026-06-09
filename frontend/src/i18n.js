@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 
-const STORAGE_KEY = 'ai-log-security-analyzer:language'
+const STORAGE_KEY = 'LogForenSight:language'
 const DEFAULT_LANG = 'zh'
 
 const currentLanguage = ref(localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG)
@@ -8,7 +8,7 @@ const currentLanguage = ref(localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG)
 const messages = {
   zh: {
     app: {
-      title: "AI Log Security Analyzer",
+      title: "LogForenSight",
       subtitle: "上传 Nginx 访问日志进行安全分析",
       clearCurrentResult: "清除当前结果",
       rulesError: "注意：无法加载规则配置 ({error})。将使用默认配置。",
@@ -432,7 +432,7 @@ const messages = {
   },
   en: {
     app: {
-      title: "AI Log Security Analyzer",
+      title: "LogForenSight",
       subtitle: "Upload your Nginx access logs for security analysis",
       clearCurrentResult: "Clear Current Result",
       rulesError: "Note: Could not load rule configuration ({error}). Using defaults.",

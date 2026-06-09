@@ -18,7 +18,7 @@ describe('i18n tool', () => {
   it('should switch language and persist to localStorage', () => {
     setLanguage('en')
     expect(currentLanguage.value).toBe('en')
-    expect(localStorage.getItem('ai-log-security-analyzer:language')).toBe('en')
+    expect(localStorage.getItem('LogForenSight:language')).toBe('en')
   })
 
   it('should toggle language', () => {
@@ -31,7 +31,7 @@ describe('i18n tool', () => {
 
   it('should translate nested keys', () => {
     setLanguage('zh')
-    expect(t('app.title')).toBe('AI Log Security Analyzer')
+    expect(t('app.title')).toBe('LogForenSight')
     expect(t('common.loading')).toBe('加载中...')
 
     setLanguage('en')

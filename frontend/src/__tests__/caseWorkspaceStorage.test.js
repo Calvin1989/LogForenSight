@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import * as storage from '../utils/caseWorkspaceStorage'
 
 describe('caseWorkspaceStorage', () => {
-  const STORAGE_KEY = 'ai-log-security-analyzer:case-workspace:v1'
+  const STORAGE_KEY = 'LogForenSight:case-workspace:v1'
 
   beforeEach(() => {
     localStorage.clear()

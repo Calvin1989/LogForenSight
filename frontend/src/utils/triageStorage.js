@@ -1,4 +1,4 @@
-const STORAGE_KEY_PREFIX = 'ai-log-security-analyzer:triage:v1:';
+const STORAGE_KEY_PREFIX = 'LogForenSight:triage:v1:';
 
 /**
  * Retrieves the triage state for a specific case.

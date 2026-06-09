@@ -1,6 +1,6 @@
-# Portfolio Showcase: AI Log Security Analyzer
+# Portfolio Showcase: LogForenSight
 
-本文档深入探讨了 **AI Log Security Analyzer** 的核心设计理念、技术选型以及适合在面试或技术分享中展示的核心技术亮点。
+本文档深入探讨了 **LogForenSight** 的核心设计理念、技术选型以及适合在面试或技术分享中展示的核心技术亮点。
 
 ---
 

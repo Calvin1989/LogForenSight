@@ -1,12 +1,12 @@
-# AI Log Security Analyzer
+# LogForenSight
 
 **本地优先、零信任、高可解释性的 Web 日志安全分析工具。**
 
-[![CI Status](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml)
+[![CI Status](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/badge/version-v2.5--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web 日志分析引擎。它能够快速解析 Nginx 与 Apache 访问日志，通过确定性的规则引擎识别安全风险，并将其聚合成高层级的安全事件。
+LogForenSight 是一款专为安全分析师和开发者设计的 Web 日志分析引擎。它能够快速解析 Nginx 与 Apache 访问日志，通过确定性的规则引擎识别安全风险，并将其聚合成高层级的安全事件。
 
 ---
 
@@ -179,4 +179,4 @@ netsh interface ipv4 show excludedportrange protocol=tcp
 
 ---
 
-**AI Log Security Analyzer** - 让日志分析回归本地，让安全发现真实可见。
+**LogForenSight** - 让日志分析回归本地，让安全发现真实可见。

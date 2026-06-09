@@ -10,7 +10,7 @@ def main() -> None:
     Main entry point for the CLI tool.
     Parses arguments, executes analysis via service, and saves the report.
     """
-    parser = argparse.ArgumentParser(description="AI Log Security Analyzer - CLI")
+    parser = argparse.ArgumentParser(description="LogForenSight - CLI")
     parser.add_argument("log_file", help="Path to the Nginx access log file")
     parser.add_argument("--output", "-o", help="Path to save the Markdown report", default="security_report.md")
     parser.add_argument("--rules", help="Path to rules.yaml configuration file")

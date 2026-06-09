@@ -1,6 +1,6 @@
 # Project Architecture
 
-The **AI Log Security Analyzer** is built with a clean, layered architecture to ensure maintainability and scalability.
+The **LogForenSight** is built with a clean, layered architecture to ensure maintainability and scalability.
 
 ## Backend (Python/FastAPI)
 

@@ -1,6 +1,6 @@
 # Release Checklist (v2.0 Batch Analysis Edition)
 
-本清单用于确保 **AI Log Security Analyzer** 的版本发布达到 Portfolio 展示级别。
+本清单用于确保 **LogForenSight** 的版本发布达到 Portfolio 展示级别。
 
 ---
 
