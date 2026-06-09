@@ -5,7 +5,7 @@
 **本地优先、零外部依赖、可解释、可导出的 Web 日志安全分析与处置工作台。**
 
 [![CI Status](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-v2.9.2--local-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v2.10--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 ![Local-first](https://img.shields.io/badge/local--first-yes-brightgreen)
 ![No LLM Required](https://img.shields.io/badge/LLM-not_required-blue)
@@ -131,7 +131,7 @@ flowchart LR
 
 ## 🧪 当前验证状态
 
-当前稳定版本：`v2.9.1-local`
+当前稳定版本：`v2.10-local`
 
 已验证：
 
@@ -150,6 +150,7 @@ flowchart LR
 | ---------------------------- | ------------------------ |
 | `docs/demo.md`               | 推荐演示路径                   |
 | `docs/portfolio.md`          | 项目展示与面试讲解                |
+| `docs/release_checklist.md`  | 发布前后检查清单                |
 | `docs/release_notes.md`      | 版本说明                     |
 | `docs/architecture.md`       | 架构说明                     |
 | `docs/api_contract.md`       | API 契约                   |
