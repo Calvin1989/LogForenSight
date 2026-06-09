@@ -3,7 +3,7 @@
 **本地优先、零信任、高可解释性的 Web 日志安全分析工具。**
 
 [![CI Status](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-v2.1--local-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v2.2--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web 日志分析引擎。它能够快速解析 Nginx 与 Apache 访问日志，通过确定性的规则引擎识别安全风险，并将其聚合成高层级的安全事件。
@@ -17,6 +17,7 @@ AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web
 - **🚫 零基础设施 (Zero-Infra)**: 无需数据库，无需外部 API，无需连接大模型 (LLM)，启动即用。
 - **🗂️ 多文件案件分析 (v2.0)**: 支持将多个日志文件作为一个 case 联合分析，保留每个 source file 的解析质量统计，适合按站点、时间段或事件窗口进行调查。
 - **📁 本地案例工作区 (v2.1)**: 用户可将分析结果主动保存为案例 (Saved Cases)，支持按标题/标签搜索、按风险等级过滤，并提供 JSON 导入导出功能。
+- **🩺 分析师处置工作流 (v2.2)**: 支持对每个风险点 (Finding) 和安全事件 (Incident) 进行本地处置标记（状态、优先级、备注），并支持导出 Markdown 处置摘要。
 - **📊 深度聚合与演进**: 从原子级的风险点 (Findings) 到逻辑聚合的安全事件 (Incidents)，再到自动化生成的管理层摘要 (Executive Summary)。
 - **🔄 闭环工作流**: 支持报告对比 (Report Comparison)、脱敏分享 (Sanitized Report) 以及多格式导出。
 
@@ -89,9 +90,9 @@ npm run dev
 
 | 项目 | 状态说明 |
 | :--- | :--- |
-| **当前版本** | `v2.1-local` (Stable) |
+| **当前版本** | `v2.2-local` (Stable) |
 | **后端测试** | ![Pytest](https://img.shields.io/badge/Pytest-65%20passed-green.svg) |
-| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-114%20passed-green.svg) |
+| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-129%20passed-green.svg) |
 | **Docker** | ![Docker](https://img.shields.io/badge/Docker--Compose-passed-blue.svg) |
 | **多语言** | 支持 中文 / English 实时切换 |
 | **部署方式** | Local-first / No database / No external API / No LLM |

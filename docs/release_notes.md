@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.2-local] - Analyst Triage Workflow
+- **分析师处置面板**: 在分析结果页新增独立的处置区块，支持对 Findings 和 Incidents 进行状态管理。
+- **状态跟踪**: 提供 Open, Investigating, Mitigated, False Positive 四种标准状态。
+- **优先级与备注**: 支持设置 Critical, High, Medium, Low 优先级，并允许分析师输入详细的处置备注。
+- **本地持久化**: 处置状态基于 `caseId` 自动保存于 `localStorage`，支持在重新加载案例时自动恢复。
+- **Markdown 摘要导出**: 支持一键导出包含统计指标和明细表的处置摘要报告。
+- **验证快照**: Backend `65 passed`，Frontend `129 passed`，`npm run build` passed，`docker compose config` passed。
+
 ## [v2.1-local] - Saved Case Workspace
 - **本地案例工作区**: 引入独立的 Saved Cases 视图，将临时分析历史提升为受控的案件存档。
 - **主动保存工作流**: 支持用户为当前分析结果设置标题、标签和备注，并持久化到本地。

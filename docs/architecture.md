@@ -29,6 +29,7 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
 - **State Management**: Uses Vue 3's Composition API. Analysis-related state and methods are encapsulated in `src/composables/useAnalysisState.js` to keep `App.vue` clean and focused on layout.
 - **Multi-file Workflow (v2.0)**: The upload flow supports selecting multiple log files and uses `analyzeBatchFiles()` to submit them as one logical case.
 - **API Client**: `src/api.js` centralizes all HTTP communication with the backend, including `/api/analyze`, `/api/analyze/batch`, and tuned analysis requests.
+- **Analyst Triage (v2.2)**: `src/utils/triageStorage.js` handles persistent storage of triage status, priority, and notes for individual findings and incidents. It links state to analysis records via `caseId`.
 - **Local Case Workspace (v2.1)**: `src/utils/caseWorkspaceStorage.js` manages persistent storage of saved analysis cases. It uses a snapshotting approach that excludes non-serializable objects (like `File`) and raw logs to ensure privacy and storage efficiency.
 - **Local History**: `src/utils/historyStorage.js` manages persistent storage of recent analysis results in `localStorage`.
 - **Export Utilities**: `src/utils/exportUtils.js` provides pure frontend functions for converting data to CSV/JSON and triggering browser downloads.
@@ -73,11 +74,11 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
                                    v
                           [ Frontend (Vue 3) ]
                                    |
-                +------------------+------------------+------------------+
-                |                  |                  |                  |
-                v                  v                  v                  v
-          [ components ]    [ composables ]    [ utils/exportUtils ] [ utils/caseWorkspaceStorage ]
-          ( UI Display )    ( State Mgmt )     ( CSV/JSON Export )   ( Saved Cases )
+                +------------------+------------------+------------------+------------------+
+                |                  |                  |                  |                  |
+                v                  v                  v                  v                  v
+          [ components ]    [ composables ]    [ utils/exportUtils ] [ utils/triageStorage ] [ utils/caseWorkspaceStorage ]
+          ( UI Display )    ( State Mgmt )     ( CSV/JSON Export )   ( Triage State )        ( Saved Cases )
                                    |
                                    v
                          [ utils/historyStorage ]

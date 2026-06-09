@@ -109,4 +109,14 @@ describe('i18n tool', () => {
     expect(t('workspace.title')).toBe('Case Workspace')
     expect(t('workspace.saveCase')).toBe('Save as Case')
   })
+
+  it('should have triage translations', () => {
+    setLanguage('zh')
+    expect(t('triage.title')).toBe('分析师处置工作流 (Analyst Triage)')
+    expect(t('triage.status')).toBe('状态')
+
+    setLanguage('en')
+    expect(t('triage.title')).toBe('Analyst Triage Workflow')
+    expect(t('triage.status')).toBe('Status')
+  })
 })

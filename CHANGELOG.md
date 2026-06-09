@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.2-local] - 2026-06-09
+### Added
+- **Analyst Triage Workflow**: Introduced a dedicated triage panel for findings and incidents.
+- **Triage State Persistence**: Local storage of triage status (Open, Investigating, Mitigated, False Positive), priority, and notes.
+- **Triage Metrics Summary**: Real-time summary of triage progress (e.g., open counts, critical priority counts).
+- **Markdown Triage Export**: Support for exporting a structured triage summary report for documentation or handoff.
+- **Triage-to-Case Linkage**: Triage states are automatically linked to saved cases via `caseId`, ensuring continuity.
+- **Tests**: Added Vitest coverage for `triageStorage` and `TriagePanel` component.
+- **Bilingual Support**: Full Chinese and English translations for all triage-related labels and statuses.
+
 ## [v2.1-local] - 2026-06-09
 ### Added
 - **Saved Case Workspace**: A dedicated local workspace to save, browse, search, and manage analysis cases.

@@ -28,6 +28,7 @@ function buildAnalysisDisplayName(files) {
 export function useAnalysisState() {
   const loading = ref(false)
   const result = currentAnalysisResult
+  const currentCaseId = ref('current-analysis')
   const error = ref(null)
   const selectedFile = ref(null)
   const selectedLogFormat = ref('auto')
@@ -62,6 +63,7 @@ export function useAnalysisState() {
     loading.value = true
     error.value = null
     result.value = null
+    currentCaseId.value = 'current-analysis'
 
     try {
       let data
@@ -153,6 +155,7 @@ export function useAnalysisState() {
 
   const handleRestoreRecord = (record) => {
     result.value = record.result
+    currentCaseId.value = record.id
     selectedLogFormat.value = record.log_format
     selectedRecordId.value = record.id
     error.value = null
@@ -206,6 +209,7 @@ export function useAnalysisState() {
 
     caseStorage.saveCase(caseRecord)
     savedCases.value = caseStorage.listCases()
+    currentCaseId.value = caseRecord.id
     return caseRecord
   }
 
@@ -216,6 +220,7 @@ export function useAnalysisState() {
   const clearCurrentResult = () => {
     loading.value = false
     result.value = null
+    currentCaseId.value = 'current-analysis'
     error.value = null
     selectedFile.value = null
     selectedLogFormat.value = 'auto'
@@ -282,6 +287,7 @@ export function useAnalysisState() {
   return {
     loading,
     result,
+    currentCaseId,
     error,
     selectedFile,
     selectedLogFormat,
