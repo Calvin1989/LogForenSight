@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.9.2-local] - 2026-06-09
+### Changed
+- **README First-screen Visual Polish**: Refined the README hero area with a more distinctive positioning line, richer badges, and a faster first-screen summary for GitHub visitors.
+- **Visual Rhythm Improvements**: Added emoji-based section rhythm, a feature highlight table, a more prominent quick start block, and a documentation navigation table while preserving the Chinese-first documentation style.
+- **Workflow Diagram**: Added a Mermaid workflow diagram to show the path from log upload to deterministic detection, triage, saved cases, and analyst evidence export.
+- **Runtime Compatibility**: Documentation-only patch with no frontend behavior change, no backend behavior change, no dependency change, and no runtime logic change.
+
 ## [v2.9.1-local] - 2026-06-09
 ### Changed
 - **README Chinese-first Restoration**: Restored `README.md` to a Chinese-first project documentation style with the project body led by Chinese sections instead of a GitHub listing-centric English structure.
