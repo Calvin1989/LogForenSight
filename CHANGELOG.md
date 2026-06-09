@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Analyst Evidence Pack Export**: Added a local-first Markdown evidence pack export for the current analysis result, designed for analyst handoff and ticket workflows.
 - **Evidence Pack Content Reuse**: Reused existing findings, incidents, timeline, rule coverage, parse stats, batch source file metadata, triage state, and saved case metadata when available.
 - **Bilingual Export Entry**: Added `Download Evidence Pack` / `下载证据包` in the report area with i18n coverage and missing-data fallbacks.
+- **v2.5 IOC / Investigation Entities Extraction**: Added local-first extraction for IPv4 addresses, usernames/accounts, URLs, file paths/request paths, HTTP methods, HTTP status codes, and batch source files from findings, incidents, timeline events, and report context.
+- **Investigation Entities UI**: Added a lightweight `Investigation Entities` / `调查实体` section to the analysis results view with deduplication, counts, first/last seen timestamps, related source files, and stable sorting.
+- **Evidence Enrichment**: Added an `Investigation entities` chapter to the Analyst Evidence Pack Markdown export with `Not available` / `暂无数据` fallbacks when no entities can be extracted.
+- **Tests and i18n Coverage**: Added Vitest coverage for IOC extraction, UI fallback, Evidence Pack integration, and bilingual labels for the new investigation entity feature.
 
 ## [v2.2.2-local] - 2026-06-09
 ### Added

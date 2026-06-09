@@ -3,7 +3,7 @@
 **本地优先、零信任、高可解释性的 Web 日志安全分析工具。**
 
 [![CI Status](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/ai-log-security-analyzer/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-v2.4--local-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v2.5--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web 日志分析引擎。它能够快速解析 Nginx 与 Apache 访问日志，通过确定性的规则引擎识别安全风险，并将其聚合成高层级的安全事件。
@@ -19,6 +19,7 @@ AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web
 - **📁 本地案例工作区 (v2.1)**: 用户可将分析结果主动保存为案例 (Saved Cases)，支持按标题/标签搜索、按风险等级过滤，并提供 JSON 导入导出功能。
 - **🩺 分析师处置工作流 (v2.2)**: 支持对每个风险点 (Finding) 和安全事件 (Incident) 进行本地处置标记（状态、优先级、备注），并支持导出 Markdown 处置摘要。
 - **📦 分析师证据包导出 (v2.4)**: 支持将当前分析结果导出为结构化 Markdown 证据包，整合严重程度摘要、时间轴、规则覆盖、处置信息与案例元数据，便于粘贴到工单或安全报告。
+- **🧭 IOC / 调查实体提取 (v2.5)**: 本地提取 IP、账号、URL、路径、HTTP 方法、HTTP 状态码和 batch source files，并在 UI 与 Evidence Pack 中统一展示，便于快速调查与归因。
 - **📊 深度聚合与演进**: 从原子级的风险点 (Findings) 到逻辑聚合的安全事件 (Incidents)，再到自动化生成的管理层摘要 (Executive Summary)。
 - **🔄 闭环工作流**: 支持报告对比 (Report Comparison)、脱敏分享 (Sanitized Report) 以及多格式导出。
 
@@ -65,12 +66,14 @@ npm run dev
 - **Per-source Parse Quality**: 在总体解析质量之外，保留每个 source file 的 `total_lines`、`parsed_lines`、`skipped_lines`、`parse_rate` 与 `detected_format` 统计。
 - **Attack Timeline**: 还原攻击者的行为轨迹，支持按严重程度和 IP 过滤。
 - **Incident Aggregation**: 自动识别行为模式，将零散请求聚合成具备业务意义的安全事件。
+- **Investigation Entities (v2.5)**: 从 findings、incidents、timeline、report context 与 batch source file metadata 中本地提取 IOC / investigation entities，并提供稳定排序、去重计数、首次/最后出现时间及相关来源文件信息。
 - **Recent Analyses Labels**: Recent Analyses 会对批量案例显示 `Batch` 标签，帮助分析师快速区分单文件和案件级分析记录。
 - **Report Comparison**: 追踪风险趋势，直观对比不同时间段或不同站点的风险变化。
 
 ### 3. 报告与分享
 - **Executive Summary**: 为管理层提供直观的风险评分 (0-100) 和核心指标摘要。
 - **Analyst Evidence Pack Export (v2.4)**: 在报告区域提供 `Download Evidence Pack` / `下载证据包` 入口，导出包含 Findings、Incidents、Timeline、Rule Coverage、Parse Stats、batch source files、Triage 与 Case metadata 的 Markdown 证据包。
+- **Evidence Enrichment (v2.5)**: Evidence Pack 新增 `Investigation Entities` / `调查实体` 章节，导出去重后的 IP、账号、URL、路径、HTTP 方法、HTTP 状态码、source files，以及计数、时间范围和来源文件关联。
 - **Sanitized Sharing**: 内置脱敏引擎，一键生成隐藏敏感 IP 和 Token 的合规报告。
 - **Multi-format Export**: 支持导出 Markdown 报告、CSV 明细及 JSON 统计摘要。
 
@@ -92,9 +95,9 @@ npm run dev
 
 | 项目 | 状态说明 |
 | :--- | :--- |
-| **当前版本** | `v2.4-local` (Stable) |
+| **当前版本** | `v2.5-local` |
 | **后端测试** | ![Pytest](https://img.shields.io/badge/Pytest-65%20passed-green.svg) |
-| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-129%20passed-green.svg) |
+| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-141%20passed-green.svg) |
 | **Docker** | ![Docker](https://img.shields.io/badge/Docker--Compose-passed-blue.svg) |
 | **多语言** | 支持 中文 / English 实时切换 |
 | **部署方式** | Local-first / No database / No external API / No LLM |
@@ -106,8 +109,18 @@ npm run dev
 - 入口位置：分析结果页底部的 Markdown 报告区域，与现有报告下载按钮并列。
 - 按钮文案：英文 `Download Evidence Pack`，中文 `下载证据包`。
 - 导出格式：当前版本提供本地 Markdown 导出，不上传数据、不调用外部 API、不新增数据库。
-- 导出内容：Generated timestamp、Severity summary、Executive summary、Findings、Incidents、Timeline highlights、Rule coverage、Parse stats、batch source files、Triage 状态/优先级/备注，以及已保存案例的 metadata。
+- 导出内容：Generated timestamp、Severity summary、Executive summary、Findings、Incidents、Investigation Entities、Timeline highlights、Rule coverage、Parse stats、batch source files、Triage 状态/优先级/备注，以及已保存案例的 metadata。
 - 缺失数据处理：若当前分析缺少某些可选字段，导出内容会显示 `Not available` / `暂无数据`，不会中断导出。
+
+---
+
+## 🧭 IOC / Investigation Entities
+
+- 入口位置：分析结果区中的 `Investigation Entities` / `调查实体` 卡片，位于 `Parse Stats` 之后、`Incidents` 之前。
+- 提取范围：优先复用已有 `findings`、`incidents`、`timeline_events`、`report_markdown` 与 `source_files` 上下文，不调用外部 API、不上传数据。
+- 提取类型：IPv4、用户名/账号、`http://` / `https://` URL、Linux/Windows/HTTP 请求路径、HTTP 方法、HTTP 状态码、batch source files。
+- 输出内容：稳定排序后的 `type`、`value`、`count`、`first seen`、`last seen`、`related source files`，便于测试、调查与报告阅读。
+- 缺失数据处理：没有可提取实体时显示 `Not available` / `暂无数据`，不会报错。
 
 ---
 

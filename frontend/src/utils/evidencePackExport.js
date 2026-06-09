@@ -1,6 +1,7 @@
 import { currentLanguage, t, translateRiskLevel, translateSeverity } from '../i18n'
 import { getCase } from './caseWorkspaceStorage'
 import { downloadTextFile } from './exportUtils'
+import { extractInvestigationEntities } from './iocExtraction'
 import { localizeAnalysisForDisplay } from './localizedAnalysis'
 import { getTriageState } from './triageStorage'
 
@@ -53,6 +54,32 @@ function appendTable(lines, headers, rows) {
 
 function appendFallback(lines) {
   lines.push(`- ${t('evidencePack.notAvailable')}`, '')
+}
+
+function appendInvestigationEntities(lines, analysisResult, language) {
+  lines.push(`## ${t('evidencePack.investigationEntities')}`, '')
+
+  const { entities } = extractInvestigationEntities(analysisResult)
+  if (entities.length === 0) {
+    appendFallback(lines)
+    return
+  }
+
+  appendTable(lines, [
+    t('entities.type'),
+    t('entities.value'),
+    t('common.count'),
+    t('entities.firstSeen'),
+    t('entities.lastSeen'),
+    t('entities.relatedSourceFiles')
+  ], entities.map((entity) => [
+    t(`entities.types.${entity.type}`, entity.type),
+    entity.value,
+    entity.count,
+    formatTimestamp(entity.firstSeen, language),
+    formatTimestamp(entity.lastSeen, language),
+    listOrFallback(entity.relatedSourceFiles)
+  ]))
 }
 
 function appendSeverityCounts(lines, title, counts = {}) {
@@ -251,6 +278,8 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   } else {
     appendFallback(lines)
   }
+
+  appendInvestigationEntities(lines, analysisResult, language)
 
   lines.push(`## ${t('evidencePack.timelineHighlights')}`, '')
   if (timelineEvents.length > 0) {

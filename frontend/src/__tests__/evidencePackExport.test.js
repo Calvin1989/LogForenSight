@@ -48,12 +48,16 @@ describe('evidencePackExport', () => {
           rule_id: 'high_frequency_ip',
           title: 'High Frequency IP',
           severity: 'high',
-          description: 'A source IP exceeded the threshold.',
+          description: 'A source IP exceeded the threshold for user=alice on https://portal.example.com/login.',
           recommendation: 'Rate limit the source.',
           matched_count: 25,
           matched_fields: ['source_ip'],
           matched_values: ['1.2.3.4'],
-          evidence: ['1.2.3.4 - GET /login']
+          evidence: ['1.2.3.4 - GET /login HTTP/1.1" 401 src_user=alice'],
+          metadata: {
+            source_file: 'web-1.log',
+            path: 'C:\\inetpub\\wwwroot\\web.config'
+          }
         }
       ],
       incidents: [
@@ -76,7 +80,8 @@ describe('evidencePackExport', () => {
           severity: 'high',
           source_ip: '1.2.3.4',
           description: 'Burst traffic detected.',
-          evidence: 'GET /'
+          evidence: 'GET /login HTTP/1.1" 401',
+          source_file: 'web-1.log'
         }
       ],
       rule_coverage: [
@@ -135,6 +140,7 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Case metadata')
     expect(markdown).toContain('## Findings list')
     expect(markdown).toContain('## Incidents list')
+    expect(markdown).toContain('## Investigation entities')
     expect(markdown).toContain('## Timeline highlights')
     expect(markdown).toContain('## Rule coverage')
     expect(markdown).toContain('## Triage summary')
@@ -144,6 +150,10 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('Matched rules')
     expect(markdown).toContain('Unmatched rules')
     expect(markdown).toContain('web-1.log')
+    expect(markdown).toContain('IP Address')
+    expect(markdown).toContain('alice')
+    expect(markdown).toContain('https://portal.example.com/login')
+    expect(markdown).toContain('C:\\inetpub\\wwwroot\\web.config')
   })
 
   it('returns fallback text instead of crashing when optional data is missing', () => {
@@ -160,6 +170,7 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('Not available')
     expect(markdown).toContain('## Findings list')
     expect(markdown).toContain('## Incidents list')
+    expect(markdown).toContain('## Investigation entities')
     expect(markdown).toContain('## Triage summary')
   })
 })
