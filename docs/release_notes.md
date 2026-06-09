@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.9.2-local] - README Visual Polish
+- **README Visual Polish**: 优化 `README.md` 第一屏展示，加入更清晰的 Hero 短句、badge 组合、`30 秒看懂` 摘要和更靠前的快速开始入口。
+- **Chinese-first Style Retained**: 继续保持中文主导说明，同时保留少量英文定位与 GitHub SEO keywords，不改成英文 README。
+- **Structure and Rhythm Upgrade**: 新增 emoji 节奏、小节亮点表格、Mermaid workflow、表格化文档导航，并将长说明下移到后半部分。
+- **Documentation-only Patch**: 不新增截图，不修改前端/后端业务逻辑，不引入新依赖，不调整默认端口。
+
+---
+
 ## [v2.9.1-local] - README Chinese Style Polish
 - **README Chinese-first Polish**: 将 `README.md` 从偏 GitHub listing 的英文结构调整回中文主导的项目文档风格，保留顶部简短英文定位，但主体叙述以中文为主。
 - **Keyword Preservation**: 在合适位置保留 `security log analysis`、`incident response`、`threat hunting`、`ioc extraction` 等 GitHub 可检索关键词，但不再让 README 首页变成英文营销页。
