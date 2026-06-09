@@ -57,6 +57,57 @@ function appendFallback(lines) {
   lines.push(`- ${t('evidencePack.notAvailable')}`, '')
 }
 
+function resolveAnalysisScope(analysisMode, sourceFiles = []) {
+  const normalizedMode = typeof analysisMode === 'string' ? analysisMode.trim().toLowerCase() : ''
+  if (normalizedMode === 'batch' || normalizedMode === 'batch_case' || normalizedMode === 'batch-case') {
+    return t('evidencePack.analysisScopeBatchCase')
+  }
+  if (normalizedMode === 'multi_file' || normalizedMode === 'multi-file' || normalizedMode === 'multifile') {
+    return t('evidencePack.analysisScopeMultiFile')
+  }
+  if (normalizedMode === 'single_file' || normalizedMode === 'single-file' || normalizedMode === 'single') {
+    return t('evidencePack.analysisScopeSingleFile')
+  }
+
+  if (Array.isArray(sourceFiles) && sourceFiles.length > 1) {
+    return t('evidencePack.analysisScopeMultiFile')
+  }
+  if (Array.isArray(sourceFiles) && sourceFiles.length === 1) {
+    return t('evidencePack.analysisScopeSingleFile')
+  }
+
+  return ''
+}
+
+function appendCaseMetadataSummary(lines, metadata) {
+  lines.push(`## ${t('evidencePack.caseMetadata')}`, '')
+  lines.push(`- **${t('evidencePack.product')}**: LogForenSight`)
+  lines.push(`- **${t('evidencePack.exportType')}**: ${t('evidencePack.title')}`)
+  lines.push(`- **${t('evidencePack.generatedAt')}**: ${metadata.generatedAt}`)
+  lines.push(`- **${t('evidencePack.caseId')}**: ${valueOrFallback(metadata.caseId)}`)
+  lines.push(`- **${t('evidencePack.caseTitle')}**: ${valueOrFallback(metadata.caseTitle)}`)
+  lines.push(`- **${t('evidencePack.sourceFilesLabel')}**: ${listOrFallback(metadata.sourceFiles)}`)
+  lines.push(`- **${t('evidencePack.analysisScope')}**: ${valueOrFallback(metadata.analysisScope)}`)
+  lines.push(`- **${t('evidencePack.findingsCount')}**: ${metadata.findingsCount}`)
+  lines.push(`- **${t('evidencePack.incidentsCount')}**: ${metadata.incidentsCount}`)
+  lines.push(`- **${t('evidencePack.investigationEntitiesCount')}**: ${metadata.investigationEntitiesCount}`)
+  lines.push(`- **${t('evidencePack.triageRecordsCount')}**: ${metadata.triageRecordsCount}`, '')
+}
+
+function appendPrivacyNote(lines) {
+  lines.push(`## ${t('evidencePack.localFirstPrivacyNote')}`, '')
+  lines.push(t('evidencePack.localFirstPrivacyBody'), '')
+}
+
+function appendValidationSummary(lines, summary) {
+  lines.push(`## ${t('evidencePack.validationSummary')}`, '')
+  lines.push(`- **${t('evidencePack.analysisMethod')}**: ${t('evidencePack.analysisMethodDeterministicLocalRules')}`)
+  lines.push(`- **${t('evidencePack.detectionExplainabilityLabel')}**: ${summary.hasFindings ? t('evidencePack.includedWhenFindingsAvailable') : t('evidencePack.notAvailable')}`)
+  lines.push(`- **${t('evidencePack.analystTriageLabel')}**: ${summary.hasTriage ? t('evidencePack.includedWhenTriageStateExists') : t('evidencePack.notAvailable')}`)
+  lines.push(`- **${t('evidencePack.evidenceSource')}**: ${t('evidencePack.evidenceSourceLocalUploadDerived')}`)
+  lines.push(`- **${t('evidencePack.rawLogs')}**: ${t('evidencePack.rawLogsExcluded')}`, '')
+}
+
 function appendInvestigationEntities(lines, analysisResult, language) {
   lines.push(`## ${t('evidencePack.investigationEntities')}`, '')
 
@@ -245,7 +296,12 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
     ? parseStats.source_files
     : (Array.isArray(analysis.source_files) ? analysis.source_files : [])
   const triageEntries = Object.values(triageState || {})
+  const investigationEntities = extractInvestigationEntities(analysisResult).entities
   const generatedAt = formatTimestamp(new Date().toISOString(), language)
+  const sourceFileNames = sourceFiles
+    .map((file) => file?.filename || file?.name)
+    .filter(Boolean)
+  const analysisScope = resolveAnalysisScope(analysis.analysis_mode || caseRecord?.analysis_mode, sourceFiles)
 
   const statusCounts = {}
   const priorityCounts = {}
@@ -264,9 +320,22 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   const lines = []
 
   lines.push(`# ${t('evidencePack.title')}`, '')
-  lines.push(`- **${t('evidencePack.generatedAt')}**: ${generatedAt}`)
-  lines.push(`- **${t('evidencePack.caseId')}**: ${caseId}`)
-  lines.push(`- **${t('evidencePack.analysisMode')}**: ${valueOrFallback(analysis.analysis_mode || caseRecord?.analysis_mode)}`, '')
+  appendCaseMetadataSummary(lines, {
+    generatedAt,
+    caseId,
+    caseTitle: caseRecord?.title,
+    sourceFiles: sourceFileNames,
+    analysisScope,
+    findingsCount: findings.length,
+    incidentsCount: incidents.length,
+    investigationEntitiesCount: investigationEntities.length,
+    triageRecordsCount: triageEntries.length
+  })
+  appendPrivacyNote(lines)
+  appendValidationSummary(lines, {
+    hasFindings: findings.length > 0,
+    hasTriage: triageEntries.length > 0
+  })
 
   lines.push(`## ${t('evidencePack.severitySummary')}`, '')
   appendTable(lines, [t('evidencePack.metric'), t('evidencePack.value')], [
@@ -300,7 +369,7 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
     appendFallback(lines)
   }
 
-  lines.push(`## ${t('evidencePack.caseMetadata')}`, '')
+  lines.push(`## ${t('evidencePack.caseRecordDetails')}`, '')
   if (caseRecord) {
     lines.push(`- **${t('workspace.caseTitle')}**: ${valueOrFallback(caseRecord.title)}`)
     lines.push(`- **${t('evidencePack.sourceName')}**: ${valueOrFallback(caseRecord.source_name)}`)

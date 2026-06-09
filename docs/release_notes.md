@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.8-local] - Analyst Evidence Pack Metadata Polish
+- **Case Metadata Summary**: 在 Analyst Evidence Pack 顶部新增更正式的 `Case metadata` 区块，汇总 Product、Export type、Generated at、Case ID、Case title、Source files、Analysis scope 以及 findings / incidents / entities / triage counts。
+- **Local-first Privacy Note**: 新增本地优先隐私说明，明确导出流程不依赖外部 API、云服务、数据库或 LLM。
+- **Validation Summary**: 新增简洁的验证摘要，说明 deterministic local rules、Detection Explainability、Analyst Triage、evidence source 和 raw log exposure boundary。
+- **Compatibility**: 保持现有 Markdown 导出结构稳定；缺失 case metadata、entities、triage 或 source files 时仍使用 `Not available` / `暂无数据` 风格，不报错。
+
+---
+
 ## [v2.7-local] - GitHub Discoverability / Release Polish
 - **README Positioning Refresh**: 首页文案调整为更适合 GitHub 搜索与快速理解的项目定位，突出 local-first、security log triage、IOC extraction、detection explainability 和 analyst evidence pack export。
 - **Repository Listing Guidance**: 新增 `docs/github_listing.md`，提供 GitHub description、topics、short intro、portfolio bullets 和 release snapshot 命名建议。

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.8-local] - 2026-06-09
+### Changed
+- **Analyst Evidence Pack Metadata Polish**: Enhanced the Markdown evidence pack header with a formal `Case metadata` summary, including product/export type, generated timestamp, case identifiers, analysis scope, source files, and analysis counts when available.
+- **Local-first Privacy Note**: Added an explicit privacy note to the evidence pack to clarify that export remains local-first and does not depend on external APIs, cloud services, databases, or LLMs.
+- **Validation Summary**: Added a compact validation-oriented section that explains deterministic local rules, explainability inclusion, triage inclusion, evidence source, and raw log exposure boundaries.
+
+### Tests
+- **Evidence Pack Coverage**: Expanded `evidencePackExport` tests to verify the new metadata, privacy, validation, and fallback behavior without weakening existing assertions for investigation entities, explainability, and triage sections.
+
 ## [v2.7-local] - 2026-06-09
 ### Changed
 - **GitHub Discoverability Polish**: Refined repository-facing documentation to describe LogForenSight as a local-first security log triage workflow with IOC extraction, detection explainability, and analyst evidence pack export.
