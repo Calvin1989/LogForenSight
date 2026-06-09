@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.9.1-local] - 2026-06-09
+### Changed
+- **README Chinese-first Restoration**: Restored `README.md` to a Chinese-first project documentation style with the project body led by Chinese sections instead of a GitHub listing-centric English structure.
+- **Discoverability Keywords Preserved**: Kept concise English keywords such as `security log analysis`, `incident response`, `threat hunting`, and `ioc extraction` in appropriate places to preserve GitHub discoverability.
+- **Runtime Compatibility**: Documentation-only patch with no frontend behavior change, no backend behavior change, no dependency change, and no runtime logic change.
+
 ## [v2.9-local] - 2026-06-09
 ### Changed
 - **Triage UX Status Summary**: Added a bilingual triage status summary with explicit `Open / Investigating / Mitigated / False Positive` counts and a `No triage records yet` / `暂无处置记录` fallback for empty cases.

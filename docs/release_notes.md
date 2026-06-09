@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.9.1-local] - README Chinese Style Polish
+- **README Chinese-first Polish**: 将 `README.md` 从偏 GitHub listing 的英文结构调整回中文主导的项目文档风格，保留顶部简短英文定位，但主体叙述以中文为主。
+- **Keyword Preservation**: 在合适位置保留 `security log analysis`、`incident response`、`threat hunting`、`ioc extraction` 等 GitHub 可检索关键词，但不再让 README 首页变成英文营销页。
+- **Documentation-only Patch**: 仅更新 `README.md`、`CHANGELOG.md` 与本文件，不修改前端/后端业务逻辑、不引入新依赖、不调整默认端口。
+- **No Behavior Change**: 前端与后端运行行为保持不变，Docker 配置、测试代码和业务代码均不做变更。
+
+---
+
 ## [v2.9-local] - Analyst Triage UX Polish
 - **Status Summary**: 在 Analyst Triage 区域新增更明确的状态汇总，按 `Open / Investigating / Mitigated / False Positive` 展示当前 case 的 triage 分布，并在没有记录时显示 `No triage records yet` / `暂无处置记录`。
 - **Needs Review Indicator**: 在 Findings 和 Incidents 列表中为尚未 triage 或仍为 `open` 的条目增加轻量 `Needs review` / `待复核` 提示，帮助分析师快速识别待处理对象。
