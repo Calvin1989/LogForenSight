@@ -7,15 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [v2.3-local] - 2026-06-09
-### Added
-- **Case Dashboard**: A centralized dashboard for summarizing saved cases and triage status.
-- **Metrics Calculation**: Pure function utility to calculate risk distribution, triage status, and priority distribution across all saved cases.
-- **Actionable Insights**: Highlights high-risk open cases, recently saved cases, and cases without any triage activity.
-- **Bilingual Support**: Full Chinese and English translations for all dashboard metrics and labels.
-- **Tests**: Comprehensive Vitest coverage for dashboard metrics utilities and the `CaseDashboard` component.
-- **Privacy**: Local-only computation; no data sent to backend or stored in raw format.
-
 ## [v2.2.1-local] - 2026-06-09
 ### Fixed
 - **Test Output Cleanup**: Muted expected `console.error` during malformed JSON tests and suppressed jsdom navigation warnings in triage export tests.

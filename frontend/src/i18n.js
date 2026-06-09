@@ -328,24 +328,6 @@ const messages = {
       disabledRulesCount: "个已禁用规则",
       memoryOnly: "调优仅影响当前页面内存，不写入 rules.yaml",
       batchHint: "当前调优会应用于整个批量日志集合。"
-    },
-    dashboard: {
-      title: "案例总览仪表盘 (Case Dashboard)",
-      empty: "暂无保存的案例，请先分析并保存案例以查看仪表盘。",
-      totalCases: "总案例数",
-      batchCases: "批量案例",
-      singleCases: "单文件案例",
-      averageRiskScore: "平均风险评分",
-      riskDistribution: "风险等级分布",
-      triageDistribution: "处置状态分布",
-      priorityDistribution: "优先级分布",
-      highRiskOpenCases: "高危待处理案例",
-      recentCases: "最近保存案例",
-      casesWithoutTriage: "未处置案例",
-      noCases: "所有案例均已处置",
-      localOnly: "仅本地计算",
-      openItems: "所有高危项均已处理",
-      updated: "更新于"
     }
   },
   en: {
@@ -670,24 +652,6 @@ const messages = {
       disabledRulesCount: "disabled rules",
       memoryOnly: "Tuning only affects current session and is not saved to rules.yaml",
       batchHint: "Current tuning applies to the entire batch log set."
-    },
-    dashboard: {
-      title: "Case Dashboard",
-      empty: "No saved cases yet. Analyze and save a case to view the dashboard.",
-      totalCases: "Total Cases",
-      batchCases: "Batch Cases",
-      singleCases: "Single Cases",
-      averageRiskScore: "Avg Risk Score",
-      riskDistribution: "Risk Distribution",
-      triageDistribution: "Triage Status",
-      priorityDistribution: "Priority Distribution",
-      highRiskOpenCases: "High-Risk Open Cases",
-      recentCases: "Recently Saved",
-      casesWithoutTriage: "Cases Without Triage",
-      noCases: "All cases triaged",
-      localOnly: "Local computation",
-      openItems: "No high-risk open items",
-      updated: "Updated at"
     }
   }
 };

@@ -27,11 +27,6 @@
         @clear="handleClearHistory"
       />
 
-      <CaseDashboard
-        :cases="savedCases"
-        @select="onSelectCase"
-      />
-
       <CaseWorkspace
         :cases="savedCases"
         @select="onSelectCase"
@@ -142,7 +137,6 @@ import TimelineView from './components/TimelineView.vue'
 import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
 import CaseWorkspace from './components/CaseWorkspace.vue'
-import CaseDashboard from './components/CaseDashboard.vue'
 import TriagePanel from './components/TriagePanel.vue'
 
 const {

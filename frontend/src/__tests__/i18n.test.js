@@ -119,14 +119,4 @@ describe('i18n tool', () => {
     expect(t('triage.title')).toBe('Analyst Triage Workflow')
     expect(t('triage.status')).toBe('Status')
   })
-
-  it('should have dashboard translations', () => {
-    setLanguage('zh')
-    expect(t('dashboard.title')).toBe('案例总览仪表盘 (Case Dashboard)')
-    expect(t('dashboard.totalCases')).toBe('总案例数')
-
-    setLanguage('en')
-    expect(t('dashboard.title')).toBe('Case Dashboard')
-    expect(t('dashboard.totalCases')).toBe('Total Cases')
-  })
 })
