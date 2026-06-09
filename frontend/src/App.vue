@@ -96,6 +96,12 @@
 
         <FindingsList :findings="displayResult.findings" />
 
+        <TriagePanel
+          v-if="displayResult"
+          :caseId="currentCaseId"
+          :analysisResult="displayResult"
+        />
+
         <MarkdownReport
           :result="displayResult"
           :reportMarkdown="displayResult.report_markdown"
@@ -131,10 +137,12 @@ import TimelineView from './components/TimelineView.vue'
 import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
 import CaseWorkspace from './components/CaseWorkspace.vue'
+import TriagePanel from './components/TriagePanel.vue'
 
 const {
   loading,
   result,
+  currentCaseId,
   error,
   selectedFile,
   sanitizingReport,
@@ -172,9 +180,10 @@ const onSaveCase = () => {
 }
 
 const onSelectCase = (caseItem) => {
-  // Restore from snapshot
-  result.value = caseItem.result_snapshot
-  // Since it's a snapshot, we don't have the original file
+   // Restore from snapshot
+   result.value = caseItem.result_snapshot
+   currentCaseId.value = caseItem.id
+   // Since it's a snapshot, we don't have the original file
   selectedFile.value = null
   error.value = null
 
