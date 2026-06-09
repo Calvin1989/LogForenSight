@@ -96,7 +96,7 @@
           />
         </div>
 
-        <FindingsList :findings="displayResult.findings" />
+        <FindingsList :findings="displayResult.findings" :analysisResult="result" />
 
         <TriagePanel
           v-if="displayResult"

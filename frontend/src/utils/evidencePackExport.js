@@ -2,6 +2,7 @@ import { currentLanguage, t, translateRiskLevel, translateSeverity } from '../i1
 import { getCase } from './caseWorkspaceStorage'
 import { downloadTextFile } from './exportUtils'
 import { extractInvestigationEntities } from './iocExtraction'
+import { buildFindingExplanation, renderFindingExplanation } from './findingExplainability'
 import { localizeAnalysisForDisplay } from './localizedAnalysis'
 import { getTriageState } from './triageStorage'
 
@@ -159,6 +160,69 @@ function appendEvidenceList(lines, evidence) {
   lines.push('')
 }
 
+function appendIndicatorHints(lines, hints) {
+  if (!Array.isArray(hints) || hints.length === 0) return
+
+  const rows = hints.map((hint) => {
+    const kind = t(`explainability.indicatorKind.${hint.kind}`, hint.kind)
+    return [kind, hint.value]
+  })
+  appendTable(lines, [t('common.description'), t('findings.values')], rows)
+}
+
+function appendRelatedEntities(lines, entities) {
+  if (!Array.isArray(entities) || entities.length === 0) {
+    lines.push(`- ${t('explainability.noRelatedEntities')}`)
+    lines.push('')
+    return
+  }
+
+  appendTable(lines, [
+    t('entities.type'),
+    t('entities.value'),
+    t('common.count')
+  ], entities.map((entity) => [entity.type, entity.value, entity.count]))
+}
+
+function appendFindingExplanation(lines, finding, analysisResult) {
+  const explanation = buildFindingExplanation(finding, analysisResult)
+  const rendered = renderFindingExplanation(explanation, (key, fallback) => t(key, fallback || ''))
+
+  lines.push(`- **${t('explainability.ruleId')}**: ${valueOrFallback(explanation.ruleId)}`)
+  lines.push(`- **${t('explainability.ruleName')}**: ${valueOrFallback(explanation.ruleName)}`)
+  lines.push(`- **${t('explainability.ruleDescription')}**: ${valueOrFallback(explanation.ruleDescription)}`)
+  lines.push(`- **${t('explainability.severityRationale')}**: ${valueOrFallback(rendered.rationale)}`)
+
+  if (explanation.hasMatchedContext) {
+    lines.push(`- **${t('explainability.matchedContext')}**: ${valueOrFallback(rendered.matchedContextLabel)}`)
+    lines.push(`  - **${t('explainability.matchedField')}**: ${valueOrFallback(explanation.matchedField)}`)
+    lines.push(`  - **${t('explainability.matchedValue')}**: ${valueOrFallback(explanation.matchedValue)}`)
+  } else {
+    lines.push(`- **${t('explainability.matchedContext')}**: ${t('evidencePack.notAvailable')}`)
+  }
+
+  if (explanation.hasIndicators) {
+    lines.push(`- **${t('explainability.indicators')}**:`)
+    appendIndicatorHints(lines, explanation.indicatorHints)
+  } else {
+    lines.push(`- **${t('explainability.indicators')}**: ${t('evidencePack.notAvailable')}`)
+  }
+
+  if (explanation.hasEvidence) {
+    lines.push(`- **${t('explainability.evidenceSnippet')}**: \`${explanation.evidenceSnippet}\``)
+    if (explanation.evidenceTruncated) {
+      lines.push(`  - _${t('explainability.evidenceTruncated')}_`)
+    }
+  } else {
+    lines.push(`- **${t('explainability.evidenceSnippet')}**: ${t('evidencePack.notAvailable')}`)
+  }
+
+  lines.push(`- **${t('explainability.recommendedAction')}**: ${valueOrFallback(rendered.recommendedAction)}`)
+
+  lines.push(`- **${t('explainability.relatedEntities')}**:`)
+  appendRelatedEntities(lines, explanation.relatedEntities)
+}
+
 export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   if (!analysisResult) return ''
 
@@ -280,6 +344,21 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   }
 
   appendInvestigationEntities(lines, analysisResult, language)
+
+  lines.push(`## ${t('evidencePack.detectionExplainability')}`, '')
+  lines.push(`> ${t('evidencePack.detectionExplainabilityIntro')}`, '')
+  if (findings.length === 0) {
+    appendFallback(lines)
+  } else {
+    findings.forEach((finding, index) => {
+      lines.push(`### ${valueOrFallback(finding.title)} (${valueOrFallback(finding.rule_id)})`, '')
+      appendFindingExplanation(lines, finding, analysisResult)
+      if (index < findings.length - 1) {
+        lines.push('')
+      }
+    })
+    lines.push('')
+  }
 
   lines.push(`## ${t('evidencePack.timelineHighlights')}`, '')
   if (timelineEvents.length > 0) {

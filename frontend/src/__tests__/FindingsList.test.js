@@ -107,4 +107,37 @@ describe('FindingsList.vue', () => {
     expect(finding.find('.finding-matched-details').exists()).toBe(false)
     expect(finding.text()).not.toContain('Matched Details:')
   })
+
+  it('renders the detection explainability drilldown toggle for each finding', () => {
+    const wrapper = mount(FindingsList, {
+      props: {
+        findings: mockFindings,
+        analysisResult: {
+          findings: mockFindings,
+          entities: []
+        }
+      }
+    })
+
+    const toggleButtons = wrapper.findAll('.explainability-toggle')
+    expect(toggleButtons.length).toBe(mockFindings.length)
+    expect(toggleButtons[0].text()).toContain('Show explanation')
+    expect(toggleButtons[0].text()).toContain('Detection Explainability')
+  })
+
+  it('expands the explainability drilldown when the toggle is clicked', async () => {
+    const wrapper = mount(FindingsList, {
+      props: {
+        findings: mockFindings,
+        analysisResult: { findings: mockFindings, entities: [] }
+      }
+    })
+
+    expect(wrapper.find('[data-testid="finding-explainability"]').exists()).toBe(false)
+
+    await wrapper.find('.explainability-toggle').trigger('click')
+
+    expect(wrapper.find('[data-testid="finding-explainability"]').exists()).toBe(true)
+    expect(wrapper.find('.explainability-toggle').text()).toContain('Hide explanation')
+  })
 })

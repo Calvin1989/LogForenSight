@@ -4,6 +4,15 @@
 
 ---
 
+## [v2.6-local] - Detection Explainability Drilldown
+- **Per-Finding Explainability**: 每条 finding 都附带 `Show explanation` / `展开解释` 按钮，展开后展示本地静态的 `Detection Explainability` / `检测可解释性` 面板，包含 Rule ID / Name / Description、严重程度判定依据、命中上下文、命中指标 (IP/Path/Method/Status/UA/Keyword/Count)、截断后的证据片段、按严重程度分级的推荐分析师操作、以及与该 finding 关联的调查实体。
+- **Pure-Function Utility**: 新增 `frontend/src/utils/findingExplainability.js`，作为纯函数生成结构化的解释；新增 `frontend/src/components/FindingExplainability.vue` 在 `FindingsList` 中渲染 drilldown。
+- **Evidence Pack Integration**: `Download Evidence Pack` / `下载证据包` 额外输出 `Detection Explainability` / `检测可解释性` 章节，结构与 UI 面板保持一致。
+- **Bilingual & Fallback**: 全部 UI 文案接入现有 i18n（中/英），缺数据时显示 `Not available` / `暂无数据`，不报错；不修改后端 API schema，不调用外部 API/LLM/威胁情报。
+- **Validation Snapshot**: Backend `65 passed`，Frontend `154 passed`，`npm run build` passed，`docker compose config` passed。
+
+---
+
 ## [v2.2.1-local] - Test Polish & Noise Cleanup
 - **测试输出优化**: 清理了前端测试中的 `console.error` 噪音和 `jsdom` 导航警告，使 CI 输出更清爽、专业。
 - **导出逻辑测试**: 增强了导出功能的测试覆盖，确保在无真实浏览器环境下的逻辑正确性。

@@ -164,7 +164,53 @@ const messages = {
       noMatch: "没有匹配筛选条件的风险点。",
       matchedDetails: "匹配详情",
       fields: "字段",
-      values: "值"
+      values: "值",
+      explainability: "检测可解释性",
+      showExplanation: "展开解释",
+      hideExplanation: "收起解释"
+    },
+    explainability: {
+      title: "检测可解释性 (Detection Explainability)",
+      intro: "为每条风险点提供本地静态的可解释信息，帮助分析师快速了解为什么该日志被判定为安全发现。",
+      ruleContext: "规则信息",
+      ruleId: "规则 ID",
+      ruleName: "规则名称",
+      ruleDescription: "规则说明",
+      severityRationale: "严重程度判定依据",
+      matchedContext: "命中上下文",
+      matchedField: "命中字段",
+      matchedValue: "命中值",
+      indicators: "命中指标 / 关键字 / 正则提示",
+      indicatorKind: {
+        ip: "IP",
+        path: "路径",
+        method: "HTTP 方法",
+        status: "HTTP 状态",
+        "user-agent": "User-Agent",
+        keyword: "关键字",
+        count: "次数"
+      },
+      evidenceSnippet: "证据片段",
+      evidenceTruncated: "（已截断展示）",
+      recommendedAction: "推荐分析师操作",
+      relatedEntities: "相关调查实体 (Related IOCs / Entities)",
+      relatedEntitiesGlobal: "全局相关实体摘要",
+      noRelatedEntities: "暂无关联实体",
+      rationale: {
+        critical: "该条风险被判定为 严重 (Critical)，命中规则通常意味着资产或数据面临直接威胁。",
+        high: "该条风险被判定为 高危 (High)，命中规则存在较高概率的真实攻击或被利用风险。",
+        medium: "该条风险被判定为 中危 (Medium)，命中规则值得进一步关联分析。",
+        low: "该条风险被判定为 低危 (Low)，命中规则通常对应可疑但不直接造成危害的活动。",
+        info: "该条风险被判定为 提示 (Info)，命中规则用于留痕与后续观察。",
+        informational: "该条风险被判定为 提示 (Informational)，命中规则用于留痕与后续观察。"
+      },
+      recommendations: {
+        critical: "立即进行复核 (prioritize review)，验证来源真实意图，并在确认后隔离受影响资产 (isolate affected asset)。",
+        high: "优先复核 (prioritize review)，验证来源真实意图，并在确认后隔离受影响资产 (isolate affected asset)。",
+        medium: "结合相关事件和调查实体进行关联分析 (correlate with related events and entities)。",
+        low: "记录在案并持续监控 (document and monitor)。",
+        info: "在案例备注中登记以备后续参考，无需立即处置。"
+      }
     },
     report: {
       title: "Markdown 报告",
@@ -206,7 +252,9 @@ const messages = {
       enabled: "已启用",
       yes: "是",
       no: "否",
-      notAvailable: "暂无数据"
+      notAvailable: "暂无数据",
+      detectionExplainability: "检测可解释性 (Detection Explainability)",
+      detectionExplainabilityIntro: "为每条风险点提供本地静态的可解释信息：规则信息、严重程度判定依据、命中上下文、命中指标、证据片段、推荐分析师操作以及相关调查实体。"
     },
     entities: {
       title: "调查实体",
@@ -540,7 +588,53 @@ const messages = {
       noMatch: "No findings match your filters.",
       matchedDetails: "Matched Details",
       fields: "Fields",
-      values: "Values"
+      values: "Values",
+      explainability: "Detection Explainability",
+      showExplanation: "Show explanation",
+      hideExplanation: "Hide explanation"
+    },
+    explainability: {
+      title: "Detection Explainability",
+      intro: "Local, static explanations for every finding so analysts can quickly understand why a log line was flagged as a security risk.",
+      ruleContext: "Rule Context",
+      ruleId: "Rule ID",
+      ruleName: "Rule Name",
+      ruleDescription: "Rule Description",
+      severityRationale: "Severity Rationale",
+      matchedContext: "Matched Field / Message Context",
+      matchedField: "Matched Field",
+      matchedValue: "Matched Value",
+      indicators: "Matched Indicator / Keyword / Regex Hints",
+      indicatorKind: {
+        ip: "IP",
+        path: "Path",
+        method: "HTTP Method",
+        status: "HTTP Status",
+        "user-agent": "User-Agent",
+        keyword: "Keyword",
+        count: "Count"
+      },
+      evidenceSnippet: "Evidence Snippet",
+      evidenceTruncated: "(truncated for display)",
+      recommendedAction: "Recommended Analyst Action",
+      relatedEntities: "Related IOCs / Investigation Entities",
+      relatedEntitiesGlobal: "Globally Related Entities Summary",
+      noRelatedEntities: "No related entities available",
+      rationale: {
+        critical: "Classified as CRITICAL: the matching rule typically indicates a direct threat to the asset or data.",
+        high: "Classified as HIGH: the matching rule is highly likely to represent a real attack or exploit attempt.",
+        medium: "Classified as MEDIUM: the matching rule is worth correlating with related events.",
+        low: "Classified as LOW: the matching rule typically reflects suspicious but non-destructive activity.",
+        info: "Classified as INFO: the matching rule is for record-keeping and follow-up observation.",
+        informational: "Classified as INFORMATIONAL: the matching rule is for record-keeping and follow-up observation."
+      },
+      recommendations: {
+        critical: "Prioritize immediate review, validate the source, and isolate the affected asset if the activity is confirmed malicious.",
+        high: "Prioritize review, validate the source, and isolate the affected asset if the activity is confirmed malicious.",
+        medium: "Correlate with related events and investigation entities to decide whether further action is required.",
+        low: "Document the observation and continue monitoring the source for additional suspicious activity.",
+        info: "Record the observation in the case notes for future reference; no immediate action is required."
+      }
     },
     report: {
       title: "Markdown Report",
@@ -582,7 +676,9 @@ const messages = {
       enabled: "Enabled",
       yes: "Yes",
       no: "No",
-      notAvailable: "Not available"
+      notAvailable: "Not available",
+      detectionExplainability: "Detection Explainability",
+      detectionExplainabilityIntro: "Per-finding, local-first explanation: rule context, severity rationale, matched field/message context, indicator/keyword/regex hints, evidence snippet, recommended analyst action, and related investigation entities."
     },
     entities: {
       title: "Investigation Entities",

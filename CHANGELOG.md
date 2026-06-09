@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Detection Explainability Drilldown (v2.6)**: Per-finding local-first explanation panel in the `Security Findings` / `安全风险点` area, including rule context, severity rationale, matched field/message context, matched indicator/keyword/regex hints, evidence snippet (with truncation marker), severity-aware recommended analyst action, and related investigation entities. Implemented as a pure-function utility (`findingExplainability.js`) and a small `FindingExplainability.vue` component, both fully covered by Vitest.
+- **Explainability in Analyst Evidence Pack**: Added a new `Detection Explainability` / `检测可解释性` chapter to the Analyst Evidence Pack Markdown export, with stable structure and `Not available` / `暂无数据` fallbacks.
+- **Bilingual UI/i18n Coverage**: New `explainability.*` and `findings.showExplanation` / `findings.hideExplanation` translation keys for both Chinese and English, with dedicated i18n tests.
+- **Tests and Validation**: Added Vitest coverage for `findingExplainability`, `FindingExplainability` component, drilldown toggle inside `FindingsList`, and the new Evidence Pack section. Total frontend test count is now 154 (up from 141). Backend tests unchanged at 65.
 - **Analyst Evidence Pack Export**: Added a local-first Markdown evidence pack export for the current analysis result, designed for analyst handoff and ticket workflows.
 - **Evidence Pack Content Reuse**: Reused existing findings, incidents, timeline, rule coverage, parse stats, batch source file metadata, triage state, and saved case metadata when available.
 - **Bilingual Export Entry**: Added `Download Evidence Pack` / `下载证据包` in the report area with i18n coverage and missing-data fallbacks.

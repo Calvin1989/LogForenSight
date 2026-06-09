@@ -93,6 +93,24 @@
         </div>
         <p class="finding-desc"><strong>{{ t('common.description') }}:</strong> {{ finding.description }}</p>
         <p class="finding-rec"><strong>{{ t('common.recommendation') }}:</strong> {{ finding.recommendation }}</p>
+
+        <div class="finding-actions">
+          <button
+            class="explainability-toggle"
+            :aria-expanded="expandedExplanations.has(index)"
+            @click="toggleExplanation(index)"
+          >
+            <span class="toggle-icon">{{ expandedExplanations.has(index) ? '▼' : '▶' }}</span>
+            <span>{{ expandedExplanations.has(index) ? t('findings.hideExplanation') : t('findings.showExplanation') }}</span>
+            <span class="toggle-meta">{{ t('findings.explainability') }}</span>
+          </button>
+        </div>
+
+        <FindingExplainability
+          v-if="expandedExplanations.has(index)"
+          :finding="finding"
+          :analysisResult="analysisContext"
+        />
         
         <div v-if="hasMatchedDetails(finding)" class="finding-matched-details">
           <div class="matched-details-header">
@@ -150,11 +168,16 @@
 import { ref, computed } from 'vue'
 import { downloadJson, downloadTextFile, convertFindingsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity } from '../i18n'
+import FindingExplainability from './FindingExplainability.vue'
 
 const props = defineProps({
   findings: {
     type: Array,
     required: true
+  },
+  analysisResult: {
+    type: Object,
+    default: null
   }
 })
 
@@ -164,6 +187,7 @@ const textSearch = ref('')
 const copyStatus = ref('')
 const expandedFindings = ref(new Set())
 const expandedMatchedValues = ref(new Set())
+const expandedExplanations = ref(new Set())
 
 const availableRules = computed(() => {
   const rules = new Set(props.findings.map(f => f.rule_id))
@@ -189,6 +213,11 @@ const filteredFindings = computed(() => {
   })
 })
 
+const analysisContext = computed(() => {
+  if (props.analysisResult) return props.analysisResult
+  return { findings: props.findings }
+})
+
 const clearFilters = () => {
   severityFilter.value = 'all'
   ruleFilter.value = 'all'
@@ -203,6 +232,16 @@ const toggleEvidence = (index) => {
     newSet.add(index)
   }
   expandedFindings.value = newSet
+}
+
+const toggleExplanation = (index) => {
+  const newSet = new Set(expandedExplanations.value)
+  if (newSet.has(index)) {
+    newSet.delete(index)
+  } else {
+    newSet.add(index)
+  }
+  expandedExplanations.value = newSet
 }
 
 const getVisibleEvidence = (finding, index) => {
@@ -468,6 +507,46 @@ const new_date_str = () => {
 .finding-desc, .finding-rec {
   margin: 0.5rem 0;
   font-size: 0.95rem;
+}
+
+.finding-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.explainability-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: #e7f5ff;
+  border: 1px solid #a5d8ff;
+  color: #1971c2;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.explainability-toggle:hover {
+  background: #d0ebff;
+  border-color: #74c0fc;
+}
+
+.explainability-toggle .toggle-icon {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.explainability-toggle .toggle-meta {
+  font-weight: 400;
+  color: #495057;
+  font-size: 0.75rem;
+  border-left: 1px solid #a5d8ff;
+  padding-left: 0.4rem;
 }
 
 .finding-matched-details {

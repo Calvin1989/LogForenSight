@@ -32,6 +32,7 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
 - **Analyst Triage (v2.2)**: `src/utils/triageStorage.js` handles persistent storage of triage status, priority, and notes for individual findings and incidents. It links state to analysis records via `caseId`.
 - **Local Case Workspace (v2.1)**: `src/utils/caseWorkspaceStorage.js` manages persistent storage of saved analysis cases. It uses a snapshotting approach that excludes non-serializable objects (like `File`) and raw logs to ensure privacy and storage efficiency.
 - **Local History**: `src/utils/historyStorage.js` manages persistent storage of recent analysis results in `localStorage`.
+- **Detection Explainability (v2.6)**: `src/utils/findingExplainability.js` is a pure-function utility that builds a structured, local-first explanation for any finding (rule context, severity rationale, matched context, indicator hints, evidence snippet, recommended action, related IOCs). `src/components/FindingExplainability.vue` renders the drilldown inside the `FindingsList`, and the result is also embedded in the Analyst Evidence Pack export.
 - **Export Utilities**: `src/utils/exportUtils.js` provides pure frontend functions for converting data to CSV/JSON and triggering browser downloads.
 - **Responsive Design**: Uses plain CSS with Flexbox and Grid to ensure the interface works well across different screen sizes.
 

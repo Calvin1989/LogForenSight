@@ -20,6 +20,7 @@ AI Log Security Analyzer 是一款专为安全分析师和开发者设计的 Web
 - **🩺 分析师处置工作流 (v2.2)**: 支持对每个风险点 (Finding) 和安全事件 (Incident) 进行本地处置标记（状态、优先级、备注），并支持导出 Markdown 处置摘要。
 - **📦 分析师证据包导出 (v2.4)**: 支持将当前分析结果导出为结构化 Markdown 证据包，整合严重程度摘要、时间轴、规则覆盖、处置信息与案例元数据，便于粘贴到工单或安全报告。
 - **🧭 IOC / 调查实体提取 (v2.5)**: 本地提取 IP、账号、URL、路径、HTTP 方法、HTTP 状态码和 batch source files，并在 UI 与 Evidence Pack 中统一展示，便于快速调查与归因。
+- **🧠 Detection Explainability Drilldown (v2.6)**: 为每条风险点提供本地静态的可解释性 drilldown：规则信息、严重程度判定依据、命中上下文、命中指标 / 关键字 / 正则提示、证据片段、推荐分析师操作以及相关调查实体，并在 Evidence Pack 中以独立章节导出。
 - **📊 深度聚合与演进**: 从原子级的风险点 (Findings) 到逻辑聚合的安全事件 (Incidents)，再到自动化生成的管理层摘要 (Executive Summary)。
 - **🔄 闭环工作流**: 支持报告对比 (Report Comparison)、脱敏分享 (Sanitized Report) 以及多格式导出。
 
@@ -67,6 +68,7 @@ npm run dev
 - **Attack Timeline**: 还原攻击者的行为轨迹，支持按严重程度和 IP 过滤。
 - **Incident Aggregation**: 自动识别行为模式，将零散请求聚合成具备业务意义的安全事件。
 - **Investigation Entities (v2.5)**: 从 findings、incidents、timeline、report context 与 batch source file metadata 中本地提取 IOC / investigation entities，并提供稳定排序、去重计数、首次/最后出现时间及相关来源文件信息。
+- **Detection Explainability Drilldown (v2.6)**: 每条风险点支持本地可展开的 `Detection Explainability` / `检测可解释性` 面板，展示规则 ID/名称/说明、严重程度判定依据、命中字段/消息上下文、命中指标（IP / 路径 / HTTP 方法 / 状态 / User-Agent / 关键字 / 次数）、证据片段（带截断提示）、推荐分析师操作（按严重程度分级）以及与该 finding 关联的调查实体；缺数据时显示 `Not available` / `暂无数据`，不会报错。
 - **Recent Analyses Labels**: Recent Analyses 会对批量案例显示 `Batch` 标签，帮助分析师快速区分单文件和案件级分析记录。
 - **Report Comparison**: 追踪风险趋势，直观对比不同时间段或不同站点的风险变化。
 
@@ -74,6 +76,7 @@ npm run dev
 - **Executive Summary**: 为管理层提供直观的风险评分 (0-100) 和核心指标摘要。
 - **Analyst Evidence Pack Export (v2.4)**: 在报告区域提供 `Download Evidence Pack` / `下载证据包` 入口，导出包含 Findings、Incidents、Timeline、Rule Coverage、Parse Stats、batch source files、Triage 与 Case metadata 的 Markdown 证据包。
 - **Evidence Enrichment (v2.5)**: Evidence Pack 新增 `Investigation Entities` / `调查实体` 章节，导出去重后的 IP、账号、URL、路径、HTTP 方法、HTTP 状态码、source files，以及计数、时间范围和来源文件关联。
+- **Detection Explainability in Evidence Pack (v2.6)**: Evidence Pack 新增 `Detection Explainability` / `检测可解释性` 章节，为每条 finding 输出本地静态的规则信息、严重程度判定依据、命中上下文、命中指标表格、截断后的证据片段、按严重程度分级的推荐分析师操作以及相关调查实体列表。
 - **Sanitized Sharing**: 内置脱敏引擎，一键生成隐藏敏感 IP 和 Token 的合规报告。
 - **Multi-format Export**: 支持导出 Markdown 报告、CSV 明细及 JSON 统计摘要。
 
@@ -95,9 +98,9 @@ npm run dev
 
 | 项目 | 状态说明 |
 | :--- | :--- |
-| **当前版本** | `v2.5-local` |
+| **当前版本** | `v2.6-local` |
 | **后端测试** | ![Pytest](https://img.shields.io/badge/Pytest-65%20passed-green.svg) |
-| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-141%20passed-green.svg) |
+| **前端测试** | ![Vitest](https://img.shields.io/badge/Vitest-154%20passed-green.svg) |
 | **Docker** | ![Docker](https://img.shields.io/badge/Docker--Compose-passed-blue.svg) |
 | **多语言** | 支持 中文 / English 实时切换 |
 | **部署方式** | Local-first / No database / No external API / No LLM |
@@ -111,6 +114,22 @@ npm run dev
 - 导出格式：当前版本提供本地 Markdown 导出，不上传数据、不调用外部 API、不新增数据库。
 - 导出内容：Generated timestamp、Severity summary、Executive summary、Findings、Incidents、Investigation Entities、Timeline highlights、Rule coverage、Parse stats、batch source files、Triage 状态/优先级/备注，以及已保存案例的 metadata。
 - 缺失数据处理：若当前分析缺少某些可选字段，导出内容会显示 `Not available` / `暂无数据`，不会中断导出。
+
+---
+
+## 🧠 Detection Explainability Drilldown
+
+- 入口位置：分析结果区中 `Security Findings` / `安全风险点` 卡片下，每条 finding 都附带 `Show explanation` / `展开解释` 按钮，展开后展示本地静态的 `Detection Explainability` / `检测可解释性` 面板。
+- 展示内容：
+  - **Rule Context**: Rule ID、Rule Name、Rule Description（优先复用后端 `rule_coverage` 中的 `explanation` / `description`，缺失时使用 finding 自身 `description`）。
+  - **Severity Rationale**: 根据严重程度 (critical / high / medium / low / info) 输出本地静态的判定依据。
+  - **Matched Field / Message Context**: 命中字段、命中值、Source IP、Path、Method、Status 等上下文。
+  - **Matched Indicator / Keyword / Regex Hints**: 命中指标分类（IP / Path / Method / Status / User-Agent / Keyword / Count），稳定排序。
+  - **Evidence Snippet**: 第一条 evidence 自动截断（80-600 字符，默认 280），超过限制会显示 `truncated for display` 提示。
+  - **Recommended Analyst Action**: 按严重程度分级的本地静态建议（critical/high 优先复核与隔离、medium 关联分析、low 记录监控、info 仅登记）。
+  - **Related IOCs / Investigation Entities**: 优先关联 v2.5 提取结果中的 IP / 路径 / User-Agent 等实体；缺数据时显示 `Not available` / `暂无数据`。
+- Evidence Pack 集成：`Download Evidence Pack` / `下载证据包` 现在会额外输出 `Detection Explainability` 章节，结构与 UI 面板保持一致，便于贴入工单或安全报告。
+- 隐私：所有可解释性内容均由前端纯函数在本地生成，不上传数据、不调用外部 API、不引入 LLM 或威胁情报源。
 
 ---
 
