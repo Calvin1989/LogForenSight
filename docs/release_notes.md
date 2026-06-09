@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.7-local] - GitHub Discoverability / Release Polish
+- **README Positioning Refresh**: 首页文案调整为更适合 GitHub 搜索与快速理解的项目定位，突出 local-first、security log triage、IOC extraction、detection explainability 和 analyst evidence pack export。
+- **Repository Listing Guidance**: 新增 `docs/github_listing.md`，提供 GitHub description、topics、short intro、portfolio bullets 和 release snapshot 命名建议。
+- **Portfolio / Demo / Screenshot Updates**: 更新 `docs/portfolio.md`、`docs/demo.md` 和 `docs/screenshots/README.md`，让项目展示路径更贴近当前真实功能链路。
+- **No Behavior Change**: 本版本聚焦文档与展示优化，不修改默认端口、不改变 `npm run dev` 行为、不引入新依赖、不修改业务逻辑。
+
+---
+
 ## [v2.6-local] - Detection Explainability Drilldown
 - **Per-Finding Explainability**: 每条 finding 都附带 `Show explanation` / `展开解释` 按钮，展开后展示本地静态的 `Detection Explainability` / `检测可解释性` 面板，包含 Rule ID / Name / Description、严重程度判定依据、命中上下文、命中指标 (IP/Path/Method/Status/UA/Keyword/Count)、截断后的证据片段、按严重程度分级的推荐分析师操作、以及与该 finding 关联的调查实体。
 - **Pure-Function Utility**: 新增 `frontend/src/utils/findingExplainability.js`，作为纯函数生成结构化的解释；新增 `frontend/src/components/FindingExplainability.vue` 在 `FindingsList` 中渲染 drilldown。

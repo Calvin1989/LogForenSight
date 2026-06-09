@@ -1,99 +1,123 @@
 # Portfolio Showcase: LogForenSight
 
-本文档深入探讨了 **LogForenSight** 的核心设计理念、技术选型以及适合在面试或技术分享中展示的核心技术亮点。
+本文档将 **LogForenSight** 重新组织为更适合 portfolio、面试和技术分享的展示版本，重点强调“问题定义 -> 解决方案 -> 技术亮点 -> 安全工作流 -> 验证状态”。
 
 ---
 
-## 🎯 项目定位
+## Problem
 
-本项目定位为一款 **轻量级、确定性、本地优先** 的 Web 日志分析工具。它并非要替代传统的 SIEM (如 ELK, Splunk)，而是填补了“快速、隐私、无基础设施开销”的本地分析场景空白。
+安全团队经常面对同一类痛点：
 
-在 v2.0 中，项目从 **single log analyzer** 进一步升级为 **case-level multi-file analysis** 工具。在 v2.1 中，引入了 **Saved Case Workspace**。在 v2.2 中，增加了 **Analyst Triage Workflow**，实现了从“分析”到“处置”的闭环。
-
-### 为什么不使用大模型 (LLM)？
-1.  **确定性**: 安全分析需要 100% 的可复现性。基于规则的引擎能够保证相同输入必得相同输出。
-2.  **效率**: 解析数万条日志，传统的正则与逻辑匹配速度远超 LLM 接口调用。
-3.  **成本与隐私**: 零成本运行，且不涉及将敏感的服务器日志发送给第三方大模型供应商。
+- Web 访问日志数量大，但原始文本缺少调查上下文。
+- 许多安全演示工具只做“检测”，没有把 findings 串成 analyst workflow。
+- 将敏感日志发送给外部 API、数据库或 LLM，往往会引入隐私与合规顾虑。
+- 传统 SIEM 过重，不适合本地快速排查、作品集展示或离线 DFIR 场景。
 
 ---
 
-## 💻 技术栈
+## Solution
 
--   **Frontend**: Vue 3 (Composition API), Vite, CSS Variables (Bilingual UI support).
--   **Backend**: Python 3.11, FastAPI, Pydantic, YAML-based config.
--   **Infrastructure**: Docker, Docker Compose, GitHub Actions (CI).
--   **Testing**: Pytest (Backend), Vitest (Frontend).
+LogForenSight 提供了一条 local-first 的安全分析链路，把原始日志转化为可复核、可解释、可导出的调查结果：
 
----
+1. log parsing
+2. deterministic detection
+3. incident aggregation
+4. case workspace
+5. triage workflow
+6. IOC extraction
+7. detection explainability
+8. evidence pack export
 
-## 🧠 核心架构
-
-项目遵循 **“数据驱动，逻辑分层”** 的原则：
-
-1.  **Parser 层**: 负责处理日志格式兼容性（Nginx/Apache），并提供详细的解析质量指标。
-2.  **Detector 层**: 基于 `rules.yaml` 执行原子级的威胁匹配。
-3.  **Aggregation 层**: 将原子级的 Findings 聚合成具备上下文意义的 Incidents。
-4.  **Reporting 层**: 生成 Markdown 报告、脱敏版本及确定性的 Executive Summary。
-5.  **Batch Case Workflow (v2.0)**: 支持多文件上传、统一分析、按 source file 归因与解析质量展示，贴近真实分析师工作流。
+这让项目不只是“日志解析器”，而是一个适合 incident response、DFIR、threat hunting 和 portfolio 展示的轻量级 analyst workbench。
 
 ---
 
-## 🔥 适合面试讲解的 5 个技术点
+## Technical Highlights
 
-### 1. 日志解析与健壮性处理
--   **挑战**: 不同版本的 Web 服务器日志格式可能存在细微差异。
--   **方案**: 实现了基于正则的自动识别引擎，并引入了“解析质量看板”。
--   **亮点**: 能够捕捉解析失败的样本行并返回给前端展示，帮助用户快速诊断日志格式问题。
+### 1. Parsing with quality feedback
 
-### 2. Finding -> Incident 的智能聚合
--   **挑战**: 单个 IP 可能会触发数百个低级别的安全风险（如 404 扫描）。
--   **方案**: 设计了聚合逻辑，根据攻击者的 IP、行为特征和时间窗口，将原子发现转换为逻辑事件（如 “Intensive Directory Scanning”）。
--   **亮点**: 极大降低了安全分析师的认知负荷。
+- 自动识别 Nginx / Apache 访问日志格式。
+- 暴露 `parse_rate`、`skipped_lines` 和失败样本，便于快速定位格式问题。
+- 在多文件 batch 场景下保留 per-source parse stats，增强 source attribution。
 
-### 3. 确定性的 Executive Summary 生成
--   **挑战**: 如何在不使用 AI 的情况下，生成看起来很“智能”的摘要？
--   **方案**: 建立了一套基于风险权重的计分模型 (0-100)，并根据发现的严重程度分布、事件频率自动套用结构化模板。
--   **亮点**: 实现了完全本地化、秒级的专业安全报告生成。
+### 2. Deterministic detection over black-box AI
 
-### 4. 零依赖的中英文实时切换 (Bilingual UI)
--   **挑战**: 在不引入 vue-i18n 等大型库的情况下，实现全站国际化。
--   **方案**: 编写了轻量级的 i18n 辅助函数，利用 Vue 3 的 `reactive` 和 `watch` 实现偏好持久化。
--   **亮点**: 极简代码实现，满足轻量级项目的展示需求。
+- 基于规则和阈值执行安全检测，输出可复现、可回归的分析结果。
+- 不依赖 LLM，不需要外部推理服务，适合可验证的安全演示。
+- 支持 Rule Coverage 和规则调优，便于解释为什么命中、为什么没命中。
 
-### 5. Rule Coverage / Detection Explainability
--   **挑战**: 安全工具常被诟病为“黑盒”，用户不知道漏掉了什么。
--   **方案**: 实现了规则覆盖面板，展示所有启用规则的状态、触发次数、命中字段以及真实的证据样例。
--   **亮点**: 增强了工具的透明度和用户信任感。
+### 3. Incident aggregation for analyst readability
 
-### 6. 从单日志到案件级分析 (v2.0)
--   **挑战**: 真实排查往往需要同时查看多个站点、时间片或代理层导出的日志，而不是孤立地分析单一文件。
--   **方案**: 引入 multi-file batch analysis，将多个文件统一送入一个共享检测管线，同时保留每个 source file 的 `parse_rate`、`detected_format` 与 `skipped_samples`。
--   **亮点**: 兼顾 analyst workflow、source attribution 和 explainability，让项目从“日志解析器”提升为“本地案件分析工作台”。
+- 将原子级 findings 聚合成更适合人类处理的 incidents。
+- 降低安全分析师的认知负荷，减少“同一 IP 重复刷屏”的问题。
+- 让项目从单条规则命中展示，提升到 case-level investigation 视角。
 
-### 7. 本地案例工作区与隐私快照 (v2.1)
--   **挑战**: 分析历史在浏览器刷新或清理后可能丢失，且保存完整分析结果可能占用过多存储。
--   **方案**: 实现了本地 Case Workspace，支持将分析结果快照化。在存储时，通过递归检查剔除 File 对象和原始大文本日志。
--   **亮点**: 实现了“零数据库”下的案件持久化，支持 JSON 导入导出，增强了工具在离线环境下的生产力。
+### 4. Investigation Entities / IOC extraction
 
-### 8. 分析师处置工作流 (v2.2)
--   **挑战**: 发现风险只是第一步，分析师需要记录哪些已修复、哪些是误报，并生成处置报告。
--   **方案**: 引入了 Triage Workflow，为 Findings 和 Incidents 提供状态跟踪（Open/Investigating/Mitigated/FP）和备注功能。
--   **亮点**: 支持基于 Case ID 的状态持久化，并能一键导出 Markdown 处置摘要，贴近企业内部的安全审计需求。
+- 从 findings、incidents、timeline、report context 和 source files 中提取调查实体。
+- 聚合 IP、账号、URL、路径、HTTP 方法、HTTP 状态码和 source files。
+- 让调查对象先于原始日志暴露，提升 DFIR 和 threat hunting 效率。
 
-### 9. Local-first Privacy as a Product Choice
--   **挑战**: 安全日志通常包含 IP、路径、令牌与业务标识，天然具有隐私和合规敏感性。
--   **方案**: 坚持 local-first 设计，不引入数据库，不依赖外部 API，不调用 LLM；分析、摘要、导出全部在本地完成。
--   **亮点**: 能把“隐私保护”从技术约束转化为产品卖点，特别适合面试中阐述架构边界与取舍。
+### 5. Detection explainability drilldown
+
+- 每条 finding 均可展开查看规则上下文、严重程度依据、命中指标和证据片段。
+- 将“可解释性”从静态文案提升为逐条 findings 的 drilldown 体验。
+- 便于面试中回答“你的工具如何避免黑盒”的问题。
+
+### 6. Analyst evidence pack export
+
+- 将 findings、incidents、Investigation Entities、Detection Explainability 和 triage 信息导出为 Markdown 证据包。
+- 适合工单交接、内部复盘、portfolio 截图和 GitHub release snapshot。
+- 保持 local-first，不依赖数据库和外部服务。
 
 ---
 
-## 🚧 项目边界与后续方向
+## Security Workflow
 
-### 边界 (Non-Goals)
--   **不替代 SIEM**: 不做实时告警，不做海量数据持久化。
--   **不做威胁情报**: 专注于日志本身的行为分析，不调用外部 IP 库。
+LogForenSight 当前最完整的安全工作流如下：
 
-### 后续方向
--   **Baseline Drift**: 增加对流量基准漂移的分析。
--   **Offline Rule Packs**: 支持导入社区编写的离线规则包。
--   **Cross-case Comparison**: 在已有本地历史之上，强化批量案件之间的纵向对比能力。
+1. 上传一个或多个 Web 日志文件。
+2. 解析并评估日志质量。
+3. 运行确定性检测规则并生成 findings。
+4. 将 findings 聚合为 incidents。
+5. 浏览 Investigation Entities 识别调查对象。
+6. 展开 Detection Explainability 查看规则依据与证据。
+7. 为 findings / incidents 添加 triage notes、状态和优先级。
+8. 保存为本地 case，并导出 analyst evidence pack。
+
+这个链路比单纯的“发现列表”更贴近真实安全分析师的工作方式。
+
+---
+
+## Local-first Design
+
+### 为什么坚持 local-first
+
+- **隐私**: 日志、IOC 和证据默认留在本地。
+- **确定性**: 相同输入稳定输出，适合验证与演示。
+- **成本**: 无外部 API、无数据库、无 SaaS 依赖。
+- **可移植**: Docker、本地开发环境和离线展示都较轻量。
+
+### 为什么不依赖 LLM
+
+- 安全场景更重视可复现性与证据链完整性。
+- 规则检测对访问日志这类结构化文本更高效。
+- 不把敏感日志发送给第三方模型服务，本身就是产品卖点。
+
+---
+
+## Validation Status
+
+- **Stable baseline**: `v2.6.1-local`
+- **Current release target**: `v2.7-local`
+- **Core stack**: Vue 3 + Vite, Python 3.11 + FastAPI, Docker Compose
+- **Validation model**: Pytest, Vitest, `npm run build`, `docker compose config`
+- **Scope note**: 当前版本主要强化 GitHub discoverability、portfolio readiness 和 release polish，不改业务逻辑
+
+---
+
+## Interview Angle
+
+如果需要在面试中用 30-60 秒概述项目，可以这样表达：
+
+> LogForenSight is a local-first security log triage tool built with FastAPI and Vue. It parses web access logs, runs deterministic detection, aggregates incidents, extracts investigation entities, explains each detection, and exports an analyst evidence pack without relying on external APIs, databases, or LLMs.

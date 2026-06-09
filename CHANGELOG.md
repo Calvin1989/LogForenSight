@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.7-local] - 2026-06-09
+### Changed
+- **GitHub Discoverability Polish**: Refined repository-facing documentation to describe LogForenSight as a local-first security log triage workflow with IOC extraction, detection explainability, and analyst evidence pack export.
+- **README Positioning**: Reworked the README for faster GitHub scanning, clearer audience targeting, portfolio-ready messaging, and more natural security/DFIR keyword coverage.
+- **Portfolio / Demo / Screenshot Docs**: Updated `docs/portfolio.md`, `docs/demo.md`, and `docs/screenshots/README.md` to reflect the current analyst workflow from parsing to evidence export.
+- **Repository Listing Metadata Guidance**: Added `docs/github_listing.md` with suggested GitHub description, topics, short project summary, portfolio bullets, and release snapshot naming guidance.
+
+### Documentation
+- **Release Notes Refresh**: Updated release-facing documentation to reflect the v2.7-local GitHub readiness goal without changing application behavior or business logic.
+
 ### Added
 - **Detection Explainability Drilldown (v2.6)**: Per-finding local-first explanation panel in the `Security Findings` / `安全风险点` area, including rule context, severity rationale, matched field/message context, matched indicator/keyword/regex hints, evidence snippet (with truncation marker), severity-aware recommended analyst action, and related investigation entities. Implemented as a pure-function utility (`findingExplainability.js`) and a small `FindingExplainability.vue` component, both fully covered by Vitest.
 - **Explainability in Analyst Evidence Pack**: Added a new `Detection Explainability` / `检测可解释性` chapter to the Analyst Evidence Pack Markdown export, with stable structure and `Not available` / `暂无数据` fallbacks.
