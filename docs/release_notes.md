@@ -4,6 +4,15 @@
 
 ---
 
+## [v2.0-local] - Multi-file Batch Analysis
+- **Multi-file Case Analysis**: 支持将多个日志文件作为同一个安全案例统一分析，从单文件日志分析升级为案件级分析工作流。
+- **Backend Endpoint**: 新增 `POST /api/analyze/batch`，支持 `multipart/form-data` 多文件上传，并保留统一的 `log_format` 控制。
+- **Frontend Batch Workflow**: 前端支持一次选择多个日志文件，Recent Analyses 会为批量记录显示 `Batch` 标签。
+- **Per-source Parse Quality**: 在聚合统计之外，保留每个 source file 的解析质量、格式识别结果与跳过样本，便于定位问题文件。
+- **Rule Tuning Batch Hint**: 在 batch 模式下明确提示临时调优将应用于整个批量集合，而不是单个文件。
+- **Validation Snapshot**: Backend `65 passed`，Frontend `20 passed / 97 passed`，`npm run build` passed，`docker compose config` passed。
+- **Local-first by Design**: 整个 v2.0 工作流仍然不依赖数据库、不调用外部服务、不连接 LLM。
+
 ## [v1.9] - Interactive Rule Tuning
 - **规则调优 UI**: 提供交互式面板，支持在不修改配置文件的前提下，临时调整检测阈值和敏感词列表。
 - **单次请求 Override**: 后端新增支持单次分析请求的规则覆盖逻辑，结果实时反映在 UI 中。

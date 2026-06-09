@@ -8,6 +8,8 @@
 
 本项目定位为一款 **轻量级、确定性、本地优先** 的 Web 日志分析工具。它并非要替代传统的 SIEM (如 ELK, Splunk)，而是填补了“快速、隐私、无基础设施开销”的本地分析场景空白。
 
+在 v2.0 中，项目从 **single log analyzer** 进一步升级为 **case-level multi-file analysis** 工具。分析师可以把同一事件窗口中的 2-10 个日志文件作为一个 investigation case 联合分析，同时保留每个 source file 的解析质量与来源信息。
+
 ### 为什么不使用大模型 (LLM)？
 1.  **确定性**: 安全分析需要 100% 的可复现性。基于规则的引擎能够保证相同输入必得相同输出。
 2.  **效率**: 解析数万条日志，传统的正则与逻辑匹配速度远超 LLM 接口调用。
@@ -32,6 +34,7 @@
 2.  **Detector 层**: 基于 `rules.yaml` 执行原子级的威胁匹配。
 3.  **Aggregation 层**: 将原子级的 Findings 聚合成具备上下文意义的 Incidents。
 4.  **Reporting 层**: 生成 Markdown 报告、脱敏版本及确定性的 Executive Summary。
+5.  **Batch Case Workflow (v2.0)**: 支持多文件上传、统一分析、按 source file 归因与解析质量展示，贴近真实分析师工作流。
 
 ---
 
@@ -62,6 +65,16 @@
 -   **方案**: 实现了规则覆盖面板，展示所有启用规则的状态、触发次数、命中字段以及真实的证据样例。
 -   **亮点**: 增强了工具的透明度和用户信任感。
 
+### 6. 从单日志到案件级分析 (v2.0)
+-   **挑战**: 真实排查往往需要同时查看多个站点、时间片或代理层导出的日志，而不是孤立地分析单一文件。
+-   **方案**: 引入 multi-file batch analysis，将多个文件统一送入一个共享检测管线，同时保留每个 source file 的 `parse_rate`、`detected_format` 与 `skipped_samples`。
+-   **亮点**: 兼顾 analyst workflow、source attribution 和 explainability，让项目从“日志解析器”提升为“本地案件分析工作台”。
+
+### 7. Local-first Privacy as a Product Choice
+-   **挑战**: 安全日志通常包含 IP、路径、令牌与业务标识，天然具有隐私和合规敏感性。
+-   **方案**: 坚持 local-first 设计，不引入数据库，不依赖外部 API，不调用 LLM；分析、摘要、导出全部在本地完成。
+-   **亮点**: 能把“隐私保护”从技术约束转化为产品卖点，特别适合面试中阐述架构边界与取舍。
+
 ---
 
 ## 🚧 项目边界与后续方向
@@ -71,6 +84,6 @@
 -   **不做威胁情报**: 专注于日志本身的行为分析，不调用外部 IP 库。
 
 ### 后续方向
--   **Rule Tuning UI**: 支持在前端直接调整规则阈值。
 -   **Baseline Drift**: 增加对流量基准漂移的分析。
 -   **Offline Rule Packs**: 支持导入社区编写的离线规则包。
+-   **Cross-case Comparison**: 在已有本地历史之上，强化批量案件之间的纵向对比能力。

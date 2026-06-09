@@ -37,7 +37,51 @@ Analyzes Nginx log content via file upload and returns structured findings and a
     - `log_format`: (Optional) `auto`, `nginx`, or `apache`. Default is `auto`.
 - **Configuration:** Detection rules can be customized via the `RULES_FILE` environment variable on the server side (pointing to a YAML file).
 
-## 3. Analyze Log (Sanitized)
+## 3. Analyze Logs as One Case (Batch)
+Analyzes multiple uploaded log files as one combined case while preserving per-file parsing quality.
+
+- **Endpoint:** `POST /api/analyze/batch`
+- **Content-Type:** `multipart/form-data`
+- **Accepted Extensions:** `.log`, `.txt`
+- **Max File Size:** 5MB per file
+- **Max File Count:** 10 files
+- **Form Parameters:**
+    - `files`: One or more uploaded files using the same `files` field name.
+    - `log_format`: (Optional) `auto`, `nginx`, or `apache`. Default is `auto`.
+- **Validation Rules:**
+    - At least one file is required.
+    - Empty files return `400 Bad Request`.
+    - More than 10 files returns `400 Bad Request`.
+- **Response Notes:**
+    - `analysis_mode` is set to `batch`.
+    - `source_files` contains per-source parsing details for each uploaded file.
+    - The top-level `parse_stats` field contains aggregate parsing quality across the whole batch case.
+
+### Success Response Additions
+```json
+{
+  "analysis_mode": "batch",
+  "source_files": [
+    {
+      "filename": "web-1.log",
+      "total_lines": 120,
+      "parsed_lines": 118,
+      "skipped_lines": 2,
+      "parse_rate": 0.9833,
+      "detected_format": "combined",
+      "skipped_samples": [
+        {
+          "line_number": 17,
+          "content": "malformed log line content...",
+          "reason": "unmatched_log_format"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 4. Analyze Log (Sanitized)
 Analyzes Nginx log content via file upload and returns a sanitized result (IPs and secrets redacted).
 
 - **Endpoint:** `POST /api/analyze/sanitized`
@@ -46,7 +90,7 @@ Analyzes Nginx log content via file upload and returns a sanitized result (IPs a
 - **Max File Size:** 5MB
 - **Response Structure:** Identical to `/api/analyze`, but content is redacted.
 
-## 4. Analyze Log (Tuned)
+## 5. Analyze Log (Tuned)
 Analyzes Nginx log content via file upload with temporary rule overrides.
 
 - **Endpoint:** `POST /api/analyze/tuned`
@@ -231,6 +275,20 @@ Aggregated security events grouped by Source IP.
 | report_markdown | string | Full formatted Markdown report. |
 | executive_summary | ExecutiveSummary | High-level risk assessment. |
 | rule_coverage | List[RuleCoverageItem] | Details on which rules were applied and triggered. |
+| analysis_mode | string | Analysis mode, such as `single` or `batch`. |
+| source_files | List[SourceFileStats] | Per-source parsing quality for batch analysis; empty for single-file analysis. |
+
+### SourceFileStats
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| filename | string | Original uploaded filename. |
+| total_lines | integer | Total lines found in that source file. |
+| parsed_lines | integer | Lines successfully parsed from that source file. |
+| skipped_lines | integer | Lines skipped during parsing for that source file. |
+| parse_rate | float | Parsing success rate for that source file. |
+| detected_format | string | Detected format for that source file. |
+| skipped_samples | List[SkippedSample] | Sample skipped lines for that source file. |
 
 ### RuleCoverageItem
 

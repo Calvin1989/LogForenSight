@@ -27,7 +27,8 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
 
 - **Component-Based**: The UI is broken down into reusable components (e.g., `FileUpload.vue`, `IncidentsList.vue`, `FindingsList.vue`, `RuleCoverage.vue`) located in `src/components/`.
 - **State Management**: Uses Vue 3's Composition API. Analysis-related state and methods are encapsulated in `src/composables/useAnalysisState.js` to keep `App.vue` clean and focused on layout.
-- **API Client**: `src/api.js` centralizes all HTTP communication with the backend.
+- **Multi-file Workflow (v2.0)**: The upload flow supports selecting multiple log files and uses `analyzeBatchFiles()` to submit them as one logical case.
+- **API Client**: `src/api.js` centralizes all HTTP communication with the backend, including `/api/analyze`, `/api/analyze/batch`, and tuned analysis requests.
 - **Local History**: `src/utils/historyStorage.js` manages persistent storage of recent analysis results in `localStorage`.
 - **Export Utilities**: `src/utils/exportUtils.js` provides pure frontend functions for converting data to CSV/JSON and triggering browser downloads.
 - **Responsive Design**: Uses plain CSS with Flexbox and Grid to ensure the interface works well across different screen sizes.
@@ -92,3 +93,16 @@ The frontend is a modern SPA (Single Page Application) focused on simplicity and
 8. **Response**: Backend returns an `AnalysisResult` JSON containing summary, incidents, findings, coverage, and the report.
    - *Optional*: If the user requests a sanitized report, `sanitizer.py` is called to redact sensitive data from the final `AnalysisResult` before it is sent back or used for report generation.
 9. **Display**: Frontend renders the data into cards, tables, and a preview.
+
+## Batch Analysis Flow (v2.0)
+
+The multi-file case workflow reuses the existing deterministic analysis pipeline while adding source attribution:
+
+1. **Multi-file Upload**: The frontend lets the analyst select multiple `.log` / `.txt` files for one investigation case.
+2. **Batch Request**: `analyzeBatchFiles()` sends the files to `POST /api/analyze/batch` as `multipart/form-data`.
+3. **Per-file Parsing**: The backend parses each file independently, preserving per-source `SourceFileStats` including parse rate, skipped lines, detected format, and skipped samples.
+4. **Log Aggregation**: Parsed entries from all files are merged into one shared `LogEntry` collection for case-level analysis.
+5. **Shared Detection Pipeline**: The combined entries move through the same deterministic detection, incident building, timeline generation, executive summary, rule coverage, and Markdown report pipeline used by single-file analysis.
+6. **Unified Result**: The response returns aggregate `parse_stats`, `analysis_mode="batch"`, and `source_files` so the frontend can show both case-level findings and per-source parsing quality.
+
+This design keeps the project local-first and deterministic: there is still no database, no external API, and no LLM dependency involved in the batch workflow.

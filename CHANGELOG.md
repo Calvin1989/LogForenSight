@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.0-local] - 2026-06-09
+### Added
+- **Multi-file Batch Analysis Backend**: Added combined case analysis for multiple uploaded log files through `POST /api/analyze/batch`.
+- **Frontend Multi-file Upload Flow**: Added batch upload support and recent-history labeling for case-level analyses.
+- **Per-source Parsing Details**: Added `analysis_mode` and `source_files` metadata so the UI can display source attribution and per-file parse quality.
+- **Batch-aware Rule Tuning UX**: Added guidance that temporary rule tuning in batch mode applies to the entire uploaded set.
+- **Tests**: Added backend and frontend coverage for batch analysis, source file stats, history labels, and batch UI behavior.
+
 ## [v1.9-local] - 2026-06-08
 ### Added
 - **Rule Tuning UI**: A new panel to temporarily adjust rule parameters (thresholds, sensitive paths, user-agents) in the frontend.
