@@ -1,39 +1,137 @@
-# Release Checklist (v2.0 Batch Analysis Edition)
+# Release Checklist
 
-本清单用于确保 **LogForenSight** 的版本发布达到 Portfolio 展示级别。
+本清单用于确保 **LogForenSight** 的本地优先发布流程保持稳定、可复核、可回滚。
 
 ---
 
-## 1. 核心逻辑验证
-- [ ] **后端测试**: `cd backend && python -m pytest` (预期 65 passed)。
-- [ ] **前端测试**: `cd frontend && npm run test` (预期 20 passed / 97 passed)。
-- [ ] **构建校验**: `cd frontend && npm run build` (确保生产环境静态资源生成无误)。
-- [ ] **容器验证**: `docker compose config` 无语法错误，`docker compose up` 可正常启动。
+## 1. Baseline
 
-## 2. 国际化与渲染 (Bilingual & Render)
-- [ ] **中英文切换**: 首页、统计卡片、Findings/Incidents 列表、Rule Tuning 面板实时翻译切换正常。
-- [ ] **Markdown 预览**: 页面底部的 Markdown 报告预览不包含 `#`、`**` 等源码符号，表格和列表渲染美观。
-- [ ] **持久化**: 刷新页面后，语言偏好和本地历史记录 (Recent Analyses) 依然存在。
+- [ ] 从干净的 `main` 创建发布分支。
+- [ ] 执行 `git fetch --prune origin`、`git fetch --tags origin`、`git pull --ff-only origin main`。
+- [ ] 确认 `git status` 干净，禁止在脏工作树上开始版本迭代。
+- [ ] 记录当前 `main` 的 `HEAD`、稳定 tag、release asset 名称与目标版本号。
 
-## 3. 功能完整性 (Portfolio Features)
-- [ ] **Multi-file Batch Analysis**: 能够一次上传 2-3 个日志文件并返回统一案件分析结果。
-- [ ] **Per-source Parse Quality**: 解析质量区域展示 Source Files 明细，包括每个文件的 `parse_rate` 与 `detected_format`。
-- [ ] **Batch History Labels**: Recent Analyses 中的批量记录显示 `Batch` 标签。
-- [ ] **Rule Tuning**: 能够临时调整阈值并重新分析，观察结果变化，且不修改 `rules.yaml`。
-- [ ] **Batch Hint**: 在 batch 模式下，Rule Tuning 面板明确提示调优作用于整个批量集合。
-- [ ] **Executive Summary**: 包含风险评分、风险等级、核心指标和 methodology 说明。
-- [ ] **Report Comparison**: 能够成功对比两个历史记录，并导出对比 Markdown。
-- [ ] **Rule Coverage**: 显示所有预设规则的状态，包含调优后的启用/禁用状态。
-- [ ] **脱敏引擎**: 下载的 Sanitized Report 中 IP 地址已部分掩码 (如 `1.2.x.x`)。
+```powershell
+git switch main
+git fetch --prune origin
+git fetch --tags origin
+git pull --ff-only origin main
+git status
+git log --oneline --decorate -5
+git tag --list "v2.*"
+git switch -c chore/<release-branch>
+```
 
-## 4. 仓库质量 (Repo Polish)
-- [ ] **README.md**: 包含 v2.0 batch analysis、local-first/no database/no external API/no LLM 的最新说明。
-- [ ] **CHANGELOG.md**: 记录了 v2.0-local 的多文件案件分析与相关测试更新。
-- [ ] **Portfolio Docs**: `docs/portfolio.md` 和 `docs/release_notes.md` 已就绪。
-- [ ] **Git Hygiene**: `git show --check HEAD` 干净（无 trailing whitespace）。
-- [ ] **Samples**: `samples/` 目录下包含有效的 Nginx 和 Apache 示例日志。
+## 2. Repo Hygiene
 
-## 5. 发布后确认
-- [ ] 标签指向正确的提交。
-- [ ] 远程分支与本地同步。
-- [ ] GitHub 首页展示效果符合预期。
+- [ ] 不使用 `git add .`，只精确暂存本次实际修改文件。
+- [ ] 检查旧仓库名 / 旧项目名残留。
+- [ ] 仅修改本次版本允许的文件和范围，不顺手做全仓库格式化。
+- [ ] 提交前执行 `git diff --check` 与 `git diff --cached --check`。
+
+```powershell
+git grep -n "ai-log-security-analyzer"
+git grep -n "AI Log Security Analyzer"
+git grep -n "ai-log-analyzer"
+git grep -n "Calvin1989/ai-log-security-analyzer"
+git diff --check
+git diff --cached --check
+```
+
+## 3. Validation
+
+- [ ] 后端测试通过：`cd backend && python -m pytest`。
+- [ ] 前端测试通过：`cd frontend && npm run test`。
+- [ ] 前端构建通过：`cd frontend && npm run build`。
+- [ ] Docker Compose 配置校验通过：`docker compose config`。
+- [ ] 提交后执行 `git show --check --stat HEAD`，确认无空白错误且提交范围正确。
+
+```powershell
+cd backend
+python -m pytest
+
+cd ..\frontend
+npm run test
+npm run build
+
+cd ..
+docker compose config
+git diff --check
+git show --check --stat HEAD
+```
+
+## 4. Staging And Commit
+
+- [ ] 用 `git diff --stat` 和目标文件级 diff 复核改动范围。
+- [ ] 只按文件逐个 `git add`。
+- [ ] 用清晰、低风险的提交信息描述本次发布主题。
+- [ ] 提交后再次确认 `git status`。
+
+```powershell
+git diff --stat
+git diff -- .github/workflows/ci.yml docs/release_checklist.md README.md CHANGELOG.md docs/release_notes.md .gitignore
+
+git add .github/workflows/ci.yml
+git add docs/release_checklist.md
+git add README.md
+git add CHANGELOG.md docs/release_notes.md
+git add .gitignore
+
+git diff --cached --stat
+git diff --cached --check
+git commit -m "chore: <release summary>"
+git show --check --stat HEAD
+git status
+```
+
+如果本次未修改 `.gitignore`，则不要执行对应的 `git add .gitignore`。
+
+## 5. PR And Merge
+
+- [ ] 推送发布分支到 `origin`。
+- [ ] 创建 PR，并在正文中附上 backend / frontend / docker / git 验证结果。
+- [ ] 合并前确认 PR 描述与实际 diff 一致。
+- [ ] 合并后保留分支或删除分支，按本次发布策略执行。
+
+```powershell
+git push -u origin chore/<release-branch>
+gh pr create --base main --head chore/<release-branch> --title "<title>"
+gh pr merge --merge --delete-branch=false
+```
+
+## 6. Tag And Archive
+
+- [ ] 回到 `main` 后再次执行完整验证，确保合并结果仍然稳定。
+- [ ] 创建并推送版本 tag。
+- [ ] 生成发布归档 zip，并包含 `PROJECT_STATE.txt`。
+- [ ] 检查归档内是否包含错误条目或不应打包的内容。
+- [ ] 生成并核对归档 `SHA256`。
+
+```powershell
+git fetch origin
+git switch main
+git pull --ff-only origin main
+
+git tag vX.Y-local
+git push origin vX.Y-local
+```
+
+归档检查要求：
+
+- [ ] zip 文件名与版本、提交哈希一致。
+- [ ] 归档中包含 `PROJECT_STATE.txt`。
+- [ ] 不包含明显错误条目，如缓存、临时文件、无关构建产物或本地 IDE 垃圾文件。
+- [ ] `SHA256` 已记录，可用于 Release 附件校验。
+
+## 7. GitHub Release
+
+- [ ] 在 GitHub 创建 Release，标题、tag、说明与 `CHANGELOG.md` / `docs/release_notes.md` 保持一致。
+- [ ] 上传 zip 与 `SHA256` 信息。
+- [ ] 确认 Release 页面中的版本主题、验证结论和运行时兼容性描述准确。
+
+## 8. Post-release Check
+
+- [ ] 再次执行 `git status`，确认工作树干净。
+- [ ] 检查本地 `main`、远端 `origin/main` 与 tag 已同步。
+- [ ] 检查 GitHub Actions、Release 页面和仓库首页链接正常。
+- [ ] 记录 PR 编号、`main HEAD`、tag 推送状态、修改文件清单与最终验证结果。

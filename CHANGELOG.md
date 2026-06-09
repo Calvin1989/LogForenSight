@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.11-local] - CI and Release Hygiene
+### Changed
+- **Improved CI / Release Workflow Documentation**: Polished the repository-facing workflow naming and documentation so the local validation path, CI steps, and release checklist stay aligned.
+- **Clarified Release Checklist**: Expanded `docs/release_checklist.md` to cover clean-branch baseline checks, precise staging, old-name grep, git whitespace checks, tag push, archive validation, SHA256 verification, and GitHub Release creation.
+- **Docker Compose Validation Included**: Explicitly kept `docker compose config` as part of both CI and release hygiene guidance.
+- **No Runtime Behavior Changes**: This release does not change backend behavior, frontend runtime behavior, parser logic, detector logic, or incident aggregation behavior.
+
 ## [v2.10-local] - 2026-06-09
 ### Added
 - **Curated Demo Sample Logs**: Added `samples/demo_access.log`, `samples/demo_batch_part1.log`, and `samples/demo_batch_part2.log` to provide a stable local demo path for parsing, findings, incidents, investigation entities, explainability, triage, and evidence export.

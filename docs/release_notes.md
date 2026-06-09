@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.11-local] - CI / Release Hygiene
+- **CI / Release Hygiene**: 对当前本地优先工作流做小步卫生增强，保持 GitHub 仓库、PR 流程和发布文档更加稳定、清晰、可复核。
+- **Release Checklist Polish**: 更新 `docs/release_checklist.md`，补齐从干净 `main` 起步、禁止 `git add .`、旧名 grep、backend/frontend 验证、`docker compose config`、git whitespace 检查、tag 推送、归档校验、SHA256 与 GitHub Release 创建等步骤。
+- **Workflow Alignment**: 让 CI 中的步骤命名与发布清单术语保持一致，减少本地验证和 GitHub Actions 之间的理解偏差。
+- **No Runtime Behavior Change**: 不修改 backend app code、frontend 主要 UI、parser / detector / incident aggregation 核心逻辑，也不调整依赖版本和默认端口。
+
+---
+
 ## [v2.10-local] - Demo Sample Polish
 - **Demo Sample Polish**: 新增 `samples/demo_access.log`、`samples/demo_batch_part1.log` 与 `samples/demo_batch_part2.log`，用于稳定展示从上传日志到导出 Evidence Pack 的完整本地分析链路。
 - **Recommended Demo Path**: 更新 `docs/demo.md`，明确推荐样例、单文件与批量演示方式，以及 `parse quality -> findings / incidents -> Investigation Entities -> Detection Explainability -> triage -> Evidence Pack` 的演示顺序。
