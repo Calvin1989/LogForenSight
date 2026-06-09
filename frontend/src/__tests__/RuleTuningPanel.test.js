@@ -1,10 +1,18 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import RuleTuningPanel from '../components/RuleTuningPanel.vue';
 
 // Mock i18n
 vi.mock('../i18n', () => ({
   t: (key) => key
+}));
+
+const { mockedAnalysisResult } = vi.hoisted(() => ({
+  mockedAnalysisResult: { value: null }
+}));
+
+vi.mock('../composables/useAnalysisState', () => ({
+  currentAnalysisResult: mockedAnalysisResult
 }));
 
 describe('RuleTuningPanel', () => {
@@ -14,6 +22,10 @@ describe('RuleTuningPanel', () => {
     sensitive_paths: ['/admin'],
     suspicious_user_agents: ['sqlmap']
   };
+
+  beforeEach(() => {
+    mockedAnalysisResult.value = null;
+  });
 
   it('renders "no file" message when hasFile is false', () => {
     const wrapper = mount(RuleTuningPanel, {
@@ -99,5 +111,18 @@ describe('RuleTuningPanel', () => {
 
     expect(wrapper.find('input[type="number"]').element.disabled).toBe(true);
     expect(wrapper.find('.btn-primary').element.disabled).toBe(true);
+  });
+
+  it('renders batch hint when current result is batch mode', () => {
+    mockedAnalysisResult.value = { analysis_mode: 'batch' };
+    const wrapper = mount(RuleTuningPanel, {
+      props: {
+        initialConfig,
+        hasFile: true
+      }
+    });
+
+    expect(wrapper.text()).toContain('ruleTuning.batchHint');
+    mockedAnalysisResult.value = null;
   });
 });

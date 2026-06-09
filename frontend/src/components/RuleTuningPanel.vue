@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
+import { currentAnalysisResult } from '../composables/useAnalysisState';
 import { t } from '../i18n';
 
 const props = defineProps({
@@ -82,6 +83,8 @@ const handleReset = () => {
 const isValid = computed(() => {
   return highFrequencyThreshold.value >= 1 && pathScanningThreshold.value >= 1;
 });
+
+const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mode === 'batch');
 </script>
 
 <template>
@@ -104,6 +107,7 @@ const isValid = computed(() => {
           {{ t('ruleTuning.temporaryNotice') }}
           <br />
           <small>{{ t('ruleTuning.memoryOnly') }}</small>
+          <small v-if="isBatchAnalysis" class="batch-hint">{{ t('ruleTuning.batchHint') }}</small>
         </div>
 
         <div class="tuning-summary-box">
@@ -235,6 +239,10 @@ const isValid = computed(() => {
   display: block;
   margin-top: 0.25rem;
   opacity: 0.8;
+}
+
+.batch-hint {
+  font-weight: 600;
 }
 
 .tuning-summary-box {

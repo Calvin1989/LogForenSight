@@ -66,4 +66,37 @@ describe('ParseStatsCard', () => {
     expect(wrapper.text()).toContain('Format mismatch')
     expect(wrapper.text()).toContain('invalid line')
   })
+
+  it('renders source files details when source_files exists', () => {
+    const wrapper = mount(ParseStatsCard, {
+      props: {
+        stats: {
+          ...defaultStats,
+          source_files: [
+            {
+              filename: 'web-1.log',
+              total_lines: 50,
+              parsed_lines: 45,
+              skipped_lines: 5,
+              parse_rate: 0.9,
+              detected_format: 'combined'
+            }
+          ]
+        }
+      }
+    })
+
+    expect(wrapper.text()).toContain('Source Files')
+    expect(wrapper.text()).toContain('web-1.log')
+    expect(wrapper.text()).toContain('Parsed Lines')
+    expect(wrapper.text()).toContain('90.0%')
+  })
+
+  it('does not crash when source_files is missing', () => {
+    const wrapper = mount(ParseStatsCard, {
+      props: { stats: defaultStats }
+    })
+
+    expect(wrapper.find('.source-files').exists()).toBe(false)
+  })
 })

@@ -1,5 +1,6 @@
 import { ref, onMounted, computed, nextTick } from 'vue'
 import {
+  analyzeBatchFiles,
   analyzeLogFile,
   analyzeLogFileSanitized,
   fetchRuleConfig,
@@ -7,9 +8,25 @@ import {
 } from '../api'
 import { getRecentAnalyses, saveAnalysisRecord, updateAnalysisRecord, clearRecentAnalyses } from '../utils/historyStorage'
 
+export const currentAnalysisResult = ref(null)
+
+function normalizeSelectedFiles(fileOrFiles) {
+  if (Array.isArray(fileOrFiles)) {
+    return fileOrFiles.filter(Boolean)
+  }
+  return fileOrFiles ? [fileOrFiles] : []
+}
+
+function buildAnalysisDisplayName(files) {
+  if (files.length <= 1) {
+    return files[0]?.name || ''
+  }
+  return `Batch: ${files[0].name} + ${files.length - 1} more`
+}
+
 export function useAnalysisState() {
   const loading = ref(false)
-  const result = ref(null)
+  const result = currentAnalysisResult
   const error = ref(null)
   const selectedFile = ref(null)
   const selectedLogFormat = ref('auto')
@@ -31,9 +48,11 @@ export function useAnalysisState() {
     }
   })
 
-  const handleAnalyze = async (file, logFormat) => {
-    if (!file) return
-    selectedFile.value = file
+  const handleAnalyze = async (fileOrFiles, logFormat) => {
+    const files = normalizeSelectedFiles(fileOrFiles)
+    if (files.length === 0) return
+
+    selectedFile.value = files.length === 1 ? files[0] : files
     selectedLogFormat.value = logFormat
 
     loading.value = true
@@ -41,23 +60,33 @@ export function useAnalysisState() {
     result.value = null
 
     try {
-      const data = await analyzeLogFile(file, logFormat)
+      let data
+      if (files.length === 1) {
+        data = await analyzeLogFile(files[0], logFormat)
+      } else {
+        data = await analyzeBatchFiles(files, { logFormat })
+      }
       result.value = data
 
       // Save to history
       const recordId = Date.now().toString()
       selectedRecordId.value = recordId
+      const displayName = buildAnalysisDisplayName(files)
+      const analysisMode = data.analysis_mode || (files.length > 1 ? 'batch' : 'single')
       
       const record = {
         id: recordId,
         analyzed_at: new Date().toISOString(),
-        file_name: file.name,
+        file_name: displayName,
+        display_name: displayName,
         log_format: logFormat === 'auto' ? data.parse_stats.detected_format : logFormat,
         total_requests: data.summary.total_requests,
         parse_rate: data.parse_stats.parse_rate,
         skipped_lines: data.parse_stats.skipped_lines,
         incidents_count: data.incidents.length,
         findings_count: data.findings.length,
+        analysis_mode: analysisMode,
+        isBatch: analysisMode === 'batch',
         result: data
       }
       recentAnalyses.value = saveAnalysisRecord(record)
@@ -74,6 +103,11 @@ export function useAnalysisState() {
       return
     }
 
+    if (Array.isArray(selectedFile.value) && selectedFile.value.length > 1) {
+      error.value = "Rule tuning for multi-file batch analysis is not supported by the current backend."
+      return
+    }
+
     loading.value = true
     error.value = null
     tuningWarnings.value = []
@@ -87,7 +121,9 @@ export function useAnalysisState() {
       if (selectedRecordId.value) {
         recentAnalyses.value = updateAnalysisRecord(selectedRecordId.value, {
           result: data.result,
-          is_tuned: true
+          is_tuned: true,
+          analysis_mode: data.result.analysis_mode || 'single',
+          isBatch: (data.result.analysis_mode || 'single') === 'batch'
         })
       }
 
@@ -166,6 +202,11 @@ export function useAnalysisState() {
       return
     }
 
+    if (Array.isArray(selectedFile.value)) {
+      error.value = "Sanitized download is only available for single-file analysis."
+      return
+    }
+
     sanitizingReport.value = true
     try {
       const data = await analyzeLogFileSanitized(selectedFile.value, selectedLogFormat.value)
@@ -185,7 +226,7 @@ export function useAnalysisState() {
   }
 
   const isSanitizedAvailable = computed(() => {
-    if (selectedFile.value) return true
+    if (selectedFile.value) return !Array.isArray(selectedFile.value)
     const currentRecord = recentAnalyses.value.find(r => r.id === selectedRecordId.value)
     return !!(currentRecord && currentRecord.sanitized_result)
   })

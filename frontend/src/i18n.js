@@ -82,7 +82,9 @@ const messages = {
     upload: {
       chooseFile: "选择 .log 或 .txt 文件",
       logFormat: "日志格式",
-      autoDetect: "自动检测"
+      autoDetect: "自动检测",
+      selectedFiles: "已选择 {count} 个文件",
+      analyzeFiles: "分析 {count} 个文件"
     },
     history: {
       title: "最近的分析",
@@ -92,7 +94,9 @@ const messages = {
       incidents: "个安全事件",
       findings: "个风险点",
       skipped: "个跳过",
-      sanitizedCached: "已缓存脱敏结果"
+      sanitizedCached: "已缓存脱敏结果",
+      tuned: "已调优",
+      batch: "批量"
     },
     summary: {
       title: "概览统计",
@@ -132,7 +136,13 @@ const messages = {
       format: "格式",
       requested: "请求格式",
       warning: "部分行无法解析。请验证选择的日志格式。",
-      skippedSamples: "跳过的行示例"
+      skippedSamples: "跳过的行示例",
+      sourceFiles: "来源文件解析质量",
+      filename: "文件名",
+      parsedLines: "已解析行数",
+      skippedLines: "跳过行数",
+      parseRate: "解析率",
+      detectedFormat: "识别格式"
     },
     incidents: {
       title: "聚合的安全事件",
@@ -264,7 +274,8 @@ const messages = {
       currentSummary: "当前调优摘要",
       activeRules: "个活跃规则",
       disabledRulesCount: "个已禁用规则",
-      memoryOnly: "调优仅影响当前页面内存，不写入 rules.yaml"
+      memoryOnly: "调优仅影响当前页面内存，不写入 rules.yaml",
+      batchHint: "当前调优会应用于整个批量日志集合。"
     }
   },
   en: {
@@ -343,7 +354,9 @@ const messages = {
     upload: {
       chooseFile: "Choose a .log or .txt file",
       logFormat: "Log Format",
-      autoDetect: "Auto Detect"
+      autoDetect: "Auto Detect",
+      selectedFiles: "{count} files selected",
+      analyzeFiles: "Analyze {count} files"
     },
     history: {
       title: "Recent Analyses",
@@ -353,7 +366,9 @@ const messages = {
       incidents: "incidents",
       findings: "findings",
       skipped: "skipped",
-      sanitizedCached: "Sanitized cached"
+      sanitizedCached: "Sanitized cached",
+      tuned: "Tuned",
+      batch: "Batch"
     },
     summary: {
       title: "Overview Statistics",
@@ -393,7 +408,13 @@ const messages = {
       format: "Format",
       requested: "Requested",
       warning: "Some lines could not be parsed. Please verify the selected log format.",
-      skippedSamples: "Skipped Line Samples"
+      skippedSamples: "Skipped Line Samples",
+      sourceFiles: "Source Files",
+      filename: "Filename",
+      parsedLines: "Parsed Lines",
+      skippedLines: "Skipped Lines",
+      parseRate: "Parse Rate",
+      detectedFormat: "Detected Format"
     },
     incidents: {
       title: "Aggregated Security Incidents",
@@ -525,7 +546,8 @@ const messages = {
       currentSummary: "Current Tuning Summary",
       activeRules: "active rules",
       disabledRulesCount: "disabled rules",
-      memoryOnly: "Tuning only affects current session and is not saved to rules.yaml"
+      memoryOnly: "Tuning only affects current session and is not saved to rules.yaml",
+      batchHint: "Current tuning applies to the entire batch log set."
     }
   }
 };
@@ -542,7 +564,22 @@ export function toggleLanguage() {
   setLanguage(nextLang)
 }
 
-export function t(key, fallback = '') {
+function interpolate(value, params) {
+  if (typeof value !== 'string' || !params) return value
+  return value.replace(/\{(\w+)\}/g, (_, token) => {
+    return token in params ? String(params[token]) : `{${token}}`
+  })
+}
+
+export function t(key, paramsOrFallback = '', maybeFallback = '') {
+  const params = (
+    paramsOrFallback &&
+    typeof paramsOrFallback === 'object' &&
+    !Array.isArray(paramsOrFallback)
+  ) ? paramsOrFallback : null
+  const fallback = typeof paramsOrFallback === 'string'
+    ? paramsOrFallback
+    : (typeof maybeFallback === 'string' ? maybeFallback : '')
   const keys = key.split('.')
   let value = messages[currentLanguage.value]
 
@@ -554,7 +591,7 @@ export function t(key, fallback = '') {
     }
   }
 
-  return value
+  return interpolate(value, params)
 }
 
 export function translateSeverity(severity) {

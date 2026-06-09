@@ -43,11 +43,34 @@
         <pre class="sample-content">{{ sample.content }}</pre>
       </div>
     </div>
+
+    <div v-if="sourceFiles.length > 0" class="source-files">
+      <h4>{{ t('parse.sourceFiles') }}</h4>
+      <div class="source-files-table">
+        <div class="source-row source-header">
+          <span>{{ t('parse.filename') }}</span>
+          <span>{{ t('parse.totalLines') }}</span>
+          <span>{{ t('parse.parsedLines') }}</span>
+          <span>{{ t('parse.skippedLines') }}</span>
+          <span>{{ t('parse.parseRate') }}</span>
+          <span>{{ t('parse.detectedFormat') }}</span>
+        </div>
+        <div v-for="file in sourceFiles" :key="file.filename" class="source-row">
+          <span>{{ file.filename }}</span>
+          <span>{{ file.total_lines }}</span>
+          <span>{{ file.parsed_lines }}</span>
+          <span>{{ file.skipped_lines }}</span>
+          <span>{{ ((file.parse_rate || 0) * 100).toFixed(1) }}%</span>
+          <span>{{ file.detected_format }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { currentAnalysisResult } from '../composables/useAnalysisState'
 import { t } from '../i18n'
 
 const props = defineProps({
@@ -61,6 +84,16 @@ const rateClass = computed(() => {
   if (props.stats.parse_rate >= 0.95) return 'rate-good'
   if (props.stats.parse_rate >= 0.8) return 'rate-warn'
   return 'rate-bad'
+})
+
+const sourceFiles = computed(() => {
+  if (Array.isArray(props.stats?.source_files)) {
+    return props.stats.source_files
+  }
+  if (Array.isArray(currentAnalysisResult.value?.source_files)) {
+    return currentAnalysisResult.value.source_files
+  }
+  return []
 })
 </script>
 
@@ -206,5 +239,51 @@ const rateClass = computed(() => {
   color: #495057;
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+.source-files {
+  margin-top: 1.5rem;
+  border-top: 1px solid #f1f3f5;
+  padding-top: 1rem;
+}
+
+.source-files h4 {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.source-files-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.source-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 2fr) repeat(5, minmax(70px, 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  border-top: 1px solid #f1f3f5;
+  align-items: center;
+}
+
+.source-row:first-child {
+  border-top: none;
+}
+
+.source-header {
+  background: #f8f9fa;
+  font-weight: 700;
+  color: #495057;
+}
+
+@media (max-width: 768px) {
+  .source-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 </style>

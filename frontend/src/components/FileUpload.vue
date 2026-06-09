@@ -5,10 +5,11 @@
         type="file" 
         id="logFile" 
         accept=".log,.txt" 
+        multiple
         @change="onFileChange"
       />
       <label for="logFile" class="file-label">
-        {{ internalSelectedFile ? internalSelectedFile.name : t('upload.chooseFile') }}
+        {{ selectedFileLabel }}
       </label>
     </div>
 
@@ -22,20 +23,20 @@
     </div>
 
     <button 
-      @click="$emit('analyze', internalSelectedFile, logFormat)" 
-      :disabled="!internalSelectedFile || loading"
+      @click="emitAnalyze"
+      :disabled="selectedFiles.length === 0 || props.loading"
       class="analyze-btn"
     >
-      {{ loading ? t('actions.analyzing') : t('actions.analyze') }}
+      {{ analyzeButtonLabel }}
     </button>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { t } from '../i18n'
 
-defineProps({
+const props = defineProps({
   loading: {
     type: Boolean,
     default: false
@@ -43,14 +44,37 @@ defineProps({
 })
 
 const emit = defineEmits(['analyze'])
-const internalSelectedFile = ref(null)
+const selectedFiles = ref([])
 const logFormat = ref('auto')
 
-const onFileChange = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    internalSelectedFile.value = file
+const selectedFileLabel = computed(() => {
+  if (selectedFiles.value.length === 1) {
+    return selectedFiles.value[0].name
   }
+  if (selectedFiles.value.length > 1) {
+    return t('upload.selectedFiles', { count: selectedFiles.value.length })
+  }
+  return t('upload.chooseFile')
+})
+
+const analyzeButtonLabel = computed(() => {
+  if (props.loading) {
+    return t('actions.analyzing')
+  }
+  if (selectedFiles.value.length > 1) {
+    return t('upload.analyzeFiles', { count: selectedFiles.value.length })
+  }
+  return t('actions.analyze')
+})
+
+const onFileChange = (event) => {
+  selectedFiles.value = Array.from(event.target.files || [])
+}
+
+const emitAnalyze = () => {
+  if (selectedFiles.value.length === 0) return
+  const payload = selectedFiles.value.length === 1 ? selectedFiles.value[0] : selectedFiles.value
+  emit('analyze', payload, logFormat.value)
 }
 </script>
 

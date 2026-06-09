@@ -19,16 +19,17 @@
         @click="$emit('select', record)"
       >
         <div class="item-main">
-          <div class="file-name">{{ record.file_name }}</div>
+          <div class="file-name">{{ record.display_name || record.file_name || '-' }}</div>
           <div class="timestamp">{{ formatDate(record.analyzed_at) }}</div>
         </div>
         
         <div class="item-stats">
-          <span class="stat-tag format">{{ record.log_format }}</span>
-          <span class="stat-tag success">{{ (record.parse_rate * 100).toFixed(0) }}% {{ t('history.parsed') }}</span>
+          <span v-if="record.log_format" class="stat-tag format">{{ record.log_format }}</span>
+          <span class="stat-tag success">{{ formatParseRate(record.parse_rate) }} {{ t('history.parsed') }}</span>
           <span v-if="record.incidents_count > 0" class="stat-tag incident">{{ record.incidents_count }} {{ t('history.incidents') }}</span>
           <span v-if="record.findings_count > 0" class="stat-tag finding">{{ record.findings_count }} {{ t('history.findings') }}</span>
           <span v-if="record.skipped_lines > 0" class="stat-tag skip">{{ record.skipped_lines }} {{ t('history.skipped') }}</span>
+          <span v-if="record.analysis_mode === 'batch' || record.isBatch" class="stat-tag batch">{{ t('history.batch') }}</span>
           <span v-if="record.is_tuned" class="stat-tag tuned">{{ t('history.tuned') }}</span>
           <span v-if="record.sanitized_result" class="stat-tag cached">{{ t('history.sanitizedCached') }}</span>
         </div>
@@ -57,6 +58,11 @@ const formatDate = (isoString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+const formatParseRate = (parseRate) => {
+  const normalized = typeof parseRate === 'number' ? parseRate : 0
+  return `${(normalized * 100).toFixed(0)}%`
 }
 </script>
 
@@ -164,4 +170,5 @@ const formatDate = (isoString) => {
 .stat-tag.skip { background: #fff0f6; color: #c2255c; }
 .stat-tag.cached { background: #e3fafc; color: #0b7285; }
 .stat-tag.tuned { background: #e7f5ff; color: #1971c2; border: 1px solid #a5d8ff; }
+.stat-tag.batch { background: #f3f0ff; color: #6741d9; border: 1px solid #d0bfff; }
 </style>

@@ -43,6 +43,14 @@ describe('i18n tool', () => {
     expect(t('missing.key', 'fallback text')).toBe('fallback text')
   })
 
+  it('should replace count parameters in translations', () => {
+    setLanguage('en')
+    expect(t('upload.selectedFiles', { count: 3 })).toBe('3 files selected')
+
+    setLanguage('zh')
+    expect(t('upload.analyzeFiles', { count: 2 })).toBe('分析 2 个文件')
+  })
+
   it('should translate severity correctly', () => {
     setLanguage('zh')
     expect(translateSeverity('critical')).toBe('严重')
@@ -78,5 +86,17 @@ describe('i18n tool', () => {
     setLanguage('en')
     expect(t('ruleTuning.title')).toBe('Temporary Rule Tuning')
     expect(t('ruleTuning.highFrequencyThreshold')).toBe('High Frequency Threshold')
+  })
+
+  it('should have new batch-related translations', () => {
+    setLanguage('zh')
+    expect(t('history.batch')).toBe('批量')
+    expect(t('parse.sourceFiles')).toBe('来源文件解析质量')
+    expect(t('ruleTuning.batchHint')).toBe('当前调优会应用于整个批量日志集合。')
+
+    setLanguage('en')
+    expect(t('history.batch')).toBe('Batch')
+    expect(t('parse.detectedFormat')).toBe('Detected Format')
+    expect(t('ruleTuning.batchHint')).toBe('Current tuning applies to the entire batch log set.')
   })
 })

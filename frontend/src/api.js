@@ -1,6 +1,7 @@
 // Use relative paths to support both Vite proxy and Nginx proxy
 const API_ENDPOINTS = {
   ANALYZE: '/api/analyze',
+  ANALYZE_BATCH: '/api/analyze/batch',
   ANALYZE_TUNED: '/api/analyze/tuned',
   ANALYZE_SANITIZED: '/api/analyze/sanitized',
   RULES: '/api/rules'
@@ -29,6 +30,37 @@ export async function analyzeLogFile(file, logFormat = 'auto') {
   if (!response.ok) {
     // Return the detail error message from FastAPI
     throw new Error(data.detail || 'Analysis failed');
+  }
+
+  return data;
+}
+
+/**
+ * Sends multiple log files to the backend for combined analysis.
+ *
+ * @param {File[]} files - The .log or .txt files to analyze together.
+ * @param {Object} options - Optional request options.
+ * @returns {Promise<Object>} - The batch AnalysisResult from the backend.
+ * @throws {Error} - If the analysis fails or the files are invalid.
+ */
+export async function analyzeBatchFiles(files, options = {}) {
+  const formData = new FormData();
+  const logFormat = options.logFormat ?? options.log_format ?? 'auto';
+
+  files.forEach((file) => {
+    formData.append('files', file);
+  });
+  formData.append('log_format', logFormat);
+
+  const response = await fetch(API_ENDPOINTS.ANALYZE_BATCH, {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || 'Batch analysis failed');
   }
 
   return data;
