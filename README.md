@@ -72,6 +72,8 @@ npm run dev
 
 如遇 Windows 端口占用问题，请参考 `docs/release_notes.md`。项目默认端口和 `npm run dev` 行为保持不变。
 
+推荐使用 `samples/` 目录中的 demo 日志快速体验完整分析链路。
+
 ---
 
 ## 🎯 适合谁？

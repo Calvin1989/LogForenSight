@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.10-local] - 2026-06-09
+### Added
+- **Curated Demo Sample Logs**: Added `samples/demo_access.log`, `samples/demo_batch_part1.log`, and `samples/demo_batch_part2.log` to provide a stable local demo path for parsing, findings, incidents, investigation entities, explainability, triage, and evidence export.
+- **Samples README**: Added `samples/README.md` to document the recommended upload order, sample purpose, and data-safety boundaries for local demos.
+
+### Changed
+- **Demo Guide Refresh**: Updated `docs/demo.md` with a Chinese-first recommended demo path, explicit sample selection guidance, and a clearer walkthrough for the full analyst workflow.
+- **README Demo Hint**: Added a lightweight README note that points users to the `samples/` directory for the quickest end-to-end demo experience.
+- **Runtime Compatibility**: Documentation-only and sample-only release with no frontend behavior change, no backend behavior change, no dependency change, and no parser/detector logic change.
+
 ## [v2.9.2-local] - 2026-06-09
 ### Changed
 - **README First-screen Visual Polish**: Refined the README hero area with a more distinctive positioning line, richer badges, and a faster first-screen summary for GitHub visitors.

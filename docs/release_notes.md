@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.10-local] - Demo Sample Polish
+- **Demo Sample Polish**: 新增 `samples/demo_access.log`、`samples/demo_batch_part1.log` 与 `samples/demo_batch_part2.log`，用于稳定展示从上传日志到导出 Evidence Pack 的完整本地分析链路。
+- **Recommended Demo Path**: 更新 `docs/demo.md`，明确推荐样例、单文件与批量演示方式，以及 `parse quality -> findings / incidents -> Investigation Entities -> Detection Explainability -> triage -> Evidence Pack` 的演示顺序。
+- **Samples README**: 新增 `samples/README.md`，说明推荐演示顺序、样例用途与保留地址 / 非真实数据约束。
+- **Documentation-only / Sample-only Release**: 本版本不修改 parser / detector / incident aggregation 行为，不引入新依赖，不调整默认端口，不改变运行时逻辑。
+
+---
+
 ## [v2.9.2-local] - README Visual Polish
 - **README Visual Polish**: 优化 `README.md` 第一屏展示，加入更清晰的 Hero 短句、badge 组合、`30 秒看懂` 摘要和更靠前的快速开始入口。
 - **Chinese-first Style Retained**: 继续保持中文主导说明，同时保留少量英文定位与 GitHub SEO keywords，不改成英文 README。
