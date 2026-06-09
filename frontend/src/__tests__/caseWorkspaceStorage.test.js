@@ -93,7 +93,10 @@ describe('caseWorkspaceStorage', () => {
   })
 
   it('should handle malformed JSON in localStorage', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
     localStorage.setItem(STORAGE_KEY, 'invalid-json')
     expect(storage.listCases()).toEqual([])
+    expect(console.error).toHaveBeenCalled()
+    vi.restoreAllMocks()
   })
 })

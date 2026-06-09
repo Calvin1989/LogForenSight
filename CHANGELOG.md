@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.2.1-local] - 2026-06-09
+### Fixed
+- **Test Output Cleanup**: Muted expected `console.error` during malformed JSON tests and suppressed jsdom navigation warnings in triage export tests.
+- **Test Robustness**: Enhanced mocks for `URL.createObjectURL` and anchor elements to ensure stable export testing across environments.
+
 ## [v2.2-local] - 2026-06-09
 ### Added
 - **Analyst Triage Workflow**: Introduced a dedicated triage panel for findings and incidents.
