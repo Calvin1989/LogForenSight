@@ -61,7 +61,10 @@ describe('triageStorage', () => {
   })
 
   it('should handle malformed JSON in localStorage', () => {
-    localStorage.setItem(STORAGE_KEY, 'invalid-json');
-    expect(storage.getTriageState(caseId)).toEqual({});
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    localStorage.setItem(STORAGE_KEY, 'invalid-json')
+    expect(storage.getTriageState(caseId)).toEqual({})
+    expect(console.error).toHaveBeenCalled()
+    vi.restoreAllMocks()
   })
 })

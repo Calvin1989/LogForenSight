@@ -106,11 +106,30 @@ describe('TriagePanel.vue', () => {
       props: { caseId, analysisResult: mockAnalysisResult }
     })
     
-    // Mock URL.createObjectURL
-    window.URL.createObjectURL = vi.fn(() => 'blob:url')
-    window.URL.revokeObjectURL = vi.fn()
+    // Mock URL.createObjectURL and URL.revokeObjectURL
+    const createObjectURL = vi.fn(() => 'blob:url')
+    const revokeObjectURL = vi.fn()
+    window.URL.createObjectURL = createObjectURL
+    window.URL.revokeObjectURL = revokeObjectURL
     
+    // Mock anchor element and its click method
+    const mockAnchor = {
+      href: '',
+      download: '',
+      click: vi.fn(),
+      style: {}
+    }
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor)
+    vi.spyOn(document.body, 'appendChild').mockImplementation(() => {})
+    vi.spyOn(document.body, 'removeChild').mockImplementation(() => {})
+
     await wrapper.find('.action-btn').trigger('click')
+
     expect(storage.exportTriageSummary).toHaveBeenCalled()
+    expect(createObjectURL).toHaveBeenCalled()
+    expect(mockAnchor.click).toHaveBeenCalled()
+    expect(mockAnchor.download).toContain('triage-summary')
+
+    vi.restoreAllMocks()
   })
 })

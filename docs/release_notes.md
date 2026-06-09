@@ -4,6 +4,11 @@
 
 ---
 
+## [v2.2.1-local] - Test Polish & Noise Cleanup
+- **测试输出优化**: 清理了前端测试中的 `console.error` 噪音和 `jsdom` 导航警告，使 CI 输出更清爽、专业。
+- **导出逻辑测试**: 增强了导出功能的测试覆盖，确保在无真实浏览器环境下的逻辑正确性。
+- **验证快照**: Backend `65 passed`，Frontend `129 passed` (clean output)，`npm run build` passed。
+
 ## [v2.2-local] - Analyst Triage Workflow
 - **分析师处置面板**: 在分析结果页新增独立的处置区块，支持对 Findings 和 Incidents 进行状态管理。
 - **状态跟踪**: 提供 Open, Investigating, Mitigated, False Positive 四种标准状态。
