@@ -7,6 +7,7 @@ import {
   analyzeLogWithTuning
 } from '../api'
 import { getRecentAnalyses, saveAnalysisRecord, updateAnalysisRecord, clearRecentAnalyses } from '../utils/historyStorage'
+import * as caseStorage from '../utils/caseWorkspaceStorage'
 
 export const currentAnalysisResult = ref(null)
 
@@ -35,11 +36,14 @@ export function useAnalysisState() {
   const rules = ref(null)
   const rulesError = ref(null)
   const recentAnalyses = ref([])
+  const savedCases = ref([])
   const tuningWarnings = ref([])
 
   onMounted(async () => {
     // Load history
     recentAnalyses.value = getRecentAnalyses()
+    // Load cases
+    savedCases.value = caseStorage.listCases()
     
     try {
       rules.value = await fetchRuleConfig()
@@ -166,7 +170,51 @@ export function useAnalysisState() {
     selectedRecordId.value = null
   }
 
+  const handleSaveCase = (title, notes = '', tags = []) => {
+    if (!result.value) return
+
+    const data = result.value
+    const analysisMode = data.analysis_mode || (Array.isArray(selectedFile.value) ? 'batch' : 'single')
+
+    const caseRecord = {
+      id: Date.now().toString(),
+      title: title || (analysisMode === 'batch' ? `Batch Case: ${buildAnalysisDisplayName(selectedFile.value)}` : `Analysis Case: ${selectedFile.value?.name || 'Unknown'}`),
+      source_name: buildAnalysisDisplayName(Array.isArray(selectedFile.value) ? selectedFile.value : [selectedFile.value]),
+      analysis_mode: analysisMode,
+      is_batch: analysisMode === 'batch',
+      risk_level: data.executive_summary?.overall_risk_level || 'UNKNOWN',
+      risk_score: data.summary?.risk_score || 0,
+      total_requests: data.summary?.total_requests || 0,
+      unique_ips: data.summary?.unique_ips || 0,
+      finding_count: data.findings?.length || 0,
+      incident_count: data.incidents?.length || 0,
+      high_count: data.summary?.finding_severity_counts?.HIGH || 0,
+      medium_count: data.summary?.finding_severity_counts?.MEDIUM || 0,
+      low_count: data.summary?.finding_severity_counts?.LOW || 0,
+      tags: tags,
+      notes: notes,
+      result_snapshot: {
+        summary: data.summary,
+        executive_summary: data.executive_summary,
+        parse_stats: data.parse_stats,
+        findings: data.findings.slice(0, 50), // Snapshot limit
+        incidents: data.incidents.slice(0, 20),
+        timeline_events: data.timeline_events?.slice(0, 50),
+        rule_coverage: data.rule_coverage
+      }
+    }
+
+    caseStorage.saveCase(caseRecord)
+    savedCases.value = caseStorage.listCases()
+    return caseRecord
+  }
+
+  const handleRefreshCases = () => {
+    savedCases.value = caseStorage.listCases()
+  }
+
   const clearCurrentResult = () => {
+    loading.value = false
     result.value = null
     error.value = null
     selectedFile.value = null
@@ -242,12 +290,15 @@ export function useAnalysisState() {
     rules,
     rulesError,
     recentAnalyses,
+    savedCases,
     tuningWarnings,
     handleAnalyze,
     handleApplyTuning,
     handleResetTuning,
     handleRestoreRecord,
     handleClearHistory,
+    handleSaveCase,
+    handleRefreshCases,
     clearCurrentResult,
     handleDownloadSanitized,
     isSanitizedAvailable

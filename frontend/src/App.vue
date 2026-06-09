@@ -16,12 +16,21 @@
         <button @click="clearCurrentResult" class="clear-current-btn">
           {{ t('app.clearCurrentResult') }}
         </button>
+        <button v-if="result" @click="onSaveCase" class="save-case-btn">
+          {{ t('workspace.saveCase') }}
+        </button>
       </div>
 
       <RecentAnalyses 
         :history="recentAnalyses" 
         @select="handleRestoreRecord"
         @clear="handleClearHistory"
+      />
+
+      <CaseWorkspace
+        :cases="savedCases"
+        @select="onSelectCase"
+        @refresh="handleRefreshCases"
       />
 
       <ReportComparison
@@ -121,6 +130,7 @@ import SeverityDistribution from './components/SeverityDistribution.vue'
 import TimelineView from './components/TimelineView.vue'
 import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
+import CaseWorkspace from './components/CaseWorkspace.vue'
 
 const {
   loading,
@@ -131,12 +141,15 @@ const {
   rules,
   rulesError,
   recentAnalyses,
+  savedCases,
   tuningWarnings,
   handleAnalyze,
   handleApplyTuning,
   handleResetTuning,
   handleRestoreRecord,
   handleClearHistory,
+  handleSaveCase,
+  handleRefreshCases,
   clearCurrentResult,
   handleDownloadSanitized,
   isSanitizedAvailable
@@ -145,6 +158,32 @@ const {
 const displayResult = computed(() => {
   return localizeAnalysisForDisplay(result.value, currentLanguage.value)
 })
+
+const onSaveCase = () => {
+  const defaultTitle = result.value.analysis_mode === 'batch'
+    ? `Batch Case: ${new Date().toLocaleString()}`
+    : `Case: ${selectedFile.value?.name || 'Manual Save'}`
+
+  const title = prompt(t('workspace.caseTitle'), defaultTitle)
+  if (title === null) return // Cancelled
+
+  handleSaveCase(title)
+  alert(t('workspace.saved'))
+}
+
+const onSelectCase = (caseItem) => {
+  // Restore from snapshot
+  result.value = caseItem.result_snapshot
+  // Since it's a snapshot, we don't have the original file
+  selectedFile.value = null
+  error.value = null
+
+  // Scroll to results
+  nextTick(() => {
+    const el = document.getElementById('analysis-results')
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  })
+}
 </script>
 
 <style scoped>
@@ -170,10 +209,11 @@ header h1 {
 .main-actions {
   display: flex;
   justify-content: center;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.clear-current-btn {
+.clear-current-btn, .save-case-btn {
   padding: 0.6rem 1.2rem;
   background-color: #f8f9fa;
   color: #495057;
@@ -185,10 +225,21 @@ header h1 {
   transition: all 0.2s;
 }
 
-.clear-current-btn:hover {
+.clear-current-btn:hover, .save-case-btn:hover {
   background-color: #e9ecef;
   border-color: #adb5bd;
   color: #212529;
+}
+
+.save-case-btn {
+  background-color: #e7f5ff;
+  color: #1971c2;
+  border-color: #a5d8ff;
+}
+
+.save-case-btn:hover {
+  background-color: #d0ebff;
+  border-color: #74c0fc;
 }
 
 .error-msg {
