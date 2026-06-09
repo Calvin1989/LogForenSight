@@ -90,9 +90,20 @@
           </span>
           <h3>{{ finding.title }}</h3>
           <span class="rule-id">{{ t('common.rule') }}: {{ finding.rule_id }}</span>
+          <span v-if="showNeedsReview(finding)" class="triage-badge needs-review">
+            {{ t('triage.needsReview') }}
+          </span>
         </div>
         <p class="finding-desc"><strong>{{ t('common.description') }}:</strong> {{ finding.description }}</p>
         <p class="finding-rec"><strong>{{ t('common.recommendation') }}:</strong> {{ finding.recommendation }}</p>
+        <div v-if="getFormattedUpdatedAt(finding) || getAnalystNote(finding)" class="triage-meta">
+          <span v-if="getFormattedUpdatedAt(finding)">
+            <strong>{{ t('triage.lastUpdated') }}:</strong> {{ getFormattedUpdatedAt(finding) }}
+          </span>
+          <span v-if="getAnalystNote(finding)">
+            <strong>{{ t('triage.analystNote') }}:</strong> {{ getAnalystNote(finding) }}
+          </span>
+        </div>
 
         <div class="finding-actions">
           <button
@@ -169,6 +180,7 @@ import { ref, computed } from 'vue'
 import { downloadJson, downloadTextFile, convertFindingsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity } from '../i18n'
 import FindingExplainability from './FindingExplainability.vue'
+import { getTriageItemUpdatedAt, needsTriageReview } from '../utils/triageStorage'
 
 const props = defineProps({
   findings: {
@@ -178,6 +190,10 @@ const props = defineProps({
   analysisResult: {
     type: Object,
     default: null
+  },
+  triageState: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -217,6 +233,26 @@ const analysisContext = computed(() => {
   if (props.analysisResult) return props.analysisResult
   return { findings: props.findings }
 })
+
+const getFindingTriage = (finding) => {
+  return props.triageState[`finding:${finding.rule_id}`]
+}
+
+const showNeedsReview = (finding) => {
+  return needsTriageReview(getFindingTriage(finding))
+}
+
+const getFormattedUpdatedAt = (finding) => {
+  const rawValue = getTriageItemUpdatedAt(getFindingTriage(finding))
+  if (!rawValue) return ''
+
+  const parsed = new Date(rawValue)
+  return Number.isNaN(parsed.getTime()) ? rawValue : parsed.toLocaleString()
+}
+
+const getAnalystNote = (finding) => {
+  return getFindingTriage(finding)?.notes || ''
+}
 
 const clearFilters = () => {
   severityFilter.value = 'all'
@@ -504,9 +540,33 @@ const new_date_str = () => {
 .severity-badge[data-severity="medium"] { background: #fff3cd; color: #856404; }
 .severity-badge[data-severity="low"] { background: #d1ecf1; color: #0c5460; }
 
+.triage-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.triage-badge.needs-review {
+  background: #fff3bf;
+  color: #8f5b00;
+  border: 1px solid #ffe066;
+}
+
 .finding-desc, .finding-rec {
   margin: 0.5rem 0;
   font-size: 0.95rem;
+}
+
+.triage-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.8rem;
+  color: #6c757d;
 }
 
 .finding-actions {

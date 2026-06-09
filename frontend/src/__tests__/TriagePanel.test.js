@@ -5,7 +5,12 @@ import * as storage from '../utils/triageStorage'
 
 // Mock i18n
 vi.mock('../i18n', () => ({
-  t: (key) => key
+  t: (key, params) => {
+    if (key === 'triage.statusSummaryText') {
+      return `Open: ${params.open} · Investigating: ${params.investigating} · Mitigated: ${params.mitigated} · False positive: ${params.falsePositive}`
+    }
+    return key
+  }
 }))
 
 // Mock storage
@@ -14,7 +19,17 @@ vi.mock('../utils/triageStorage', () => ({
   saveTriageItem: vi.fn((caseId, key, data) => ({ [key]: data })),
   clearTriageState: vi.fn(),
   exportTriageSummary: vi.fn(() => '# Summary'),
-  listTriageItems: vi.fn(() => [])
+  listTriageItems: vi.fn(() => []),
+  getTriageStatusCounts: vi.fn((state = {}) => {
+    const counts = { open: 0, investigating: 0, mitigated: 0, false_positive: 0 }
+    Object.values(state).forEach((item) => {
+      if (item?.status && counts[item.status] !== undefined) {
+        counts[item.status] += 1
+      }
+    })
+    return counts
+  }),
+  getTriageItemUpdatedAt: vi.fn((item) => item?.updated_at || item?.updatedAt || '')
 }))
 
 describe('TriagePanel.vue', () => {
@@ -26,15 +41,33 @@ describe('TriagePanel.vue', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    storage.getTriageState.mockReturnValue({})
     window.confirm = vi.fn(() => true)
   })
 
-  it('renders empty state when no triage data', () => {
+  it('renders empty state and fallback summary when no triage data', () => {
     const wrapper = mount(TriagePanel, {
       props: { caseId, analysisResult: { incidents: [], findings: [] } }
     })
     expect(wrapper.find('.empty-state').exists()).toBe(true)
     expect(wrapper.text()).toContain('triage.empty')
+    expect(wrapper.text()).toContain('triage.noRecords')
+  })
+
+  it('renders triage status summary counts', () => {
+    storage.getTriageState.mockReturnValue({
+      'finding:rule-1': { status: 'open', priority: 'medium' },
+      'finding:rule-2': { status: 'investigating', priority: 'high' },
+      'incident:inc-1': { status: 'mitigated', priority: 'low' },
+      'incident:inc-2': { status: 'false_positive', priority: 'low' }
+    })
+
+    const wrapper = mount(TriagePanel, {
+      props: { caseId, analysisResult: { incidents: [], findings: [] } }
+    })
+
+    expect(wrapper.text()).toContain('Open: 1 · Investigating: 1 · Mitigated: 1 · False positive: 1')
+    expect(wrapper.text()).toContain('triage.falsePositive')
   })
 
   it('renders findings and incidents', () => {
@@ -84,7 +117,7 @@ describe('TriagePanel.vue', () => {
 
   it('filters by status', async () => {
     // Mock storage to return one triaged item
-    storage.getTriageState.mockReturnValueOnce({
+    storage.getTriageState.mockReturnValue({
       'incident:inc-1': { status: 'mitigated', priority: 'medium' }
     })
     
@@ -100,8 +133,27 @@ describe('TriagePanel.vue', () => {
     expect(wrapper.text()).toContain('Finding 1')
   })
 
+  it('shows last updated and analyst note metadata when available', () => {
+    storage.getTriageState.mockReturnValue({
+      'finding:rule-1': {
+        status: 'investigating',
+        priority: 'high',
+        notes: 'Needs follow-up',
+        updated_at: '2026-06-09T12:00:00Z'
+      }
+    })
+
+    const wrapper = mount(TriagePanel, {
+      props: { caseId, analysisResult: mockAnalysisResult }
+    })
+
+    expect(wrapper.text()).toContain('triage.lastUpdated')
+    expect(wrapper.text()).toContain('triage.analystNote')
+    expect(wrapper.text()).toContain('Needs follow-up')
+  })
+
   it('calls exportTriageSummary on export click', async () => {
-    storage.getTriageState.mockReturnValueOnce({ 'incident:inc-1': { status: 'open' } })
+    storage.getTriageState.mockReturnValue({ 'incident:inc-1': { status: 'open' } })
     const wrapper = mount(TriagePanel, {
       props: { caseId, analysisResult: mockAnalysisResult }
     })

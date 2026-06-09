@@ -79,7 +79,10 @@
 
         <InvestigationEntities :analysisResult="result" />
 
-        <IncidentsList :incidents="displayResult.incidents" />
+        <IncidentsList
+          :incidents="displayResult.incidents"
+          :triageState="triageState"
+        />
 
         <div class="side-by-side">
           <TopList 
@@ -96,12 +99,17 @@
           />
         </div>
 
-        <FindingsList :findings="displayResult.findings" :analysisResult="result" />
+        <FindingsList
+          :findings="displayResult.findings"
+          :analysisResult="result"
+          :triageState="triageState"
+        />
 
         <TriagePanel
           v-if="displayResult"
           :caseId="currentCaseId"
           :analysisResult="displayResult"
+          @triage-state-change="handleTriageStateChange"
         />
 
         <MarkdownReport
@@ -119,7 +127,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { t, currentLanguage } from './i18n'
 import { localizeAnalysisForDisplay } from './utils/localizedAnalysis'
 import LanguageToggle from './components/LanguageToggle.vue'
@@ -170,6 +178,16 @@ const {
 const displayResult = computed(() => {
   return localizeAnalysisForDisplay(result.value, currentLanguage.value)
 })
+
+const triageState = ref({})
+
+watch(currentCaseId, () => {
+  triageState.value = {}
+})
+
+const handleTriageStateChange = (state) => {
+  triageState.value = state || {}
+}
 
 const onSaveCase = () => {
   const defaultTitle = result.value.analysis_mode === 'batch'

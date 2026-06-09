@@ -15,6 +15,13 @@
       </div>
     </div>
 
+    <div class="triage-status-summary" :class="{ empty: !hasTriageData }">
+      <span class="summary-label">{{ t('triage.statusSummary') }}</span>
+      <span class="summary-text">
+        {{ hasTriageData ? statusSummaryText : t('triage.noRecords') }}
+      </span>
+    </div>
+
     <div class="triage-summary-cards" v-if="hasTriageData">
       <div class="summary-card">
         <span class="label">{{ t('triage.open') }}</span>
@@ -27,6 +34,10 @@
       <div class="summary-card">
         <span class="label">{{ t('triage.mitigated') }}</span>
         <span class="value">{{ stats.mitigated }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="label">{{ t('triage.falsePositive') }}</span>
+        <span class="value">{{ stats.false_positive }}</span>
       </div>
       <div class="summary-card danger" v-if="stats.criticalPriority > 0">
         <span class="label">{{ t('triage.critical') }}</span>
@@ -61,6 +72,14 @@
           <span class="item-type-tag" :class="item.type">{{ t(`triage.${item.type}`) }}</span>
           <span class="item-id">{{ item.id }}</span>
           <p class="item-desc">{{ item.description }}</p>
+          <div v-if="hasItemMetadata(item.key)" class="item-meta">
+            <span v-if="getFormattedUpdatedAt(item.key)" class="meta-chip">
+              {{ t('triage.lastUpdated') }}: {{ getFormattedUpdatedAt(item.key) }}
+            </span>
+            <span v-if="getTriageNote(item.key)" class="meta-chip note-chip">
+              {{ t('triage.analystNote') }}: {{ getTriageNote(item.key) }}
+            </span>
+          </div>
         </div>
         
         <div class="row-actions">
@@ -109,6 +128,8 @@ import { ref, computed, watch } from 'vue'
 import { t } from '../i18n'
 import * as storage from '../utils/triageStorage'
 
+const emit = defineEmits(['triage-state-change'])
+
 const props = defineProps({
   caseId: {
     type: String,
@@ -128,7 +149,11 @@ const triageState = ref(storage.getTriageState(props.caseId))
 
 watch(() => props.caseId, (newCaseId) => {
   triageState.value = storage.getTriageState(newCaseId)
-})
+}, { immediate: true })
+
+watch(triageState, (newState) => {
+  emit('triage-state-change', newState)
+}, { immediate: true, deep: true })
 
 const hasTriageData = computed(() => Object.keys(triageState.value).length > 0)
 
@@ -172,16 +197,47 @@ const visibleItems = computed(() => {
 })
 
 const stats = computed(() => {
-  const s = { open: 0, investigating: 0, mitigated: 0, false_positive: 0, criticalPriority: 0 }
+  const s = {
+    ...storage.getTriageStatusCounts(triageState.value),
+    criticalPriority: 0
+  }
   Object.values(triageState.value).forEach(data => {
-    if (s[data.status] !== undefined) s[data.status]++
     if (data.priority === 'critical' || data.priority === 'high') s.criticalPriority++
   })
   return s
 })
 
+const statusSummaryText = computed(() => {
+  return t('triage.statusSummaryText', {
+    open: stats.value.open,
+    investigating: stats.value.investigating,
+    mitigated: stats.value.mitigated,
+    falsePositive: stats.value.false_positive
+  })
+})
+
 const getTriageValue = (key, field, fallback) => {
   return triageState.value[key]?.[field] ?? fallback
+}
+
+const getTriageItem = (key) => {
+  return triageState.value[key]
+}
+
+const getTriageNote = (key) => {
+  return getTriageItem(key)?.notes || ''
+}
+
+const getFormattedUpdatedAt = (key) => {
+  const rawValue = storage.getTriageItemUpdatedAt(getTriageItem(key))
+  if (!rawValue) return ''
+
+  const parsed = new Date(rawValue)
+  return Number.isNaN(parsed.getTime()) ? rawValue : parsed.toLocaleString()
+}
+
+const hasItemMetadata = (key) => {
+  return Boolean(getFormattedUpdatedAt(key) || getTriageNote(key))
 }
 
 const updateItem = (itemKey, field, value) => {
@@ -283,6 +339,34 @@ const handleExport = () => {
   margin-bottom: 1.5rem;
 }
 
+.triage-status-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+.triage-status-summary.empty {
+  color: #6c757d;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #495057;
+  text-transform: uppercase;
+}
+
+.summary-text {
+  font-size: 0.9rem;
+  color: #495057;
+}
+
 .summary-card {
   background: #f8f9fa;
   padding: 0.75rem;
@@ -369,6 +453,29 @@ const handleExport = () => {
   font-size: 0.85rem;
   color: #6c757d;
   margin: 0.25rem 0 0 0;
+}
+
+.item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #495057;
+  background: #f1f3f5;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+.note-chip {
+  max-width: 100%;
+  word-break: break-word;
 }
 
 .row-actions {

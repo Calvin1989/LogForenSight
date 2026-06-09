@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.9-local] - 2026-06-09
+### Changed
+- **Triage UX Status Summary**: Added a bilingual triage status summary with explicit `Open / Investigating / Mitigated / False Positive` counts and a `No triage records yet` / `暂无处置记录` fallback for empty cases.
+- **Needs Review Prompt**: Added lightweight `Needs review` / `待复核` indicators in Findings and Incidents so analysts can spot items without triage or still marked as open.
+- **Triage Metadata Visibility**: Surfaced `Last updated` and `Analyst note` hints from the existing local triage state without changing backend behavior or the stored triage schema.
+- **Compatibility**: Preserved the existing local-first triage storage key and did not introduce any storage key migration or backend API change.
+
+### Tests
+- **Frontend Coverage**: Expanded `TriagePanel`, `FindingsList`, `IncidentsList`, `triageStorage`, and `i18n` tests to cover status summary aggregation, empty-state fallback, needs-review visibility, and triage metadata rendering.
+
 ## [v2.8-local] - 2026-06-09
 ### Changed
 - **Analyst Evidence Pack Metadata Polish**: Enhanced the Markdown evidence pack header with a formal `Case metadata` summary, including product/export type, generated timestamp, case identifiers, analysis scope, source files, and analysis counts when available.

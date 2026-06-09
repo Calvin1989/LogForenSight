@@ -85,10 +85,21 @@
           </span>
           <h3>{{ incident.title }}</h3>
           <span class="ip-badge">{{ incident.source_ip }}</span>
+          <span v-if="showNeedsReview(incident)" class="triage-badge needs-review">
+            {{ t('triage.needsReview') }}
+          </span>
         </div>
         
         <div class="incident-body">
           <p class="summary">{{ incident.summary }}</p>
+          <div v-if="getFormattedUpdatedAt(incident) || getAnalystNote(incident)" class="triage-meta">
+            <span v-if="getFormattedUpdatedAt(incident)">
+              <strong>{{ t('triage.lastUpdated') }}:</strong> {{ getFormattedUpdatedAt(incident) }}
+            </span>
+            <span v-if="getAnalystNote(incident)">
+              <strong>{{ t('triage.analystNote') }}:</strong> {{ getAnalystNote(incident) }}
+            </span>
+          </div>
           
           <div class="meta-info">
             <span><strong>{{ t('common.confidence') }}:</strong> {{ translateRiskLevel(incident.confidence).toUpperCase() }}</span>
@@ -129,11 +140,16 @@
 import { ref, computed } from 'vue'
 import { downloadJson, downloadTextFile, convertIncidentsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity, translateRiskLevel } from '../i18n'
+import { getTriageItemUpdatedAt, needsTriageReview } from '../utils/triageStorage'
 
 const props = defineProps({
   incidents: {
     type: Array,
     required: true
+  },
+  triageState: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -153,6 +169,26 @@ const filteredIncidents = computed(() => {
     return matchesSeverity && matchesIp
   })
 })
+
+const getIncidentTriage = (incident) => {
+  return props.triageState[`incident:${incident.incident_id || incident.id}`]
+}
+
+const showNeedsReview = (incident) => {
+  return needsTriageReview(getIncidentTriage(incident))
+}
+
+const getFormattedUpdatedAt = (incident) => {
+  const rawValue = getTriageItemUpdatedAt(getIncidentTriage(incident))
+  if (!rawValue) return ''
+
+  const parsed = new Date(rawValue)
+  return Number.isNaN(parsed.getTime()) ? rawValue : parsed.toLocaleString()
+}
+
+const getAnalystNote = (incident) => {
+  return getIncidentTriage(incident)?.notes || ''
+}
 
 const clearFilters = () => {
   severityFilter.value = 'all'
@@ -401,6 +437,21 @@ const new_date_str = () => {
 .severity-badge[data-severity="medium"] { background: #fd7e14; color: white; }
 .severity-badge[data-severity="low"] { background: #17a2b8; color: white; }
 
+.triage-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.triage-badge.needs-review {
+  background: #fff3bf;
+  color: #8f5b00;
+  border: 1px solid #ffe066;
+}
+
 .ip-badge {
   background: #f1f3f5;
   padding: 0.25rem 0.75rem;
@@ -418,6 +469,15 @@ const new_date_str = () => {
   margin-bottom: 1.25rem;
   color: #212529;
   line-height: 1.5;
+}
+
+.triage-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #6c757d;
 }
 
 .meta-info {

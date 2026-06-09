@@ -140,4 +140,48 @@ describe('FindingsList.vue', () => {
     expect(wrapper.find('[data-testid="finding-explainability"]').exists()).toBe(true)
     expect(wrapper.find('.explainability-toggle').text()).toContain('Hide explanation')
   })
+
+  it('shows Needs review when a finding has no triage record', () => {
+    const wrapper = mount(FindingsList, {
+      props: { findings: mockFindings }
+    })
+
+    expect(wrapper.findAll('.triage-badge.needs-review')).toHaveLength(mockFindings.length)
+    expect(wrapper.text()).toContain('Needs review')
+  })
+
+  it('shows localized needs review text in Chinese', () => {
+    setLanguage('zh')
+
+    const wrapper = mount(FindingsList, {
+      props: { findings: [mockFindings[0]] }
+    })
+
+    expect(wrapper.text()).toContain('待复核')
+  })
+
+  it('does not show Needs review for mitigated or false positive findings', () => {
+    const wrapper = mount(FindingsList, {
+      props: {
+        findings: mockFindings,
+        triageState: {
+          'finding:high_frequency_ip': {
+            status: 'mitigated',
+            priority: 'low',
+            updated_at: '2026-06-09T12:00:00Z'
+          },
+          'finding:sensitive_path_probe': {
+            status: 'false_positive',
+            priority: 'low',
+            notes: 'Known scanner'
+          }
+        }
+      }
+    })
+
+    expect(wrapper.find('.triage-badge.needs-review').exists()).toBe(false)
+    expect(wrapper.text()).toContain('Last updated')
+    expect(wrapper.text()).toContain('Analyst note')
+    expect(wrapper.text()).toContain('Known scanner')
+  })
 })

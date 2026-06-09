@@ -60,6 +60,31 @@ describe('triageStorage', () => {
     expect(md).toContain('open');
   })
 
+  it('should summarize triage status counts', () => {
+    const counts = storage.getTriageStatusCounts({
+      'finding:1': { status: 'open' },
+      'finding:2': { status: 'investigating' },
+      'incident:A': { status: 'mitigated' },
+      'incident:B': { status: 'false_positive' }
+    })
+
+    expect(counts).toEqual({
+      open: 1,
+      investigating: 1,
+      mitigated: 1,
+      false_positive: 1
+    })
+  })
+
+  it('should return a stable empty triage summary', () => {
+    expect(storage.getTriageStatusCounts()).toEqual({
+      open: 0,
+      investigating: 0,
+      mitigated: 0,
+      false_positive: 0
+    })
+  })
+
   it('should copy triage state to another case', () => {
     storage.saveTriageItem(caseId, 'finding:rule-1', { status: 'investigating', priority: 'high' });
     storage.copyTriageState(caseId, 'copied-case');
@@ -74,5 +99,17 @@ describe('triageStorage', () => {
     expect(storage.getTriageState(caseId)).toEqual({})
     expect(console.error).toHaveBeenCalled()
     vi.restoreAllMocks()
+  })
+
+  it('should identify items that still need review', () => {
+    expect(storage.needsTriageReview()).toBe(true)
+    expect(storage.needsTriageReview({ status: 'open' })).toBe(true)
+    expect(storage.needsTriageReview({ status: 'mitigated' })).toBe(false)
+    expect(storage.needsTriageReview({ status: 'false_positive' })).toBe(false)
+  })
+
+  it('should read both updated_at and updatedAt fields without migration', () => {
+    expect(storage.getTriageItemUpdatedAt({ updated_at: '2026-06-09T10:00:00Z' })).toBe('2026-06-09T10:00:00Z')
+    expect(storage.getTriageItemUpdatedAt({ updatedAt: '2026-06-09T11:00:00Z' })).toBe('2026-06-09T11:00:00Z')
   })
 })

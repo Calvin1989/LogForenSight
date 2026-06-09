@@ -1,4 +1,10 @@
 const STORAGE_KEY_PREFIX = 'LogForenSight:triage:v1:';
+const TRIAGE_STATUS_COUNTS_TEMPLATE = {
+  open: 0,
+  investigating: 0,
+  mitigated: 0,
+  false_positive: 0
+};
 
 /**
  * Retrieves the triage state for a specific case.
@@ -46,6 +52,39 @@ export function listTriageItems(caseId) {
     key,
     ...data
   }));
+}
+
+/**
+ * Returns a stable triage status summary object.
+ * @param {Object} triageState
+ * @returns {{open:number, investigating:number, mitigated:number, false_positive:number}}
+ */
+export function getTriageStatusCounts(triageState) {
+  const counts = { ...TRIAGE_STATUS_COUNTS_TEMPLATE };
+  Object.values(triageState || {}).forEach((data) => {
+    if (data && counts[data.status] !== undefined) {
+      counts[data.status] += 1;
+    }
+  });
+  return counts;
+}
+
+/**
+ * Returns the canonical update timestamp field without changing stored data.
+ * @param {Object} triageItem
+ * @returns {string}
+ */
+export function getTriageItemUpdatedAt(triageItem) {
+  return triageItem?.updated_at || triageItem?.updatedAt || '';
+}
+
+/**
+ * Determines whether an item still needs analyst review.
+ * @param {Object} triageItem
+ * @returns {boolean}
+ */
+export function needsTriageReview(triageItem) {
+  return !triageItem?.status || triageItem.status === 'open';
 }
 
 /**

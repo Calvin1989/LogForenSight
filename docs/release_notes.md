@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.9-local] - Analyst Triage UX Polish
+- **Status Summary**: 在 Analyst Triage 区域新增更明确的状态汇总，按 `Open / Investigating / Mitigated / False Positive` 展示当前 case 的 triage 分布，并在没有记录时显示 `No triage records yet` / `暂无处置记录`。
+- **Needs Review Indicator**: 在 Findings 和 Incidents 列表中为尚未 triage 或仍为 `open` 的条目增加轻量 `Needs review` / `待复核` 提示，帮助分析师快速识别待处理对象。
+- **Triage Metadata Hints**: 复用现有 triage state 中的 `updated_at` / `updatedAt` 与 `notes` 字段，在列表和 triage 面板中更清楚地展示 `Last updated` / `最近更新` 与 `Analyst note` / `分析师备注`。
+- **Compatibility**: 不修改后端 API、不改变 parser / detector / incident aggregation 逻辑、不迁移 localStorage key，也不引入新依赖。
+
+---
+
 ## [v2.8-local] - Analyst Evidence Pack Metadata Polish
 - **Case Metadata Summary**: 在 Analyst Evidence Pack 顶部新增更正式的 `Case metadata` 区块，汇总 Product、Export type、Generated at、Case ID、Case title、Source files、Analysis scope 以及 findings / incidents / entities / triage counts。
 - **Local-first Privacy Note**: 新增本地优先隐私说明，明确导出流程不依赖外部 API、云服务、数据库或 LLM。
