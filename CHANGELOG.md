@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.1-local] - 2026-06-09
+### Added
+- **Saved Case Workspace**: A dedicated local workspace to save, browse, search, and manage analysis cases.
+- **Manual Save Workflow**: Added "Save as Case" button to analysis results with custom title and metadata support.
+- **Case Management UI**: Support for searching by title/tags, filtering by risk level, and deleting cases.
+- **Import/Export for Cases**: Support for exporting saved cases to JSON files and importing them back, enabling case portability.
+- **Snapshot Storage**: Optimized result snapshotting that avoids storing raw logs or `File` objects to ensure privacy.
+- **Tests**: Comprehensive Vitest coverage for case storage utilities, workspace UI components, and i18n keys.
+- **Documentation**: Updated architecture, demo, and release notes to reflect the new local-first workspace capabilities.
+
 ## [v2.0-local] - 2026-06-09
 ### Added
 - **Multi-file Batch Analysis Backend**: Added combined case analysis for multiple uploaded log files through `POST /api/analyze/batch`.

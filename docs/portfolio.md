@@ -8,7 +8,7 @@
 
 本项目定位为一款 **轻量级、确定性、本地优先** 的 Web 日志分析工具。它并非要替代传统的 SIEM (如 ELK, Splunk)，而是填补了“快速、隐私、无基础设施开销”的本地分析场景空白。
 
-在 v2.0 中，项目从 **single log analyzer** 进一步升级为 **case-level multi-file analysis** 工具。分析师可以把同一事件窗口中的 2-10 个日志文件作为一个 investigation case 联合分析，同时保留每个 source file 的解析质量与来源信息。
+在 v2.0 中，项目从 **single log analyzer** 进一步升级为 **case-level multi-file analysis** 工具。在 v2.1 中，引入了 **Saved Case Workspace**，将临时分析历史提升为受控的、可管理的本地工作区。
 
 ### 为什么不使用大模型 (LLM)？
 1.  **确定性**: 安全分析需要 100% 的可复现性。基于规则的引擎能够保证相同输入必得相同输出。
@@ -70,7 +70,12 @@
 -   **方案**: 引入 multi-file batch analysis，将多个文件统一送入一个共享检测管线，同时保留每个 source file 的 `parse_rate`、`detected_format` 与 `skipped_samples`。
 -   **亮点**: 兼顾 analyst workflow、source attribution 和 explainability，让项目从“日志解析器”提升为“本地案件分析工作台”。
 
-### 7. Local-first Privacy as a Product Choice
+### 7. 本地案例工作区与隐私快照 (v2.1)
+-   **挑战**: 分析历史在浏览器刷新或清理后可能丢失，且保存完整分析结果可能占用过多存储。
+-   **方案**: 实现了本地 Case Workspace，支持将分析结果快照化。在存储时，通过递归检查剔除 File 对象和原始大文本日志。
+-   **亮点**: 实现了“零数据库”下的案件持久化，支持 JSON 导入导出，增强了工具在离线环境下的生产力。
+
+### 8. Local-first Privacy as a Product Choice
 -   **挑战**: 安全日志通常包含 IP、路径、令牌与业务标识，天然具有隐私和合规敏感性。
 -   **方案**: 坚持 local-first 设计，不引入数据库，不依赖外部 API，不调用 LLM；分析、摘要、导出全部在本地完成。
 -   **亮点**: 能把“隐私保护”从技术约束转化为产品卖点，特别适合面试中阐述架构边界与取舍。

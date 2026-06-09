@@ -99,4 +99,14 @@ describe('i18n tool', () => {
     expect(t('parse.detectedFormat')).toBe('Detected Format')
     expect(t('ruleTuning.batchHint')).toBe('Current tuning applies to the entire batch log set.')
   })
+
+  it('should have workspace translations', () => {
+    setLanguage('zh')
+    expect(t('workspace.title')).toBe('案例工作区 (Saved Cases)')
+    expect(t('workspace.saveCase')).toBe('保存为案例')
+
+    setLanguage('en')
+    expect(t('workspace.title')).toBe('Case Workspace')
+    expect(t('workspace.saveCase')).toBe('Save as Case')
+  })
 })

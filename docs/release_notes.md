@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.1-local] - Saved Case Workspace
+- **本地案例工作区**: 引入独立的 Saved Cases 视图，将临时分析历史提升为受控的案件存档。
+- **主动保存工作流**: 支持用户为当前分析结果设置标题、标签和备注，并持久化到本地。
+- **搜索与过滤**: 支持按标题/标签全局搜索，以及按风险等级对已保存案例进行过滤。
+- **导入导出 (JSON)**: 提供案例元数据的导出与导入功能，方便在不同设备间迁移分析快照。
+- **隐私保护快照**: 存储逻辑自动剔除原始日志文本与 File 对象，确保在保存案例的同时不泄露原始日志。
+- **验证快照**: Backend `65 passed`，Frontend `114 passed`，`npm run build` passed，`docker compose config` passed。
+
 ## [v2.0-local] - Multi-file Batch Analysis
 - **Multi-file Case Analysis**: 支持将多个日志文件作为同一个安全案例统一分析，从单文件日志分析升级为案件级分析工作流。
 - **Backend Endpoint**: 新增 `POST /api/analyze/batch`，支持 `multipart/form-data` 多文件上传，并保留统一的 `log_format` 控制。
