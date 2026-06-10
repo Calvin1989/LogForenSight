@@ -124,6 +124,24 @@ describe('i18n tool', () => {
     expect(t('triage.noRecords')).toBe('No triage records yet')
   })
 
+  it('should have case notes translations in both languages', () => {
+    setLanguage('zh')
+    expect(t('caseNotes.title')).toBe('案件备注 / 决策日志')
+    expect(t('caseNotes.empty')).toBe('暂无案件备注')
+    expect(t('caseNotes.observation')).toBe('观察')
+    expect(t('caseNotes.action')).toBe('处置动作')
+    expect(t('caseNotes.evidencePackTitle')).toBe('分析师案件备注 / 决策日志')
+    expect(t('caseNotes.noExportNotes')).toBe('暂无案件备注。')
+
+    setLanguage('en')
+    expect(t('caseNotes.title')).toBe('Case Notes / Decision Log')
+    expect(t('caseNotes.empty')).toBe('No case notes yet')
+    expect(t('caseNotes.observation')).toBe('Observation')
+    expect(t('caseNotes.action')).toBe('Action')
+    expect(t('caseNotes.evidencePackTitle')).toBe('Analyst Case Notes / Decision Log')
+    expect(t('caseNotes.noExportNotes')).toBe('No analyst case notes recorded.')
+  })
+
   it('should have evidence pack translations', () => {
     setLanguage('zh')
     expect(t('report.downloadEvidencePack')).toBe('下载证据包')

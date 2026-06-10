@@ -1,4 +1,5 @@
 import { currentLanguage, t, translateRiskLevel, translateSeverity } from '../i18n'
+import { loadCaseNotes } from './caseNotesStorage'
 import { getCase } from './caseWorkspaceStorage'
 import { downloadTextFile } from './exportUtils'
 import { extractInvestigationEntities } from './iocExtraction'
@@ -106,6 +107,25 @@ function appendValidationSummary(lines, summary) {
   lines.push(`- **${t('evidencePack.analystTriageLabel')}**: ${summary.hasTriage ? t('evidencePack.includedWhenTriageStateExists') : t('evidencePack.notAvailable')}`)
   lines.push(`- **${t('evidencePack.evidenceSource')}**: ${t('evidencePack.evidenceSourceLocalUploadDerived')}`)
   lines.push(`- **${t('evidencePack.rawLogs')}**: ${t('evidencePack.rawLogsExcluded')}`, '')
+}
+
+function appendCaseNotes(lines, caseNotes, language) {
+  lines.push(`## ${t('caseNotes.evidencePackTitle')}`, '')
+
+  if (!Array.isArray(caseNotes) || caseNotes.length === 0) {
+    lines.push(t('caseNotes.noExportNotes'), '')
+    return
+  }
+
+  caseNotes.forEach((note) => {
+    lines.push(`### ${t(`caseNotes.${note.type}`, note.type)}: ${valueOrFallback(note.title || t('caseNotes.untitled'))}`, '')
+    lines.push(note.body || t('caseNotes.noBody'), '')
+    lines.push(`- **${t('caseNotes.type')}**: ${t(`caseNotes.${note.type}`, note.type)}`)
+    lines.push(`- **${t('caseNotes.noteTitle')}**: ${valueOrFallback(note.title || t('caseNotes.untitled'))}`)
+    lines.push(`- **${t('caseNotes.noteBody')}**: ${valueOrFallback(note.body || t('caseNotes.noBody'))}`)
+    lines.push(`- **${t('caseNotes.createdAt')}**: ${formatTimestamp(note.createdAt, language)}`)
+    lines.push(`- **${t('caseNotes.updatedAt')}**: ${formatTimestamp(note.updatedAt, language)}`, '')
+  })
 }
 
 function appendInvestigationEntities(lines, analysisResult, language) {
@@ -281,6 +301,7 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   const caseId = options.caseId || 'current-analysis'
   const caseRecord = options.caseRecord ?? getCase(caseId)
   const triageState = options.triageState ?? getTriageState(caseId)
+  const caseNotes = options.caseNotes ?? loadCaseNotes(caseId)
   const analysis = language === 'zh'
     ? localizeAnalysisForDisplay(analysisResult, language)
     : analysisResult
@@ -380,6 +401,8 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   } else {
     appendFallback(lines)
   }
+
+  appendCaseNotes(lines, caseNotes, language)
 
   lines.push(`## ${t('evidencePack.parseStats')}`, '')
   appendTable(lines, [t('evidencePack.metric'), t('evidencePack.value')], [

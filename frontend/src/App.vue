@@ -112,10 +112,16 @@
           @triage-state-change="handleTriageStateChange"
         />
 
+        <CaseNotesPanel
+          v-if="displayResult"
+          :caseId="currentCaseId === 'current-analysis' ? caseNotesContextId : currentCaseId"
+        />
+
         <MarkdownReport
           :result="result"
           :reportMarkdown="displayResult.report_markdown"
           :caseId="currentCaseId"
+          :caseNotesCaseId="currentCaseId === 'current-analysis' ? caseNotesContextId : currentCaseId"
           :file="selectedFile"
           :sanitizing="sanitizingReport"
           :sanitizedAvailable="isSanitizedAvailable"
@@ -148,6 +154,7 @@ import TimelineView from './components/TimelineView.vue'
 import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
 import CaseWorkspace from './components/CaseWorkspace.vue'
+import CaseNotesPanel from './components/CaseNotesPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
 
@@ -155,6 +162,7 @@ const {
   loading,
   result,
   currentCaseId,
+  caseNotesContextId,
   error,
   selectedFile,
   sanitizingReport,
@@ -205,6 +213,7 @@ const onSelectCase = (caseItem) => {
    // Restore from snapshot
    result.value = caseItem.result_snapshot
    currentCaseId.value = caseItem.id
+   caseNotesContextId.value = caseItem.id
    // Since it's a snapshot, we don't have the original file
   selectedFile.value = null
   error.value = null

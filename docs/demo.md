@@ -1,6 +1,6 @@
 # 演示指南 (Demo Guide)
 
-本指南用于在 5-8 分钟内稳定展示 **LogForenSight** 的完整本地分析链路：上传日志、验证解析质量、查看 findings / incidents、检查 Investigation Entities、展开 Detection Explainability、补充 triage 信息，并导出 Evidence Pack。
+本指南用于在 5-8 分钟内稳定展示 **LogForenSight** 的完整本地分析链路：上传日志、验证解析质量、查看 findings / incidents、检查 Investigation Entities、展开 Detection Explainability、补充 triage 信息、记录 Case Notes，并导出 Evidence Pack。
 
 ---
 
@@ -47,7 +47,7 @@ npm run dev
 5. 查看 Investigation Entities。
 6. 展开 Detection Explainability。
 7. 添加 triage notes。
-8. 导出 Evidence Pack。
+8. 记录一条 Observation 或 Decision note，然后导出 Evidence Pack。
 
 这条路径适合 README、Portfolio、面试演示和本地试跑，能够在最短时间内串起当前版本最完整、最稳定的分析师工作流。
 
@@ -101,10 +101,14 @@ npm run dev
 - **动作**: 为一个 incident 设置状态为 `Investigating`、优先级为 `Critical`，并添加备注，例如“继续核对源 IP 是否为外部扫描器”。
 - **解说**: “这一步把检测结果变成可跟踪的分析师动作。”
 
-### 8. 导出 Evidence Pack
+### 8. 记录 Case Notes 并导出 Evidence Pack
+
+- **展示点**: `Case Notes / Decision Log`。
+- **动作**: 记录一条 `Observation` 或 `Decision` note，例如“观察到登录端点存在重复失败请求”或“决定暂时封禁该来源 IP 并继续监控”。
+- **解说**: “这一步可以把调查过程、假设和最终决策沉淀成结构化本地备注，并随 Evidence Pack 一起导出。”
 
 - **动作**: 点击 `Download Evidence Pack` / `下载证据包`。
-- **解说**: “Evidence Pack 会把 findings、incidents、Investigation Entities、Detection Explainability 和 triage 信息整理成便于交接的 Markdown 证据包。”
+- **解说**: “Evidence Pack 会把 findings、incidents、Investigation Entities、Detection Explainability、triage 信息以及 analyst case notes 整理成便于交接的 Markdown 证据包。”
 
 ---
 

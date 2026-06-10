@@ -77,6 +77,7 @@
 import { ref, computed } from 'vue'
 import { downloadJson, buildAnalysisSummaryExport } from '../utils/exportUtils'
 import { t, currentLanguage } from '../i18n'
+import { loadCaseNotes } from '../utils/caseNotesStorage'
 import { downloadEvidencePack } from '../utils/evidencePackExport'
 import { buildLocalizedMarkdownReport } from '../utils/localizedReport'
 
@@ -86,6 +87,10 @@ const props = defineProps({
     default: null
   },
   caseId: {
+    type: String,
+    default: 'current-analysis'
+  },
+  caseNotesCaseId: {
     type: String,
     default: 'current-analysis'
   },
@@ -216,6 +221,7 @@ const downloadEvidencePackMarkdown = () => {
   if (!props.result) return
   downloadEvidencePack(props.result, {
     caseId: props.caseId,
+    caseNotes: loadCaseNotes(props.caseNotesCaseId),
     language: currentLanguage.value
   })
 }

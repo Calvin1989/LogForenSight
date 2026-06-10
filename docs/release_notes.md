@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.12-local] - Analyst Case Notes / Decision Log
+- **Analyst Case Notes / Decision Log**: 新增独立的本地优先案件备注面板，支持记录 Observation、Hypothesis、Action、Decision 四类分析师笔记。
+- **Local-first Storage**: 备注按 caseId 或当前 analysis context 写入浏览器本地存储，不复用 triage key，不引入后端、数据库或新依赖。
+- **Evidence Pack Integration**: 导出的 Analyst Evidence Pack 新增 `Analyst Case Notes / Decision Log` / `分析师案件备注 / 决策日志` 章节，便于交接和复盘。
+- **No Parser / Detector Behavior Change**: 不修改 parser、detector、incident aggregation 核心逻辑，不改变默认端口，不引入后端 API 变更。
+
+---
+
 ## [v2.11-local] - CI / Release Hygiene
 - **CI / Release Hygiene**: 对当前本地优先工作流做小步卫生增强，保持 GitHub 仓库、PR 流程和发布文档更加稳定、清晰、可复核。
 - **Release Checklist Polish**: 更新 `docs/release_checklist.md`，补齐从干净 `main` 起步、禁止 `git add .`、旧名 grep、backend/frontend 验证、`docker compose config`、git whitespace 检查、tag 推送、归档校验、SHA256 与 GitHub Release 创建等步骤。

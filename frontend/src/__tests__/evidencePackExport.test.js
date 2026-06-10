@@ -131,6 +131,16 @@ describe('evidencePackExport', () => {
           updated_at: '2026-06-09T10:04:00Z'
         }
       },
+      caseNotes: [
+        {
+          id: 'note-1',
+          type: 'observation',
+          title: 'Observed credential stuffing pattern',
+          body: 'Multiple failed logins from the same IP against the login endpoint.',
+          createdAt: '2026-06-09T10:05:00Z',
+          updatedAt: '2026-06-09T10:06:00Z'
+        }
+      ],
       language: 'en'
     })
 
@@ -157,12 +167,15 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Findings list')
     expect(markdown).toContain('## Incidents list')
     expect(markdown).toContain('## Investigation entities')
+    expect(markdown).toContain('## Analyst Case Notes / Decision Log')
     expect(markdown).toContain('## Timeline highlights')
     expect(markdown).toContain('## Rule coverage')
     expect(markdown).toContain('## Triage summary')
     expect(markdown).toContain('Saved Case 1')
     expect(markdown).toContain('Tracking repeated login requests.')
     expect(markdown).toContain('Temporary block applied.')
+    expect(markdown).toContain('Observed credential stuffing pattern')
+    expect(markdown).toContain('Multiple failed logins from the same IP against the login endpoint.')
     expect(markdown).toContain('Matched rules')
     expect(markdown).toContain('Unmatched rules')
     expect(markdown).toContain('web-1.log')
@@ -180,6 +193,7 @@ describe('evidencePackExport', () => {
     }, {
       caseId: 'case-missing',
       triageState: {},
+      caseNotes: [],
       language: 'en'
     })
 
@@ -192,7 +206,33 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Findings list')
     expect(markdown).toContain('## Incidents list')
     expect(markdown).toContain('## Investigation entities')
+    expect(markdown).toContain('## Analyst Case Notes / Decision Log')
+    expect(markdown).toContain('No analyst case notes recorded.')
     expect(markdown).toContain('## Triage summary')
+  })
+
+  it('does not break existing Evidence Pack section ordering when case notes are added', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [],
+      incidents: []
+    }, {
+      caseId: 'case-order',
+      triageState: {},
+      caseNotes: [{
+        id: 'note-1',
+        type: 'decision',
+        title: 'Decision made',
+        body: 'Proceed with monitoring.',
+        createdAt: '2026-06-09T10:00:00Z',
+        updatedAt: '2026-06-09T10:00:00Z'
+      }],
+      language: 'en'
+    })
+
+    expect(markdown.indexOf('## Case record details')).toBeLessThan(markdown.indexOf('## Analyst Case Notes / Decision Log'))
+    expect(markdown.indexOf('## Analyst Case Notes / Decision Log')).toBeLessThan(markdown.indexOf('## Parse stats'))
+    expect(markdown.indexOf('## Parse stats')).toBeLessThan(markdown.indexOf('## Findings list'))
   })
 
   it('includes a Detection Explainability chapter with per-finding rule context, rationale and recommended action', () => {
@@ -275,6 +315,7 @@ describe('evidencePackExport', () => {
     }, {
       caseId: 'case-zh',
       triageState: {},
+      caseNotes: [],
       language: 'zh'
     })
 

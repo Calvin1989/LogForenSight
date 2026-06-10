@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.12-local] - Analyst Case Notes and Decision Log
+### Added
+- **Added local-first analyst case notes**: Introduced a dedicated `Case Notes / 案件备注` panel for recording investigation observations, hypotheses, actions, and decisions without any backend dependency.
+- **Added note types for observation, hypothesis, action, and decision**: Notes are stored per case or local analysis context and remain compatible with the existing Saved Case Workspace structure.
+- **Added Evidence Pack export section for case notes**: Analyst notes are now included in the Markdown Evidence Pack as a structured `Analyst Case Notes / Decision Log` chapter.
+- **No backend behavior changes**: This release does not change backend APIs, parser logic, detector logic, incident aggregation behavior, default ports, or dependency footprint.
+
 ## [v2.11-local] - CI and Release Hygiene
 ### Changed
 - **Improved CI / Release Workflow Documentation**: Polished the repository-facing workflow naming and documentation so the local validation path, CI steps, and release checklist stay aligned.
