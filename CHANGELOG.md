@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.12.2-local] - Case Notes Timestamp Monotonicity Fix
+### Fixed
+- Ensured `Case Notes` `updatedAt` is strictly monotonic during rapid local updates, including GitHub Actions runs where create and update can occur in the same millisecond.
+- Added a small timestamp helper in frontend local storage logic so `updatedAt` is forced to remain later than the prior `updatedAt` and `createdAt`.
+- Tightened frontend test coverage for same-millisecond updates to improve CI stability without changing UI, backend, parser, detector, or incident aggregation behavior.
+
 ## [v2.12.1-local] - Case Notes Documentation Polish
 ### Changed
 - Highlighted Analyst Case Notes / Decision Log more clearly in README.

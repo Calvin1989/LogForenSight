@@ -42,6 +42,27 @@ function sortNotes(notes) {
   })
 }
 
+function parseTimestamp(value) {
+  if (typeof value !== 'string' || !value) return null
+
+  const parsed = Date.parse(value)
+  return Number.isNaN(parsed) ? null : parsed
+}
+
+function createMonotonicTimestamp(previousTimestamp, minimumTimestamp) {
+  const now = new Date()
+  const nowTime = now.getTime()
+  const previousTime = parseTimestamp(previousTimestamp)
+  const minimumTime = parseTimestamp(minimumTimestamp)
+  const floor = Math.max(previousTime ?? -Infinity, minimumTime ?? -Infinity)
+
+  if (Number.isFinite(floor) && nowTime <= floor) {
+    return new Date(floor + 1).toISOString()
+  }
+
+  return now.toISOString()
+}
+
 function normalizeNote(note) {
   if (!note || typeof note !== 'object') return null
 
@@ -107,16 +128,18 @@ export function updateCaseNote(caseId, noteId, patch = {}) {
   if (!noteId) return loadCaseNotes(caseId)
 
   const notes = loadCaseNotes(caseId)
-  const now = new Date().toISOString()
   const updatedNotes = notes.map((note) => {
     if (note.id !== noteId) return note
+
+    const previousTimestamp = note.updatedAt
+    const minimumTimestamp = note.createdAt
 
     return normalizeNote({
       ...note,
       ...patch,
       id: note.id,
       createdAt: note.createdAt,
-      updatedAt: patch.updatedAt || now
+      updatedAt: createMonotonicTimestamp(previousTimestamp, minimumTimestamp)
     })
   })
 
