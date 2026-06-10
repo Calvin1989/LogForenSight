@@ -32,8 +32,41 @@
       </p>
 
       <div v-if="isOpen" class="preview-body">
-        <div class="preview-label">{{ t('evidencePackPreview.previewLabel') }}</div>
-        <pre data-testid="evidence-pack-preview" class="preview-markdown">{{ previewMarkdown }}</pre>
+        <div class="preview-layout">
+          <nav
+            v-if="navigatorSections.length > 0"
+            class="section-navigator"
+            data-testid="evidence-pack-section-navigator"
+            :aria-label="t('evidencePackPreview.sectionNavigator')"
+          >
+            <div class="navigator-title">{{ t('evidencePackPreview.sectionNavigator') }}</div>
+            <button
+              v-for="section in navigatorSections"
+              :key="section.key"
+              type="button"
+              class="navigator-link"
+              @click="scrollToSection(section.targetId)"
+            >
+              {{ section.label }}
+            </button>
+          </nav>
+
+          <div class="preview-content">
+            <div class="preview-label">{{ t('evidencePackPreview.previewLabel') }}</div>
+            <div data-testid="evidence-pack-preview" class="preview-markdown">
+              <pre v-if="previewIntro" class="preview-block">{{ previewIntro }}</pre>
+              <section
+                v-for="section in previewContentSections"
+                :id="section.targetId"
+                :key="section.targetId"
+                class="preview-section"
+                :data-section-key="section.navigationKey || 'other'"
+              >
+                <pre class="preview-block">{{ section.content }}</pre>
+              </section>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </section>
@@ -43,6 +76,19 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { currentLanguage, t } from '../i18n'
 import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
+
+const SUPPORTED_NAVIGATOR_SECTIONS = [
+  { key: 'review-readiness', labelKey: 'reviewReadiness.title' },
+  { key: 'quality-score', labelKey: 'evidencePackQuality.title' },
+  { key: 'export-guardrails', labelKey: 'evidencePackGuardrails.title' },
+  { key: 'share-safety-review', labelKey: 'evidencePackShareSafety.title', external: true },
+  { key: 'parse-stats', labelKey: 'evidencePack.parseStats' },
+  { key: 'findings', labelKey: 'evidencePack.findingsList' },
+  { key: 'incidents', labelKey: 'evidencePack.incidentsList' },
+  { key: 'timeline', labelKey: 'evidencePack.timelineHighlights' },
+  { key: 'rule-coverage', labelKey: 'evidencePack.ruleCoverage' },
+  { key: 'case-notes', labelKey: 'caseNotes.evidencePackTitle' }
+]
 
 const props = defineProps({
   result: {
@@ -72,6 +118,10 @@ const props = defineProps({
   caseId: {
     type: String,
     default: 'current-analysis'
+  },
+  shareSafetyTargetId: {
+    type: String,
+    default: ''
   }
 })
 
@@ -108,8 +158,129 @@ const previewMarkdown = computed(() => {
   return buildEvidencePackMarkdown(props.result, options)
 })
 
+function buildPreviewSectionId(index, navigationKey) {
+  if (navigationKey) {
+    return `evidence-pack-preview-${navigationKey}`
+  }
+
+  return `evidence-pack-preview-section-${index + 1}`
+}
+
+const previewSections = computed(() => {
+  if (!previewMarkdown.value) {
+    return []
+  }
+
+  const titleToNavigationKey = new Map(
+    SUPPORTED_NAVIGATOR_SECTIONS
+      .filter((section) => !section.external)
+      .map((section) => [t(section.labelKey), section.key])
+  )
+
+  const sections = []
+  const lines = previewMarkdown.value.split('\n')
+  let currentSection = null
+
+  lines.forEach((line) => {
+    const headingMatch = line.match(/^##\s+(.+)$/)
+    if (headingMatch) {
+      if (currentSection) {
+        sections.push(currentSection)
+      }
+
+      const title = headingMatch[1].trim()
+      currentSection = {
+        title,
+        navigationKey: titleToNavigationKey.get(title) || null,
+        lines: [line]
+      }
+      return
+    }
+
+    if (!currentSection) {
+      currentSection = {
+        title: '',
+        navigationKey: null,
+        lines: [line]
+      }
+      return
+    }
+
+    currentSection.lines.push(line)
+  })
+
+  if (currentSection) {
+    sections.push(currentSection)
+  }
+
+  return sections.map((section, index) => ({
+    ...section,
+    targetId: buildPreviewSectionId(index, section.navigationKey),
+    content: section.lines.join('\n')
+  }))
+})
+
+const previewIntro = computed(() => {
+  return previewSections.value[0]?.title ? '' : (previewSections.value[0]?.content || '')
+})
+
+const previewContentSections = computed(() => {
+  return previewSections.value[0]?.title ? previewSections.value : previewSections.value.slice(1)
+})
+
+const navigatorSections = computed(() => {
+  return SUPPORTED_NAVIGATOR_SECTIONS.reduce((sections, section) => {
+    const label = t(section.labelKey)
+
+    if (section.external) {
+      if (
+        props.shareSafetyTargetId &&
+        typeof document !== 'undefined' &&
+        document.getElementById(props.shareSafetyTargetId)
+      ) {
+        sections.push({
+          key: section.key,
+          label,
+          targetId: props.shareSafetyTargetId
+        })
+      }
+      return sections
+    }
+
+    const matchingSection = previewSections.value.find(
+      (previewSection) => previewSection.navigationKey === section.key
+    )
+
+    if (matchingSection) {
+      sections.push({
+        key: section.key,
+        label,
+        targetId: matchingSection.targetId
+      })
+    }
+
+    return sections
+  }, [])
+})
+
 function togglePreview() {
   isOpen.value = !isOpen.value
+}
+
+function scrollToSection(targetId) {
+  if (!targetId || typeof document === 'undefined') {
+    return
+  }
+
+  const element = document.getElementById(targetId)
+  if (!element || typeof element.scrollIntoView !== 'function') {
+    return
+  }
+
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  })
 }
 
 function showCopyFeedback(key) {
@@ -255,6 +426,52 @@ onBeforeUnmount(() => {
   margin-top: 1rem;
 }
 
+.preview-layout {
+  display: grid;
+  grid-template-columns: minmax(11rem, 14rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.section-navigator {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #f8f9fa;
+  padding: 0.85rem;
+  position: sticky;
+  top: 0;
+}
+
+.navigator-title {
+  margin-bottom: 0.65rem;
+  color: #212529;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.navigator-link {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0.35rem 0;
+  color: #0b5ed7;
+  font-size: 0.92rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.navigator-link:hover {
+  color: #084298;
+  text-decoration: underline;
+}
+
+.preview-content {
+  min-width: 0;
+}
+
 .preview-label {
   margin-bottom: 0.5rem;
   color: #495057;
@@ -263,7 +480,6 @@ onBeforeUnmount(() => {
 }
 
 .preview-markdown {
-  margin: 0;
   padding: 1rem;
   border: 1px solid #dee2e6;
   border-radius: 6px;
@@ -275,6 +491,17 @@ onBeforeUnmount(() => {
   word-break: break-word;
   max-height: 26rem;
   overflow: auto;
+}
+
+.preview-section + .preview-section {
+  margin-top: 1rem;
+}
+
+.preview-block {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .empty-state {
@@ -289,6 +516,10 @@ onBeforeUnmount(() => {
 @media (max-width: 768px) {
   .preview-header {
     flex-direction: column;
+  }
+
+  .preview-layout {
+    grid-template-columns: 1fr;
   }
 
   .preview-actions {

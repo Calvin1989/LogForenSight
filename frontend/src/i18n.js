@@ -342,6 +342,7 @@ const messages = {
     evidencePackPreview: {
       title: "Evidence Pack 导出预览",
       empty: "运行分析后可预览 Evidence Pack 导出内容。",
+      sectionNavigator: "章节导航",
       showPreview: "显示预览",
       hidePreview: "隐藏预览",
       copyMarkdown: "复制 Markdown",
@@ -955,6 +956,7 @@ const messages = {
     evidencePackPreview: {
       title: "Evidence Pack Export Preview",
       empty: "Run an analysis to preview the Evidence Pack export.",
+      sectionNavigator: "Section navigator",
       showPreview: "Show preview",
       hidePreview: "Hide preview",
       copyMarkdown: "Copy Markdown",

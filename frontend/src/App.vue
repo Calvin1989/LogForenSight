@@ -139,6 +139,7 @@
 
         <EvidencePackShareSafety
           v-if="displayResult"
+          id="evidence-pack-share-safety"
           :markdown="evidencePackShareSafetyMarkdown"
           :result="result"
         />
@@ -152,6 +153,7 @@
           :evidencePackQuality="evidencePackQualityForGuardrails"
           :exportGuardrails="exportGuardrails"
           :caseId="currentCaseId"
+          shareSafetyTargetId="evidence-pack-share-safety"
         />
 
         <CaseNotesPanel
