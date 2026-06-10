@@ -120,6 +120,14 @@
           :caseId="reviewReadinessCaseId"
         />
 
+        <EvidencePackQualityScore
+          v-if="displayResult"
+          :result="result"
+          :triageState="triageState"
+          :caseNotes="caseNotesForQuality"
+          :reviewReadiness="reviewReadinessForQuality"
+        />
+
         <CaseNotesPanel
           v-if="displayResult"
           :caseId="currentCaseId === 'current-analysis' ? caseNotesContextId : currentCaseId"
@@ -164,9 +172,12 @@ import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
 import CaseWorkspace from './components/CaseWorkspace.vue'
 import CaseNotesPanel from './components/CaseNotesPanel.vue'
+import EvidencePackQualityScore from './components/EvidencePackQualityScore.vue'
 import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
+import { loadCaseNotes } from './utils/caseNotesStorage'
+import { buildReviewReadiness } from './utils/reviewReadiness'
 
 const {
   loading,
@@ -206,6 +217,21 @@ const reviewReadinessCaseId = computed(() => {
 
 const reviewReadinessKey = computed(() => {
   return `${reviewReadinessCaseId.value}:${caseNotesRevision.value}`
+})
+
+const caseNotesForQuality = computed(() => {
+  if (!result.value) return []
+
+  caseNotesRevision.value
+  return loadCaseNotes(reviewReadinessCaseId.value)
+})
+
+const reviewReadinessForQuality = computed(() => {
+  return buildReviewReadiness({
+    result: result.value,
+    triageState: triageState.value,
+    caseNotes: caseNotesForQuality.value
+  })
 })
 
 watch(currentCaseId, () => {

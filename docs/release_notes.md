@@ -4,6 +4,19 @@
 
 ---
 
+## v2.14-local - Evidence Pack Quality Score
+
+Adds a local-first Evidence Pack Quality Score to help analysts assess export readiness.
+
+Highlights:
+- 0-100 deterministic quality score
+- Checklist scoring for high-risk review, incident triage, Case Notes, Investigation Entities, and Review Readiness
+- Evidence Pack export integration
+- Frontend-only change
+- No backend, parser, detector, CI, Docker, dependency, port, README, demo, portfolio, or sample changes
+
+---
+
 ## v2.13-local - Investigation Review Readiness
 
 Adds a local-first readiness checklist for analysts before exporting the Evidence Pack.

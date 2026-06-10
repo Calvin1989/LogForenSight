@@ -5,6 +5,7 @@ import { downloadTextFile } from './exportUtils'
 import { extractInvestigationEntities } from './iocExtraction'
 import { buildFindingExplanation, renderFindingExplanation } from './findingExplainability'
 import { localizeAnalysisForDisplay } from './localizedAnalysis'
+import { buildEvidencePackQuality } from './evidencePackQuality'
 import { buildReviewReadiness } from './reviewReadiness'
 import { getTriageState } from './triageStorage'
 
@@ -156,6 +157,57 @@ function appendReviewReadiness(lines, reviewReadiness) {
     lines.push(`- **${t(check.labelKey)}**: ${formatReadinessStatus(check.status)}`)
   })
 
+  lines.push('')
+}
+
+function formatEvidencePackQualityStatus(status) {
+  if (!status) return t('evidencePack.notAvailable')
+
+  const normalized = String(status).trim().toLowerCase()
+  if (normalized === 'ready') return t('evidencePackQuality.statusReady')
+  if (normalized === 'good') return t('evidencePackQuality.statusGood')
+  if (normalized === 'partial') return t('evidencePackQuality.statusPartial')
+  if (normalized === 'missing') return t('evidencePackQuality.statusMissing')
+  return status
+}
+
+function formatEvidencePackQualityCheckStatus(status) {
+  if (!status) return t('evidencePack.notAvailable')
+
+  const normalized = String(status).trim().toLowerCase()
+  if (normalized === 'pass') return t('evidencePackQuality.checkPass')
+  if (normalized === 'attention') return t('evidencePackQuality.checkAttention')
+  if (normalized === 'missing') return t('evidencePackQuality.checkMissing')
+  return status
+}
+
+function appendEvidencePackQuality(lines, quality) {
+  lines.push(`## ${t('evidencePackQuality.title')}`, '')
+
+  if (!quality) {
+    lines.push(t('evidencePackQuality.notAvailableForExport'), '')
+    return
+  }
+
+  lines.push(`- **${t('evidencePackQuality.score')}**: ${quality.score} / ${quality.summary?.maxScore ?? 100}`)
+  lines.push(`- **${t('evidencePackQuality.statusLabel')}**: ${formatEvidencePackQualityStatus(quality.status)}`, '')
+
+  lines.push(`### ${t('evidencePackQuality.checklistResults')}`, '')
+  ;(quality.checks || []).forEach((check) => {
+    lines.push(`- **${t(check.labelKey)}**: ${formatEvidencePackQualityCheckStatus(check.status)} (${check.earned} / ${check.points})`)
+  })
+  lines.push('')
+
+  lines.push(`### ${t('evidencePackQuality.recommendations')}`, '')
+  const failedChecks = (quality.checks || []).filter((check) => check.status !== 'pass')
+  if (failedChecks.length === 0) {
+    lines.push(`- ${t('evidencePackQuality.noRecommendations')}`, '')
+    return
+  }
+
+  failedChecks.forEach((check) => {
+    lines.push(`- ${t(check.recommendationKey)}`)
+  })
   lines.push('')
 }
 
@@ -336,6 +388,14 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   const reviewReadiness = options.reviewReadiness === undefined
     ? buildReviewReadiness({ result: analysisResult, triageState, caseNotes })
     : options.reviewReadiness
+  const evidencePackQuality = options.evidencePackQuality === undefined
+    ? buildEvidencePackQuality({
+        result: analysisResult,
+        triageState,
+        caseNotes,
+        reviewReadiness
+      })
+    : options.evidencePackQuality
   const analysis = language === 'zh'
     ? localizeAnalysisForDisplay(analysisResult, language)
     : analysisResult
@@ -438,6 +498,7 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
 
   appendCaseNotes(lines, caseNotes, language)
   appendReviewReadiness(lines, reviewReadiness)
+  appendEvidencePackQuality(lines, evidencePackQuality)
 
   lines.push(`## ${t('evidencePack.parseStats')}`, '')
   appendTable(lines, [t('evidencePack.metric'), t('evidencePack.value')], [

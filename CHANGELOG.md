@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.14-local] - Evidence Pack Quality Score
+
+- Added a deterministic Evidence Pack Quality Score for analyst handoff readiness.
+- Scored high-risk finding review, incident triage, Case Notes presence, Investigation Entities, and Review Readiness.
+- Integrated the score into the Analyst Evidence Pack export.
+- Frontend-only release; no backend, parser, detector, CI, Docker, dependency, port, README, demo, portfolio, or sample changes.
+
 ## [v2.13-local] - Investigation Review Readiness
 ### Added
 - Added an investigation review readiness checklist before Evidence Pack export.

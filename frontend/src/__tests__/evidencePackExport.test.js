@@ -169,6 +169,7 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Investigation entities')
     expect(markdown).toContain('## Analyst Case Notes / Decision Log')
     expect(markdown).toContain('## Investigation Review Readiness')
+    expect(markdown).toContain('## Evidence Pack Quality Score')
     expect(markdown).toContain('## Timeline highlights')
     expect(markdown).toContain('## Rule coverage')
     expect(markdown).toContain('## Triage summary')
@@ -182,6 +183,11 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('**Incidents reviewed**: Ready')
     expect(markdown).toContain('**Analyst case notes recorded**: Ready')
     expect(markdown).toContain('**Evidence Pack readiness**: Ready')
+    expect(markdown).toContain('**Score**: 100 / 100')
+    expect(markdown).toContain('**Status**: Ready')
+    expect(markdown).toContain('### Checklist item results')
+    expect(markdown).toContain('### Recommendations for failed/missing items')
+    expect(markdown).toContain('All checklist items passed.')
     expect(markdown).toContain('Matched rules')
     expect(markdown).toContain('Unmatched rules')
     expect(markdown).toContain('web-1.log')
@@ -240,7 +246,8 @@ describe('evidencePackExport', () => {
 
     expect(markdown.indexOf('## Case record details')).toBeLessThan(markdown.indexOf('## Analyst Case Notes / Decision Log'))
     expect(markdown.indexOf('## Analyst Case Notes / Decision Log')).toBeLessThan(markdown.indexOf('## Investigation Review Readiness'))
-    expect(markdown.indexOf('## Investigation Review Readiness')).toBeLessThan(markdown.indexOf('## Parse stats'))
+    expect(markdown.indexOf('## Investigation Review Readiness')).toBeLessThan(markdown.indexOf('## Evidence Pack Quality Score'))
+    expect(markdown.indexOf('## Evidence Pack Quality Score')).toBeLessThan(markdown.indexOf('## Parse stats'))
     expect(markdown.indexOf('## Parse stats')).toBeLessThan(markdown.indexOf('## Findings list'))
   })
 
@@ -260,6 +267,72 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Investigation Review Readiness')
     expect(markdown).toContain('Review readiness was not available for this export.')
     expect(markdown).toContain('## Analyst Case Notes / Decision Log')
+  })
+
+  it('exports an Evidence Pack Quality Score section when quality is provided', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [],
+      incidents: []
+    }, {
+      caseId: 'case-quality',
+      triageState: {},
+      caseNotes: [],
+      reviewReadiness: { status: 'attention', checks: [] },
+      evidencePackQuality: {
+        score: 85,
+        status: 'good',
+        summary: {
+          maxScore: 100,
+          earnedScore: 85,
+          totalChecks: 5,
+          passedChecks: 4
+        },
+        checks: [
+          {
+            id: 'highRiskReviewed',
+            labelKey: 'evidencePackQuality.highRiskReviewed',
+            status: 'pass',
+            points: 25,
+            earned: 25,
+            recommendationKey: 'evidencePackQuality.reviewHighRiskFindings'
+          },
+          {
+            id: 'entitiesPresent',
+            labelKey: 'evidencePackQuality.entitiesPresent',
+            status: 'attention',
+            points: 15,
+            earned: 0,
+            recommendationKey: 'evidencePackQuality.checkEntities'
+          }
+        ]
+      },
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Evidence Pack Quality Score')
+    expect(markdown).toContain('**Score**: 85 / 100')
+    expect(markdown).toContain('**Status**: Good')
+    expect(markdown).toContain('**High-risk findings reviewed**: Pass (25 / 25)')
+    expect(markdown).toContain('**Investigation entities present**: Attention (0 / 15)')
+    expect(markdown).toContain('Confirm whether investigation entities or IOC context should be included.')
+  })
+
+  it('exports a fallback when quality is missing', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [],
+      incidents: []
+    }, {
+      caseId: 'case-no-quality',
+      triageState: {},
+      caseNotes: [],
+      evidencePackQuality: null,
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Evidence Pack Quality Score')
+    expect(markdown).toContain('Evidence Pack quality score was not available for this export.')
   })
 
   it('includes a Detection Explainability chapter with per-finding rule context, rationale and recommended action', () => {
