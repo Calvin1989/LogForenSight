@@ -111,6 +111,11 @@ describe('EvidencePackExportPreview.vue', () => {
     localStorage.clear()
     setLanguage('en')
 
+    Object.defineProperty(Element.prototype, 'scrollIntoView', {
+      configurable: true,
+      value: vi.fn()
+    })
+
     Object.defineProperty(navigator, 'clipboard', {
       configurable: true,
       value: {
@@ -180,16 +185,74 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(preview.text()).toContain('## Evidence Pack Export Guardrails')
   })
 
+  it('renders a section navigator with key Evidence Pack entries', async () => {
+    const shareSafetyTarget = document.createElement('div')
+    shareSafetyTarget.id = 'evidence-pack-share-safety'
+    document.body.appendChild(shareSafetyTarget)
+
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: {
+        ...sampleProps,
+        shareSafetyTargetId: 'evidence-pack-share-safety'
+      }
+    })
+
+    await wrapper.find('.preview-btn').trigger('click')
+
+    const navigatorPanel = wrapper.find('[data-testid="evidence-pack-section-navigator"]')
+    expect(navigatorPanel.exists()).toBe(true)
+    expect(navigatorPanel.text()).toContain('Section navigator')
+    expect(navigatorPanel.text()).toContain('Investigation Review Readiness')
+    expect(navigatorPanel.text()).toContain('Evidence Pack Quality Score')
+    expect(navigatorPanel.text()).toContain('Evidence Pack Export Guardrails')
+    expect(navigatorPanel.text()).toContain('Evidence Pack Share Safety Review')
+
+    const qualityButton = navigatorPanel.findAll('button').find((button) => {
+      return button.text().includes('Evidence Pack Quality Score')
+    })
+    const qualitySection = wrapper.find('#evidence-pack-preview-quality-score')
+
+    expect(qualityButton).toBeTruthy()
+    expect(qualitySection.exists()).toBe(true)
+    await qualityButton.trigger('click')
+
+    wrapper.unmount()
+    shareSafetyTarget.remove()
+  })
+
+  it('omits missing navigator targets without crashing the preview UI', async () => {
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: {
+        ...sampleProps,
+        shareSafetyTargetId: 'missing-share-safety-section'
+      }
+    })
+
+    await wrapper.find('.preview-btn').trigger('click')
+
+    const navigatorPanel = wrapper.find('[data-testid="evidence-pack-section-navigator"]')
+    expect(navigatorPanel.exists()).toBe(true)
+    expect(navigatorPanel.text()).not.toContain('Evidence Pack Share Safety Review')
+    expect(wrapper.find('[data-testid="evidence-pack-preview"]').text()).toContain('# Analyst Evidence Pack')
+  })
+
   it('copy button calls clipboard writeText when available', async () => {
     const wrapper = mount(EvidencePackExportPreview, {
-      props: sampleProps
+      props: {
+        ...sampleProps,
+        shareSafetyTargetId: 'missing-share-safety-section'
+      }
     })
+
+    await wrapper.find('.preview-btn').trigger('click')
 
     await wrapper.find('.copy-btn').trigger('click')
     await flushPromises()
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringContaining('# Analyst Evidence Pack'))
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Section navigator')
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Evidence Pack Share Safety Review')
     expect(wrapper.text()).toContain('Markdown copied.')
   })
 
