@@ -30,10 +30,10 @@ git switch -c chore/<release-branch>
 - [ ] 提交前执行 `git diff --check` 与 `git diff --cached --check`。
 
 ```powershell
-git grep -n "ai-log-security-analyzer"
-git grep -n "AI Log Security Analyzer"
-git grep -n "ai-log-analyzer"
-git grep -n "Calvin1989/ai-log-security-analyzer"
+git grep -n "<legacy-repo-slug>"
+git grep -n "<legacy-project-name>"
+git grep -n "<legacy-short-name>"
+git grep -n "<legacy-owner>/<legacy-repo-slug>"
 git diff --check
 git diff --cached --check
 ```

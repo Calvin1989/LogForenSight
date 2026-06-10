@@ -5,7 +5,7 @@
 **本地优先、零外部依赖、可解释、可导出的 Web 日志安全分析与处置工作台。**
 
 [![CI Status](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-v2.10--local-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v2.12--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 ![Local-first](https://img.shields.io/badge/local--first-yes-brightgreen)
 ![No LLM Required](https://img.shields.io/badge/LLM-not_required-blue)
@@ -39,6 +39,7 @@ LogForenSight 不是 SIEM，也不是“把日志交给 AI 猜”的聊天式工
 | 🧬 IOC / Investigation Entities | 快速定位 IP、账号、URL、路径、HTTP 方法、状态码等调查对象                            |
 | 🔎 Detection Explainability     | 展示规则依据、命中字段、命中指标和证据片段                                         |
 | ✅ Analyst Triage Workflow       | 跟踪 Open / Investigating / Mitigated / False Positive，并提示待复核对象 |
+| 📝 Analyst Case Notes           | 记录观察、假设、处置动作和决策日志                                              |
 | 💾 Saved Case Workspace         | 在本地保存、搜索、过滤、导入导出分析案例                                          |
 | 📦 Evidence Pack Export         | 导出适合交接、复盘、工单流转的 Markdown 证据包                                  |
 
@@ -131,7 +132,7 @@ flowchart LR
 
 ## 🧪 当前验证状态
 
-当前稳定版本：`v2.10-local`
+当前稳定版本：`v2.12-local`
 
 已验证：
 

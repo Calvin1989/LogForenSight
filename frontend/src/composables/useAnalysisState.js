@@ -8,6 +8,7 @@ import {
 } from '../api'
 import { getRecentAnalyses, saveAnalysisRecord, updateAnalysisRecord, clearRecentAnalyses } from '../utils/historyStorage'
 import * as caseStorage from '../utils/caseWorkspaceStorage'
+import * as caseNotesStorage from '../utils/caseNotesStorage'
 import * as triageStorage from '../utils/triageStorage'
 
 export const currentAnalysisResult = ref(null)
@@ -26,10 +27,15 @@ function buildAnalysisDisplayName(files) {
   return `Batch: ${files[0].name} + ${files.length - 1} more`
 }
 
+function createAnalysisContextId() {
+  return `analysis-${Date.now()}`
+}
+
 export function useAnalysisState() {
   const loading = ref(false)
   const result = currentAnalysisResult
   const currentCaseId = ref('current-analysis')
+  const caseNotesContextId = ref(createAnalysisContextId())
   const error = ref(null)
   const selectedFile = ref(null)
   const selectedLogFormat = ref('auto')
@@ -65,6 +71,7 @@ export function useAnalysisState() {
     error.value = null
     result.value = null
     currentCaseId.value = 'current-analysis'
+    caseNotesContextId.value = createAnalysisContextId()
 
     try {
       let data
@@ -157,6 +164,7 @@ export function useAnalysisState() {
   const handleRestoreRecord = (record) => {
     result.value = record.result
     currentCaseId.value = record.id
+    caseNotesContextId.value = record.id
     selectedLogFormat.value = record.log_format
     selectedRecordId.value = record.id
     error.value = null
@@ -212,8 +220,12 @@ export function useAnalysisState() {
     if (currentCaseId.value && currentCaseId.value !== caseRecord.id) {
       triageStorage.copyTriageState(currentCaseId.value, caseRecord.id)
     }
+    if (caseNotesContextId.value && caseNotesContextId.value !== caseRecord.id) {
+      caseNotesStorage.copyCaseNotes(caseNotesContextId.value, caseRecord.id)
+    }
     savedCases.value = caseStorage.listCases()
     currentCaseId.value = caseRecord.id
+    caseNotesContextId.value = caseRecord.id
     return caseRecord
   }
 
@@ -225,6 +237,7 @@ export function useAnalysisState() {
     loading.value = false
     result.value = null
     currentCaseId.value = 'current-analysis'
+    caseNotesContextId.value = createAnalysisContextId()
     error.value = null
     selectedFile.value = null
     selectedLogFormat.value = 'auto'
@@ -292,6 +305,7 @@ export function useAnalysisState() {
     loading,
     result,
     currentCaseId,
+    caseNotesContextId,
     error,
     selectedFile,
     selectedLogFormat,
