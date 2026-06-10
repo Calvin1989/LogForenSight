@@ -168,6 +168,7 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Incidents list')
     expect(markdown).toContain('## Investigation entities')
     expect(markdown).toContain('## Analyst Case Notes / Decision Log')
+    expect(markdown).toContain('## Investigation Review Readiness')
     expect(markdown).toContain('## Timeline highlights')
     expect(markdown).toContain('## Rule coverage')
     expect(markdown).toContain('## Triage summary')
@@ -176,6 +177,11 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('Temporary block applied.')
     expect(markdown).toContain('Observed credential stuffing pattern')
     expect(markdown).toContain('Multiple failed logins from the same IP against the login endpoint.')
+    expect(markdown).toContain('**Overall status**: Ready')
+    expect(markdown).toContain('**High-risk findings reviewed**: Ready')
+    expect(markdown).toContain('**Incidents reviewed**: Ready')
+    expect(markdown).toContain('**Analyst case notes recorded**: Ready')
+    expect(markdown).toContain('**Evidence Pack readiness**: Ready')
     expect(markdown).toContain('Matched rules')
     expect(markdown).toContain('Unmatched rules')
     expect(markdown).toContain('web-1.log')
@@ -207,7 +213,9 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Incidents list')
     expect(markdown).toContain('## Investigation entities')
     expect(markdown).toContain('## Analyst Case Notes / Decision Log')
+    expect(markdown).toContain('## Investigation Review Readiness')
     expect(markdown).toContain('No analyst case notes recorded.')
+    expect(markdown).toContain('**Evidence Pack readiness**: Attention')
     expect(markdown).toContain('## Triage summary')
   })
 
@@ -231,8 +239,27 @@ describe('evidencePackExport', () => {
     })
 
     expect(markdown.indexOf('## Case record details')).toBeLessThan(markdown.indexOf('## Analyst Case Notes / Decision Log'))
-    expect(markdown.indexOf('## Analyst Case Notes / Decision Log')).toBeLessThan(markdown.indexOf('## Parse stats'))
+    expect(markdown.indexOf('## Analyst Case Notes / Decision Log')).toBeLessThan(markdown.indexOf('## Investigation Review Readiness'))
+    expect(markdown.indexOf('## Investigation Review Readiness')).toBeLessThan(markdown.indexOf('## Parse stats'))
     expect(markdown.indexOf('## Parse stats')).toBeLessThan(markdown.indexOf('## Findings list'))
+  })
+
+  it('exports a fallback when review readiness is not available', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [],
+      incidents: []
+    }, {
+      caseId: 'case-no-readiness',
+      triageState: {},
+      caseNotes: [],
+      reviewReadiness: null,
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Investigation Review Readiness')
+    expect(markdown).toContain('Review readiness was not available for this export.')
+    expect(markdown).toContain('## Analyst Case Notes / Decision Log')
   })
 
   it('includes a Detection Explainability chapter with per-finding rule context, rationale and recommended action', () => {

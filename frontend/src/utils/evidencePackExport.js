@@ -5,6 +5,7 @@ import { downloadTextFile } from './exportUtils'
 import { extractInvestigationEntities } from './iocExtraction'
 import { buildFindingExplanation, renderFindingExplanation } from './findingExplainability'
 import { localizeAnalysisForDisplay } from './localizedAnalysis'
+import { buildReviewReadiness } from './reviewReadiness'
 import { getTriageState } from './triageStorage'
 
 function valueOrFallback(value) {
@@ -126,6 +127,36 @@ function appendCaseNotes(lines, caseNotes, language) {
     lines.push(`- **${t('caseNotes.createdAt')}**: ${formatTimestamp(note.createdAt, language)}`)
     lines.push(`- **${t('caseNotes.updatedAt')}**: ${formatTimestamp(note.updatedAt, language)}`, '')
   })
+}
+
+function formatReadinessStatus(status) {
+  if (!status) return t('evidencePack.notAvailable')
+  return t(`reviewReadiness.${status}`, status)
+}
+
+function appendReviewReadiness(lines, reviewReadiness) {
+  lines.push(`## ${t('reviewReadiness.title')}`, '')
+
+  if (!reviewReadiness) {
+    lines.push(t('reviewReadiness.exportFallback'), '')
+    return
+  }
+
+  const checksById = reviewReadiness.checks.reduce((accumulator, check) => {
+    accumulator[check.id] = check
+    return accumulator
+  }, {})
+
+  lines.push(`- **${t('reviewReadiness.overallStatus')}**: ${formatReadinessStatus(reviewReadiness.status)}`)
+
+  ;['highRiskFindings', 'incidents', 'caseNotes', 'evidencePack'].forEach((checkId) => {
+    const check = checksById[checkId]
+    if (!check) return
+
+    lines.push(`- **${t(check.labelKey)}**: ${formatReadinessStatus(check.status)}`)
+  })
+
+  lines.push('')
 }
 
 function appendInvestigationEntities(lines, analysisResult, language) {
@@ -302,6 +333,9 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   const caseRecord = options.caseRecord ?? getCase(caseId)
   const triageState = options.triageState ?? getTriageState(caseId)
   const caseNotes = options.caseNotes ?? loadCaseNotes(caseId)
+  const reviewReadiness = options.reviewReadiness === undefined
+    ? buildReviewReadiness({ result: analysisResult, triageState, caseNotes })
+    : options.reviewReadiness
   const analysis = language === 'zh'
     ? localizeAnalysisForDisplay(analysisResult, language)
     : analysisResult
@@ -403,6 +437,7 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   }
 
   appendCaseNotes(lines, caseNotes, language)
+  appendReviewReadiness(lines, reviewReadiness)
 
   lines.push(`## ${t('evidencePack.parseStats')}`, '')
   appendTable(lines, [t('evidencePack.metric'), t('evidencePack.value')], [

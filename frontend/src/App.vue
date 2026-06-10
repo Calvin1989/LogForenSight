@@ -112,9 +112,18 @@
           @triage-state-change="handleTriageStateChange"
         />
 
+        <ReviewReadinessPanel
+          v-if="displayResult"
+          :key="reviewReadinessKey"
+          :result="result"
+          :triageState="triageState"
+          :caseId="reviewReadinessCaseId"
+        />
+
         <CaseNotesPanel
           v-if="displayResult"
           :caseId="currentCaseId === 'current-analysis' ? caseNotesContextId : currentCaseId"
+          @notes-change="handleCaseNotesChange"
         />
 
         <MarkdownReport
@@ -155,6 +164,7 @@ import RecentAnalyses from './components/RecentAnalyses.vue'
 import ReportComparison from './components/ReportComparison.vue'
 import CaseWorkspace from './components/CaseWorkspace.vue'
 import CaseNotesPanel from './components/CaseNotesPanel.vue'
+import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
 
@@ -188,6 +198,15 @@ const displayResult = computed(() => {
 })
 
 const triageState = ref({})
+const caseNotesRevision = ref(0)
+
+const reviewReadinessCaseId = computed(() => {
+  return currentCaseId.value === 'current-analysis' ? caseNotesContextId.value : currentCaseId.value
+})
+
+const reviewReadinessKey = computed(() => {
+  return `${reviewReadinessCaseId.value}:${caseNotesRevision.value}`
+})
 
 watch(currentCaseId, () => {
   triageState.value = {}
@@ -195,6 +214,10 @@ watch(currentCaseId, () => {
 
 const handleTriageStateChange = (state) => {
   triageState.value = state || {}
+}
+
+const handleCaseNotesChange = () => {
+  caseNotesRevision.value += 1
 }
 
 const onSaveCase = () => {

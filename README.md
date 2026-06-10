@@ -5,7 +5,7 @@
 **本地优先、零外部依赖、可解释、可导出的 Web 日志安全分析与处置工作台。**
 
 [![CI Status](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml/badge.svg)](https://github.com/Calvin1989/LogForenSight/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-v2.12--local-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v2.13--local-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 ![Local-first](https://img.shields.io/badge/local--first-yes-brightgreen)
 ![No LLM Required](https://img.shields.io/badge/LLM-not_required-blue)
@@ -19,12 +19,13 @@
 
 LogForenSight 不是 SIEM，也不是“把日志交给 AI 猜”的聊天式工具。
 
-它是一条本地运行的安全分析链路：解析 Web 访问日志、执行确定性检测、聚合 incidents、提取 IOC、解释每条 detection，并导出可交接的 Analyst Evidence Pack。
+它是一条本地运行的安全分析链路：解析 Web 访问日志、执行确定性检测、聚合 incidents、提取 IOC、解释每条 detection、检查 Review Readiness，并导出可交接的 Analyst Evidence Pack。
 
 * 🧪 **确定性检测**：相同输入得到相同输出，便于复核、测试和演示。
 * 🔍 **调查实体抽取**：统一提取 IP、URL、账号、路径、HTTP 方法和状态码。
 * 🧭 **分析师处置流**：支持状态、优先级、备注、状态汇总和 `Needs review / 待复核` 提示。
 * � **案件备注与决策日志**：记录 Observation、Hypothesis、Action、Decision，并随 Evidence Pack 一起导出。
+* ✅ **Review Readiness**：导出 Evidence Pack 前快速检查高风险 findings、incidents 和 case notes 是否已复核到位。
 * �📦 **证据包导出**：生成包含 metadata、privacy note、validation summary 的 Markdown Evidence Pack。
 * 🔐 **本地优先**：无数据库、零外部 API、无 LLM 依赖，敏感日志默认不离开本地。
 
@@ -41,6 +42,7 @@ LogForenSight 不是 SIEM，也不是“把日志交给 AI 猜”的聊天式工
 | 🔎 Detection Explainability     | 展示规则依据、命中字段、命中指标和证据片段                                         |
 | ✅ Analyst Triage Workflow       | 跟踪 Open / Investigating / Mitigated / False Positive，并提示待复核对象 |
 | 📝 Analyst Case Notes           | 记录观察、假设、处置动作和决策日志，并随 Evidence Pack 导出                      |
+| ✅ Review Readiness             | 在导出前检查高风险 findings、incidents 和 case notes 是否已复核完成              |
 | 💾 Saved Case Workspace         | 在本地保存、搜索、过滤、导入导出分析案例                                          |
 | 📦 Evidence Pack Export         | 导出适合交接、复盘、工单流转的 Markdown 证据包                                  |
 
@@ -102,11 +104,14 @@ flowchart LR
     F --> H
     G --> H
     H --> I[Case Notes / Decision Log]
-    I --> J[Analyst Evidence Pack]
-    H --> K[Saved Case Workspace]
+    I --> J[Review Readiness]
+    J --> K[Analyst Evidence Pack]
+    H --> L[Saved Case Workspace]
 ```
 
-推荐演示顺序也建议按 `Triage Workflow -> Case Notes / Decision Log -> Analyst Evidence Pack` 讲解，这样更容易让 GitHub 首页访客理解该功能已经完整落地。
+推荐演示顺序也建议按 `Triage Workflow -> Case Notes / Decision Log -> Review Readiness -> Analyst Evidence Pack` 讲解，这样更容易让 GitHub 首页访客理解该功能已经完整落地。
+
+核心链路可以概括为：`Parse -> Detect -> Explain -> Triage -> Case Notes -> Review Readiness -> Evidence Pack`。
 
 ---
 
@@ -136,7 +141,7 @@ flowchart LR
 
 ## 🧪 当前验证状态
 
-当前稳定版本：`v2.12-local`
+当前稳定版本：`v2.13-local`
 
 已验证：
 

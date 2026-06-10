@@ -1,6 +1,6 @@
 # 演示指南 (Demo Guide)
 
-本指南用于在 5-8 分钟内稳定展示 **LogForenSight** 的完整本地分析链路：上传日志、验证解析质量、查看 findings / incidents、检查 Investigation Entities、展开 Detection Explainability、补充 triage 信息、记录 Case Notes，并导出 Evidence Pack。
+本指南用于在 5-8 分钟内稳定展示 **LogForenSight** 的完整本地分析链路：上传日志、验证解析质量、查看 findings / incidents、检查 Investigation Entities、展开 Detection Explainability、补充 triage 信息、记录 Case Notes、查看 Review Readiness，并导出 Evidence Pack。
 
 ---
 
@@ -48,7 +48,8 @@ npm run dev
 6. 展开 Detection Explainability。
 7. 在 Triage Workflow 中标记状态、优先级和备注。
 8. 在 Analyst Case Notes / Decision Log 中记录一条 Observation 或 Decision。
-9. 导出 Analyst Evidence Pack，确认其中包含 Triage Summary 和 Analyst Case Notes / Decision Log。
+9. 查看 Investigation Review Readiness，确认高风险 findings、incidents 和 case notes 状态。
+10. 导出 Analyst Evidence Pack，确认其中包含 Triage Summary、Analyst Case Notes / Decision Log 和 Investigation Review Readiness。
 
 这条路径适合 README、Portfolio、面试演示和本地试跑，能够在最短时间内串起当前版本最完整、最稳定的分析师工作流。
 
@@ -102,15 +103,22 @@ npm run dev
 - **动作**: 为一个 incident 设置状态为 `Investigating`、优先级为 `Critical`，并添加备注，例如“继续核对源 IP 是否为外部扫描器”。
 - **解说**: “这一步把检测结果变成可跟踪的分析师动作。”
 
-### 8. 记录 Case Notes 并导出 Evidence Pack
+### 8. 记录 Case Notes 并查看 Review Readiness
 
 - **展示点**: `Case Notes / Decision Log`。
 - **动作**: 记录一条 `Observation` 或 `Decision` note，例如“观察到登录端点存在重复失败请求”或“决定暂时封禁该来源 IP 并继续监控”。
 - **解说**: “这一步可以把调查过程、假设和最终决策沉淀成结构化本地备注，并随 Evidence Pack 一起导出。”
 
+### 9. 查看 Review Readiness 并导出 Evidence Pack
+
+- **展示点**: `Investigation Review Readiness`。
+- **动作**: 查看高风险 findings、incidents 和 case notes 的复核状态，确认是否存在 `Attention` / `需关注` 项。
+- **确认点**: 面板应明确提示是否已满足导出 Evidence Pack 前的核心复核要求。
+- **解说**: “这一步帮助分析师在导出前快速发现仍未复核的 high-risk findings、incidents 或缺失的 case notes。”
+
 - **动作**: 点击 `Download Evidence Pack` / `下载证据包`。
-- **确认点**: 导出的 Analyst Evidence Pack 中应同时看到 `Triage Summary` 和 `Analyst Case Notes / Decision Log`。
-- **解说**: “Evidence Pack 会把 findings、incidents、Investigation Entities、Detection Explainability、triage 信息以及 analyst case notes 整理成便于交接的 Markdown 证据包。”
+- **确认点**: 导出的 Analyst Evidence Pack 中应同时看到 `Triage Summary`、`Analyst Case Notes / Decision Log` 和 `Investigation Review Readiness`。
+- **解说**: “Evidence Pack 会把 findings、incidents、Investigation Entities、Detection Explainability、triage 信息、analyst case notes 以及导出前的 review readiness 提示整理成便于交接的 Markdown 证据包。”
 
 ---
 

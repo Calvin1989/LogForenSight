@@ -4,6 +4,20 @@
 
 ---
 
+## v2.13-local - Investigation Review Readiness
+
+Adds a local-first readiness checklist for analysts before exporting the Evidence Pack.
+
+Highlights:
+- Review status for high-risk findings
+- Review status for incidents
+- Case Notes readiness
+- Evidence Pack readiness summary
+- Evidence Pack export integration
+- No backend behavior changes
+
+---
+
 ## [v2.12.2-local] - Case Notes Timestamp Monotonicity Fix
 
 - **CI / Test Stability**: 修复 `Case Notes` 在 GitHub Actions 等高速环境下的时间戳竞争问题，避免创建后立即更新时 `updatedAt === createdAt` 导致测试偶发失败。

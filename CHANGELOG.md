@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.13-local] - Investigation Review Readiness
+### Added
+- Added an investigation review readiness checklist before Evidence Pack export.
+- Highlighted unreviewed high-risk findings and incidents.
+- Added readiness awareness for Analyst Case Notes.
+- Integrated review readiness into Analyst Evidence Pack export.
+- No backend, parser, detector, dependency, or port changes.
+
 ## [v2.12.2-local] - Case Notes Timestamp Monotonicity Fix
 ### Fixed
 - Ensured `Case Notes` `updatedAt` is strictly monotonic during rapid local updates, including GitHub Actions runs where create and update can occur in the same millisecond.
