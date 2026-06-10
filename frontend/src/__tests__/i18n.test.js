@@ -288,4 +288,45 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.copyFailed')).toBe('Copy failed. Please select and copy manually.')
     expect(t('evidencePackPreview.previewLabel')).toBe('Markdown preview')
   })
+
+  it('should have evidence pack share safety translations in both languages', () => {
+    setLanguage('zh')
+    expect(t('evidencePackShareSafety.title')).toBe('Evidence Pack 分享安全检查')
+    expect(t('evidencePackShareSafety.statusSafe')).toBe('相对安全')
+    expect(t('evidencePackShareSafety.statusReviewRecommended')).toBe('建议复核')
+    expect(t('evidencePackShareSafety.statusAttention')).toBe('需要关注')
+    expect(t('evidencePackShareSafety.findingUrlsWithQueryStrings', {
+      count: 2,
+      samples: 'https://a.example?a=1'
+    })).toContain('带查询字符串的 URL')
+    expect(t('evidencePackShareSafety.exportNotBlocked')).toContain('不会阻止导出')
+
+    setLanguage('en')
+    expect(t('evidencePackShareSafety.title')).toBe('Evidence Pack Share Safety Review')
+    expect(t('evidencePackShareSafety.statusSafe')).toBe('Safe')
+    expect(t('evidencePackShareSafety.statusReviewRecommended')).toBe('Review recommended')
+    expect(t('evidencePackShareSafety.statusAttention')).toBe('Attention')
+    expect(t('evidencePackShareSafety.findingUrlsWithQueryStrings', {
+      count: 2,
+      samples: 'https://a.example?a=1'
+    })).toContain('URLs with query strings')
+    expect(t('evidencePackShareSafety.exportNotBlocked')).toContain('does not block export')
+  })
+
+  it('should keep evidence pack share safety Chinese strings readable', () => {
+    setLanguage('zh')
+
+    const values = [
+      t('evidencePackShareSafety.title'),
+      t('evidencePackShareSafety.empty'),
+      t('evidencePackShareSafety.summaryAttention'),
+      t('evidencePackShareSafety.warningHighExposureIndicators'),
+      t('evidencePackShareSafety.recommendationTrimRawEvidence')
+    ]
+
+    values.forEach((value) => {
+      expect(value).not.toContain('\ufffd')
+      expect(/[一-龥]/.test(value)).toBe(true)
+    })
+  })
 })

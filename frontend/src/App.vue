@@ -137,6 +137,12 @@
           :caseNotes="caseNotesForQuality"
         />
 
+        <EvidencePackShareSafety
+          v-if="displayResult"
+          :markdown="evidencePackShareSafetyMarkdown"
+          :result="result"
+        />
+
         <EvidencePackExportPreview
           v-if="displayResult"
           :result="result"
@@ -194,11 +200,13 @@ import CaseWorkspace from './components/CaseWorkspace.vue'
 import CaseNotesPanel from './components/CaseNotesPanel.vue'
 import EvidencePackQualityScore from './components/EvidencePackQualityScore.vue'
 import EvidencePackExportGuardrails from './components/EvidencePackExportGuardrails.vue'
+import EvidencePackShareSafety from './components/EvidencePackShareSafety.vue'
 import EvidencePackExportPreview from './components/EvidencePackExportPreview.vue'
 import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
 import { loadCaseNotes } from './utils/caseNotesStorage'
+import { buildEvidencePackMarkdown } from './utils/evidencePackExport'
 import { buildEvidencePackQuality } from './utils/evidencePackQuality'
 import { buildEvidencePackExportGuardrails } from './utils/evidencePackExportGuardrails'
 import { buildReviewReadiness } from './utils/reviewReadiness'
@@ -274,6 +282,22 @@ const exportGuardrails = computed(() => {
     result: result.value,
     triageState: triageState.value,
     caseNotes: caseNotesForQuality.value
+  })
+})
+
+const evidencePackShareSafetyMarkdown = computed(() => {
+  if (!result.value) {
+    return ''
+  }
+
+  return buildEvidencePackMarkdown(result.value, {
+    caseId: currentCaseId.value,
+    triageState: triageState.value,
+    caseNotes: caseNotesForQuality.value,
+    reviewReadiness: reviewReadinessForQuality.value,
+    evidencePackQuality: evidencePackQualityForGuardrails.value,
+    evidencePackExportGuardrails: exportGuardrails.value,
+    language: currentLanguage.value
   })
 })
 

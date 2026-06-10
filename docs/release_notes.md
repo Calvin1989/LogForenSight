@@ -4,6 +4,21 @@
 
 ---
 
+## v2.17-local - Evidence Pack Share Safety Review
+
+Adds a local-first, deterministic share safety review before sharing the final Evidence Pack Markdown.
+
+Highlights:
+- Reviews the final Evidence Pack Markdown preview or analysis result locally
+- Flags IP addresses, URLs with query strings, sensitive paths, account-like values, raw evidence snippets, and source filenames
+- Summarizes results as safe, review recommended, or attention
+- Does not block export
+- Does not auto-redact content
+- Frontend-only change
+- No backend, parser, detector, incident aggregation, CI, Docker, dependency, README, demo, portfolio, or sample changes
+
+---
+
 ## v2.16-local - Evidence Pack Export Preview
 
 Adds a local-first Evidence Pack Export Preview so analysts can inspect the final Markdown handoff before downloading it.

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.17-local] - Evidence Pack Share Safety Review
+
+- Added a local-first, deterministic Evidence Pack Share Safety Review based on the final Markdown preview or analysis result.
+- Added `buildEvidencePackShareSafety({ markdown, result })` to flag IPs, query-string URLs, sensitive paths, account-like values, raw evidence snippets, and source filenames for manual review.
+- Added an `EvidencePackShareSafety` panel near the export preview with safe, review recommended, and attention states.
+- Export remains available; the review does not block export and does not auto-redact content.
+- Expanded frontend test coverage for the pure function, component rendering, and bilingual i18n strings.
+- Frontend-only release; no backend, parser, detector, incident aggregation, CI, Docker, dependency, sample, README, demo, or portfolio changes.
+
 ## [v2.16-local] - Evidence Pack Export Preview
 
 - Added an Evidence Pack Export Preview before Markdown download.
