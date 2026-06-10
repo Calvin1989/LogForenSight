@@ -170,6 +170,7 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('## Analyst Case Notes / Decision Log')
     expect(markdown).toContain('## Investigation Review Readiness')
     expect(markdown).toContain('## Evidence Pack Quality Score')
+    expect(markdown).toContain('## Evidence Pack Export Guardrails')
     expect(markdown).toContain('## Timeline highlights')
     expect(markdown).toContain('## Rule coverage')
     expect(markdown).toContain('## Triage summary')
@@ -188,6 +189,11 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('### Checklist item results')
     expect(markdown).toContain('### Recommendations for failed/missing items')
     expect(markdown).toContain('All checklist items passed.')
+    expect(markdown).toContain('**Decision**: Ready')
+    expect(markdown).toContain('**Quality score**: 100')
+    expect(markdown).toContain('### Blockers')
+    expect(markdown).toContain('### Recommendations')
+    expect(markdown).toContain('Guardrails do not block export')
     expect(markdown).toContain('Matched rules')
     expect(markdown).toContain('Unmatched rules')
     expect(markdown).toContain('web-1.log')
@@ -247,7 +253,8 @@ describe('evidencePackExport', () => {
     expect(markdown.indexOf('## Case record details')).toBeLessThan(markdown.indexOf('## Analyst Case Notes / Decision Log'))
     expect(markdown.indexOf('## Analyst Case Notes / Decision Log')).toBeLessThan(markdown.indexOf('## Investigation Review Readiness'))
     expect(markdown.indexOf('## Investigation Review Readiness')).toBeLessThan(markdown.indexOf('## Evidence Pack Quality Score'))
-    expect(markdown.indexOf('## Evidence Pack Quality Score')).toBeLessThan(markdown.indexOf('## Parse stats'))
+    expect(markdown.indexOf('## Evidence Pack Quality Score')).toBeLessThan(markdown.indexOf('## Evidence Pack Export Guardrails'))
+    expect(markdown.indexOf('## Evidence Pack Export Guardrails')).toBeLessThan(markdown.indexOf('## Parse stats'))
     expect(markdown.indexOf('## Parse stats')).toBeLessThan(markdown.indexOf('## Findings list'))
   })
 
@@ -333,6 +340,60 @@ describe('evidencePackExport', () => {
 
     expect(markdown).toContain('## Evidence Pack Quality Score')
     expect(markdown).toContain('Evidence Pack quality score was not available for this export.')
+  })
+
+  it('exports a fallback when guardrails are missing', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [],
+      incidents: []
+    }, {
+      caseId: 'case-no-guardrails',
+      triageState: {},
+      caseNotes: [],
+      evidencePackExportGuardrails: null,
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Evidence Pack Export Guardrails')
+    expect(markdown).toContain('Evidence Pack export guardrails were not available for this export.')
+  })
+
+  it('keeps review readiness and quality score sections when guardrails are included', () => {
+    const markdown = buildEvidencePackMarkdown({
+      summary: {},
+      findings: [],
+      incidents: []
+    }, {
+      caseId: 'case-guardrails',
+      triageState: {},
+      caseNotes: [{ id: 'note-1', body: 'Analyst note.' }],
+      reviewReadiness: { status: 'ready', summary: { requiredBlockers: 0 }, checks: [] },
+      evidencePackQuality: {
+        score: 95,
+        status: 'ready',
+        summary: {
+          maxScore: 100,
+          earnedScore: 95,
+          totalChecks: 5,
+          passedChecks: 5
+        },
+        checks: []
+      },
+      evidencePackExportGuardrails: {
+        decision: 'ready',
+        severity: 'success',
+        summaryKey: 'evidencePackGuardrails.readySummary',
+        score: 95,
+        blockers: [],
+        recommendations: []
+      },
+      language: 'en'
+    })
+
+    expect(markdown).toContain('## Investigation Review Readiness')
+    expect(markdown).toContain('## Evidence Pack Quality Score')
+    expect(markdown).toContain('## Evidence Pack Export Guardrails')
   })
 
   it('includes a Detection Explainability chapter with per-finding rule context, rationale and recommended action', () => {

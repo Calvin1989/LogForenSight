@@ -5,6 +5,7 @@ import { downloadTextFile } from './exportUtils'
 import { extractInvestigationEntities } from './iocExtraction'
 import { buildFindingExplanation, renderFindingExplanation } from './findingExplainability'
 import { localizeAnalysisForDisplay } from './localizedAnalysis'
+import { buildEvidencePackExportGuardrails } from './evidencePackExportGuardrails'
 import { buildEvidencePackQuality } from './evidencePackQuality'
 import { buildReviewReadiness } from './reviewReadiness'
 import { getTriageState } from './triageStorage'
@@ -211,6 +212,55 @@ function appendEvidencePackQuality(lines, quality) {
   lines.push('')
 }
 
+function formatEvidencePackGuardrailsDecision(decision) {
+  if (!decision) return t('evidencePack.notAvailable')
+
+  if (decision === 'ready') return t('evidencePackGuardrails.statusReady')
+  if (decision === 'review_recommended') return t('evidencePackGuardrails.statusReviewRecommended')
+  if (decision === 'not_ready') return t('evidencePackGuardrails.statusNotReady')
+  return decision
+}
+
+function appendEvidencePackExportGuardrails(lines, guardrails) {
+  lines.push(`## ${t('evidencePackGuardrails.title')}`, '')
+
+  if (!guardrails) {
+    lines.push(t('evidencePackGuardrails.notAvailableForExport'), '')
+    return
+  }
+
+  lines.push(`- **${t('evidencePackGuardrails.decision')}**: ${formatEvidencePackGuardrailsDecision(guardrails.decision)}`)
+  if (typeof guardrails.score === 'number') {
+    lines.push(`- **${t('evidencePackGuardrails.score')}**: ${guardrails.score}`)
+  }
+  if (guardrails.summaryKey) {
+    lines.push(`- ${t(guardrails.summaryKey)}`)
+  }
+  lines.push('')
+
+  lines.push(`### ${t('evidencePackGuardrails.blockers')}`, '')
+  if (Array.isArray(guardrails.blockers) && guardrails.blockers.length > 0) {
+    guardrails.blockers.forEach((blocker) => {
+      lines.push(`- ${t(blocker.labelKey)}`)
+    })
+  } else {
+    lines.push(`- ${t('evidencePackGuardrails.noBlockers')}`)
+  }
+  lines.push('')
+
+  lines.push(`### ${t('evidencePackGuardrails.recommendations')}`, '')
+  if (Array.isArray(guardrails.recommendations) && guardrails.recommendations.length > 0) {
+    guardrails.recommendations.forEach((recommendation) => {
+      lines.push(`- ${t(recommendation.labelKey)}`)
+    })
+  } else {
+    lines.push(`- ${t('evidencePackGuardrails.noRecommendations')}`)
+  }
+  lines.push('')
+
+  lines.push(t('evidencePackGuardrails.exportNotBlocked'), '')
+}
+
 function appendInvestigationEntities(lines, analysisResult, language) {
   lines.push(`## ${t('evidencePack.investigationEntities')}`, '')
 
@@ -396,6 +446,15 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
         reviewReadiness
       })
     : options.evidencePackQuality
+  const evidencePackExportGuardrails = options.evidencePackExportGuardrails === undefined
+    ? buildEvidencePackExportGuardrails({
+        quality: evidencePackQuality,
+        reviewReadiness,
+        result: analysisResult,
+        triageState,
+        caseNotes
+      })
+    : options.evidencePackExportGuardrails
   const analysis = language === 'zh'
     ? localizeAnalysisForDisplay(analysisResult, language)
     : analysisResult
@@ -499,6 +558,7 @@ export function buildEvidencePackMarkdown(analysisResult, options = {}) {
   appendCaseNotes(lines, caseNotes, language)
   appendReviewReadiness(lines, reviewReadiness)
   appendEvidencePackQuality(lines, evidencePackQuality)
+  appendEvidencePackExportGuardrails(lines, evidencePackExportGuardrails)
 
   lines.push(`## ${t('evidencePack.parseStats')}`, '')
   appendTable(lines, [t('evidencePack.metric'), t('evidencePack.value')], [

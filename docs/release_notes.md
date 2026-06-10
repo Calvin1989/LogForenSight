@@ -4,6 +4,21 @@
 
 ---
 
+## v2.15-local - Evidence Pack Export Guardrails
+
+Adds local-first Evidence Pack Export Guardrails to help analysts decide whether an Evidence Pack is ready for handoff.
+
+Highlights:
+- Deterministic export decision: ready, review recommended, or not ready
+- Blocker and recommendation summary
+- Uses existing Quality Score, Review Readiness, triage, and Case Notes context
+- Evidence Pack export integration
+- Does not block export
+- Frontend-only change
+- No backend, parser, detector, CI, Docker, dependency, port, README, demo, portfolio, or sample changes
+
+---
+
 ## v2.14-local - Evidence Pack Quality Score
 
 Adds a local-first Evidence Pack Quality Score to help analysts assess export readiness.

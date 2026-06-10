@@ -237,4 +237,33 @@ describe('i18n tool', () => {
     expect(t('evidencePackQuality.reviewReadinessReady')).toBe('Review readiness ready')
     expect(t('evidencePackQuality.notAvailableForExport')).toBe('Evidence Pack quality score was not available for this export.')
   })
+
+  it('should have evidence pack export guardrails translations in English', () => {
+    setLanguage('en')
+    expect(t('evidencePackGuardrails.title')).toBe('Evidence Pack Export Guardrails')
+    expect(t('evidencePackGuardrails.empty')).toBe('Run an analysis to review Evidence Pack export guardrails.')
+    expect(t('evidencePackGuardrails.statusReady')).toBe('Ready')
+    expect(t('evidencePackGuardrails.statusReviewRecommended')).toBe('Review recommended')
+    expect(t('evidencePackGuardrails.statusNotReady')).toBe('Not ready')
+    expect(t('evidencePackGuardrails.notAvailableForExport')).toBe('Evidence Pack export guardrails were not available for this export.')
+  })
+
+  it('should have evidence pack export guardrails translations in Chinese with normal strings', () => {
+    setLanguage('zh')
+
+    const title = t('evidencePackGuardrails.title')
+    const empty = t('evidencePackGuardrails.empty')
+    const summary = t('evidencePackGuardrails.notReadySummary')
+    const exportNote = t('evidencePackGuardrails.exportNotBlocked')
+
+    expect(title).toBe('Evidence Pack 导出提示')
+    expect(empty).toBe('运行分析后可查看 Evidence Pack 导出提示。')
+    expect(summary).toContain('低质量导出风险')
+    expect(exportNote).toContain('不会阻止导出')
+
+    ;[title, empty, summary, exportNote].forEach((value) => {
+      expect(value).not.toContain('\ufffd')
+      expect(/[一-龥]/.test(value)).toBe(true)
+    })
+  })
 })
