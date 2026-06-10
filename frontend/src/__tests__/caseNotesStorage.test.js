@@ -12,6 +12,7 @@ import {
 describe('caseNotesStorage', () => {
   beforeEach(() => {
     localStorage.clear()
+    vi.useRealTimers()
     vi.restoreAllMocks()
   })
 
@@ -58,7 +59,31 @@ describe('caseNotesStorage', () => {
       body: 'Need immediate review.',
       createdAt: created.createdAt
     })
-    expect(notes[0].updatedAt).not.toBe(created.createdAt)
+    expect(Date.parse(notes[0].updatedAt)).toBeGreaterThan(Date.parse(created.createdAt))
+  })
+
+  it('update note keeps updatedAt monotonic within the same millisecond', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-06-10T08:00:00.000Z'))
+
+    const [created] = addCaseNote('case-1', {
+      type: 'observation',
+      title: 'Initial note',
+      body: 'Created in a fixed clock tick.'
+    })
+
+    const [firstUpdate] = updateCaseNote('case-1', created.id, {
+      body: 'First update in the same millisecond.'
+    })
+    const [secondUpdate] = updateCaseNote('case-1', created.id, {
+      body: 'Second update in the same millisecond.'
+    })
+
+    expect(created.createdAt).toBe('2026-06-10T08:00:00.000Z')
+    expect(firstUpdate.updatedAt).toBe('2026-06-10T08:00:00.001Z')
+    expect(secondUpdate.updatedAt).toBe('2026-06-10T08:00:00.002Z')
+    expect(Date.parse(firstUpdate.updatedAt)).toBeGreaterThan(Date.parse(created.createdAt))
+    expect(Date.parse(secondUpdate.updatedAt)).toBeGreaterThan(Date.parse(firstUpdate.updatedAt))
   })
 
   it('delete note works', () => {

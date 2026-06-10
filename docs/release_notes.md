@@ -4,6 +4,14 @@
 
 ---
 
+## [v2.12.2-local] - Case Notes Timestamp Monotonicity Fix
+
+- **CI / Test Stability**: 修复 `Case Notes` 在 GitHub Actions 等高速环境下的时间戳竞争问题，避免创建后立即更新时 `updatedAt === createdAt` 导致测试偶发失败。
+- **Timestamp Monotonicity**: 在 `frontend/src/utils/caseNotesStorage.js` 中新增安全 helper，确保 `updateCaseNote` 生成的 `updatedAt` 严格晚于既有 `updatedAt` 与 `createdAt`。
+- **Focused Scope**: 本次仅修复前端本地存储里的 Case Notes 时间戳单调递增逻辑，并补强对应测试；不修改 UI、不修改后端、不改变 parser / detector / incident aggregation 行为，也不引入新依赖。
+
+---
+
 ## v2.12.1-local - Case Notes Documentation Polish
 
 Documentation-only follow-up for v2.12-local.
