@@ -339,6 +339,16 @@ const messages = {
       improveQualityScore: "补齐缺失项以提升 Evidence Pack 质量评分。",
       notAvailableForExport: "当前导出未包含 Evidence Pack 导出提示。"
     },
+    evidencePackPreview: {
+      title: "Evidence Pack 导出预览",
+      empty: "运行分析后可预览 Evidence Pack 导出内容。",
+      showPreview: "显示预览",
+      hidePreview: "隐藏预览",
+      copyMarkdown: "复制 Markdown",
+      copySuccess: "Markdown 已复制。",
+      copyFailed: "复制失败，请手动选择并复制。",
+      previewLabel: "Markdown 预览"
+    },
     entities: {
       title: "调查实体",
       intro: "从当前分析结果中提取可调查的 IP、账号、URL、路径、HTTP 方法、状态码和来源文件。",
@@ -906,6 +916,16 @@ const messages = {
       addCaseNotes: "Record at least one case note or decision before handoff.",
       improveQualityScore: "Complete the missing context to improve the Evidence Pack quality score.",
       notAvailableForExport: "Evidence Pack export guardrails were not available for this export."
+    },
+    evidencePackPreview: {
+      title: "Evidence Pack Export Preview",
+      empty: "Run an analysis to preview the Evidence Pack export.",
+      showPreview: "Show preview",
+      hidePreview: "Hide preview",
+      copyMarkdown: "Copy Markdown",
+      copySuccess: "Markdown copied.",
+      copyFailed: "Copy failed. Please select and copy manually.",
+      previewLabel: "Markdown preview"
     },
     entities: {
       title: "Investigation Entities",

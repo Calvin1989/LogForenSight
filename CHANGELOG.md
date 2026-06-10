@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.16-local] - Evidence Pack Export Preview
+
+- Added an Evidence Pack Export Preview before Markdown download.
+- Reused the existing Evidence Pack Markdown builder for preview content.
+- Added copy-to-clipboard support for the generated Markdown preview.
+- Frontend-only release; no backend, parser, detector, CI, Docker, dependency, port, README, demo, portfolio, or sample changes.
+
 ## [v2.15-local] - Evidence Pack Export Guardrails
 
 - Added deterministic Evidence Pack Export Guardrails for analyst handoff decisions.
