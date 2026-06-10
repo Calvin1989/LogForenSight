@@ -46,8 +46,9 @@ npm run dev
 4. 查看 findings / incidents。
 5. 查看 Investigation Entities。
 6. 展开 Detection Explainability。
-7. 添加 triage notes。
-8. 记录一条 Observation 或 Decision note，然后导出 Evidence Pack。
+7. 在 Triage Workflow 中标记状态、优先级和备注。
+8. 在 Analyst Case Notes / Decision Log 中记录一条 Observation 或 Decision。
+9. 导出 Analyst Evidence Pack，确认其中包含 Triage Summary 和 Analyst Case Notes / Decision Log。
 
 这条路径适合 README、Portfolio、面试演示和本地试跑，能够在最短时间内串起当前版本最完整、最稳定的分析师工作流。
 
@@ -108,6 +109,7 @@ npm run dev
 - **解说**: “这一步可以把调查过程、假设和最终决策沉淀成结构化本地备注，并随 Evidence Pack 一起导出。”
 
 - **动作**: 点击 `Download Evidence Pack` / `下载证据包`。
+- **确认点**: 导出的 Analyst Evidence Pack 中应同时看到 `Triage Summary` 和 `Analyst Case Notes / Decision Log`。
 - **解说**: “Evidence Pack 会把 findings、incidents、Investigation Entities、Detection Explainability、triage 信息以及 analyst case notes 整理成便于交接的 Markdown 证据包。”
 
 ---

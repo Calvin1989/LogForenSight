@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.12.1-local] - Case Notes Documentation Polish
+### Changed
+- Highlighted Analyst Case Notes / Decision Log more clearly in README.
+- Clarified demo flow for adding notes before Evidence Pack export.
+- Documentation-only patch.
+- No runtime behavior changes.
+
 ## [v2.12-local] - Analyst Case Notes and Decision Log
 ### Added
 - **Added local-first analyst case notes**: Introduced a dedicated `Case Notes / 案件备注` panel for recording investigation observations, hypotheses, actions, and decisions without any backend dependency.

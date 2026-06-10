@@ -24,7 +24,8 @@ LogForenSight 不是 SIEM，也不是“把日志交给 AI 猜”的聊天式工
 * 🧪 **确定性检测**：相同输入得到相同输出，便于复核、测试和演示。
 * 🔍 **调查实体抽取**：统一提取 IP、URL、账号、路径、HTTP 方法和状态码。
 * 🧭 **分析师处置流**：支持状态、优先级、备注、状态汇总和 `Needs review / 待复核` 提示。
-* 📦 **证据包导出**：生成包含 metadata、privacy note、validation summary 的 Markdown Evidence Pack。
+* � **案件备注与决策日志**：记录 Observation、Hypothesis、Action、Decision，并随 Evidence Pack 一起导出。
+* �📦 **证据包导出**：生成包含 metadata、privacy note、validation summary 的 Markdown Evidence Pack。
 * 🔐 **本地优先**：无数据库、零外部 API、无 LLM 依赖，敏感日志默认不离开本地。
 
 ---
@@ -39,7 +40,7 @@ LogForenSight 不是 SIEM，也不是“把日志交给 AI 猜”的聊天式工
 | 🧬 IOC / Investigation Entities | 快速定位 IP、账号、URL、路径、HTTP 方法、状态码等调查对象                            |
 | 🔎 Detection Explainability     | 展示规则依据、命中字段、命中指标和证据片段                                         |
 | ✅ Analyst Triage Workflow       | 跟踪 Open / Investigating / Mitigated / False Positive，并提示待复核对象 |
-| 📝 Analyst Case Notes           | 记录观察、假设、处置动作和决策日志                                              |
+| 📝 Analyst Case Notes           | 记录观察、假设、处置动作和决策日志，并随 Evidence Pack 导出                      |
 | 💾 Saved Case Workspace         | 在本地保存、搜索、过滤、导入导出分析案例                                          |
 | 📦 Evidence Pack Export         | 导出适合交接、复盘、工单流转的 Markdown 证据包                                  |
 
@@ -100,9 +101,12 @@ flowchart LR
     E --> H[Analyst Triage]
     F --> H
     G --> H
-    H --> I[Saved Case Workspace]
-    H --> J[Analyst Evidence Pack]
+    H --> I[Case Notes / Decision Log]
+    I --> J[Analyst Evidence Pack]
+    H --> K[Saved Case Workspace]
 ```
+
+推荐演示顺序也建议按 `Triage Workflow -> Case Notes / Decision Log -> Analyst Evidence Pack` 讲解，这样更容易让 GitHub 首页访客理解该功能已经完整落地。
 
 ---
 

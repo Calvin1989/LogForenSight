@@ -4,6 +4,16 @@
 
 ---
 
+## v2.12.1-local - Case Notes Documentation Polish
+
+Documentation-only follow-up for v2.12-local.
+
+- Makes Analyst Case Notes / Decision Log more visible in README and demo flow.
+- Clarifies that notes can be exported in Analyst Evidence Pack.
+- No frontend, backend, parser, detector, storage, dependency, or port changes.
+
+---
+
 ## [v2.12-local] - Analyst Case Notes / Decision Log
 - **Analyst Case Notes / Decision Log**: 新增独立的本地优先案件备注面板，支持记录 Observation、Hypothesis、Action、Decision 四类分析师笔记。
 - **Local-first Storage**: 备注按 caseId 或当前 analysis context 写入浏览器本地存储，不复用 triage key，不引入后端、数据库或新依赖。
