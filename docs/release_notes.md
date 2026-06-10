@@ -4,6 +4,20 @@
 
 ---
 
+## v2.16-local - Evidence Pack Export Preview
+
+Adds a local-first Evidence Pack Export Preview so analysts can inspect the final Markdown handoff before downloading it.
+
+Highlights:
+- Preview final Evidence Pack Markdown before export
+- Copy generated Markdown to clipboard
+- Reuses existing Evidence Pack export builder
+- Includes Review Readiness, Quality Score, and Export Guardrails in preview
+- Frontend-only change
+- No backend, parser, detector, CI, Docker, dependency, port, README, demo, portfolio, or sample changes
+
+---
+
 ## v2.15-local - Evidence Pack Export Guardrails
 
 Adds local-first Evidence Pack Export Guardrails to help analysts decide whether an Evidence Pack is ready for handoff.

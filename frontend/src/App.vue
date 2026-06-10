@@ -137,6 +137,17 @@
           :caseNotes="caseNotesForQuality"
         />
 
+        <EvidencePackExportPreview
+          v-if="displayResult"
+          :result="result"
+          :triageState="triageState"
+          :caseNotes="caseNotesForQuality"
+          :reviewReadiness="reviewReadinessForQuality"
+          :evidencePackQuality="evidencePackQualityForGuardrails"
+          :exportGuardrails="exportGuardrails"
+          :caseId="currentCaseId"
+        />
+
         <CaseNotesPanel
           v-if="displayResult"
           :caseId="currentCaseId === 'current-analysis' ? caseNotesContextId : currentCaseId"
@@ -183,11 +194,13 @@ import CaseWorkspace from './components/CaseWorkspace.vue'
 import CaseNotesPanel from './components/CaseNotesPanel.vue'
 import EvidencePackQualityScore from './components/EvidencePackQualityScore.vue'
 import EvidencePackExportGuardrails from './components/EvidencePackExportGuardrails.vue'
+import EvidencePackExportPreview from './components/EvidencePackExportPreview.vue'
 import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
 import { loadCaseNotes } from './utils/caseNotesStorage'
 import { buildEvidencePackQuality } from './utils/evidencePackQuality'
+import { buildEvidencePackExportGuardrails } from './utils/evidencePackExportGuardrails'
 import { buildReviewReadiness } from './utils/reviewReadiness'
 
 const {
@@ -251,6 +264,16 @@ const evidencePackQualityForGuardrails = computed(() => {
     triageState: triageState.value,
     caseNotes: caseNotesForQuality.value,
     reviewReadiness: reviewReadinessForQuality.value
+  })
+})
+
+const exportGuardrails = computed(() => {
+  return buildEvidencePackExportGuardrails({
+    quality: evidencePackQualityForGuardrails.value,
+    reviewReadiness: reviewReadinessForQuality.value,
+    result: result.value,
+    triageState: triageState.value,
+    caseNotes: caseNotesForQuality.value
   })
 })
 
