@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import EvidencePackExportPreview from '../components/EvidencePackExportPreview.vue'
 import { setLanguage } from '../i18n'
+import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
 
 const sampleResult = {
   analysis_mode: 'single',
@@ -108,6 +109,9 @@ const sampleProps = {
 
 describe('EvidencePackExportPreview.vue', () => {
   beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-06-11T10:45:46Z'))
+
     localStorage.clear()
     setLanguage('en')
 
@@ -131,6 +135,7 @@ describe('EvidencePackExportPreview.vue', () => {
 
   afterEach(() => {
     localStorage.clear()
+    vi.useRealTimers()
     vi.restoreAllMocks()
   })
 
@@ -146,6 +151,7 @@ describe('EvidencePackExportPreview.vue', () => {
 
     expect(wrapper.text()).toContain('Evidence Pack Export Preview')
     expect(wrapper.text()).toContain('Run an analysis to preview the Evidence Pack export.')
+    expect(wrapper.find('[data-testid="copy-section-button"]').exists()).toBe(false)
   })
 
   it('renders title', () => {
@@ -249,11 +255,44 @@ describe('EvidencePackExportPreview.vue', () => {
     await wrapper.find('.copy-btn').trigger('click')
     await flushPromises()
 
+    const expectedMarkdown = buildEvidencePackMarkdown(sampleResult, {
+      caseId: sampleProps.caseId,
+      triageState: sampleProps.triageState,
+      caseNotes: sampleProps.caseNotes,
+      language: 'en'
+    })
+
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringContaining('# Analyst Evidence Pack'))
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expectedMarkdown)
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Section navigator')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Evidence Pack Share Safety Review')
     expect(wrapper.text()).toContain('Markdown copied.')
+  })
+
+  it('renders copy section actions for parsed markdown sections and copies only the targeted section content', async () => {
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: sampleProps
+    })
+
+    await wrapper.find('.preview-btn').trigger('click')
+
+    const qualitySection = wrapper.find('[data-section-key="quality-score"]')
+    expect(qualitySection.exists()).toBe(true)
+    expect(qualitySection.find('[data-testid="copy-section-button"]').exists()).toBe(true)
+
+    await qualitySection.find('[data-testid="copy-section-button"]').trigger('click')
+    await flushPromises()
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
+
+    const copiedSection = navigator.clipboard.writeText.mock.calls[0][0]
+    expect(copiedSection).toContain('## Evidence Pack Quality Score')
+    expect(copiedSection).toContain('### Checklist item results')
+    expect(copiedSection).not.toContain('## Investigation Review Readiness')
+    expect(copiedSection).not.toContain('## Evidence Pack Export Guardrails')
+    expect(copiedSection).not.toContain('Section navigator')
+    expect(copiedSection).not.toContain('Copy section')
+    expect(wrapper.text()).toContain('Section copied.')
   })
 
   it('copy failure fallback does not throw', async () => {
@@ -279,5 +318,32 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
     expect(document.execCommand).toHaveBeenCalledWith('copy')
     expect(wrapper.text()).toContain('Copy failed. Please select and copy manually.')
+  })
+
+  it('shows section copy fallback feedback without affecting full markdown copy feedback', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: vi.fn().mockRejectedValue(new Error('clipboard unavailable'))
+      }
+    })
+
+    Object.defineProperty(document, 'execCommand', {
+      configurable: true,
+      value: vi.fn().mockReturnValue(false)
+    })
+
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: sampleProps
+    })
+
+    await wrapper.find('.preview-btn').trigger('click')
+
+    const qualitySection = wrapper.find('[data-section-key="quality-score"]')
+    await qualitySection.find('[data-testid="copy-section-button"]').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('Section copy failed. Please select and copy manually.')
+    expect(wrapper.text()).not.toContain('Markdown copied.')
   })
 })
