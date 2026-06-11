@@ -112,6 +112,26 @@
             </dl>
           </section>
         </div>
+
+        <div
+          class="export-manifest-compatibility"
+          data-testid="evidence-pack-manifest-compatibility"
+          :class="`is-${manifestExportValidation.compatibility}`"
+        >
+          <span class="export-manifest-compatibility-label">
+            {{ t('evidencePackPreview.manifestCompatibilityTitle') }}
+          </span>
+          <strong class="export-manifest-compatibility-value">
+            {{ formatManifestCompatibilityStatus(manifestExportValidation.status) }}
+          </strong>
+          <p class="export-manifest-compatibility-note">
+            {{
+              manifestExportValidation.status === 'blocked'
+                ? t('evidencePackPreview.manifestCompatibilityBlockedNote')
+                : t('evidencePackPreview.manifestCompatibilitySafeNote')
+            }}
+          </p>
+        </div>
       </div>
 
       <div v-if="isOpen" class="preview-body">
@@ -177,7 +197,10 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { currentLanguage, t } from '../i18n'
 import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
-import { buildEvidencePackManifest } from '../utils/evidencePackManifest'
+import {
+  buildEvidencePackManifest,
+  validateEvidencePackManifestForExport
+} from '../utils/evidencePackManifest'
 
 const SUPPORTED_NAVIGATOR_SECTIONS = [
   { key: 'review-readiness', labelKey: 'reviewReadiness.title' },
@@ -283,6 +306,10 @@ const manifest = computed(() => {
     exportGuardrails: props.exportGuardrails,
     shareSafety: props.shareSafety
   })
+})
+
+const manifestExportValidation = computed(() => {
+  return validateEvidencePackManifestForExport(manifest.value)
 })
 
 function buildPreviewSectionId(index, navigationKey) {
@@ -422,6 +449,11 @@ function formatManifestReadinessStatus(status) {
   if (status === 'attention') return t('reviewReadiness.overallAttention')
   if (status === 'needs_review') return t('caseClosureChecklist.statusNeedsReview')
   return t('evidencePackPreview.notAvailable')
+}
+
+function formatManifestCompatibilityStatus(status) {
+  if (status === 'blocked') return t('evidencePackPreview.manifestCompatibilityBlocked')
+  return t('evidencePackPreview.manifestCompatibilityCompatible')
 }
 
 function summarizeReviewReadiness(readiness) {
@@ -931,6 +963,44 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.85rem;
+}
+
+.export-manifest-compatibility {
+  margin-top: 0.9rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #dbe7f3;
+  background: #f8fbff;
+}
+
+.export-manifest-compatibility.is-safe {
+  border-color: #d7f0df;
+  background: #f6fcf8;
+}
+
+.export-manifest-compatibility.is-unsafe {
+  border-color: #f3d7d7;
+  background: #fff7f7;
+}
+
+.export-manifest-compatibility-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+}
+
+.export-manifest-compatibility-value {
+  display: block;
+  margin-top: 0.2rem;
+  color: #212529;
+}
+
+.export-manifest-compatibility-note {
+  margin: 0.35rem 0 0;
+  color: #495057;
+  font-size: 0.92rem;
 }
 
 .export-manifest-section {

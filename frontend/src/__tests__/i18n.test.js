@@ -287,6 +287,10 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.manifestTitle')).toBe('导出清单')
     expect(t('evidencePackPreview.manifestSubtitle')).toContain('不写入 Markdown')
     expect(t('evidencePackPreview.manifestGapCount')).toBe('Gap count')
+    expect(t('evidencePackPreview.manifestCompatibilityTitle')).toBe('导出兼容性')
+    expect(t('evidencePackPreview.manifestCompatibilityCompatible')).toBe('兼容')
+    expect(t('evidencePackPreview.manifestCompatibilityBlocked')).toBe('阻止导出')
+    expect(t('evidencePackPreview.manifestCompatibilitySafeNote')).toContain('不改变 Markdown 导出行为')
 
     setLanguage('en')
     expect(t('evidencePackPreview.title')).toBe('Evidence Pack Export Preview')
@@ -307,6 +311,10 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.manifestTitle')).toBe('Export manifest')
     expect(t('evidencePackPreview.manifestSubtitle')).toContain('Never included in Markdown')
     expect(t('evidencePackPreview.manifestNextActionCount')).toBe('Next action count')
+    expect(t('evidencePackPreview.manifestCompatibilityTitle')).toBe('Export compatibility')
+    expect(t('evidencePackPreview.manifestCompatibilityCompatible')).toBe('Compatible')
+    expect(t('evidencePackPreview.manifestCompatibilityBlocked')).toBe('Blocked')
+    expect(t('evidencePackPreview.manifestCompatibilitySafeNote')).toContain('does not change Markdown export behavior')
   })
 
   it('should have evidence pack share safety translations in both languages', () => {

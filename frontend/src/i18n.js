@@ -382,7 +382,12 @@ const messages = {
       manifestShareSafetyStatus: "Share safety",
       manifestHandoffReadinessStatus: "Handoff readiness",
       manifestGapCount: "Gap count",
-      manifestNextActionCount: "Next action count"
+      manifestNextActionCount: "Next action count",
+      manifestCompatibilityTitle: "导出兼容性",
+      manifestCompatibilityCompatible: "兼容",
+      manifestCompatibilityBlocked: "阻止导出",
+      manifestCompatibilitySafeNote: "当前仅包含未来可安全导出的低风险字段；本 PR 不改变 Markdown 导出行为。",
+      manifestCompatibilityBlockedNote: "发现高风险字段时必须继续排除在 Markdown 导出之外。"
     },
     caseClosureChecklist: {
       title: "案件收尾检查清单",
@@ -1107,7 +1112,12 @@ const messages = {
       manifestShareSafetyStatus: "Share safety",
       manifestHandoffReadinessStatus: "Handoff readiness",
       manifestGapCount: "Gap count",
-      manifestNextActionCount: "Next action count"
+      manifestNextActionCount: "Next action count",
+      manifestCompatibilityTitle: "Export compatibility",
+      manifestCompatibilityCompatible: "Compatible",
+      manifestCompatibilityBlocked: "Blocked",
+      manifestCompatibilitySafeNote: "Only low-risk manifest fields are eligible for future export. This PR does not change Markdown export behavior.",
+      manifestCompatibilityBlockedNote: "High-risk fields must remain excluded from Markdown export."
     },
     caseClosureChecklist: {
       title: "Case closure checklist",

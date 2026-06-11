@@ -208,7 +208,9 @@ describe('evidencePackExport', () => {
     expect(markdown).not.toContain('Next actions')
     expect(markdown).not.toContain('下一步动作')
     expect(markdown).not.toContain('Export manifest')
+    expect(markdown).not.toContain('Export compatibility')
     expect(markdown).not.toContain('导出清单')
+    expect(markdown).not.toContain('导出兼容性')
     expect(markdown).not.toContain('Closure gaps')
     expect(markdown).not.toContain('证据缺口')
   })
@@ -499,6 +501,7 @@ describe('evidencePackExport', () => {
     expect(markdown).not.toContain('交接摘要')
     expect(markdown).not.toContain('案件收尾检查清单')
     expect(markdown).not.toContain('证据缺口')
+    expect(markdown).not.toContain('导出兼容性')
   })
 
   it('falls back to Not available inside the explainability chapter when finding data is missing', () => {

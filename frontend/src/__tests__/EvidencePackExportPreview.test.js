@@ -237,6 +237,9 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(manifestCard.text()).toContain('Incidents')
     expect(manifestCard.text()).toContain('Gap count')
     expect(manifestCard.text()).toContain('Next action count')
+    expect(manifestCard.text()).toContain('Export compatibility')
+    expect(manifestCard.text()).toContain('Compatible')
+    expect(manifestCard.text()).toContain('Only low-risk manifest fields are eligible for future export')
     expect(manifestCard.text()).toContain('2026-06-11T10:45:46.000Z')
   })
 
@@ -366,6 +369,7 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Evidence Pack Share Safety Review')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Handoff summary')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Export manifest')
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Export compatibility')
     expect(wrapper.text()).toContain('Markdown copied.')
   })
 
@@ -394,6 +398,7 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(copiedSection).not.toContain('Copy section')
     expect(copiedSection).not.toContain('Handoff summary')
     expect(copiedSection).not.toContain('Export manifest')
+    expect(copiedSection).not.toContain('Export compatibility')
     expect(wrapper.text()).toContain('Section copied.')
   })
 
