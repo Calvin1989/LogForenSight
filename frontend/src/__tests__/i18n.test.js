@@ -281,6 +281,9 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.copySectionSuccess')).toBe('本章节已复制。')
     expect(t('evidencePackPreview.copySectionFailed')).toBe('本章节复制失败，请手动选择并复制。')
     expect(t('evidencePackPreview.previewLabel')).toBe('Markdown 预览')
+    expect(t('evidencePackPreview.handoffSummaryTitle')).toBe('交接摘要')
+    expect(t('evidencePackPreview.handoffSummaryNote')).toContain('不会写入导出 Markdown')
+    expect(t('evidencePackPreview.notAvailable')).toBe('暂无')
 
     setLanguage('en')
     expect(t('evidencePackPreview.title')).toBe('Evidence Pack Export Preview')
@@ -295,6 +298,9 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.copySectionSuccess')).toBe('Section copied.')
     expect(t('evidencePackPreview.copySectionFailed')).toBe('Section copy failed. Please select and copy manually.')
     expect(t('evidencePackPreview.previewLabel')).toBe('Markdown preview')
+    expect(t('evidencePackPreview.handoffSummaryTitle')).toBe('Handoff summary')
+    expect(t('evidencePackPreview.handoffSummaryNote')).toContain('never included in exported Markdown')
+    expect(t('evidencePackPreview.notAvailable')).toBe('Not available')
   })
 
   it('should have evidence pack share safety translations in both languages', () => {

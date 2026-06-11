@@ -3,6 +3,10 @@ import { flushPromises, mount } from '@vue/test-utils'
 import EvidencePackExportPreview from '../components/EvidencePackExportPreview.vue'
 import { setLanguage } from '../i18n'
 import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
+import { buildEvidencePackExportGuardrails } from '../utils/evidencePackExportGuardrails'
+import { buildEvidencePackQuality } from '../utils/evidencePackQuality'
+import { buildEvidencePackShareSafety } from '../utils/evidencePackShareSafety'
+import { buildReviewReadiness } from '../utils/reviewReadiness'
 
 const sampleResult = {
   analysis_mode: 'single',
@@ -107,6 +111,47 @@ const sampleProps = {
   caseId: 'case-1'
 }
 
+const sampleReviewReadiness = buildReviewReadiness({
+  result: sampleResult,
+  triageState: sampleProps.triageState,
+  caseNotes: sampleProps.caseNotes
+})
+
+const sampleEvidencePackQuality = buildEvidencePackQuality({
+  result: sampleResult,
+  triageState: sampleProps.triageState,
+  caseNotes: sampleProps.caseNotes,
+  reviewReadiness: sampleReviewReadiness
+})
+
+const sampleExportGuardrails = buildEvidencePackExportGuardrails({
+  quality: sampleEvidencePackQuality,
+  reviewReadiness: sampleReviewReadiness,
+  result: sampleResult,
+  triageState: sampleProps.triageState,
+  caseNotes: sampleProps.caseNotes
+})
+
+const sampleShareSafetyMarkdown = buildEvidencePackMarkdown(sampleResult, {
+  caseId: sampleProps.caseId,
+  triageState: sampleProps.triageState,
+  caseNotes: sampleProps.caseNotes,
+  reviewReadiness: sampleReviewReadiness,
+  evidencePackQuality: sampleEvidencePackQuality,
+  evidencePackExportGuardrails: sampleExportGuardrails,
+  language: 'en'
+})
+
+const sampleShareSafety = buildEvidencePackShareSafety({
+  markdown: sampleShareSafetyMarkdown,
+  result: sampleResult
+})
+
+sampleProps.reviewReadiness = sampleReviewReadiness
+sampleProps.evidencePackQuality = sampleEvidencePackQuality
+sampleProps.exportGuardrails = sampleExportGuardrails
+sampleProps.shareSafety = sampleShareSafety
+
 describe('EvidencePackExportPreview.vue', () => {
   beforeEach(() => {
     vi.useFakeTimers()
@@ -160,6 +205,37 @@ describe('EvidencePackExportPreview.vue', () => {
     })
 
     expect(wrapper.text()).toContain('Evidence Pack Export Preview')
+  })
+
+  it('renders handoff summary bar with four status entries', () => {
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: sampleProps
+    })
+
+    const summaryBar = wrapper.find('[data-testid="evidence-pack-handoff-summary-bar"]')
+    expect(summaryBar.exists()).toBe(true)
+    expect(summaryBar.text()).toContain('Handoff summary')
+    expect(summaryBar.text()).toContain('Investigation Review Readiness')
+    expect(summaryBar.text()).toContain('Evidence Pack Quality Score')
+    expect(summaryBar.text()).toContain('Evidence Pack Export Guardrails')
+    expect(summaryBar.text()).toContain('Evidence Pack Share Safety Review')
+  })
+
+  it('renders neutral handoff summary states when upstream data is unavailable', () => {
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: {
+        ...sampleProps,
+        reviewReadiness: null,
+        evidencePackQuality: null,
+        exportGuardrails: null,
+        shareSafety: null
+      }
+    })
+
+    const summaryBar = wrapper.find('[data-testid="evidence-pack-handoff-summary-bar"]')
+    expect(summaryBar.exists()).toBe(true)
+    expect(summaryBar.text()).toContain('Not available')
+    expect(summaryBar.text()).toContain('Status unavailable')
   })
 
   it('toggles preview open and closed', async () => {
@@ -259,6 +335,9 @@ describe('EvidencePackExportPreview.vue', () => {
       caseId: sampleProps.caseId,
       triageState: sampleProps.triageState,
       caseNotes: sampleProps.caseNotes,
+      reviewReadiness: sampleProps.reviewReadiness,
+      evidencePackQuality: sampleProps.evidencePackQuality,
+      evidencePackExportGuardrails: sampleProps.exportGuardrails,
       language: 'en'
     })
 
@@ -266,6 +345,7 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expectedMarkdown)
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Section navigator')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Evidence Pack Share Safety Review')
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Handoff summary')
     expect(wrapper.text()).toContain('Markdown copied.')
   })
 
@@ -292,6 +372,7 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(copiedSection).not.toContain('## Evidence Pack Export Guardrails')
     expect(copiedSection).not.toContain('Section navigator')
     expect(copiedSection).not.toContain('Copy section')
+    expect(copiedSection).not.toContain('Handoff summary')
     expect(wrapper.text()).toContain('Section copied.')
   })
 

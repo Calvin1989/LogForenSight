@@ -152,6 +152,7 @@
           :reviewReadiness="reviewReadinessForQuality"
           :evidencePackQuality="evidencePackQualityForGuardrails"
           :exportGuardrails="exportGuardrails"
+          :shareSafety="evidencePackShareSafetySummary"
           :caseId="currentCaseId"
           shareSafetyTargetId="evidence-pack-share-safety"
         />
@@ -211,6 +212,7 @@ import { loadCaseNotes } from './utils/caseNotesStorage'
 import { buildEvidencePackMarkdown } from './utils/evidencePackExport'
 import { buildEvidencePackQuality } from './utils/evidencePackQuality'
 import { buildEvidencePackExportGuardrails } from './utils/evidencePackExportGuardrails'
+import { buildEvidencePackShareSafety } from './utils/evidencePackShareSafety'
 import { buildReviewReadiness } from './utils/reviewReadiness'
 
 const {
@@ -300,6 +302,17 @@ const evidencePackShareSafetyMarkdown = computed(() => {
     evidencePackQuality: evidencePackQualityForGuardrails.value,
     evidencePackExportGuardrails: exportGuardrails.value,
     language: currentLanguage.value
+  })
+})
+
+const evidencePackShareSafetySummary = computed(() => {
+  if (!result.value) {
+    return null
+  }
+
+  return buildEvidencePackShareSafety({
+    markdown: evidencePackShareSafetyMarkdown.value,
+    result: result.value
   })
 })
 

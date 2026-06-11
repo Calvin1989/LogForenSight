@@ -31,6 +31,29 @@
         {{ t(copyFeedbackKey) }}
       </p>
 
+      <div
+        class="handoff-summary-bar"
+        data-testid="evidence-pack-handoff-summary-bar"
+        :aria-label="t('evidencePackPreview.handoffSummaryTitle')"
+      >
+        <div class="handoff-summary-header">
+          <span class="handoff-summary-title">{{ t('evidencePackPreview.handoffSummaryTitle') }}</span>
+          <span class="handoff-summary-note">{{ t('evidencePackPreview.handoffSummaryNote') }}</span>
+        </div>
+        <div class="handoff-summary-items">
+          <article
+            v-for="item in handoffSummaryItems"
+            :key="item.key"
+            class="handoff-summary-item"
+            :class="`is-${item.tone}`"
+          >
+            <div class="handoff-summary-label">{{ item.label }}</div>
+            <div class="handoff-summary-value">{{ item.value }}</div>
+            <div v-if="item.detail" class="handoff-summary-detail">{{ item.detail }}</div>
+          </article>
+        </div>
+      </div>
+
       <div v-if="isOpen" class="preview-body">
         <div class="preview-layout">
           <nav
@@ -130,6 +153,10 @@ const props = defineProps({
     default: null
   },
   exportGuardrails: {
+    type: Object,
+    default: null
+  },
+  shareSafety: {
     type: Object,
     default: null
   },
@@ -284,6 +311,146 @@ const navigatorSections = computed(() => {
 
     return sections
   }, [])
+})
+
+function formatQualityStatus(status) {
+  const normalized = typeof status === 'string' ? status.trim().toLowerCase() : ''
+
+  if (normalized === 'ready') return t('evidencePackQuality.statusReady')
+  if (normalized === 'good') return t('evidencePackQuality.statusGood')
+  if (normalized === 'partial') return t('evidencePackQuality.statusPartial')
+  if (normalized === 'missing') return t('evidencePackQuality.statusMissing')
+
+  return t('evidencePackPreview.notAvailable')
+}
+
+function formatGuardrailDecision(decision) {
+  if (decision === 'ready') return t('evidencePackGuardrails.statusReady')
+  if (decision === 'review_recommended') return t('evidencePackGuardrails.statusReviewRecommended')
+  if (decision === 'not_ready') return t('evidencePackGuardrails.statusNotReady')
+
+  return t('evidencePackPreview.notAvailable')
+}
+
+function formatShareSafetyStatus(status) {
+  if (status === 'safe') return t('evidencePackShareSafety.statusSafe')
+  if (status === 'review_recommended') return t('evidencePackShareSafety.statusReviewRecommended')
+  if (status === 'attention') return t('evidencePackShareSafety.statusAttention')
+
+  return t('evidencePackPreview.notAvailable')
+}
+
+function summarizeReviewReadiness(readiness) {
+  const status = typeof readiness?.status === 'string' ? readiness.status.trim().toLowerCase() : ''
+  const requiredBlockers = readiness?.summary?.requiredBlockers
+
+  if (!status) {
+    return {
+      value: t('evidencePackPreview.notAvailable'),
+      detail: t('evidencePackPreview.unavailableDetail'),
+      tone: 'neutral'
+    }
+  }
+
+  return {
+    value: status === 'ready' ? t('reviewReadiness.overallReady') : t('reviewReadiness.overallAttention'),
+    detail: typeof requiredBlockers === 'number'
+      ? t('evidencePackPreview.reviewReadinessDetail', { count: requiredBlockers })
+      : '',
+    tone: status === 'ready' ? 'positive' : 'warning'
+  }
+}
+
+function summarizeQuality(quality) {
+  const hasScore = typeof quality?.score === 'number'
+  const status = typeof quality?.status === 'string' ? quality.status.trim().toLowerCase() : ''
+
+  if (!hasScore && !status) {
+    return {
+      value: t('evidencePackPreview.notAvailable'),
+      detail: t('evidencePackPreview.unavailableDetail'),
+      tone: 'neutral'
+    }
+  }
+
+  return {
+    value: hasScore
+      ? t('evidencePackPreview.qualityScoreValue', {
+          score: quality.score,
+          max: quality?.summary?.maxScore ?? 100
+        })
+      : formatQualityStatus(status),
+    detail: formatQualityStatus(status),
+    tone: status === 'ready' || status === 'good'
+      ? 'positive'
+      : (status === 'partial' || status === 'missing' ? 'warning' : 'neutral')
+  }
+}
+
+function summarizeGuardrails(guardrails) {
+  const decision = typeof guardrails?.decision === 'string' ? guardrails.decision : ''
+
+  if (!decision) {
+    return {
+      value: t('evidencePackPreview.notAvailable'),
+      detail: t('evidencePackPreview.unavailableDetail'),
+      tone: 'neutral'
+    }
+  }
+
+  return {
+    value: formatGuardrailDecision(decision),
+    detail: guardrails?.summaryKey ? t(guardrails.summaryKey) : '',
+    tone: decision === 'ready' ? 'positive' : (decision === 'review_recommended' ? 'warning' : 'danger')
+  }
+}
+
+function summarizeShareSafety(shareSafety) {
+  const status = typeof shareSafety?.status === 'string' ? shareSafety.status : ''
+
+  if (!status) {
+    return {
+      value: t('evidencePackPreview.notAvailable'),
+      detail: t('evidencePackPreview.unavailableDetail'),
+      tone: 'neutral'
+    }
+  }
+
+  const issueCount = (Array.isArray(shareSafety?.findings) ? shareSafety.findings.length : 0)
+    + (Array.isArray(shareSafety?.warnings) ? shareSafety.warnings.length : 0)
+
+  return {
+    value: formatShareSafetyStatus(status),
+    detail: status === 'safe'
+      ? t('evidencePackPreview.shareSafetyClear')
+      : t('evidencePackPreview.shareSafetyIssues', { count: issueCount }),
+    tone: status === 'safe' ? 'positive' : (status === 'review_recommended' ? 'warning' : 'danger')
+  }
+}
+
+const handoffSummaryItems = computed(() => {
+  return [
+    {
+      key: 'review-readiness',
+      label: t('reviewReadiness.title'),
+      ...summarizeReviewReadiness(props.reviewReadiness)
+    },
+    {
+      key: 'quality-score',
+      label: t('evidencePackQuality.title'),
+      ...summarizeQuality(props.evidencePackQuality)
+    },
+    {
+      key: 'export-guardrails',
+      label: t('evidencePackGuardrails.title'),
+      ...summarizeGuardrails(props.exportGuardrails)
+    },
+    {
+      key: 'share-safety-review',
+      label: t('evidencePackShareSafety.title'),
+      ...summarizeShareSafety(props.shareSafety)
+    }
+  ]
 })
 
 function togglePreview() {
@@ -487,6 +654,87 @@ onBeforeUnmount(() => {
   margin-top: 1rem;
 }
 
+.handoff-summary-bar {
+  margin-top: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #f8f9fa;
+  padding: 0.9rem 1rem 1rem;
+}
+
+.handoff-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.handoff-summary-title {
+  color: #212529;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.handoff-summary-note {
+  color: #6c757d;
+  font-size: 0.82rem;
+}
+
+.handoff-summary-items {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.handoff-summary-item {
+  border-radius: 8px;
+  padding: 0.8rem;
+  border: 1px solid #dee2e6;
+  background: white;
+  min-width: 0;
+}
+
+.handoff-summary-item.is-positive {
+  border-color: #c3e6cb;
+  background: #f4fbf5;
+}
+
+.handoff-summary-item.is-warning {
+  border-color: #ffd8a8;
+  background: #fff9f1;
+}
+
+.handoff-summary-item.is-danger {
+  border-color: #ffc9c9;
+  background: #fff5f5;
+}
+
+.handoff-summary-item.is-neutral {
+  border-color: #dee2e6;
+  background: #ffffff;
+}
+
+.handoff-summary-label {
+  color: #495057;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.handoff-summary-value {
+  color: #212529;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.handoff-summary-detail {
+  color: #6c757d;
+  font-size: 0.82rem;
+  margin-top: 0.25rem;
+  line-height: 1.45;
+}
+
 .preview-layout {
   display: grid;
   grid-template-columns: minmax(11rem, 14rem) minmax(0, 1fr);
@@ -610,6 +858,15 @@ onBeforeUnmount(() => {
 @media (max-width: 768px) {
   .preview-header {
     flex-direction: column;
+  }
+
+  .handoff-summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .handoff-summary-items {
+    grid-template-columns: 1fr;
   }
 
   .preview-layout {
