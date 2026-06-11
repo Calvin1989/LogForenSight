@@ -346,8 +346,12 @@ const messages = {
       showPreview: "显示预览",
       hidePreview: "隐藏预览",
       copyMarkdown: "复制 Markdown",
+      copySection: "复制本章节",
+      copySectionWithTitle: "复制章节：{title}",
       copySuccess: "Markdown 已复制。",
       copyFailed: "复制失败，请手动选择并复制。",
+      copySectionSuccess: "本章节已复制。",
+      copySectionFailed: "本章节复制失败，请手动选择并复制。",
       previewLabel: "Markdown 预览"
     },
     evidencePackShareSafety: {
@@ -960,8 +964,12 @@ const messages = {
       showPreview: "Show preview",
       hidePreview: "Hide preview",
       copyMarkdown: "Copy Markdown",
+      copySection: "Copy section",
+      copySectionWithTitle: "Copy section: {title}",
       copySuccess: "Markdown copied.",
       copyFailed: "Copy failed. Please select and copy manually.",
+      copySectionSuccess: "Section copied.",
+      copySectionFailed: "Section copy failed. Please select and copy manually.",
       previewLabel: "Markdown preview"
     },
     evidencePackShareSafety: {

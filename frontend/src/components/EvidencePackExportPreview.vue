@@ -62,6 +62,24 @@
                 class="preview-section"
                 :data-section-key="section.navigationKey || 'other'"
               >
+                <div v-if="section.title" class="preview-section-actions">
+                  <button
+                    type="button"
+                    class="preview-section-copy-btn"
+                    data-testid="copy-section-button"
+                    :aria-label="t('evidencePackPreview.copySectionWithTitle', { title: section.title })"
+                    @click="copySection(section)"
+                  >
+                    {{ t('evidencePackPreview.copySection') }}
+                  </button>
+                  <span
+                    v-if="sectionCopyFeedback.targetId === section.targetId && sectionCopyFeedback.key"
+                    class="section-copy-feedback"
+                    :class="{ error: sectionCopyFeedback.key === 'evidencePackPreview.copySectionFailed' }"
+                  >
+                    {{ t(sectionCopyFeedback.key) }}
+                  </span>
+                </div>
                 <pre class="preview-block">{{ section.content }}</pre>
               </section>
             </div>
@@ -127,7 +145,12 @@ const props = defineProps({
 
 const isOpen = ref(false)
 const copyFeedbackKey = ref('')
+const sectionCopyFeedback = ref({
+  key: '',
+  targetId: ''
+})
 let copyFeedbackTimer = null
+let sectionCopyFeedbackTimer = null
 
 const previewMarkdown = computed(() => {
   currentLanguage.value
@@ -283,19 +306,6 @@ function scrollToSection(targetId) {
   })
 }
 
-function showCopyFeedback(key) {
-  copyFeedbackKey.value = key
-
-  if (copyFeedbackTimer) {
-    clearTimeout(copyFeedbackTimer)
-  }
-
-  copyFeedbackTimer = window.setTimeout(() => {
-    copyFeedbackKey.value = ''
-    copyFeedbackTimer = null
-  }, 1800)
-}
-
 function fallbackCopy(text) {
   if (typeof document === 'undefined' || !document.body) {
     return false
@@ -321,25 +331,59 @@ function fallbackCopy(text) {
   }
 }
 
+async function copyText(text) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text)
+      return true
+    }
+  } catch {
+    if (fallbackCopy(text)) {
+      return true
+    }
+  }
+
+  return fallbackCopy(text)
+}
+
+function showCopyFeedback(key) {
+  copyFeedbackKey.value = key
+
+  if (copyFeedbackTimer) {
+    clearTimeout(copyFeedbackTimer)
+  }
+
+  copyFeedbackTimer = window.setTimeout(() => {
+    copyFeedbackKey.value = ''
+    copyFeedbackTimer = null
+  }, 1800)
+}
+
+function showSectionCopyFeedback(targetId, key) {
+  sectionCopyFeedback.value = {
+    targetId,
+    key
+  }
+
+  if (sectionCopyFeedbackTimer) {
+    clearTimeout(sectionCopyFeedbackTimer)
+  }
+
+  sectionCopyFeedbackTimer = window.setTimeout(() => {
+    sectionCopyFeedback.value = {
+      key: '',
+      targetId: ''
+    }
+    sectionCopyFeedbackTimer = null
+  }, 1800)
+}
+
 async function copyMarkdown() {
   if (!previewMarkdown.value) {
     return
   }
 
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(previewMarkdown.value)
-      showCopyFeedback('evidencePackPreview.copySuccess')
-      return
-    }
-  } catch {
-    if (fallbackCopy(previewMarkdown.value)) {
-      showCopyFeedback('evidencePackPreview.copySuccess')
-      return
-    }
-  }
-
-  if (fallbackCopy(previewMarkdown.value)) {
+  if (await copyText(previewMarkdown.value)) {
     showCopyFeedback('evidencePackPreview.copySuccess')
     return
   }
@@ -347,9 +391,26 @@ async function copyMarkdown() {
   showCopyFeedback('evidencePackPreview.copyFailed')
 }
 
+async function copySection(section) {
+  if (!section?.title || !section.content) {
+    return
+  }
+
+  if (await copyText(section.content)) {
+    showSectionCopyFeedback(section.targetId, 'evidencePackPreview.copySectionSuccess')
+    return
+  }
+
+  showSectionCopyFeedback(section.targetId, 'evidencePackPreview.copySectionFailed')
+}
+
 onBeforeUnmount(() => {
   if (copyFeedbackTimer) {
     clearTimeout(copyFeedbackTimer)
+  }
+
+  if (sectionCopyFeedbackTimer) {
+    clearTimeout(sectionCopyFeedbackTimer)
   }
 })
 </script>
@@ -495,6 +556,39 @@ onBeforeUnmount(() => {
 
 .preview-section + .preview-section {
   margin-top: 1rem;
+}
+
+.preview-section-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.preview-section-copy-btn {
+  border: 0;
+  background: transparent;
+  color: #0b5ed7;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.preview-section-copy-btn:hover {
+  color: #084298;
+  text-decoration: underline;
+}
+
+.section-copy-feedback {
+  color: #2b8a3e;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.section-copy-feedback.error {
+  color: #c92a2a;
 }
 
 .preview-block {
