@@ -284,6 +284,9 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.handoffSummaryTitle')).toBe('交接摘要')
     expect(t('evidencePackPreview.handoffSummaryNote')).toContain('不会写入导出 Markdown')
     expect(t('evidencePackPreview.notAvailable')).toBe('暂无')
+    expect(t('evidencePackPreview.manifestTitle')).toBe('导出清单')
+    expect(t('evidencePackPreview.manifestSubtitle')).toContain('不写入 Markdown')
+    expect(t('evidencePackPreview.manifestGapCount')).toBe('Gap count')
 
     setLanguage('en')
     expect(t('evidencePackPreview.title')).toBe('Evidence Pack Export Preview')
@@ -301,6 +304,9 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.handoffSummaryTitle')).toBe('Handoff summary')
     expect(t('evidencePackPreview.handoffSummaryNote')).toContain('never included in exported Markdown')
     expect(t('evidencePackPreview.notAvailable')).toBe('Not available')
+    expect(t('evidencePackPreview.manifestTitle')).toBe('Export manifest')
+    expect(t('evidencePackPreview.manifestSubtitle')).toContain('Never included in Markdown')
+    expect(t('evidencePackPreview.manifestNextActionCount')).toBe('Next action count')
   })
 
   it('should have evidence pack share safety translations in both languages', () => {

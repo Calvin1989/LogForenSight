@@ -221,6 +221,25 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(summaryBar.text()).toContain('Evidence Pack Share Safety Review')
   })
 
+  it('renders an export manifest card with key metadata and closure summary', () => {
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: sampleProps
+    })
+
+    const manifestCard = wrapper.find('[data-testid="evidence-pack-export-manifest"]')
+    expect(manifestCard.exists()).toBe(true)
+    expect(manifestCard.text()).toContain('Export manifest')
+    expect(manifestCard.text()).toContain('Generated at')
+    expect(manifestCard.text()).toContain('Source counts')
+    expect(manifestCard.text()).toContain('Status summary')
+    expect(manifestCard.text()).toContain('Closure summary')
+    expect(manifestCard.text()).toContain('Findings')
+    expect(manifestCard.text()).toContain('Incidents')
+    expect(manifestCard.text()).toContain('Gap count')
+    expect(manifestCard.text()).toContain('Next action count')
+    expect(manifestCard.text()).toContain('2026-06-11T10:45:46.000Z')
+  })
+
   it('renders neutral handoff summary states when upstream data is unavailable', () => {
     const wrapper = mount(EvidencePackExportPreview, {
       props: {
@@ -346,6 +365,7 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Section navigator')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Evidence Pack Share Safety Review')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Handoff summary')
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Export manifest')
     expect(wrapper.text()).toContain('Markdown copied.')
   })
 
@@ -373,6 +393,7 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(copiedSection).not.toContain('Section navigator')
     expect(copiedSection).not.toContain('Copy section')
     expect(copiedSection).not.toContain('Handoff summary')
+    expect(copiedSection).not.toContain('Export manifest')
     expect(wrapper.text()).toContain('Section copied.')
   })
 

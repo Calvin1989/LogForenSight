@@ -207,6 +207,8 @@ describe('evidencePackExport', () => {
     expect(markdown).not.toContain('Evidence gaps')
     expect(markdown).not.toContain('Next actions')
     expect(markdown).not.toContain('下一步动作')
+    expect(markdown).not.toContain('Export manifest')
+    expect(markdown).not.toContain('导出清单')
     expect(markdown).not.toContain('Closure gaps')
     expect(markdown).not.toContain('证据缺口')
   })

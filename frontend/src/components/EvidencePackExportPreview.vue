@@ -54,6 +54,66 @@
         </div>
       </div>
 
+      <div
+        class="export-manifest-card"
+        data-testid="evidence-pack-export-manifest"
+      >
+        <div class="export-manifest-header">
+          <div>
+            <h4>{{ t('evidencePackPreview.manifestTitle') }}</h4>
+            <p>{{ t('evidencePackPreview.manifestSubtitle') }}</p>
+          </div>
+          <div class="export-manifest-generated">
+            <span class="export-manifest-meta-label">{{ t('evidencePackPreview.manifestGeneratedAt') }}</span>
+            <span class="export-manifest-meta-value">{{ manifest.generatedAt }}</span>
+          </div>
+        </div>
+
+        <div class="export-manifest-grid">
+          <section class="export-manifest-section">
+            <h5>{{ t('evidencePackPreview.manifestSourceCounts') }}</h5>
+            <dl class="export-manifest-list">
+              <div
+                v-for="item in manifestSourceCountItems"
+                :key="item.key"
+                class="export-manifest-row"
+              >
+                <dt>{{ item.label }}</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="export-manifest-section">
+            <h5>{{ t('evidencePackPreview.manifestStatusSummary') }}</h5>
+            <dl class="export-manifest-list">
+              <div
+                v-for="item in manifestStatusItems"
+                :key="item.key"
+                class="export-manifest-row"
+              >
+                <dt>{{ item.label }}</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="export-manifest-section">
+            <h5>{{ t('evidencePackPreview.manifestClosureSummary') }}</h5>
+            <dl class="export-manifest-list">
+              <div
+                v-for="item in manifestClosureItems"
+                :key="item.key"
+                class="export-manifest-row"
+              >
+                <dt>{{ item.label }}</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            </dl>
+          </section>
+        </div>
+      </div>
+
       <div v-if="isOpen" class="preview-body">
         <div class="preview-layout">
           <nav
@@ -117,6 +177,7 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { currentLanguage, t } from '../i18n'
 import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
+import { buildEvidencePackManifest } from '../utils/evidencePackManifest'
 
 const SUPPORTED_NAVIGATOR_SECTIONS = [
   { key: 'review-readiness', labelKey: 'reviewReadiness.title' },
@@ -206,6 +267,22 @@ const previewMarkdown = computed(() => {
   }
 
   return buildEvidencePackMarkdown(props.result, options)
+})
+
+const manifest = computed(() => {
+  if (!props.result) {
+    return null
+  }
+
+  return buildEvidencePackManifest({
+    result: props.result,
+    triageState: props.triageState,
+    caseNotes: props.caseNotes,
+    reviewReadiness: props.reviewReadiness,
+    evidencePackQuality: props.evidencePackQuality,
+    exportGuardrails: props.exportGuardrails,
+    shareSafety: props.shareSafety
+  })
 })
 
 function buildPreviewSectionId(index, navigationKey) {
@@ -340,6 +417,13 @@ function formatShareSafetyStatus(status) {
   return t('evidencePackPreview.notAvailable')
 }
 
+function formatManifestReadinessStatus(status) {
+  if (status === 'ready') return t('reviewReadiness.overallReady')
+  if (status === 'attention') return t('reviewReadiness.overallAttention')
+  if (status === 'needs_review') return t('caseClosureChecklist.statusNeedsReview')
+  return t('evidencePackPreview.notAvailable')
+}
+
 function summarizeReviewReadiness(readiness) {
   const status = typeof readiness?.status === 'string' ? readiness.status.trim().toLowerCase() : ''
   const requiredBlockers = readiness?.summary?.requiredBlockers
@@ -450,6 +534,67 @@ const handoffSummaryItems = computed(() => {
       label: t('evidencePackShareSafety.title'),
       ...summarizeShareSafety(props.shareSafety)
     }
+  ]
+})
+
+const manifestSourceCountItems = computed(() => {
+  const sourceCounts = manifest.value?.sourceCounts || {}
+
+  return [
+    { key: 'findings', label: t('evidencePackPreview.manifestFindings'), value: sourceCounts.findings ?? 0 },
+    { key: 'incidents', label: t('evidencePackPreview.manifestIncidents'), value: sourceCounts.incidents ?? 0 },
+    { key: 'timelineEvents', label: t('evidencePackPreview.manifestTimelineEvents'), value: sourceCounts.timelineEvents ?? 0 },
+    { key: 'ruleCoverage', label: t('evidencePackPreview.manifestRuleCoverage'), value: sourceCounts.ruleCoverage ?? 0 },
+    { key: 'sourceFiles', label: t('evidencePackPreview.manifestSourceFiles'), value: sourceCounts.sourceFiles ?? 0 },
+    { key: 'triageRecords', label: t('evidencePackPreview.manifestTriageRecords'), value: sourceCounts.triageRecords ?? 0 },
+    { key: 'caseNotes', label: t('evidencePackPreview.manifestCaseNotes'), value: sourceCounts.caseNotes ?? 0 },
+    { key: 'entities', label: t('evidencePackPreview.manifestEntities'), value: sourceCounts.entities ?? 0 }
+  ]
+})
+
+const manifestStatusItems = computed(() => {
+  const statusSummary = manifest.value?.statusSummary || {}
+
+  return [
+    {
+      key: 'reviewReadinessStatus',
+      label: t('evidencePackPreview.manifestReviewReadinessStatus'),
+      value: formatManifestReadinessStatus(statusSummary.reviewReadinessStatus)
+    },
+    {
+      key: 'qualityScore',
+      label: t('evidencePackPreview.manifestQualityScore'),
+      value: statusSummary.qualityScore ?? t('evidencePackPreview.notAvailable')
+    },
+    {
+      key: 'qualityStatus',
+      label: t('evidencePackPreview.manifestQualityStatus'),
+      value: formatQualityStatus(statusSummary.qualityStatus)
+    },
+    {
+      key: 'guardrailDecision',
+      label: t('evidencePackPreview.manifestGuardrailDecision'),
+      value: formatGuardrailDecision(statusSummary.guardrailDecision)
+    },
+    {
+      key: 'shareSafetyStatus',
+      label: t('evidencePackPreview.manifestShareSafetyStatus'),
+      value: formatShareSafetyStatus(statusSummary.shareSafetyStatus)
+    },
+    {
+      key: 'handoffReadinessStatus',
+      label: t('evidencePackPreview.manifestHandoffReadinessStatus'),
+      value: formatManifestReadinessStatus(statusSummary.handoffReadinessStatus)
+    }
+  ]
+})
+
+const manifestClosureItems = computed(() => {
+  const closureSummary = manifest.value?.closureSummary || {}
+
+  return [
+    { key: 'gapCount', label: t('evidencePackPreview.manifestGapCount'), value: closureSummary.gapCount ?? 0 },
+    { key: 'nextActionCount', label: t('evidencePackPreview.manifestNextActionCount'), value: closureSummary.nextActionCount ?? 0 }
   ]
 })
 
@@ -735,6 +880,94 @@ onBeforeUnmount(() => {
   line-height: 1.45;
 }
 
+.export-manifest-card {
+  margin-top: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #fcfcfd;
+  padding: 1rem;
+}
+
+.export-manifest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.export-manifest-header h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: #212529;
+}
+
+.export-manifest-header p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.export-manifest-generated {
+  min-width: 0;
+  text-align: right;
+}
+
+.export-manifest-meta-label {
+  display: block;
+  color: #6c757d;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.export-manifest-meta-value {
+  display: block;
+  color: #212529;
+  font-size: 0.88rem;
+  word-break: break-word;
+}
+
+.export-manifest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.export-manifest-section {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.85rem;
+}
+
+.export-manifest-section h5 {
+  margin: 0 0 0.7rem;
+  color: #212529;
+  font-size: 0.9rem;
+}
+
+.export-manifest-list {
+  margin: 0;
+}
+
+.export-manifest-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.export-manifest-row dt {
+  color: #495057;
+}
+
+.export-manifest-row dd {
+  margin: 0;
+  color: #212529;
+  font-weight: 700;
+  text-align: right;
+}
+
 .preview-layout {
   display: grid;
   grid-template-columns: minmax(11rem, 14rem) minmax(0, 1fr);
@@ -866,6 +1099,18 @@ onBeforeUnmount(() => {
   }
 
   .handoff-summary-items {
+    grid-template-columns: 1fr;
+  }
+
+  .export-manifest-header {
+    flex-direction: column;
+  }
+
+  .export-manifest-generated {
+    text-align: left;
+  }
+
+  .export-manifest-grid {
     grid-template-columns: 1fr;
   }
 
