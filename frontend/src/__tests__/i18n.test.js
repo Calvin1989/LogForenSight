@@ -364,6 +364,8 @@ describe('i18n tool', () => {
     expect(t('caseClosureChecklist.statusReady')).toBe('Ready')
     expect(t('caseClosureChecklist.handoffNeedsReviewDetail')).toContain('still needs analyst review')
     expect(t('caseClosureChecklist.evidenceGapsTitle')).toBe('Evidence gaps')
+    expect(t('caseClosureChecklist.nextActionsTitle')).toBe('Next actions')
+    expect(t('caseClosureChecklist.nextActionPrepareFinalHandoff')).toBe('Prepare final handoff')
     expect(t('caseClosureChecklist.noGaps')).toBe('No obvious closure gaps were detected.')
     expect(t('caseClosureChecklist.gapGuardrailsAttention')).toBe('Export guardrails need attention')
   })
@@ -379,7 +381,10 @@ describe('i18n tool', () => {
       t('caseClosureChecklist.handoffNeedsReviewDetail'),
       t('caseClosureChecklist.evidenceGapsTitle'),
       t('caseClosureChecklist.evidenceGapsSubtitle'),
-      t('caseClosureChecklist.noGaps')
+      t('caseClosureChecklist.noGaps'),
+      t('caseClosureChecklist.nextActionsTitle'),
+      t('caseClosureChecklist.nextActionsSubtitle'),
+      t('caseClosureChecklist.nextActionAddCaseNotesDescription')
     ]
 
     values.forEach((value) => {
@@ -394,11 +399,15 @@ describe('i18n tool', () => {
     expect(t('caseClosureChecklist.evidenceGapsSubtitle')).toContain('案件收尾')
     expect(t('caseClosureChecklist.gapMissingNotes')).toBe('缺少案件备注')
     expect(t('caseClosureChecklist.gapHandoffNeedsReview')).toBe('交接准备度尚未就绪')
+    expect(t('caseClosureChecklist.nextActionsTitle')).toBe('下一步动作')
+    expect(t('caseClosureChecklist.nextActionReviewShareSafetyItems')).toBe('复核分享安全项')
 
     setLanguage('en')
     expect(t('caseClosureChecklist.evidenceGapsTitle')).toBe('Evidence gaps')
     expect(t('caseClosureChecklist.evidenceGapsSubtitle')).toContain('block case closure')
     expect(t('caseClosureChecklist.gapEmptyTimeline')).toBe('Timeline unavailable or empty')
     expect(t('caseClosureChecklist.gapShareSafetyAttention')).toBe('Share safety review has items')
+    expect(t('caseClosureChecklist.nextActionReviewIncidentsFindings')).toBe('Review incidents / findings')
+    expect(t('caseClosureChecklist.nextActionResolveExportGuardrailsDescription')).toContain('Evidence Pack')
   })
 })

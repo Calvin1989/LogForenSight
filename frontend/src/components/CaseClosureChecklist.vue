@@ -31,8 +31,10 @@
       </article>
     </div>
 
-    <CaseClosureEvidenceGaps
-      :checklist-items="checklistItems"
+    <CaseClosureEvidenceGaps :gap-items="gapItems" />
+
+    <CaseClosureNextActions
+      :gap-items="gapItems"
       :handoff-readiness="handoffReadiness"
     />
   </section>
@@ -42,6 +44,8 @@
 import { computed } from 'vue'
 import { t } from '../i18n'
 import CaseClosureEvidenceGaps from './CaseClosureEvidenceGaps.vue'
+import CaseClosureNextActions from './CaseClosureNextActions.vue'
+import { buildCaseClosureGapItems } from '../utils/caseClosureGapItems'
 
 const props = defineProps({
   result: {
@@ -428,6 +432,13 @@ const checklistItems = computed(() => {
     shareSafetyItem.value,
     handoffReadiness.value
   ]
+})
+
+const gapItems = computed(() => {
+  return buildCaseClosureGapItems({
+    checklistItems: checklistItems.value,
+    handoffReadiness: handoffReadiness.value
+  })
 })
 </script>
 

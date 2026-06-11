@@ -37,110 +37,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { t } from '../i18n'
 
-const props = defineProps({
-  checklistItems: {
+defineProps({
+  gapItems: {
     type: Array,
     default: () => []
-  },
-  handoffReadiness: {
-    type: Object,
-    default: null
   }
-})
-
-function normalizeArray(value) {
-  return Array.isArray(value) ? value : []
-}
-
-function findItem(id) {
-  return normalizeArray(props.checklistItems).find((item) => item?.id === id) || null
-}
-
-function createGap(id, labelKey, source) {
-  return {
-    id,
-    label: t(labelKey),
-    value: source?.value || t('caseClosureChecklist.statusUnavailable'),
-    description: source?.description || t('caseClosureChecklist.handoffUnavailableDetail'),
-    tone: source?.tone || 'neutral'
-  }
-}
-
-function hasAttentionTone(item) {
-  return item?.tone === 'warning' || item?.tone === 'danger'
-}
-
-function shouldIncludeTimeline(item) {
-  return item?.id === 'timeline' && item?.tone !== 'positive'
-}
-
-function shouldIncludeRuleCoverage(item) {
-  return item?.id === 'rule-coverage' && item?.tone !== 'positive'
-}
-
-function shouldIncludeHandoff(item) {
-  return Boolean(item) && item.tone !== 'positive'
-}
-
-const gapItems = computed(() => {
-  const gaps = []
-  const findings = findItem('findings')
-  const incidents = findItem('incidents')
-  const timeline = findItem('timeline')
-  const ruleCoverage = findItem('rule-coverage')
-  const caseNotes = findItem('case-notes')
-  const reviewReadiness = findItem('review-readiness')
-  const qualityScore = findItem('quality-score')
-  const exportGuardrails = findItem('export-guardrails')
-  const shareSafety = findItem('share-safety')
-  const handoff = props.handoffReadiness && typeof props.handoffReadiness === 'object'
-    ? props.handoffReadiness
-    : findItem('handoff-readiness')
-
-  if (hasAttentionTone(caseNotes)) {
-    gaps.push(createGap('missing-notes', 'caseClosureChecklist.gapMissingNotes', caseNotes))
-  }
-
-  if (shouldIncludeTimeline(timeline)) {
-    gaps.push(createGap('empty-timeline', 'caseClosureChecklist.gapEmptyTimeline', timeline))
-  }
-
-  if (hasAttentionTone(incidents)) {
-    gaps.push(createGap('missing-incidents', 'caseClosureChecklist.gapMissingIncidents', incidents))
-  }
-
-  if (hasAttentionTone(findings)) {
-    gaps.push(createGap('missing-findings', 'caseClosureChecklist.gapMissingFindings', findings))
-  }
-
-  if (shouldIncludeRuleCoverage(ruleCoverage)) {
-    gaps.push(createGap('rule-coverage-unavailable', 'caseClosureChecklist.gapRuleCoverageUnavailable', ruleCoverage))
-  }
-
-  if (hasAttentionTone(reviewReadiness)) {
-    gaps.push(createGap('review-readiness-attention', 'caseClosureChecklist.gapReviewReadinessAttention', reviewReadiness))
-  }
-
-  if (hasAttentionTone(qualityScore)) {
-    gaps.push(createGap('quality-needs-improvement', 'caseClosureChecklist.gapQualityNeedsImprovement', qualityScore))
-  }
-
-  if (hasAttentionTone(exportGuardrails)) {
-    gaps.push(createGap('guardrails-attention', 'caseClosureChecklist.gapGuardrailsAttention', exportGuardrails))
-  }
-
-  if (hasAttentionTone(shareSafety)) {
-    gaps.push(createGap('share-safety-attention', 'caseClosureChecklist.gapShareSafetyAttention', shareSafety))
-  }
-
-  if (shouldIncludeHandoff(handoff)) {
-    gaps.push(createGap('handoff-needs-review', 'caseClosureChecklist.gapHandoffNeedsReview', handoff))
-  }
-
-  return gaps
 })
 </script>
 
