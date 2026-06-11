@@ -30,12 +30,18 @@
         <p class="check-item-description">{{ item.description }}</p>
       </article>
     </div>
+
+    <CaseClosureEvidenceGaps
+      :checklist-items="checklistItems"
+      :handoff-readiness="handoffReadiness"
+    />
   </section>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { t } from '../i18n'
+import CaseClosureEvidenceGaps from './CaseClosureEvidenceGaps.vue'
 
 const props = defineProps({
   result: {

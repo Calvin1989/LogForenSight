@@ -363,6 +363,9 @@ describe('i18n tool', () => {
     expect(t('caseClosureChecklist.statusUnavailable')).toBe('Unavailable')
     expect(t('caseClosureChecklist.statusReady')).toBe('Ready')
     expect(t('caseClosureChecklist.handoffNeedsReviewDetail')).toContain('still needs analyst review')
+    expect(t('caseClosureChecklist.evidenceGapsTitle')).toBe('Evidence gaps')
+    expect(t('caseClosureChecklist.noGaps')).toBe('No obvious closure gaps were detected.')
+    expect(t('caseClosureChecklist.gapGuardrailsAttention')).toBe('Export guardrails need attention')
   })
 
   it('should keep case closure checklist Chinese strings readable', () => {
@@ -373,12 +376,29 @@ describe('i18n tool', () => {
       t('caseClosureChecklist.subtitle'),
       t('caseClosureChecklist.findingsUnavailableDetail'),
       t('caseClosureChecklist.caseNotesMissingDetail'),
-      t('caseClosureChecklist.handoffNeedsReviewDetail')
+      t('caseClosureChecklist.handoffNeedsReviewDetail'),
+      t('caseClosureChecklist.evidenceGapsTitle'),
+      t('caseClosureChecklist.evidenceGapsSubtitle'),
+      t('caseClosureChecklist.noGaps')
     ]
 
     values.forEach((value) => {
       expect(value).not.toContain('\ufffd')
       expect(/[一-龥]/.test(value)).toBe(true)
     })
+  })
+
+  it('should have evidence gap translations in both languages', () => {
+    setLanguage('zh')
+    expect(t('caseClosureChecklist.evidenceGapsTitle')).toBe('证据缺口')
+    expect(t('caseClosureChecklist.evidenceGapsSubtitle')).toContain('案件收尾')
+    expect(t('caseClosureChecklist.gapMissingNotes')).toBe('缺少案件备注')
+    expect(t('caseClosureChecklist.gapHandoffNeedsReview')).toBe('交接准备度尚未就绪')
+
+    setLanguage('en')
+    expect(t('caseClosureChecklist.evidenceGapsTitle')).toBe('Evidence gaps')
+    expect(t('caseClosureChecklist.evidenceGapsSubtitle')).toContain('block case closure')
+    expect(t('caseClosureChecklist.gapEmptyTimeline')).toBe('Timeline unavailable or empty')
+    expect(t('caseClosureChecklist.gapShareSafetyAttention')).toBe('Share safety review has items')
   })
 })

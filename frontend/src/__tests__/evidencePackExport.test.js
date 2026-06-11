@@ -204,6 +204,9 @@ describe('evidencePackExport', () => {
     expect(markdown).not.toContain('Handoff summary')
     expect(markdown).not.toContain('Case closure checklist')
     expect(markdown).not.toContain('案件收尾检查清单')
+    expect(markdown).not.toContain('Evidence gaps')
+    expect(markdown).not.toContain('Closure gaps')
+    expect(markdown).not.toContain('证据缺口')
   })
 
   it('returns fallback text instead of crashing when optional data is missing', () => {
@@ -491,6 +494,7 @@ describe('evidencePackExport', () => {
     expect(markdown).toContain('**相关调查实体 (Related IOCs / Entities)**')
     expect(markdown).not.toContain('交接摘要')
     expect(markdown).not.toContain('案件收尾检查清单')
+    expect(markdown).not.toContain('证据缺口')
   })
 
   it('falls back to Not available inside the explainability chapter when finding data is missing', () => {

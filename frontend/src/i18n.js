@@ -403,7 +403,20 @@ const messages = {
       shareSafetyUnavailableDetail: "当前没有可用的分享安全检查摘要。",
       handoffReadyDetail: "现有复核、质量与交接信号整体显示可以准备交接。",
       handoffNeedsReviewDetail: "至少一项复核、质量或分享安全信号仍建议人工复核。",
-      handoffUnavailableDetail: "当前没有足够的交接信号来判断 readiness。"
+      handoffUnavailableDetail: "当前没有足够的交接信号来判断 readiness。",
+      evidenceGapsTitle: "证据缺口",
+      evidenceGapsSubtitle: "集中列出当前仍阻碍案件收尾或交接的关键缺口。",
+      noGaps: "当前未发现明显的收尾证据缺口。",
+      gapMissingNotes: "缺少案件备注",
+      gapEmptyTimeline: "时间轴不可用或为空",
+      gapMissingIncidents: "安全事件缺失或尚未 triage",
+      gapMissingFindings: "Findings 缺失或尚未复核",
+      gapRuleCoverageUnavailable: "规则覆盖不可用",
+      gapReviewReadinessAttention: "Review Readiness 需关注",
+      gapQualityNeedsImprovement: "质量评分需要提升",
+      gapGuardrailsAttention: "导出提示需要关注",
+      gapShareSafetyAttention: "分享安全复核存在待处理项",
+      gapHandoffNeedsReview: "交接准备度尚未就绪"
     },
     evidencePackShareSafety: {
       title: "Evidence Pack 分享安全检查",
@@ -1072,7 +1085,20 @@ const messages = {
       shareSafetyUnavailableDetail: "Share safety review summary is unavailable.",
       handoffReadyDetail: "The current review, quality, and handoff signals indicate the case is ready for handoff.",
       handoffNeedsReviewDetail: "At least one review, quality, or share safety signal still needs analyst review.",
-      handoffUnavailableDetail: "Not enough handoff signals are available to determine readiness."
+      handoffUnavailableDetail: "Not enough handoff signals are available to determine readiness.",
+      evidenceGapsTitle: "Evidence gaps",
+      evidenceGapsSubtitle: "List the current gaps that still block case closure or analyst handoff.",
+      noGaps: "No obvious closure gaps were detected.",
+      gapMissingNotes: "Missing case notes",
+      gapEmptyTimeline: "Timeline unavailable or empty",
+      gapMissingIncidents: "Incidents missing or not triaged",
+      gapMissingFindings: "Findings missing or not reviewed",
+      gapRuleCoverageUnavailable: "Rule coverage unavailable",
+      gapReviewReadinessAttention: "Review readiness needs attention",
+      gapQualityNeedsImprovement: "Quality score needs improvement",
+      gapGuardrailsAttention: "Export guardrails need attention",
+      gapShareSafetyAttention: "Share safety review has items",
+      gapHandoffNeedsReview: "Handoff readiness not ready"
     },
     evidencePackShareSafety: {
       title: "Evidence Pack Share Safety Review",
