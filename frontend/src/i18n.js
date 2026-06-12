@@ -494,6 +494,13 @@ const messages = {
       gapShareSafetyAttention: "分享安全复核存在待处理项",
       gapHandoffNeedsReview: "交接准备度尚未就绪"
     },
+    triageReview: {
+      introDescription: "此视图用于组织调查工作流：分诊决策、案件笔记、复核就绪度和结案清单。",
+      decisionsTitle: "调查决策",
+      decisionsDescription: "分诊发现并记录案件笔记。",
+      readinessTitle: "复核与就绪度",
+      readinessDescription: "在打包证据前确认复核就绪度和结案清单。"
+    },
     evidencePackShareSafety: {
       title: "Evidence Pack 分享安全检查",
       empty: "运行分析后可查看 Evidence Pack 分享前安全检查结果。",
@@ -1293,6 +1300,13 @@ const messages = {
       gapGuardrailsAttention: "Export guardrails need attention",
       gapShareSafetyAttention: "Share safety review has items",
       gapHandoffNeedsReview: "Handoff readiness not ready"
+    },
+    triageReview: {
+      introDescription: "This view organizes your investigation workflow: triage decisions, case notes, review readiness, and closure checklist.",
+      decisionsTitle: "Investigation Decisions",
+      decisionsDescription: "Triage findings and record case notes",
+      readinessTitle: "Review & Readiness",
+      readinessDescription: "Check readiness and prepare for handoff"
     },
     evidencePackShareSafety: {
       title: "Evidence Pack Share Safety Review",

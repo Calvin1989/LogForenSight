@@ -485,4 +485,23 @@ describe('i18n tool', () => {
     expect(t('caseClosureChecklist.nextActionReviewIncidentsFindings')).toBe('Review incidents / findings')
     expect(t('caseClosureChecklist.nextActionResolveExportGuardrailsDescription')).toContain('Evidence Pack')
   })
+
+  it('should have triage review layout translations in both languages', () => {
+    setLanguage('zh')
+    expect(t('triageReview.introDescription')).toBe('此视图用于组织调查工作流：分诊决策、案件笔记、复核就绪度和结案清单。')
+    expect(t('triageReview.decisionsTitle')).toBe('调查决策')
+    expect(t('triageReview.decisionsDescription')).toBe('分诊发现并记录案件笔记。')
+    expect(t('triageReview.readinessTitle')).toBe('复核与就绪度')
+    expect(t('triageReview.readinessDescription')).toBe('在打包证据前确认复核就绪度和结案清单。')
+    expect(/[一-龥]/.test(t('triageReview.introDescription'))).toBe(true)
+    expect(/[一-龥]/.test(t('triageReview.decisionsTitle'))).toBe(true)
+    expect(/[一-龥]/.test(t('triageReview.readinessTitle'))).toBe(true)
+
+    setLanguage('en')
+    expect(t('triageReview.introDescription')).toBe('This view organizes your investigation workflow: triage decisions, case notes, review readiness, and closure checklist.')
+    expect(t('triageReview.decisionsTitle')).toBe('Investigation Decisions')
+    expect(t('triageReview.decisionsDescription')).toBe('Triage findings and record case notes')
+    expect(t('triageReview.readinessTitle')).toBe('Review & Readiness')
+    expect(t('triageReview.readinessDescription')).toBe('Check readiness and prepare for handoff')
+  })
 })
