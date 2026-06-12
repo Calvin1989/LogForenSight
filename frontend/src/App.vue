@@ -33,7 +33,9 @@
             data-testid="workspace-view-workspace"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.workspace') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.workspaceDescription') }}</p>
             </div>
 
             <FileUpload
@@ -73,7 +75,9 @@
             data-testid="workspace-view-overview"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.overview') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.overviewDescription') }}</p>
             </div>
 
             <template v-if="displayResult">
@@ -107,8 +111,10 @@
             </template>
 
             <div v-else class="empty-view-state" data-testid="workspace-empty-state">
+              <span class="empty-view-eyebrow">{{ t('workspaceShell.resultsRequired') }}</span>
               <h3>{{ t('workspaceShell.emptyTitle') }}</h3>
               <p>{{ t('workspaceShell.emptyDescription') }}</p>
+              <p class="empty-view-hint">{{ t('workspaceShell.overviewEmptyHint') }}</p>
             </div>
           </section>
 
@@ -118,7 +124,9 @@
             data-testid="workspace-view-investigation"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.investigation') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.investigationDescription') }}</p>
             </div>
 
             <template v-if="displayResult">
@@ -145,8 +153,10 @@
             </template>
 
             <div v-else class="empty-view-state" data-testid="workspace-empty-state">
+              <span class="empty-view-eyebrow">{{ t('workspaceShell.resultsRequired') }}</span>
               <h3>{{ t('workspaceShell.emptyTitle') }}</h3>
               <p>{{ t('workspaceShell.emptyDescription') }}</p>
+              <p class="empty-view-hint">{{ t('workspaceShell.investigationEmptyHint') }}</p>
             </div>
           </section>
 
@@ -156,7 +166,9 @@
             data-testid="workspace-view-triageReview"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.triageReview') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.triageReviewDescription') }}</p>
             </div>
 
             <template v-if="displayResult">
@@ -190,8 +202,10 @@
             </template>
 
             <div v-else class="empty-view-state" data-testid="workspace-empty-state">
+              <span class="empty-view-eyebrow">{{ t('workspaceShell.resultsRequired') }}</span>
               <h3>{{ t('workspaceShell.emptyTitle') }}</h3>
               <p>{{ t('workspaceShell.emptyDescription') }}</p>
+              <p class="empty-view-hint">{{ t('workspaceShell.triageReviewEmptyHint') }}</p>
             </div>
           </section>
 
@@ -201,7 +215,9 @@
             data-testid="workspace-view-evidencePack"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.evidencePack') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.evidencePackDescription') }}</p>
             </div>
 
             <template v-if="displayResult">
@@ -240,8 +256,10 @@
             </template>
 
             <div v-else class="empty-view-state" data-testid="workspace-empty-state">
+              <span class="empty-view-eyebrow">{{ t('workspaceShell.resultsRequired') }}</span>
               <h3>{{ t('workspaceShell.emptyTitle') }}</h3>
               <p>{{ t('workspaceShell.emptyDescription') }}</p>
+              <p class="empty-view-hint">{{ t('workspaceShell.evidencePackEmptyHint') }}</p>
             </div>
           </section>
 
@@ -251,7 +269,9 @@
             data-testid="workspace-view-markdownReport"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.markdownReport') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.markdownReportDescription') }}</p>
             </div>
 
             <template v-if="displayResult">
@@ -268,8 +288,10 @@
             </template>
 
             <div v-else class="empty-view-state" data-testid="workspace-empty-state">
+              <span class="empty-view-eyebrow">{{ t('workspaceShell.resultsRequired') }}</span>
               <h3>{{ t('workspaceShell.emptyTitle') }}</h3>
               <p>{{ t('workspaceShell.emptyDescription') }}</p>
+              <p class="empty-view-hint">{{ t('workspaceShell.markdownReportEmptyHint') }}</p>
             </div>
           </section>
 
@@ -279,7 +301,9 @@
             data-testid="workspace-view-rules"
           >
             <div class="view-header">
+              <span class="view-eyebrow">{{ t('workspaceShell.sectionEyebrow') }}</span>
               <h2>{{ t('workspaceNav.rules') }}</h2>
+              <p class="view-description">{{ t('workspaceShell.rulesDescription') }}</p>
             </div>
 
             <div v-if="rules" class="config-section">
@@ -388,13 +412,13 @@ const hasDisplayResult = computed(() => Boolean(displayResult.value))
 
 const navigationItems = computed(() => {
   return [
-    { key: 'workspace', labelKey: 'workspaceNav.workspace', disabled: false },
-    { key: 'overview', labelKey: 'workspaceNav.overview', disabled: !hasDisplayResult.value },
-    { key: 'investigation', labelKey: 'workspaceNav.investigation', disabled: !hasDisplayResult.value },
-    { key: 'triageReview', labelKey: 'workspaceNav.triageReview', disabled: !hasDisplayResult.value },
-    { key: 'evidencePack', labelKey: 'workspaceNav.evidencePack', disabled: !hasDisplayResult.value },
-    { key: 'markdownReport', labelKey: 'workspaceNav.markdownReport', disabled: !hasDisplayResult.value },
-    { key: 'rules', labelKey: 'workspaceNav.rules', disabled: false }
+    { key: 'workspace', labelKey: 'workspaceNav.workspace', descriptionKey: 'workspaceNav.workspaceDescription', disabled: false },
+    { key: 'overview', labelKey: 'workspaceNav.overview', descriptionKey: 'workspaceNav.overviewDescription', disabled: !hasDisplayResult.value },
+    { key: 'investigation', labelKey: 'workspaceNav.investigation', descriptionKey: 'workspaceNav.investigationDescription', disabled: !hasDisplayResult.value },
+    { key: 'triageReview', labelKey: 'workspaceNav.triageReview', descriptionKey: 'workspaceNav.triageReviewDescription', disabled: !hasDisplayResult.value },
+    { key: 'evidencePack', labelKey: 'workspaceNav.evidencePack', descriptionKey: 'workspaceNav.evidencePackDescription', disabled: !hasDisplayResult.value },
+    { key: 'markdownReport', labelKey: 'workspaceNav.markdownReport', descriptionKey: 'workspaceNav.markdownReportDescription', disabled: !hasDisplayResult.value },
+    { key: 'rules', labelKey: 'workspaceNav.rules', descriptionKey: 'workspaceNav.rulesDescription', disabled: false }
   ]
 })
 
@@ -572,7 +596,12 @@ const onSelectCase = (caseItem) => {
 
 header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  padding: 2.5rem 2rem;
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  background: radial-gradient(circle at top, #f8fbff 0%, #ffffff 52%, #fcfdff 100%);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
 }
 
 header h1 {
@@ -589,6 +618,8 @@ header h1 {
 
 .shell-main {
   min-width: 0;
+  display: grid;
+  gap: 1.5rem;
 }
 
 .results-anchor {
@@ -600,31 +631,67 @@ header h1 {
 }
 
 .view-header {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #edf2f7;
 }
 
 .view-header h2 {
-  margin: 0;
-  font-size: 1.2rem;
+  margin: 0.25rem 0 0.35rem;
+  font-size: 1.35rem;
   color: #2c3e50;
+}
+
+.view-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1c7ed6;
+}
+
+.view-description {
+  margin: 0;
+  max-width: 46rem;
+  color: #6c757d;
 }
 
 .empty-view-state {
   border: 1px dashed #dee2e6;
-  border-radius: 8px;
-  background: #f8f9fa;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
   padding: 2rem;
   text-align: center;
 }
 
 .empty-view-state h3 {
-  margin: 0 0 0.5rem;
+  margin: 0.35rem 0 0.5rem;
   color: #2c3e50;
 }
 
 .empty-view-state p {
   margin: 0;
   color: #6c757d;
+}
+
+.empty-view-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #e7f5ff;
+  color: #1864ab;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.empty-view-hint {
+  margin-top: 0.75rem !important;
+  color: #495057 !important;
 }
 
 .clear-current-btn, .save-case-btn {
@@ -682,6 +749,11 @@ header h1 {
 }
 
 @media (max-width: 768px) {
+  header {
+    padding: 2rem 1rem;
+    border-radius: 18px;
+  }
+
   .side-by-side {
     grid-template-columns: 1fr;
   }

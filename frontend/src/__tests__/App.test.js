@@ -282,8 +282,10 @@ describe('App.vue workspace shell', () => {
   it('defaults to workspace view, shows navigation, and disables result-only views without a result', () => {
     const wrapper = mount(App)
 
+    expect(wrapper.get('[data-testid="workspace-shell"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="workspace-nav"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="workspace-view-workspace"]').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Start a fresh investigation here')
     expect(wrapper.find('[data-testid="workspace-view-overview"]').exists()).toBe(false)
     expect(wrapper.get('[data-testid="workspace-nav-overview"]').attributes('disabled')).toBeDefined()
     expect(wrapper.get('[data-testid="workspace-nav-investigation"]').attributes('disabled')).toBeDefined()
@@ -300,6 +302,7 @@ describe('App.vue workspace shell', () => {
     expect(wrapper.get('[data-testid="workspace-view-overview"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="summary-cards"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="parse-stats-card"]').exists()).toBe(true)
+    expect(wrapper.text()).toContain('high-level risk picture')
 
     await wrapper.get('[data-testid="workspace-nav-investigation"]').trigger('click')
     expect(wrapper.get('[data-testid="workspace-view-investigation"]').exists()).toBe(true)
@@ -324,6 +327,7 @@ describe('App.vue workspace shell', () => {
     expect(wrapper.get('[data-testid="workspace-view-rules"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="rule-config-panel"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="rule-tuning-panel"]').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Inspect rules and tuning settings')
   })
 
   it('hydrates triageState in App even before triage view mounts', async () => {
