@@ -291,6 +291,12 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.manifestCompatibilityCompatible')).toBe('兼容')
     expect(t('evidencePackPreview.manifestCompatibilityBlocked')).toBe('阻止导出')
     expect(t('evidencePackPreview.manifestCompatibilitySafeNote')).toContain('不改变 Markdown 导出行为')
+    expect(t('evidencePackPreview.manifestAuditTrailTitle')).toBe('Manifest 审计追踪')
+    expect(t('evidencePackPreview.manifestAuditTrailSubtitle')).toContain('不写入 Markdown')
+    expect(t('evidencePackPreview.manifestAuditTrailPreviewOnly')).toBe('仅 Preview')
+    expect(t('evidencePackPreview.manifestAuditTrailGeneratedAt')).toBe('Manifest generated at')
+    expect(t('evidencePackPreview.manifestAuditTrailAllowlistCount')).toBe('Allowlist field count')
+    expect(t('evidencePackPreview.manifestAuditTrailStatusUnchanged')).toBe('未变更')
 
     setLanguage('en')
     expect(t('evidencePackPreview.title')).toBe('Evidence Pack Export Preview')
@@ -315,6 +321,30 @@ describe('i18n tool', () => {
     expect(t('evidencePackPreview.manifestCompatibilityCompatible')).toBe('Compatible')
     expect(t('evidencePackPreview.manifestCompatibilityBlocked')).toBe('Blocked')
     expect(t('evidencePackPreview.manifestCompatibilitySafeNote')).toContain('does not change Markdown export behavior')
+    expect(t('evidencePackPreview.manifestAuditTrailTitle')).toBe('Manifest Audit Trail')
+    expect(t('evidencePackPreview.manifestAuditTrailSubtitle')).toContain('Never included in Markdown')
+    expect(t('evidencePackPreview.manifestAuditTrailPreviewOnly')).toBe('Preview only')
+    expect(t('evidencePackPreview.manifestAuditTrailGeneratedAt')).toBe('Manifest generated at')
+    expect(t('evidencePackPreview.manifestAuditTrailAllowlistCount')).toBe('Allowlist field count')
+    expect(t('evidencePackPreview.manifestAuditTrailStatusUnchanged')).toBe('Unchanged')
+  })
+
+  it('should keep evidence pack audit trail Chinese strings readable', () => {
+    setLanguage('zh')
+
+    const values = [
+      t('evidencePackPreview.manifestAuditTrailTitle'),
+      t('evidencePackPreview.manifestAuditTrailSubtitle'),
+      t('evidencePackPreview.manifestAuditTrailPreviewOnly'),
+      t('evidencePackPreview.manifestAuditTrailMarkdownExportStatus'),
+      t('evidencePackPreview.manifestAuditTrailPreviewDistributionStatus'),
+      t('evidencePackPreview.manifestAuditTrailStatusUnchanged')
+    ]
+
+    values.forEach((value) => {
+      expect(value).not.toContain('\ufffd')
+      expect(value.length).toBeGreaterThan(0)
+    })
   })
 
   it('should have evidence pack share safety translations in both languages', () => {

@@ -243,6 +243,32 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(manifestCard.text()).toContain('2026-06-11T10:45:46.000Z')
   })
 
+  it('renders a manifest audit trail block inside the manifest card', () => {
+    const wrapper = mount(EvidencePackExportPreview, {
+      props: sampleProps
+    })
+
+    const auditTrail = wrapper.find('[data-testid="evidence-pack-manifest-audit-trail"]')
+    expect(auditTrail.exists()).toBe(true)
+    expect(auditTrail.text()).toContain('Manifest Audit Trail')
+    expect(auditTrail.text()).toContain('Preview-only reproducibility boundary and export state snapshot')
+    expect(auditTrail.text()).toContain('Preview only')
+    expect(auditTrail.text()).toContain('Manifest generated at')
+    expect(auditTrail.text()).toContain('Manifest source type')
+    expect(auditTrail.text()).toContain('preview_derived')
+    expect(auditTrail.text()).toContain('Manifest compatibility')
+    expect(auditTrail.text()).toContain('Compatible')
+    expect(auditTrail.text()).toContain('Allowlist field count')
+    expect(auditTrail.text()).toContain('17')
+    expect(auditTrail.text()).toContain('Blocked high-risk categories')
+    expect(auditTrail.text()).toContain('0')
+    expect(auditTrail.text()).toContain('Markdown export status')
+    expect(auditTrail.text()).toContain('Unchanged')
+    expect(auditTrail.text()).toContain('Share safety status')
+    expect(auditTrail.text()).toContain('Copy / download / section copy')
+    expect(auditTrail.text()).toContain('2026-06-11T10:45:46.000Z')
+  })
+
   it('renders neutral handoff summary states when upstream data is unavailable', () => {
     const wrapper = mount(EvidencePackExportPreview, {
       props: {
@@ -369,6 +395,8 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Evidence Pack Share Safety Review')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Handoff summary')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Export manifest')
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Manifest Audit Trail')
+    expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Audit trail')
     expect(navigator.clipboard.writeText.mock.calls[0][0]).not.toContain('Export compatibility')
     expect(wrapper.text()).toContain('Markdown copied.')
   })
@@ -398,6 +426,8 @@ describe('EvidencePackExportPreview.vue', () => {
     expect(copiedSection).not.toContain('Copy section')
     expect(copiedSection).not.toContain('Handoff summary')
     expect(copiedSection).not.toContain('Export manifest')
+    expect(copiedSection).not.toContain('Manifest Audit Trail')
+    expect(copiedSection).not.toContain('Audit trail')
     expect(copiedSection).not.toContain('Export compatibility')
     expect(wrapper.text()).toContain('Section copied.')
   })

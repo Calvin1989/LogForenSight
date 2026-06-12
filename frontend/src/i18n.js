@@ -387,7 +387,20 @@ const messages = {
       manifestCompatibilityCompatible: "兼容",
       manifestCompatibilityBlocked: "阻止导出",
       manifestCompatibilitySafeNote: "当前仅包含未来可安全导出的低风险字段；本 PR 不改变 Markdown 导出行为。",
-      manifestCompatibilityBlockedNote: "发现高风险字段时必须继续排除在 Markdown 导出之外。"
+      manifestCompatibilityBlockedNote: "发现高风险字段时必须继续排除在 Markdown 导出之外。",
+      manifestAuditTrailTitle: "Manifest 审计追踪",
+      manifestAuditTrailSubtitle: "展示当前 Preview 的可复核边界与导出状态快照，不写入 Markdown。",
+      manifestAuditTrailPreviewOnly: "仅 Preview",
+      manifestAuditTrailGeneratedAt: "Manifest generated at",
+      manifestAuditTrailSourceType: "Manifest source type",
+      manifestAuditTrailCompatibilityStatus: "Manifest compatibility",
+      manifestAuditTrailAllowlistCount: "Allowlist field count",
+      manifestAuditTrailBlockedCategoriesCount: "Blocked high-risk categories",
+      manifestAuditTrailMarkdownExportStatus: "Markdown export status",
+      manifestAuditTrailShareSafetyStatus: "Share safety status",
+      manifestAuditTrailPreviewDistributionStatus: "Copy / download / section copy",
+      manifestAuditTrailSourceTypePreviewDerived: "preview_derived",
+      manifestAuditTrailStatusUnchanged: "未变更"
     },
     caseClosureChecklist: {
       title: "案件收尾检查清单",
@@ -1117,7 +1130,20 @@ const messages = {
       manifestCompatibilityCompatible: "Compatible",
       manifestCompatibilityBlocked: "Blocked",
       manifestCompatibilitySafeNote: "Only low-risk manifest fields are eligible for future export. This PR does not change Markdown export behavior.",
-      manifestCompatibilityBlockedNote: "High-risk fields must remain excluded from Markdown export."
+      manifestCompatibilityBlockedNote: "High-risk fields must remain excluded from Markdown export.",
+      manifestAuditTrailTitle: "Manifest Audit Trail",
+      manifestAuditTrailSubtitle: "Preview-only reproducibility boundary and export state snapshot. Never included in Markdown.",
+      manifestAuditTrailPreviewOnly: "Preview only",
+      manifestAuditTrailGeneratedAt: "Manifest generated at",
+      manifestAuditTrailSourceType: "Manifest source type",
+      manifestAuditTrailCompatibilityStatus: "Manifest compatibility",
+      manifestAuditTrailAllowlistCount: "Allowlist field count",
+      manifestAuditTrailBlockedCategoriesCount: "Blocked high-risk categories",
+      manifestAuditTrailMarkdownExportStatus: "Markdown export status",
+      manifestAuditTrailShareSafetyStatus: "Share safety status",
+      manifestAuditTrailPreviewDistributionStatus: "Copy / download / section copy",
+      manifestAuditTrailSourceTypePreviewDerived: "preview_derived",
+      manifestAuditTrailStatusUnchanged: "Unchanged"
     },
     caseClosureChecklist: {
       title: "Case closure checklist",

@@ -132,6 +132,32 @@
             }}
           </p>
         </div>
+
+        <section
+          class="export-manifest-audit-trail"
+          data-testid="evidence-pack-manifest-audit-trail"
+        >
+          <div class="export-manifest-audit-trail-header">
+            <div>
+              <h5>{{ t('evidencePackPreview.manifestAuditTrailTitle') }}</h5>
+              <p>{{ t('evidencePackPreview.manifestAuditTrailSubtitle') }}</p>
+            </div>
+            <span class="export-manifest-audit-trail-note">
+              {{ t('evidencePackPreview.manifestAuditTrailPreviewOnly') }}
+            </span>
+          </div>
+
+          <dl class="export-manifest-list">
+            <div
+              v-for="item in manifestAuditTrailItems"
+              :key="item.key"
+              class="export-manifest-row"
+            >
+              <dt>{{ item.label }}</dt>
+              <dd>{{ item.value }}</dd>
+            </div>
+          </dl>
+        </section>
       </div>
 
       <div v-if="isOpen" class="preview-body">
@@ -198,6 +224,7 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 import { currentLanguage, t } from '../i18n'
 import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
 import {
+  buildEvidencePackManifestAuditTrail,
   buildEvidencePackManifest,
   validateEvidencePackManifestForExport
 } from '../utils/evidencePackManifest'
@@ -310,6 +337,12 @@ const manifest = computed(() => {
 
 const manifestExportValidation = computed(() => {
   return validateEvidencePackManifestForExport(manifest.value)
+})
+
+const manifestAuditTrail = computed(() => {
+  return buildEvidencePackManifestAuditTrail(manifest.value, {
+    shareSafetyStatus: props.shareSafety?.status
+  })
 })
 
 function buildPreviewSectionId(index, navigationKey) {
@@ -454,6 +487,16 @@ function formatManifestReadinessStatus(status) {
 function formatManifestCompatibilityStatus(status) {
   if (status === 'blocked') return t('evidencePackPreview.manifestCompatibilityBlocked')
   return t('evidencePackPreview.manifestCompatibilityCompatible')
+}
+
+function formatManifestSourceType(sourceType) {
+  if (sourceType === 'preview_derived') return t('evidencePackPreview.manifestAuditTrailSourceTypePreviewDerived')
+  return t('evidencePackPreview.notAvailable')
+}
+
+function formatPreviewOnlyStatus(status) {
+  if (status === 'unchanged') return t('evidencePackPreview.manifestAuditTrailStatusUnchanged')
+  return t('evidencePackPreview.notAvailable')
 }
 
 function summarizeReviewReadiness(readiness) {
@@ -627,6 +670,51 @@ const manifestClosureItems = computed(() => {
   return [
     { key: 'gapCount', label: t('evidencePackPreview.manifestGapCount'), value: closureSummary.gapCount ?? 0 },
     { key: 'nextActionCount', label: t('evidencePackPreview.manifestNextActionCount'), value: closureSummary.nextActionCount ?? 0 }
+  ]
+})
+
+const manifestAuditTrailItems = computed(() => {
+  return [
+    {
+      key: 'generatedAt',
+      label: t('evidencePackPreview.manifestAuditTrailGeneratedAt'),
+      value: manifestAuditTrail.value.generatedAt || t('evidencePackPreview.notAvailable')
+    },
+    {
+      key: 'manifestSourceType',
+      label: t('evidencePackPreview.manifestAuditTrailSourceType'),
+      value: formatManifestSourceType(manifestAuditTrail.value.manifestSourceType)
+    },
+    {
+      key: 'manifestCompatibilityStatus',
+      label: t('evidencePackPreview.manifestAuditTrailCompatibilityStatus'),
+      value: formatManifestCompatibilityStatus(manifestAuditTrail.value.manifestCompatibilityStatus)
+    },
+    {
+      key: 'exportFieldAllowlistCount',
+      label: t('evidencePackPreview.manifestAuditTrailAllowlistCount'),
+      value: manifestAuditTrail.value.exportFieldAllowlistCount ?? 0
+    },
+    {
+      key: 'blockedHighRiskFieldCategoriesCount',
+      label: t('evidencePackPreview.manifestAuditTrailBlockedCategoriesCount'),
+      value: manifestAuditTrail.value.blockedHighRiskFieldCategoriesCount ?? 0
+    },
+    {
+      key: 'markdownExportStatus',
+      label: t('evidencePackPreview.manifestAuditTrailMarkdownExportStatus'),
+      value: formatPreviewOnlyStatus(manifestAuditTrail.value.markdownExportStatus)
+    },
+    {
+      key: 'shareSafetyStatus',
+      label: t('evidencePackPreview.manifestAuditTrailShareSafetyStatus'),
+      value: formatShareSafetyStatus(manifestAuditTrail.value.shareSafetyStatus)
+    },
+    {
+      key: 'previewDistributionSurfacesStatus',
+      label: t('evidencePackPreview.manifestAuditTrailPreviewDistributionStatus'),
+      value: formatPreviewOnlyStatus(manifestAuditTrail.value.previewDistributionSurfacesStatus)
+    }
   ]
 })
 
@@ -1003,6 +1091,42 @@ onBeforeUnmount(() => {
   font-size: 0.92rem;
 }
 
+.export-manifest-audit-trail {
+  margin-top: 0.9rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.85rem 1rem;
+}
+
+.export-manifest-audit-trail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.export-manifest-audit-trail-header h5 {
+  margin: 0 0 0.25rem;
+  color: #212529;
+  font-size: 0.9rem;
+}
+
+.export-manifest-audit-trail-header p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.export-manifest-audit-trail-note {
+  color: #495057;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .export-manifest-section {
   border: 1px solid #e9ecef;
   border-radius: 8px;
@@ -1178,6 +1302,10 @@ onBeforeUnmount(() => {
 
   .export-manifest-generated {
     text-align: left;
+  }
+
+  .export-manifest-audit-trail-header {
+    flex-direction: column;
   }
 
   .export-manifest-grid {

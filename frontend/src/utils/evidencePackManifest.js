@@ -119,6 +119,20 @@ function normalizeFieldSegment(value) {
     .replace(/[^a-z0-9]/g, '')
 }
 
+function countManifestExportFields() {
+  return Object.values(MANIFEST_EXPORT_FIELD_ALLOWLIST).reduce((count, value) => {
+    if (value === true) {
+      return count + 1
+    }
+
+    if (Array.isArray(value)) {
+      return count + value.length
+    }
+
+    return count
+  }, 0)
+}
+
 function matchBlockedFieldType(pathSegments) {
   const normalizedSegments = pathSegments.map(normalizeFieldSegment)
   const joinedPath = normalizedSegments.join('.')
@@ -275,10 +289,35 @@ export function validateEvidencePackManifestForExport(manifest = {}) {
     status: blockedFields.length > 0 ? 'blocked' : 'compatible',
     compatibility: blockedFields.length > 0 ? 'unsafe' : 'safe',
     compatible: blockedFields.length === 0,
-    exportFieldCount: 17,
+    exportFieldCount: countManifestExportFields(),
     exportFields,
     blockedFields,
     warnings
+  }
+}
+
+export function buildEvidencePackManifestAuditTrail(manifest = {}, options = {}) {
+  const safeManifest = normalizeObject(manifest)
+  const validation = validateEvidencePackManifestForExport(safeManifest)
+  const blockedHighRiskFieldCategoriesCount = new Set(
+    validation.blockedFields.map((field) => field.fieldType)
+  ).size
+
+  return {
+    generatedAt: typeof safeManifest.generatedAt === 'string' ? safeManifest.generatedAt : '',
+    manifestSourceType: typeof options.manifestSourceType === 'string' && options.manifestSourceType.trim()
+      ? options.manifestSourceType.trim().toLowerCase()
+      : 'preview_derived',
+    manifestCompatibilityStatus: validation.status,
+    exportFieldAllowlistCount: validation.exportFieldCount,
+    blockedHighRiskFieldCategoriesCount,
+    markdownExportStatus: typeof options.markdownExportStatus === 'string' && options.markdownExportStatus.trim()
+      ? options.markdownExportStatus.trim().toLowerCase()
+      : 'unchanged',
+    shareSafetyStatus: normalizeStatus(options.shareSafetyStatus ?? safeManifest.statusSummary?.shareSafetyStatus),
+    previewDistributionSurfacesStatus: typeof options.previewDistributionSurfacesStatus === 'string' && options.previewDistributionSurfacesStatus.trim()
+      ? options.previewDistributionSurfacesStatus.trim().toLowerCase()
+      : 'unchanged'
   }
 }
 
