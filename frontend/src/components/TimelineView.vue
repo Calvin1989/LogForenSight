@@ -151,48 +151,63 @@ const formatEventType = (type) => {
 .filter-controls {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
   flex-wrap: wrap;
-  padding: 0.75rem;
-  background: #f8f9fa;
-  border-radius: 6px;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
 }
 
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
 }
 
 .filter-group label {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: #495057;
+  color: #475569;
 }
 
 .filter-select, .filter-input {
-  padding: 0.35rem 0.6rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  padding: 0.4375rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.875rem;
   outline: none;
+  transition: all 0.2s ease;
+}
+
+.filter-select:focus, .filter-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .clear-btn {
   background: none;
   border: none;
-  color: #007bff;
-  font-size: 0.85rem;
+  color: #2563eb;
+  font-size: 0.875rem;
   cursor: pointer;
-  padding: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
   text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: #dbeafe;
+  text-decoration: none;
 }
 
 .filter-stats {
-  font-size: 0.85rem;
-  color: #6c757d;
+  font-size: 0.875rem;
+  color: #64748b;
   margin-left: auto;
+  font-weight: 500;
 }
 
 .timeline-container {
@@ -213,22 +228,23 @@ const formatEventType = (type) => {
 }
 
 .marker-dot {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #ced4da;
+  background: #cbd5e1;
   margin-top: 0.5rem;
   z-index: 1;
+  box-shadow: 0 0 0 3px #f1f5f9;
 }
 
-.marker-dot.high { background-color: #e74c3c; }
-.marker-dot.medium { background-color: #f39c12; }
-.marker-dot.low { background-color: #3498db; }
+.marker-dot.high { background-color: #dc2626; }
+.marker-dot.medium { background-color: #f59e0b; }
+.marker-dot.low { background-color: #2563eb; }
 
 .marker-line {
   flex-grow: 1;
   width: 2px;
-  background: #e9ecef;
+  background: #e2e8f0;
 }
 
 .timeline-item:last-child .marker-line {
@@ -237,101 +253,113 @@ const formatEventType = (type) => {
 
 .timeline-content {
   flex-grow: 1;
-  padding-bottom: 2rem;
+  padding-bottom: 2.25rem;
 }
 
 .event-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: 0.625rem;
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
 }
 
 .event-time {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #495057;
-  font-family: monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #475569;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .severity-badge {
-  font-size: 0.7rem;
-  padding: 0.15rem 0.4rem;
+  font-size: 0.6875rem;
+  padding: 0.1875rem 0.5rem;
   border-radius: 4px;
-  font-weight: 700;
+  font-weight: 800;
   color: white;
+  letter-spacing: 0.025em;
 }
 
-.severity-badge[data-severity="high"] { background-color: #e74c3c; }
-.severity-badge[data-severity="medium"] { background-color: #f39c12; }
-.severity-badge[data-severity="low"] { background-color: #3498db; }
+.severity-badge[data-severity="high"] { background-color: #dc2626; }
+.severity-badge[data-severity="medium"] { background-color: #f59e0b; }
+.severity-badge[data-severity="low"] { background-color: #2563eb; }
 
 .event-type-badge {
   font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
-  background-color: #e9ecef;
-  color: #495057;
-  border-radius: 12px;
-  font-weight: 500;
+  padding: 0.1875rem 0.625rem;
+  background-color: #f1f5f9;
+  color: #475569;
+  border-radius: 999px;
+  font-weight: 600;
 }
 
 .ip-badge {
-  font-size: 0.85rem;
-  color: #6c757d;
-  font-family: monospace;
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background: #f8fafc;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 4px;
 }
 
 .event-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  color: #212529;
+  margin: 0 0 0.625rem 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #1e293b;
 }
 
 .event-desc {
-  font-size: 0.9rem;
-  color: #495057;
-  margin: 0 0 0.75rem 0;
+  font-size: 0.9375rem;
+  color: #475569;
+  margin: 0 0 0.875rem 0;
+  line-height: 1.6;
 }
 
 .event-evidence {
-  background: #f8f9fa;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 0.75rem;
-  border: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 0.875rem;
+  border-radius: 6px;
+  margin-bottom: 0.875rem;
+  border: 1px solid #e2e8f0;
 }
 
 .event-evidence strong {
   display: block;
-  font-size: 0.8rem;
-  margin-bottom: 0.4rem;
-  color: #6c757d;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .event-evidence pre {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-all;
-  font-size: 0.8rem;
-  color: #333;
+  font-size: 0.8125rem;
+  color: #1e293b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  line-height: 1.5;
 }
 
 .event-meta {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .meta-tag {
   font-size: 0.75rem;
-  color: #adb5bd;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #6c757d;
-  background: #f8f9fa;
+  color: #64748b;
+  background: #f8fafc;
   border-radius: 8px;
 }
 </style>

@@ -423,4 +423,17 @@ describe('App.vue workspace shell', () => {
     expect(shareSafety.exists()).toBe(true)
     expect(preview.text()).toContain('share-target:evidence-pack-share-safety')
   })
+
+  it('shows investigation view with intro and groups when there is a result', async () => {
+    hoisted.state.result.value = sampleResult
+
+    const wrapper = mount(App)
+
+    await wrapper.get('[data-testid="workspace-nav-investigation"]').trigger('click')
+
+    expect(wrapper.get('[data-testid="investigation-layout"]').exists()).toBe(true)
+    expect(wrapper.get('[data-testid="investigation-intro"]').exists()).toBe(true)
+    expect(wrapper.get('[data-testid="investigation-timeline-incidents-group"]').exists()).toBe(true)
+    expect(wrapper.get('[data-testid="investigation-findings-rules-group"]').exists()).toBe(true)
+  })
 })

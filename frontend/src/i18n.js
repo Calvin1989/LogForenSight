@@ -501,6 +501,14 @@ const messages = {
       readinessTitle: "复核与就绪度",
       readinessDescription: "在打包证据前确认复核就绪度和结案清单。"
     },
+    investigation: {
+      introDescription: "调查工作流概览",
+      introBody: "在同一个调查工作区中复核事件时间线、关联事件、发现项和规则覆盖情况。",
+      timelineIncidentsTitle: "时间线与事件",
+      timelineIncidentsDescription: "还原事件顺序并复核关联事件上下文。",
+      findingsRulesTitle: "发现项与规则",
+      findingsRulesDescription: "结合规则覆盖和调优上下文复核检测结果。"
+    },
     evidencePackShareSafety: {
       title: "Evidence Pack 分享安全检查",
       empty: "运行分析后可查看 Evidence Pack 分享前安全检查结果。",
@@ -1307,6 +1315,14 @@ const messages = {
       decisionsDescription: "Triage findings and record case notes",
       readinessTitle: "Review & Readiness",
       readinessDescription: "Check readiness and prepare for handoff"
+    },
+    investigation: {
+      introDescription: "Investigation workflow overview",
+      introBody: "Review the incident timeline, correlated incidents, findings, and rule coverage in one investigation workspace.",
+      timelineIncidentsTitle: "Timeline & Incidents",
+      timelineIncidentsDescription: "Reconstruct event order and review grouped incident context.",
+      findingsRulesTitle: "Findings & Rules",
+      findingsRulesDescription: "Review detections alongside rule coverage and tuning context."
     },
     evidencePackShareSafety: {
       title: "Evidence Pack Share Safety Review",

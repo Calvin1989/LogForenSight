@@ -134,25 +134,48 @@
             <template v-if="displayResult">
               <AnalysisContextBar :analysisResult="displayResult" />
 
-              <TimelineView :timelineEvents="displayResult.timeline_events || []" />
+              <div class="investigation-layout" data-testid="investigation-layout">
+                <div class="investigation-intro" data-testid="investigation-intro">
+                  <div class="investigation-intro-icon">🔍</div>
+                  <p class="investigation-intro-text">{{ t('investigation.introBody') }}</p>
+                </div>
 
-              <IncidentsList
-                :incidents="displayResult.incidents"
-                :triageState="triageState"
-              />
+                <div class="investigation-timeline-incidents-group" data-testid="investigation-timeline-incidents-group">
+                  <div class="group-header">
+                    <h3 class="group-title">{{ t('investigation.timelineIncidentsTitle') }}</h3>
+                    <span class="group-description">{{ t('investigation.timelineIncidentsDescription') }}</span>
+                  </div>
+                  <div class="group-content">
+                    <TimelineView :timelineEvents="displayResult.timeline_events || []" />
 
-              <FindingsList
-                :findings="displayResult.findings"
-                :analysisResult="result"
-                :triageState="triageState"
-              />
+                    <IncidentsList
+                      :incidents="displayResult.incidents"
+                      :triageState="triageState"
+                    />
+                  </div>
+                </div>
 
-              <div
-                v-if="displayResult.rule_coverage"
-                id="rule-coverage"
-                class="coverage-section"
-              >
-                <RuleCoverage :ruleCoverage="displayResult.rule_coverage" />
+                <div class="investigation-findings-rules-group" data-testid="investigation-findings-rules-group">
+                  <div class="group-header">
+                    <h3 class="group-title">{{ t('investigation.findingsRulesTitle') }}</h3>
+                    <span class="group-description">{{ t('investigation.findingsRulesDescription') }}</span>
+                  </div>
+                  <div class="group-content">
+                    <FindingsList
+                      :findings="displayResult.findings"
+                      :analysisResult="result"
+                      :triageState="triageState"
+                    />
+
+                    <div
+                      v-if="displayResult.rule_coverage"
+                      id="rule-coverage"
+                      class="coverage-section"
+                    >
+                      <RuleCoverage :ruleCoverage="displayResult.rule_coverage" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </template>
 
@@ -875,6 +898,55 @@ header h1 {
 
   .group-content {
     gap: 1rem;
+  }
+}
+
+/* Investigation Layout Styles */
+.investigation-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.investigation-intro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%);
+  border: 1px solid #dcfce7;
+  border-radius: 10px;
+}
+
+.investigation-intro-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.investigation-intro-text {
+  margin: 0;
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.investigation-timeline-incidents-group,
+.investigation-findings-rules-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .investigation-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 1rem;
+  }
+
+  .investigation-intro-icon {
+    font-size: 1.5rem;
   }
 }
 </style>
