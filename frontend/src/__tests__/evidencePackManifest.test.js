@@ -1,12 +1,27 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { setLanguage } from '../i18n'
 import {
+  buildEvidencePackManifestAuditTrail,
   buildEvidencePackManifest,
   getEvidencePackManifestExportFields,
   validateEvidencePackManifestForExport,
   MANIFEST_EXPORT_FIELD_ALLOWLIST,
   MANIFEST_FIELD_RISK_LEVELS
 } from '../utils/evidencePackManifest'
+
+function countAllowlistFields() {
+  return Object.values(MANIFEST_EXPORT_FIELD_ALLOWLIST).reduce((count, value) => {
+    if (value === true) {
+      return count + 1
+    }
+
+    if (Array.isArray(value)) {
+      return count + value.length
+    }
+
+    return count
+  }, 0)
+}
 
 describe('evidencePackManifest', () => {
   beforeEach(() => {
@@ -230,7 +245,7 @@ describe('evidencePackManifest', () => {
       status: 'compatible',
       compatibility: 'safe',
       compatible: true,
-      exportFieldCount: 17,
+      exportFieldCount: countAllowlistFields(),
       exportFields: {
         generatedAt: '2026-06-11T12:34:56.000Z',
         sourceCounts: {
@@ -299,6 +314,7 @@ describe('evidencePackManifest', () => {
     expect(validation.status).toBe('blocked')
     expect(validation.compatibility).toBe('unsafe')
     expect(validation.compatible).toBe(false)
+    expect(validation.exportFieldCount).toBe(countAllowlistFields())
     expect(validation.exportFields.generatedAt).toBe('2026-06-11T12:34:56.000Z')
     expect(validation.exportFields.sourceCounts.sourceFiles).toBe(1)
     expect(validation.exportFields.statusSummary.qualityScore).toBe(92)
@@ -313,5 +329,91 @@ describe('evidencePackManifest', () => {
       expect.objectContaining({ code: 'blocked-manifest-field', fieldType: 'sourceFileNames' }),
       expect.objectContaining({ code: 'blocked-manifest-field', fieldType: 'urls' })
     ]))
+  })
+
+  it('builds a stable audit trail from a compatible manifest and reuses manifest generatedAt', () => {
+    const manifest = buildEvidencePackManifest({
+      result: {
+        findings: [{ id: 'f-1' }],
+        incidents: [{ id: 'i-1' }],
+        timeline_events: [],
+        rule_coverage: [{ id: 'r-1' }],
+        parse_stats: {
+          source_files: [{ filename: 'a.log' }]
+        }
+      },
+      triageState: {
+        'finding:f-1': { status: 'investigating' }
+      },
+      caseNotes: [{ id: 'n-1' }],
+      reviewReadiness: { status: 'ready' },
+      evidencePackQuality: { score: 92, status: 'good' },
+      exportGuardrails: { decision: 'ready' },
+      shareSafety: { status: 'safe' }
+    }, {
+      generatedAt: '2026-06-11T12:34:56.000Z'
+    })
+
+    expect(buildEvidencePackManifestAuditTrail(manifest, {
+      shareSafetyStatus: 'safe'
+    })).toEqual({
+      generatedAt: '2026-06-11T12:34:56.000Z',
+      manifestSourceType: 'preview_derived',
+      manifestCompatibilityStatus: 'compatible',
+      exportFieldAllowlistCount: countAllowlistFields(),
+      blockedHighRiskFieldCategoriesCount: 0,
+      markdownExportStatus: 'unchanged',
+      shareSafetyStatus: 'safe',
+      previewDistributionSurfacesStatus: 'unchanged'
+    })
+  })
+
+  it('builds an audit trail with deduplicated blocked field categories for blocked manifests', () => {
+    const manifest = {
+      generatedAt: '2026-06-11T12:34:56.000Z',
+      sourceCounts: {
+        findings: 1,
+        incidents: 1,
+        timelineEvents: 0,
+        ruleCoverage: 1,
+        sourceFiles: 1,
+        triageRecords: 1,
+        caseNotes: 1,
+        entities: 0
+      },
+      statusSummary: {
+        reviewReadinessStatus: 'ready',
+        qualityScore: 92,
+        qualityStatus: 'good',
+        guardrailDecision: 'ready',
+        shareSafetyStatus: 'review_recommended',
+        handoffReadinessStatus: 'ready'
+      },
+      closureSummary: {
+        gapCount: 0,
+        nextActionCount: 0
+      },
+      sourceFileNames: ['access.log'],
+      extension: {
+        urls: ['https://portal.example.com/login?user=alice'],
+        nested: {
+          urls: ['https://portal.example.com/reset?token=abc'],
+          rawFindingDescriptions: ['Credential stuffing detected']
+        }
+      }
+    }
+
+    expect(buildEvidencePackManifestAuditTrail(manifest, {
+      shareSafetyStatus: 'review_recommended'
+    })).toEqual({
+      generatedAt: '2026-06-11T12:34:56.000Z',
+      manifestSourceType: 'preview_derived',
+      manifestCompatibilityStatus: 'blocked',
+      exportFieldAllowlistCount: countAllowlistFields(),
+      blockedHighRiskFieldCategoriesCount: 3,
+      markdownExportStatus: 'unchanged',
+      shareSafetyStatus: 'review_recommended',
+      previewDistributionSurfacesStatus: 'unchanged'
+    })
   })
 })
