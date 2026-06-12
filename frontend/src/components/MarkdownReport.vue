@@ -2,44 +2,50 @@
   <section class="result-card">
     <div class="header-with-action">
       <h2>{{ t('report.title') }}</h2>
-      <div class="button-group">
-        <button 
-          @click="showPreview = !showPreview" 
-          class="toggle-btn"
-        >
-          {{ showPreview ? t('actions.hidePreview') : t('actions.showPreview') }}
-        </button>
-        <button
-          v-if="localizedReport"
-          @click="downloadLocalizedReport"
-          class="download-btn raw"
-        >
-          {{ t('report.downloadReport') }}
-        </button>
-        <button 
-          v-if="reportMarkdown" 
-          @click="$emit('download-sanitized')" 
-          :disabled="sanitizing || !sanitizedAvailable"
-          class="download-btn sanitized"
-        >
-          {{ sanitizing ? t('actions.processing') : t('report.downloadSanitized') }}
-        </button>
-        <button 
-          v-if="result" 
-          @click="downloadSummaryJson" 
-          class="download-btn summary"
-          :title="t('report.downloadSummary')"
-        >
-          {{ t('report.downloadSummary') }}
-        </button>
-        <button
-          v-if="result"
-          @click="downloadEvidencePackMarkdown"
-          class="download-btn evidence-pack"
-          :title="t('report.downloadEvidencePack')"
-        >
-          {{ t('report.downloadEvidencePack') }}
-        </button>
+      <div class="markdown-report-actions" data-testid="markdown-report-actions">
+        <div class="action-group preview-actions" data-testid="markdown-preview-actions">
+          <button
+            @click="showPreview = !showPreview"
+            class="toggle-btn"
+          >
+            {{ showPreview ? t('actions.hidePreview') : t('actions.showPreview') }}
+          </button>
+        </div>
+        <div class="action-group report-downloads" data-testid="markdown-report-downloads">
+          <button
+            v-if="localizedReport"
+            @click="downloadLocalizedReport"
+            class="download-btn raw"
+          >
+            {{ t('report.downloadReport') }}
+          </button>
+          <button
+            v-if="reportMarkdown"
+            @click="$emit('download-sanitized')"
+            :disabled="sanitizing || !sanitizedAvailable"
+            class="download-btn sanitized"
+          >
+            {{ sanitizing ? t('actions.processing') : t('report.downloadSanitized') }}
+          </button>
+        </div>
+        <div class="action-group export-downloads" data-testid="markdown-export-downloads">
+          <button
+            v-if="result"
+            @click="downloadSummaryJson"
+            class="download-btn summary"
+            :title="t('report.downloadSummary')"
+          >
+            {{ t('report.downloadSummary') }}
+          </button>
+          <button
+            v-if="result"
+            @click="downloadEvidencePackMarkdown"
+            class="download-btn evidence-pack"
+            :title="t('report.downloadEvidencePack')"
+          >
+            {{ t('report.downloadEvidencePack') }}
+          </button>
+        </div>
       </div>
     </div>
     
@@ -254,9 +260,17 @@ const downloadEvidencePackMarkdown = () => {
   color: #495057;
 }
 
-.button-group {
+.markdown-report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.action-group {
   display: flex;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .download-btn {

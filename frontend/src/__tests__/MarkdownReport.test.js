@@ -100,4 +100,38 @@ describe('MarkdownReport.vue', () => {
     expect(mockAnchor.click).toHaveBeenCalled()
     expect(mockAnchor.download).toContain('analyst_evidence_pack_')
   })
+
+  it('renders action groups containers', () => {
+    const wrapper = mount(MarkdownReport, {
+      props: {
+        reportMarkdown: mockMarkdown,
+        result: mockResult
+      }
+    })
+
+    expect(wrapper.find('[data-testid="markdown-report-actions"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="markdown-preview-actions"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="markdown-report-downloads"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="markdown-export-downloads"]').exists()).toBe(true)
+  })
+
+  it('toggles preview when toggle button is clicked', async () => {
+    const wrapper = mount(MarkdownReport, {
+      props: {
+        reportMarkdown: mockMarkdown,
+        result: mockResult
+      }
+    })
+
+    // Initial state should be preview visible
+    expect(wrapper.find('.report-preview-container').exists()).toBe(true)
+
+    // Click to hide
+    await wrapper.find('.toggle-btn').trigger('click')
+    expect(wrapper.find('.report-preview-container').exists()).toBe(false)
+
+    // Click again to show
+    await wrapper.find('.toggle-btn').trigger('click')
+    expect(wrapper.find('.report-preview-container').exists()).toBe(true)
+  })
 })
