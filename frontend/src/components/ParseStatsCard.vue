@@ -1,75 +1,77 @@
 <template>
-  <div class="stats-card">
-    <div class="card-header">
-      <h3>{{ t('parse.title') }}</h3>
+  <Card class="stats-card" data-testid="parse-stats-card">
+    <CardHeader class="card-header">
+      <CardTitle>{{ t('parse.title') }}</CardTitle>
       <div class="parse-rate" :class="rateClass">
         {{ (stats.parse_rate * 100).toFixed(1) }}% {{ t('parse.success') }}
       </div>
-    </div>
-    
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span class="label">{{ t('parse.totalLines') }}</span>
-        <span class="value">{{ stats.total_lines }}</span>
-      </div>
-      <div class="stat-item">
-        <span class="label">{{ t('parse.parsed') }}</span>
-        <span class="value success">{{ stats.parsed_lines }}</span>
-      </div>
-      <div class="stat-item">
-        <span class="label">{{ t('parse.skipped') }}</span>
-        <span class="value" :class="{ 'warning': stats.skipped_lines > 0 }">{{ stats.skipped_lines }}</span>
-      </div>
-    </div>
-
-    <div class="format-info">
-      <span>{{ t('parse.format') }}: <strong>{{ stats.detected_format }}</strong></span>
-      <span class="separator">|</span>
-      <span>{{ t('parse.requested') }}: <strong>{{ stats.requested_format }}</strong></span>
-    </div>
-
-    <div v-if="stats.skipped_lines > 0" class="parse-warning">
-      <span class="icon">⚠️</span>
-      <span class="text">{{ t('parse.warning') }}</span>
-    </div>
-
-    <div v-if="stats.skipped_samples && stats.skipped_samples.length > 0" class="skipped-samples">
-      <h4>{{ t('parse.skippedSamples') }}</h4>
-      <div v-for="sample in stats.skipped_samples" :key="sample.line_number" class="sample-item">
-        <div class="sample-meta">
-          <span class="line-num">{{ t('common.line') }} {{ sample.line_number }}</span>
-          <span class="reason">{{ sample.reason }}</span>
+    </CardHeader>
+    <CardContent>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="label">{{ t('parse.totalLines') }}</span>
+          <span class="value">{{ stats.total_lines }}</span>
         </div>
-        <pre class="sample-content">{{ sample.content }}</pre>
-      </div>
-    </div>
-
-    <div v-if="sourceFiles.length > 0" class="source-files">
-      <h4>{{ t('parse.sourceFiles') }}</h4>
-      <div class="source-files-table">
-        <div class="source-row source-header">
-          <span>{{ t('parse.filename') }}</span>
-          <span>{{ t('parse.totalLines') }}</span>
-          <span>{{ t('parse.parsedLines') }}</span>
-          <span>{{ t('parse.skippedLines') }}</span>
-          <span>{{ t('parse.parseRate') }}</span>
-          <span>{{ t('parse.detectedFormat') }}</span>
+        <div class="stat-item">
+          <span class="label">{{ t('parse.parsed') }}</span>
+          <span class="value success">{{ stats.parsed_lines }}</span>
         </div>
-        <div v-for="file in sourceFiles" :key="file.filename" class="source-row">
-          <span>{{ file.filename }}</span>
-          <span>{{ file.total_lines }}</span>
-          <span>{{ file.parsed_lines }}</span>
-          <span>{{ file.skipped_lines }}</span>
-          <span>{{ ((file.parse_rate || 0) * 100).toFixed(1) }}%</span>
-          <span>{{ file.detected_format }}</span>
+        <div class="stat-item">
+          <span class="label">{{ t('parse.skipped') }}</span>
+          <span class="value" :class="{ 'warning': stats.skipped_lines > 0 }">{{ stats.skipped_lines }}</span>
         </div>
       </div>
-    </div>
-  </div>
+
+      <div class="format-info">
+        <span>{{ t('parse.format') }}: <strong>{{ stats.detected_format }}</strong></span>
+        <span class="separator">|</span>
+        <span>{{ t('parse.requested') }}: <strong>{{ stats.requested_format }}</strong></span>
+      </div>
+
+      <div v-if="stats.skipped_lines > 0" class="parse-warning">
+        <span class="icon">⚠️</span>
+        <span class="text">{{ t('parse.warning') }}</span>
+      </div>
+
+      <div v-if="stats.skipped_samples && stats.skipped_samples.length > 0" class="skipped-samples">
+        <h4>{{ t('parse.skippedSamples') }}</h4>
+        <div v-for="sample in stats.skipped_samples" :key="sample.line_number" class="sample-item">
+          <div class="sample-meta">
+            <span class="line-num">{{ t('common.line') }} {{ sample.line_number }}</span>
+            <span class="reason">{{ sample.reason }}</span>
+          </div>
+          <pre class="sample-content">{{ sample.content }}</pre>
+        </div>
+      </div>
+
+      <div v-if="sourceFiles.length > 0" class="source-files">
+        <h4>{{ t('parse.sourceFiles') }}</h4>
+        <div class="source-files-table">
+          <div class="source-row source-header">
+            <span>{{ t('parse.filename') }}</span>
+            <span>{{ t('parse.totalLines') }}</span>
+            <span>{{ t('parse.parsedLines') }}</span>
+            <span>{{ t('parse.skippedLines') }}</span>
+            <span>{{ t('parse.parseRate') }}</span>
+            <span>{{ t('parse.detectedFormat') }}</span>
+          </div>
+          <div v-for="file in sourceFiles" :key="file.filename" class="source-row">
+            <span>{{ file.filename }}</span>
+            <span>{{ file.total_lines }}</span>
+            <span>{{ file.parsed_lines }}</span>
+            <span>{{ file.skipped_lines }}</span>
+            <span>{{ ((file.parse_rate || 0) * 100).toFixed(1) }}%</span>
+            <span>{{ file.detected_format }}</span>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { currentAnalysisResult } from '../composables/useAnalysisState'
 import { t } from '../i18n'
 
@@ -99,25 +101,14 @@ const sourceFiles = computed(() => {
 
 <style scoped>
 .stats-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.25rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .card-header {
-  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-}
-
-.card-header h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: #495057;
+  padding-bottom: 1rem;
 }
 
 .parse-rate {

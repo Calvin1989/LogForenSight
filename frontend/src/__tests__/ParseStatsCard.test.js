@@ -18,11 +18,13 @@ describe('ParseStatsCard', () => {
     skipped_samples: []
   }
 
-  it('renders correctly with stats', () => {
+  it('renders correctly with stats and shadcn card wrapper', () => {
     const wrapper = mount(ParseStatsCard, {
       props: { stats: defaultStats }
     })
 
+    expect(wrapper.find('[data-testid="parse-stats-card"]').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Parsing Quality')
     expect(wrapper.text()).toContain('95.0% Success')
     expect(wrapper.text()).toContain('Total Lines100')
     expect(wrapper.text()).toContain('Parsed95')
@@ -40,8 +42,8 @@ describe('ParseStatsCard', () => {
 
   it('does not show warning when skipped_lines is 0', () => {
     const wrapper = mount(ParseStatsCard, {
-      props: { 
-        stats: { ...defaultStats, skipped_lines: 0, parse_rate: 1.0 } 
+      props: {
+        stats: { ...defaultStats, skipped_lines: 0, parse_rate: 1.0 }
       }
     })
 
@@ -56,7 +58,7 @@ describe('ParseStatsCard', () => {
         { line_number: 10, reason: 'Format mismatch', content: 'invalid line' }
       ]
     }
-    
+
     const wrapper = mount(ParseStatsCard, {
       props: { stats: statsWithSamples }
     })
