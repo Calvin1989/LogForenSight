@@ -633,6 +633,24 @@ const messages = {
       importError: "导入失败，请检查文件格式",
       noMatches: "没有匹配筛选条件的案例"
     },
+    workspaceNav: {
+      title: "工作区导航",
+      subtitle: "在不同分析视图之间切换",
+      ariaLabel: "工作区导航",
+      locked: "需分析",
+      requiresAnalysis: "请先在 Workspace 中上传并分析日志",
+      workspace: "工作区",
+      overview: "概览",
+      investigation: "调查",
+      triageReview: "分诊 / 审查",
+      evidencePack: "证据包",
+      markdownReport: "Markdown 报告",
+      rules: "规则"
+    },
+    workspaceShell: {
+      emptyTitle: "尚无可展示的分析结果",
+      emptyDescription: "请先在 Workspace 中上传并分析日志，然后再查看该视图。"
+    },
     triage: {
       title: "分析师处置工作流 (Analyst Triage)",
       empty: "尚未对任何风险或事件进行处置标记",
@@ -1375,6 +1393,24 @@ const messages = {
       importSuccess: "Import successful",
       importError: "Import failed, please check file format",
       noMatches: "No cases match your filters"
+    },
+    workspaceNav: {
+      title: "Workspace Navigation",
+      subtitle: "Move between focused analysis views",
+      ariaLabel: "Workspace navigation",
+      locked: "Locked",
+      requiresAnalysis: "Run an analysis from Workspace first",
+      workspace: "Workspace",
+      overview: "Overview",
+      investigation: "Investigation",
+      triageReview: "Triage / Review",
+      evidencePack: "Evidence Pack",
+      markdownReport: "Markdown Report",
+      rules: "Rules"
+    },
+    workspaceShell: {
+      emptyTitle: "No analysis result loaded",
+      emptyDescription: "Upload and analyze logs from the Workspace view before opening this section."
     },
     triage: {
       title: "Analyst Triage Workflow",

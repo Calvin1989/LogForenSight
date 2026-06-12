@@ -110,6 +110,18 @@ describe('i18n tool', () => {
     expect(t('workspace.saveCase')).toBe('Save as Case')
   })
 
+  it('should have workspace navigation translations', () => {
+    setLanguage('zh')
+    expect(t('workspaceNav.title')).toBe('工作区导航')
+    expect(t('workspaceNav.workspace')).toBe('工作区')
+    expect(t('workspaceNav.evidencePack')).toBe('证据包')
+
+    setLanguage('en')
+    expect(t('workspaceNav.title')).toBe('Workspace Navigation')
+    expect(t('workspaceNav.workspace')).toBe('Workspace')
+    expect(t('workspaceNav.evidencePack')).toBe('Evidence Pack')
+  })
+
   it('should have triage translations', () => {
     setLanguage('zh')
     expect(t('triage.title')).toBe('分析师处置工作流 (Analyst Triage)')
