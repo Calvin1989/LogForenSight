@@ -179,13 +179,13 @@
               <div class="triage-review-layout" data-testid="triage-review-layout">
                 <div class="triage-review-intro" data-testid="triage-review-intro">
                   <div class="triage-review-intro-icon">📋</div>
-                  <p class="triage-review-intro-text">This view organizes your investigation workflow: triage decisions, case notes, review readiness, and closure checklist.</p>
+                  <p class="triage-review-intro-text">{{ t('triageReview.introDescription') }}</p>
                 </div>
 
                 <div class="triage-review-decisions-group" data-testid="triage-review-decisions-group">
                   <div class="group-header">
-                    <h3 class="group-title">Investigation Decisions</h3>
-                    <span class="group-description">Triage findings and record case notes</span>
+                    <h3 class="group-title">{{ t('triageReview.decisionsTitle') }}</h3>
+                    <span class="group-description">{{ t('triageReview.decisionsDescription') }}</span>
                   </div>
                   <div class="group-content">
                     <TriagePanel
@@ -202,8 +202,8 @@
 
                 <div class="triage-review-readiness-group" data-testid="triage-review-readiness-group">
                   <div class="group-header">
-                    <h3 class="group-title">Review & Readiness</h3>
-                    <span class="group-description">Check readiness and prepare for handoff</span>
+                    <h3 class="group-title">{{ t('triageReview.readinessTitle') }}</h3>
+                    <span class="group-description">{{ t('triageReview.readinessDescription') }}</span>
                   </div>
                   <div class="group-content">
                     <ReviewReadinessPanel

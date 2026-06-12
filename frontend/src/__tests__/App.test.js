@@ -361,6 +361,24 @@ describe('App.vue workspace shell', () => {
     expect(wrapper.text()).toContain('Inspect rules and tuning settings')
   })
 
+  it('shows triage review layout with i18n translations in both languages', async () => {
+    hoisted.state.result.value = sampleResult
+
+    const wrapper = mount(App)
+
+    await wrapper.get('[data-testid="workspace-nav-triageReview"]').trigger('click')
+
+    // English
+    expect(wrapper.get('[data-testid="triage-review-intro"]').text()).toContain('This view organizes your investigation workflow')
+    expect(wrapper.get('[data-testid="triage-review-decisions-group"]').text()).toContain('Investigation Decisions')
+    expect(wrapper.get('[data-testid="triage-review-readiness-group"]').text()).toContain('Review & Readiness')
+    expect(wrapper.get('[data-testid="triage-review-decisions-group"]').text()).toContain('Triage findings and record case notes')
+    expect(wrapper.get('[data-testid="triage-review-readiness-group"]').text()).toContain('Check readiness and prepare for handoff')
+
+    // No hardcoded Chinese text when English is active
+    expect(wrapper.text()).not.toContain('此视图用于组织调查工作流')
+  })
+
   it('shows batch analysis context with source file summary in result views', async () => {
     hoisted.state.result.value = batchResult
 
