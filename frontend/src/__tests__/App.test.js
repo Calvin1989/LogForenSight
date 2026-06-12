@@ -206,7 +206,10 @@ vi.mock('../components/RuleCoverage.vue', () => ({
 }))
 
 const sampleResult = {
+  analysis_mode: 'single',
   summary: {
+    total_requests: 13,
+    unique_ips: 3,
     finding_severity_counts: { HIGH: 1 },
     incident_severity_counts: { HIGH: 1 },
     top_ips: [{ ip: '1.1.1.1' }],
@@ -217,6 +220,7 @@ const sampleResult = {
   },
   parse_stats: {
     parse_rate: 0.98,
+    detected_format: 'combined',
     total_lines: 100,
     parsed_lines: 98,
     skipped_lines: 2
@@ -226,6 +230,24 @@ const sampleResult = {
   timeline_events: [{ timestamp: '2026-06-12T00:00:00Z', title: 'Event' }],
   rule_coverage: [{ rule_id: 'RULE-1', title: 'Rule 1', severity: 'high', enabled: true, triggered: true }],
   report_markdown: '# Report'
+}
+
+const batchResult = {
+  ...sampleResult,
+  analysis_mode: 'batch',
+  summary: {
+    ...sampleResult.summary,
+    total_requests: 16
+  },
+  parse_stats: {
+    ...sampleResult.parse_stats,
+    parse_rate: 1
+  },
+  source_files: [
+    { filename: 'samples/demo_batch_part1.log' },
+    { filename: 'samples/demo_batch_part2.log' },
+    { filename: 'samples/demo_batch_part3.log' }
+  ]
 }
 
 let App
@@ -291,15 +313,20 @@ describe('App.vue workspace shell', () => {
     expect(wrapper.get('[data-testid="workspace-nav-investigation"]').attributes('disabled')).toBeDefined()
     expect(wrapper.get('[data-testid="workspace-nav-evidencePack"]').attributes('disabled')).toBeDefined()
     expect(wrapper.get('[data-testid="workspace-nav-markdownReport"]').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('[data-testid="analysis-context-bar"]').exists()).toBe(false)
   })
 
-  it('switches between enabled views and renders grouped components when a result exists', async () => {
+  it('shows single-analysis context in result views and switches between enabled views', async () => {
     hoisted.state.result.value = sampleResult
 
     const wrapper = mount(App)
 
     await wrapper.get('[data-testid="workspace-nav-overview"]').trigger('click')
     expect(wrapper.get('[data-testid="workspace-view-overview"]').exists()).toBe(true)
+    expect(wrapper.get('[data-testid="analysis-context-bar"]').text()).toContain('Single analysis')
+    expect(wrapper.get('[data-testid="analysis-context-bar"]').text()).toContain('13 requests')
+    expect(wrapper.get('[data-testid="analysis-context-bar"]').text()).toContain('Parse rate 98%')
+    expect(wrapper.get('[data-testid="analysis-context-bar"]').text()).toContain('1 finding / 1 incident')
     expect(wrapper.get('[data-testid="summary-cards"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="parse-stats-card"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('high-level risk picture')
@@ -328,6 +355,22 @@ describe('App.vue workspace shell', () => {
     expect(wrapper.get('[data-testid="rule-config-panel"]').exists()).toBe(true)
     expect(wrapper.get('[data-testid="rule-tuning-panel"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('Inspect rules and tuning settings')
+  })
+
+  it('shows batch analysis context with source file summary in result views', async () => {
+    hoisted.state.result.value = batchResult
+
+    const wrapper = mount(App)
+
+    await wrapper.get('[data-testid="workspace-nav-overview"]').trigger('click')
+
+    const contextBar = wrapper.get('[data-testid="analysis-context-bar"]')
+    expect(contextBar.text()).toContain('Batch analysis')
+    expect(contextBar.text()).toContain('3 source files')
+    expect(contextBar.text()).toContain('16 requests')
+    expect(contextBar.text()).toContain('Parse rate 100%')
+    expect(contextBar.text()).toContain('1 finding / 1 incident')
+    expect(wrapper.get('[data-testid="analysis-context-sources"]').text()).toContain('demo_batch_part1.log, demo_batch_part2.log +1 more')
   })
 
   it('hydrates triageState in App even before triage view mounts', async () => {

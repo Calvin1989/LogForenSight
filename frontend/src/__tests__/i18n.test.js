@@ -122,6 +122,25 @@ describe('i18n tool', () => {
     expect(t('workspaceNav.evidencePack')).toBe('Evidence Pack')
   })
 
+  it('should have analysis context translations in both languages', () => {
+    setLanguage('zh')
+    expect(t('analysisContext.singleAnalysis')).toBe('单文件分析')
+    expect(t('analysisContext.batchAnalysis')).toBe('批量分析')
+    expect(t('analysisContext.requests', { count: 16 })).toBe('16 条请求')
+    expect(t('analysisContext.parseRate', { percent: 100 })).toBe('解析率 100%')
+    expect(t('analysisContext.sourceFiles', { count: 3 })).toBe('3 个来源文件')
+    expect(t('analysisContext.moreFiles', { count: 2 })).toBe('+2 个文件')
+
+    setLanguage('en')
+    expect(t('analysisContext.singleAnalysis')).toBe('Single analysis')
+    expect(t('analysisContext.batchAnalysis')).toBe('Batch analysis')
+    expect(t('analysisContext.request', { count: 1 })).toBe('1 request')
+    expect(t('analysisContext.requests', { count: 16 })).toBe('16 requests')
+    expect(t('analysisContext.parseRate', { percent: 100 })).toBe('Parse rate 100%')
+    expect(t('analysisContext.sourceFiles', { count: 3 })).toBe('3 source files')
+    expect(t('analysisContext.moreFiles', { count: 2 })).toBe('+2 more')
+  })
+
   it('should have triage translations', () => {
     setLanguage('zh')
     expect(t('triage.title')).toBe('分析师处置工作流 (Analyst Triage)')

@@ -221,6 +221,21 @@ const messages = {
       warningBanner: "脱敏下载需要原始文件。请重新上传日志或使用带有缓存脱敏结果的历史记录。",
       infoBanner: "脱敏报告会屏蔽 IP 地址和敏感参数，以便更安全地共享。外部使用前请检查。"
     },
+    analysisContext: {
+      ariaLabel: "分析上下文摘要",
+      singleAnalysis: "单文件分析",
+      batchAnalysis: "批量分析",
+      request: "{count} 条请求",
+      requests: "{count} 条请求",
+      parseRate: "解析率 {percent}%",
+      finding: "{count} 个风险点",
+      findings: "{count} 个风险点",
+      incident: "{count} 个安全事件",
+      incidents: "{count} 个安全事件",
+      sourceFile: "{count} 个来源文件",
+      sourceFiles: "{count} 个来源文件",
+      moreFiles: "+{count} 个文件"
+    },
     evidencePack: {
       title: "分析师证据包",
       generatedAt: "生成时间",
@@ -1005,6 +1020,21 @@ const messages = {
       downloadEvidencePack: "Download Evidence Pack",
       warningBanner: "Sanitized download requires the original file. Please re-upload the log or use a history entry with cached sanitized result.",
       infoBanner: "Sanitized report masks IP addresses and sensitive parameters for safer sharing. Please review before external use."
+    },
+    analysisContext: {
+      ariaLabel: "Analysis context summary",
+      singleAnalysis: "Single analysis",
+      batchAnalysis: "Batch analysis",
+      request: "{count} request",
+      requests: "{count} requests",
+      parseRate: "Parse rate {percent}%",
+      finding: "{count} finding",
+      findings: "{count} findings",
+      incident: "{count} incident",
+      incidents: "{count} incidents",
+      sourceFile: "{count} source file",
+      sourceFiles: "{count} source files",
+      moreFiles: "+{count} more"
     },
     evidencePack: {
       title: "Analyst Evidence Pack",

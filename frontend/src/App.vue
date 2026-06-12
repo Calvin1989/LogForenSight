@@ -81,6 +81,8 @@
             </div>
 
             <template v-if="displayResult">
+              <AnalysisContextBar :analysisResult="displayResult" />
+
               <SummaryCards :summary="displayResult.summary" />
 
               <ExecutiveSummary :summary="displayResult.executive_summary" />
@@ -130,6 +132,8 @@
             </div>
 
             <template v-if="displayResult">
+              <AnalysisContextBar :analysisResult="displayResult" />
+
               <TimelineView :timelineEvents="displayResult.timeline_events || []" />
 
               <IncidentsList
@@ -172,6 +176,8 @@
             </div>
 
             <template v-if="displayResult">
+              <AnalysisContextBar :analysisResult="displayResult" />
+
               <TriagePanel
                 :caseId="currentCaseId"
                 :analysisResult="displayResult"
@@ -221,6 +227,8 @@
             </div>
 
             <template v-if="displayResult">
+              <AnalysisContextBar :analysisResult="displayResult" />
+
               <EvidencePackQualityScore
                 :result="result"
                 :triageState="triageState"
@@ -275,6 +283,8 @@
             </div>
 
             <template v-if="displayResult">
+              <AnalysisContextBar :analysisResult="displayResult" />
+
               <MarkdownReport
                 :result="result"
                 :reportMarkdown="displayResult.report_markdown"
@@ -359,6 +369,7 @@ import CaseClosureChecklist from './components/CaseClosureChecklist.vue'
 import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
+import AnalysisContextBar from './components/AnalysisContextBar.vue'
 import { loadCaseNotes } from './utils/caseNotesStorage'
 import { getTriageState } from './utils/triageStorage'
 import { buildEvidencePackMarkdown } from './utils/evidencePackExport'
