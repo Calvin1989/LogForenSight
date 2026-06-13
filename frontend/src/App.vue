@@ -765,6 +765,7 @@ const onSelectCase = (caseItem) => {
   max-width: 42rem;
   color: var(--text-secondary);
   font-size: 0.75rem;
+  overflow-wrap: anywhere;
 }
 
 .empty-view-state {
@@ -926,6 +927,7 @@ const onSelectCase = (caseItem) => {
 .group-description {
   font-size: 0.6875rem;
   color: var(--text-tertiary);
+  overflow-wrap: anywhere;
 }
 
 .group-content {
@@ -967,12 +969,24 @@ const onSelectCase = (caseItem) => {
     font-size: 0.875rem;
   }
 
+  .view-description {
+    overflow-wrap: anywhere;
+  }
+
   .group-title {
     font-size: 0.75rem;
   }
 
   .workspace-primary {
     padding: 0.75rem;
+  }
+
+  .main-actions {
+    flex-direction: column;
+  }
+
+  .main-actions button {
+    width: 100%;
   }
 }
 

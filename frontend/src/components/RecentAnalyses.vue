@@ -7,8 +7,8 @@
       </Button>
     </div>
 
-    <div v-if="history.length === 0" class="empty-state">
-      {{ t('history.emptyState') }}
+    <div v-if="history.length === 0" class="empty-state" data-testid="recent-analyses-empty">
+      <p>{{ t('history.emptyState') }}</p>
     </div>
 
     <div v-else class="history-list">
@@ -96,6 +96,14 @@ const formatParseRate = (parseRate) => {
   color: var(--text-tertiary);
   text-align: center;
   padding: 1rem 0;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-secondary);
 }
 
 .history-list {

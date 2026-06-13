@@ -4,7 +4,7 @@
       <h2>{{ t('report.title') }}</h2>
       <div class="markdown-report-actions" data-testid="markdown-report-actions">
         <div class="action-group preview-actions" data-testid="markdown-preview-actions">
-          <Button @click="showPreview = !showPreview" variant="outline" size="sm" class="toggle-btn">
+          <Button @click="showPreview = !showPreview" variant="outline" size="sm" class="toggle-btn" :aria-label="showPreview ? t('actions.hidePreview') : t('actions.showPreview')" data-testid="toggle-preview-btn">
             {{ showPreview ? t('actions.hidePreview') : t('actions.showPreview') }}
           </Button>
         </div>
@@ -20,10 +20,13 @@
             v-if="reportMarkdown"
             @click="$emit('download-sanitized')"
             :disabled="sanitizing || !sanitizedAvailable"
+            :aria-disabled="sanitizing || !sanitizedAvailable"
             variant="default" size="sm" class="sanitized"
+            data-testid="download-sanitized-btn"
           >
             {{ sanitizing ? t('actions.processing') : t('report.downloadSanitized') }}
           </Button>
+          <span v-if="!sanitizedAvailable && !sanitizing" class="disabled-hint">{{ t('report.sanitizedUnavailable') }}</span>
         </div>
         <div class="action-group export-downloads" data-testid="markdown-export-downloads">
           <Button
@@ -269,6 +272,13 @@ const downloadEvidencePackMarkdown = () => {
   display: flex;
   gap: 0.375rem;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.disabled-hint {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  line-height: 1.4;
 }
 
 .download-btn {
@@ -490,6 +500,26 @@ blockquote {
   .report-preview-container {
     padding: 0.75rem;
     max-height: 20rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-with-action {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .markdown-report-actions {
+    width: 100%;
+  }
+
+  .action-group {
+    width: 100%;
+  }
+
+  .action-group button {
+    width: 100%;
   }
 }
 </style>

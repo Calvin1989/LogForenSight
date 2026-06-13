@@ -6,9 +6,10 @@
         <span class="local-badge">{{ t('triage.localOnly') }}</span>
       </div>
       <div class="header-actions">
-        <Button @click="handleExport" variant="outline" size="sm" :disabled="!hasTriageData" class="action-btn">
+        <Button @click="handleExport" variant="outline" size="sm" :disabled="!hasTriageData" :aria-disabled="!hasTriageData" class="action-btn" data-testid="triage-export-btn">
           {{ t('triage.exportMarkdown') }}
         </Button>
+        <span v-if="!hasTriageData" class="disabled-hint">{{ t('triage.disabledExportHint') }}</span>
         <Button v-if="hasTriageData" @click="handleClear" variant="ghost" size="sm">
           {{ t('actions.clear') }}
         </Button>
@@ -46,14 +47,16 @@
     </div>
 
     <div class="triage-controls">
-      <select v-model="statusFilter" class="filter-select">
+      <label class="sr-only" for="triage-status-filter">{{ t('triage.filterStatus') }}</label>
+      <select id="triage-status-filter" v-model="statusFilter" class="filter-select" :aria-label="t('triage.filterStatus')">
         <option value="">{{ t('triage.filterStatus') }}</option>
         <option value="open">{{ t('triage.open') }}</option>
         <option value="investigating">{{ t('triage.investigating') }}</option>
         <option value="mitigated">{{ t('triage.mitigated') }}</option>
         <option value="false_positive">{{ t('triage.falsePositive') }}</option>
       </select>
-      <select v-model="priorityFilter" class="filter-select">
+      <label class="sr-only" for="triage-priority-filter">{{ t('triage.filterPriority') }}</label>
+      <select id="triage-priority-filter" v-model="priorityFilter" class="filter-select" :aria-label="t('triage.filterPriority')">
         <option value="">{{ t('triage.filterPriority') }}</option>
         <option value="critical">{{ t('triage.critical') }}</option>
         <option value="high">{{ t('triage.high') }}</option>
@@ -63,8 +66,9 @@
     </div>
 
     <div class="triage-list">
-      <div v-if="visibleItems.length === 0" class="empty-state">
-        {{ t('triage.empty') }}
+      <div v-if="visibleItems.length === 0" class="empty-state" data-testid="triage-empty">
+        <h4>{{ t('triage.empty') }}</h4>
+        <p>{{ hasTriageData ? t('common.noMatch') : t('triage.emptyHint') }}</p>
       </div>
       
       <div v-for="item in visibleItems" :key="item.key" class="triage-row">
@@ -311,6 +315,13 @@ const handleExport = () => {
 .header-actions {
   display: flex;
   gap: 0.375rem;
+  align-items: center;
+}
+
+.disabled-hint {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  line-height: 1.4;
 }
 
 .triage-summary-cards {
@@ -420,6 +431,30 @@ const handleExport = () => {
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
+}
+
+.empty-state h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--foreground);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .triage-row {

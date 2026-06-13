@@ -10,15 +10,15 @@
     </div>
 
     <!-- Selection UI -->
-    <div v-if="history.length < 2" class="empty-state">
-      {{ t('comparison.atLeastTwo').replace('{count}', history.length) }}
+    <div v-if="history.length < 2" class="empty-state" data-testid="comparison-empty">
+      <p>{{ t('comparison.atLeastTwo').replace('{count}', history.length) }}</p>
     </div>
 
     <div v-else class="selection-ui">
       <div class="selector-group">
         <div class="selector">
-          <label>{{ t('comparison.baseline') }}:</label>
-          <select v-model="baseId">
+          <label for="comparison-baseline">{{ t('comparison.baseline') }}:</label>
+          <select id="comparison-baseline" v-model="baseId" :aria-label="t('comparison.baseline')">
             <option disabled value="">{{ t('comparison.selectBaseline') }}</option>
             <option v-for="record in history" :key="'base-' + record.id" :value="record.id">
               {{ record.file_name }} ({{ formatDate(record.analyzed_at) }})
@@ -27,8 +27,8 @@
         </div>
 
         <div class="selector">
-          <label>{{ t('comparison.target') }}:</label>
-          <select v-model="targetId">
+          <label for="comparison-target">{{ t('comparison.target') }}:</label>
+          <select id="comparison-target" v-model="targetId" :aria-label="t('comparison.target')">
             <option disabled value="">{{ t('comparison.selectTarget') }}</option>
             <option v-for="record in history" :key="'target-' + record.id" :value="record.id">
               {{ record.file_name }} ({{ formatDate(record.analyzed_at) }})
@@ -232,6 +232,11 @@ const formatDate = (isoString) => {
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-secondary);
 }
 
 .selection-ui {

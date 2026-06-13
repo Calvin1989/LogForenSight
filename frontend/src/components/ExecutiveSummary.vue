@@ -19,7 +19,7 @@
         </div>
 
         <div class="dashboard-hero-actions" data-testid="executive-actions">
-          <Button variant="outline" size="sm" class="compact-download-btn" @click="downloadMarkdown" data-testid="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
+          <Button variant="outline" size="sm" class="compact-download-btn" @click="downloadMarkdown" data-testid="download-btn" :aria-label="t('actions.downloadMd')" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
             {{ t('actions.downloadMd') }}
           </Button>
         </div>

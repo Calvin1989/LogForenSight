@@ -9,7 +9,7 @@
           multiple
           @change="onFileChange"
         />
-        <label for="logFile" class="file-label">
+        <label for="logFile" class="file-label" data-testid="file-label">
           {{ selectedFileLabel }}
         </label>
       </div>
@@ -27,10 +27,17 @@
     <Button
       @click="emitAnalyze"
       :disabled="selectedFiles.length === 0 || props.loading"
+      :aria-disabled="selectedFiles.length === 0 || props.loading"
       class="analyze-btn"
+      :class="{ 'is-loading': props.loading }"
+      data-testid="analyze-btn"
     >
       {{ analyzeButtonLabel }}
     </Button>
+
+    <p v-if="selectedFiles.length === 0 && !props.loading" class="upload-hint" data-testid="upload-hint">
+      {{ t('upload.selectFileHint') }}
+    </p>
   </section>
 </template>
 
@@ -165,11 +172,34 @@ const emitAnalyze = () => {
   flex-shrink: 0;
 }
 
+.analyze-btn.is-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.analyze-btn.is-loading::after {
+  content: '';
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.375rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
 .upload-hint {
   font-size: 0.6875rem;
   color: var(--text-tertiary);
   text-align: center;
   margin-top: 0.25rem;
+  line-height: 1.4;
 }
 
 @media (max-width: 640px) {
