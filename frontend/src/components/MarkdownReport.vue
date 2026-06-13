@@ -4,23 +4,24 @@
       <h2>{{ t('report.title') }}</h2>
       <div class="markdown-report-actions" data-testid="markdown-report-actions">
         <div class="action-group preview-actions" data-testid="markdown-preview-actions">
-          <Button @click="showPreview = !showPreview" variant="outline" size="sm" class="toggle-btn" :aria-label="showPreview ? t('actions.hidePreview') : t('actions.showPreview')" data-testid="toggle-preview-btn">
+          <Button @click="showPreview = !showPreview" variant="outline" size="sm" class="toggle-btn" :disabled="!localizedReport" :aria-disabled="!localizedReport" :aria-label="showPreview ? t('actions.hidePreview') : t('actions.showPreview')" data-testid="toggle-preview-btn">
             {{ showPreview ? t('actions.hidePreview') : t('actions.showPreview') }}
           </Button>
         </div>
         <div class="action-group report-downloads" data-testid="markdown-report-downloads">
           <Button
-            v-if="localizedReport"
             @click="downloadLocalizedReport"
+            :disabled="!localizedReport"
+            :aria-disabled="!localizedReport"
             variant="default" size="sm" class="raw download-btn"
+            data-testid="download-report-btn"
           >
             {{ t('report.downloadReport') }}
           </Button>
           <Button
-            v-if="reportMarkdown"
             @click="$emit('download-sanitized')"
-            :disabled="sanitizing || !sanitizedAvailable"
-            :aria-disabled="sanitizing || !sanitizedAvailable"
+            :disabled="sanitizing || !sanitizedAvailable || !reportMarkdown"
+            :aria-disabled="sanitizing || !sanitizedAvailable || !reportMarkdown"
             variant="default" size="sm" class="sanitized"
             data-testid="download-sanitized-btn"
           >
@@ -30,16 +31,18 @@
         </div>
         <div class="action-group export-downloads" data-testid="markdown-export-downloads">
           <Button
-            v-if="result"
             @click="downloadSummaryJson"
+            :disabled="!result"
+            :aria-disabled="!result"
             variant="default" size="sm" class="summary"
             :title="t('report.downloadSummary')"
           >
             {{ t('report.downloadSummary') }}
           </Button>
           <Button
-            v-if="result"
             @click="downloadEvidencePackMarkdown"
+            :disabled="!result"
+            :aria-disabled="!result"
             variant="default" size="sm" class="evidence-pack download-btn"
             :title="t('report.downloadEvidencePack')"
           >
@@ -49,6 +52,10 @@
       </div>
     </div>
     
+    <div v-if="!reportMarkdown" class="unavailable-banner" data-testid="report-unavailable-banner">
+      {{ t('report.previewUnavailable') }}
+    </div>
+
     <div v-if="!sanitizedAvailable" class="warning-banner">
       {{ t('report.warningBanner') }}
     </div>
@@ -309,8 +316,12 @@ const downloadEvidencePackMarkdown = () => {
 .download-btn.raw {
   background-color: oklch(0.55 0.16 145);
 }
-.download-btn.raw:hover {
+.download-btn.raw:hover:not(:disabled) {
   background-color: oklch(0.5 0.16 145);
+}
+.download-btn.raw:disabled {
+  background-color: var(--muted-foreground);
+  cursor: not-allowed;
 }
 
 .download-btn.sanitized {
@@ -362,6 +373,16 @@ const downloadEvidencePackMarkdown = () => {
   border-left: 3px solid oklch(0.7 0.15 85);
   margin-bottom: 0.75rem;
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.unavailable-banner {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  background: var(--surface-subtle);
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--border);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin-bottom: 0.75rem;
 }
 
 .report-preview-container {
