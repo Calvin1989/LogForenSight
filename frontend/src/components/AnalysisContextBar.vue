@@ -1,40 +1,43 @@
 <template>
-  <section
+  <Card
     v-if="analysisResult"
     class="analysis-context-bar"
     data-testid="analysis-context-bar"
     :aria-label="t('analysisContext.ariaLabel')"
   >
-    <div class="context-metrics">
-      <span class="context-pill context-pill-primary">
-        {{ modeLabel }}
-      </span>
-      <span v-if="isBatch" class="context-pill">
-        {{ sourceFilesLabel }}
-      </span>
-      <span class="context-pill">
-        {{ requestCountLabel }}
-      </span>
-      <span class="context-pill">
-        {{ parseRateLabel }}
-      </span>
-      <span class="context-pill">
-        {{ findingsIncidentsLabel }}
-      </span>
-    </div>
+    <CardContent>
+      <div class="context-metrics">
+        <span class="context-pill context-pill-primary">
+          {{ modeLabel }}
+        </span>
+        <span v-if="isBatch" class="context-pill">
+          {{ sourceFilesLabel }}
+        </span>
+        <span class="context-pill">
+          {{ requestCountLabel }}
+        </span>
+        <span class="context-pill">
+          {{ parseRateLabel }}
+        </span>
+        <span class="context-pill">
+          {{ findingsIncidentsLabel }}
+        </span>
+      </div>
 
-    <p
-      v-if="isBatch && sourceNamesLabel"
-      class="source-summary"
-      data-testid="analysis-context-sources"
-    >
-      {{ sourceNamesLabel }}
-    </p>
-  </section>
+      <p
+        v-if="isBatch && sourceNamesLabel"
+        class="source-summary"
+        data-testid="analysis-context-sources"
+      >
+        {{ sourceNamesLabel }}
+      </p>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 
 const props = defineProps({
@@ -122,10 +125,6 @@ function formatSourceName(filename) {
 <style scoped>
 .analysis-context-bar {
   margin-top: 0.9rem;
-  padding: 0.85rem 0.95rem;
-  border: 1px solid #dbe7f3;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
 }
 
 .context-metrics {
@@ -160,11 +159,5 @@ function formatSourceName(filename) {
   font-size: 0.8rem;
   line-height: 1.45;
   word-break: break-word;
-}
-
-@media (max-width: 768px) {
-  .analysis-context-bar {
-    padding: 0.75rem 0.8rem;
-  }
 }
 </style>

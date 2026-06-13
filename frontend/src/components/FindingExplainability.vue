@@ -1,106 +1,109 @@
 <template>
-  <section class="finding-explainability" data-testid="finding-explainability">
-    <div v-if="explanation" class="explainability-grid">
-      <div v-if="explanation.hasRuleContext" class="explainability-block">
-        <h4>{{ t('explainability.ruleContext') }}</h4>
-        <dl class="explainability-list">
-          <div v-if="explanation.ruleId" class="explainability-row">
-            <dt>{{ t('explainability.ruleId') }}</dt>
-            <dd><code>{{ explanation.ruleId }}</code></dd>
-          </div>
-          <div v-if="explanation.ruleName" class="explainability-row">
-            <dt>{{ t('explainability.ruleName') }}</dt>
-            <dd>{{ explanation.ruleName }}</dd>
-          </div>
-          <div v-if="explanation.ruleDescription" class="explainability-row">
-            <dt>{{ t('explainability.ruleDescription') }}</dt>
-            <dd>{{ explanation.ruleDescription }}</dd>
-          </div>
-        </dl>
-      </div>
+  <Card class="finding-explainability" data-testid="finding-explainability">
+    <CardContent>
+      <div v-if="explanation" class="explainability-grid">
+        <div v-if="explanation.hasRuleContext" class="explainability-block">
+          <h4>{{ t('explainability.ruleContext') }}</h4>
+          <dl class="explainability-list">
+            <div v-if="explanation.ruleId" class="explainability-row">
+              <dt>{{ t('explainability.ruleId') }}</dt>
+              <dd><code>{{ explanation.ruleId }}</code></dd>
+            </div>
+            <div v-if="explanation.ruleName" class="explainability-row">
+              <dt>{{ t('explainability.ruleName') }}</dt>
+              <dd>{{ explanation.ruleName }}</dd>
+            </div>
+            <div v-if="explanation.ruleDescription" class="explainability-row">
+              <dt>{{ t('explainability.ruleDescription') }}</dt>
+              <dd>{{ explanation.ruleDescription }}</dd>
+            </div>
+          </dl>
+        </div>
 
-      <div class="explainability-block">
-        <h4>{{ t('explainability.severityRationale') }}</h4>
-        <p class="rationale-text">{{ rendered.rationale }}</p>
-      </div>
+        <div class="explainability-block">
+          <h4>{{ t('explainability.severityRationale') }}</h4>
+          <p class="rationale-text">{{ rendered.rationale }}</p>
+        </div>
 
-      <div v-if="explanation.hasMatchedContext" class="explainability-block">
-        <h4>{{ t('explainability.matchedContext') }}</h4>
-        <p v-if="rendered.matchedContextLabel" class="context-summary">
-          <code>{{ rendered.matchedContextLabel }}</code>
-        </p>
-        <dl class="explainability-list">
-          <div v-if="explanation.matchedField" class="explainability-row">
-            <dt>{{ t('explainability.matchedField') }}</dt>
-            <dd><code>{{ explanation.matchedField }}</code></dd>
-          </div>
-          <div v-if="explanation.matchedValue" class="explainability-row">
-            <dt>{{ t('explainability.matchedValue') }}</dt>
-            <dd><code>{{ explanation.matchedValue }}</code></dd>
-          </div>
-          <div v-if="explanation.matchedContext.sourceIp" class="explainability-row">
-            <dt>{{ t('common.sourceIp') }}</dt>
-            <dd><code>{{ explanation.matchedContext.sourceIp }}</code></dd>
-          </div>
-          <div v-if="explanation.matchedContext.path" class="explainability-row">
-            <dt>{{ t('common.path') }}</dt>
-            <dd><code>{{ explanation.matchedContext.path }}</code></dd>
-          </div>
-          <div v-if="explanation.matchedContext.method" class="explainability-row">
-            <dt>{{ t('common.description') }}</dt>
-            <dd><code>{{ explanation.matchedContext.method }} {{ explanation.matchedContext.status ? `HTTP ${explanation.matchedContext.status}` : '' }}</code></dd>
-          </div>
-        </dl>
-      </div>
+        <div v-if="explanation.hasMatchedContext" class="explainability-block">
+          <h4>{{ t('explainability.matchedContext') }}</h4>
+          <p v-if="rendered.matchedContextLabel" class="context-summary">
+            <code>{{ rendered.matchedContextLabel }}</code>
+          </p>
+          <dl class="explainability-list">
+            <div v-if="explanation.matchedField" class="explainability-row">
+              <dt>{{ t('explainability.matchedField') }}</dt>
+              <dd><code>{{ explanation.matchedField }}</code></dd>
+            </div>
+            <div v-if="explanation.matchedValue" class="explainability-row">
+              <dt>{{ t('explainability.matchedValue') }}</dt>
+              <dd><code>{{ explanation.matchedValue }}</code></dd>
+            </div>
+            <div v-if="explanation.matchedContext.sourceIp" class="explainability-row">
+              <dt>{{ t('common.sourceIp') }}</dt>
+              <dd><code>{{ explanation.matchedContext.sourceIp }}</code></dd>
+            </div>
+            <div v-if="explanation.matchedContext.path" class="explainability-row">
+              <dt>{{ t('common.path') }}</dt>
+              <dd><code>{{ explanation.matchedContext.path }}</code></dd>
+            </div>
+            <div v-if="explanation.matchedContext.method" class="explainability-row">
+              <dt>{{ t('common.description') }}</dt>
+              <dd><code>{{ explanation.matchedContext.method }} {{ explanation.matchedContext.status ? `HTTP ${explanation.matchedContext.status}` : '' }}</code></dd>
+            </div>
+          </dl>
+        </div>
 
-      <div v-if="explanation.hasIndicators" class="explainability-block">
-        <h4>{{ t('explainability.indicators') }}</h4>
-        <ul class="indicator-list">
-          <li v-for="hint in explanation.indicatorHints" :key="`${hint.kind}:${hint.value}`" class="indicator-item">
-            <span class="indicator-kind">{{ indicatorKindLabel(hint.kind) }}</span>
-            <code class="indicator-value">{{ hint.value }}</code>
-          </li>
-        </ul>
-      </div>
+        <div v-if="explanation.hasIndicators" class="explainability-block">
+          <h4>{{ t('explainability.indicators') }}</h4>
+          <ul class="indicator-list">
+            <li v-for="hint in explanation.indicatorHints" :key="`${hint.kind}:${hint.value}`" class="indicator-item">
+              <span class="indicator-kind">{{ indicatorKindLabel(hint.kind) }}</span>
+              <code class="indicator-value">{{ hint.value }}</code>
+            </li>
+          </ul>
+        </div>
 
-      <div v-if="explanation.hasEvidence" class="explainability-block">
-        <h4>{{ t('explainability.evidenceSnippet') }}</h4>
-        <pre class="evidence-snippet"><code>{{ explanation.evidenceSnippet }}</code></pre>
-        <p v-if="explanation.evidenceTruncated" class="evidence-truncated">
-          {{ t('explainability.evidenceTruncated') }}
-        </p>
-      </div>
+        <div v-if="explanation.hasEvidence" class="explainability-block">
+          <h4>{{ t('explainability.evidenceSnippet') }}</h4>
+          <pre class="evidence-snippet"><code>{{ explanation.evidenceSnippet }}</code></pre>
+          <p v-if="explanation.evidenceTruncated" class="evidence-truncated">
+            {{ t('explainability.evidenceTruncated') }}
+          </p>
+        </div>
 
-      <div class="explainability-block">
-        <h4>{{ t('explainability.recommendedAction') }}</h4>
-        <p class="recommendation-text">{{ rendered.recommendedAction }}</p>
-      </div>
+        <div class="explainability-block">
+          <h4>{{ t('explainability.recommendedAction') }}</h4>
+          <p class="recommendation-text">{{ rendered.recommendedAction }}</p>
+        </div>
 
-      <div class="explainability-block">
-        <h4>{{ t('explainability.relatedEntities') }}</h4>
-        <p v-if="!explanation.hasRelatedEntities" class="no-entities">
-          {{ t('explainability.noRelatedEntities') }}
-        </p>
-        <ul v-else class="related-entity-list">
-          <li v-for="entity in explanation.relatedEntities" :key="`${entity.type}:${entity.value}`" class="related-entity-item">
-            <span class="entity-type">{{ entity.type }}</span>
-            <code class="entity-value">{{ entity.value }}</code>
-            <span class="entity-count">{{ entity.count }}</span>
-          </li>
-        </ul>
-        <p v-if="explanation.relatedEntitySummary && explanation.relatedEntitySummary.globalSummary" class="global-summary">
-          <em>{{ t('explainability.relatedEntitiesGlobal') }}: {{ globalSummaryText(explanation.relatedEntitySummary) }}</em>
-        </p>
+        <div class="explainability-block">
+          <h4>{{ t('explainability.relatedEntities') }}</h4>
+          <p v-if="!explanation.hasRelatedEntities" class="no-entities">
+            {{ t('explainability.noRelatedEntities') }}
+          </p>
+          <ul v-else class="related-entity-list">
+            <li v-for="entity in explanation.relatedEntities" :key="`${entity.type}:${entity.value}`" class="related-entity-item">
+              <span class="entity-type">{{ entity.type }}</span>
+              <code class="entity-value">{{ entity.value }}</code>
+              <span class="entity-count">{{ entity.count }}</span>
+            </li>
+          </ul>
+          <p v-if="explanation.relatedEntitySummary && explanation.relatedEntitySummary.globalSummary" class="global-summary">
+            <em>{{ t('explainability.relatedEntitiesGlobal') }}: {{ globalSummaryText(explanation.relatedEntitySummary) }}</em>
+          </p>
+        </div>
       </div>
-    </div>
-    <p v-else class="explainability-empty">
-      {{ t('evidencePack.notAvailable') }}
-    </p>
-  </section>
+      <p v-else class="explainability-empty">
+        {{ t('evidencePack.notAvailable') }}
+      </p>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import { buildFindingExplanation, renderFindingExplanation } from '../utils/findingExplainability'
 
@@ -148,10 +151,6 @@ function globalSummaryText(summary) {
 <style scoped>
 .finding-explainability {
   margin-top: 1rem;
-  padding: 1rem;
-  background: #f8f9fb;
-  border: 1px dashed #ced4da;
-  border-radius: 6px;
 }
 
 .explainability-grid {
