@@ -16,6 +16,8 @@
         v-for="record in history" 
         :key="record.id" 
         class="history-item"
+        :class="{ 'is-failed': record.status === 'failed' }"
+        :data-testid="`history-item-${record.id}`"
         @click="$emit('select', record)"
       >
         <div class="item-main">
@@ -24,8 +26,9 @@
         </div>
         
         <div class="item-stats">
+          <span v-if="record.status === 'failed'" class="stat-tag failed" data-testid="history-status-failed">{{ t('history.statusFailed') }}</span>
+          <span v-else class="stat-tag success-status" data-testid="history-status-success">{{ formatParseRate(record.parse_rate) }} {{ t('history.parsed') }}</span>
           <span v-if="record.log_format" class="stat-tag format">{{ record.log_format }}</span>
-          <span class="stat-tag success">{{ formatParseRate(record.parse_rate) }} {{ t('history.parsed') }}</span>
           <span v-if="record.incidents_count > 0" class="stat-tag incident">{{ record.incidents_count }} {{ t('history.incidents') }}</span>
           <span v-if="record.findings_count > 0" class="stat-tag finding">{{ record.findings_count }} {{ t('history.findings') }}</span>
           <span v-if="record.skipped_lines > 0" class="stat-tag skip">{{ record.skipped_lines }} {{ t('history.skipped') }}</span>
@@ -127,6 +130,14 @@ const formatParseRate = (parseRate) => {
   background: var(--surface-subtle);
 }
 
+.history-item.is-failed {
+  border-left: 3px solid oklch(0.7 0.15 25);
+}
+
+.history-item.is-failed .file-name {
+  color: oklch(0.45 0.12 25);
+}
+
 .item-main {
   display: flex;
   justify-content: space-between;
@@ -170,6 +181,8 @@ const formatParseRate = (parseRate) => {
 
 .stat-tag.format { background: var(--muted); color: var(--text-secondary); }
 .stat-tag.success { background: oklch(0.95 0.05 145); color: oklch(0.4 0.12 145); }
+.stat-tag.success-status { background: oklch(0.95 0.05 145); color: oklch(0.4 0.12 145); }
+.stat-tag.failed { background: oklch(0.95 0.04 25); color: oklch(0.4 0.15 25); }
 .stat-tag.incident { background: oklch(0.95 0.04 25); color: oklch(0.45 0.15 25); }
 .stat-tag.finding { background: oklch(0.95 0.06 85); color: oklch(0.5 0.12 85); }
 .stat-tag.skip { background: oklch(0.95 0.04 350); color: oklch(0.45 0.12 350); }

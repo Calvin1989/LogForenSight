@@ -29,7 +29,7 @@
             </AlertDescription>
           </Alert>
 
-          <Alert v-if="error" variant="destructive">
+          <Alert v-if="error && !(activeView === 'workspace' && !loading)" variant="destructive">
             <AlertDescription>
               {{ t('app.error', 'Error: {error}').replace('{error}', error) }}
             </AlertDescription>
@@ -49,9 +49,10 @@
             <div class="workspace-primary">
               <FileUpload
                 :loading="loading"
+                :error="error"
                 @analyze="onAnalyze"
               />
-              <div class="main-actions" v-if="result || error || selectedFile">
+              <div class="main-actions" v-if="(result || error || selectedFile) && !loading">
                 <Button variant="outline" size="sm" @click="onClearCurrentResult">
                   {{ t('app.clearCurrentResult') }}
                 </Button>

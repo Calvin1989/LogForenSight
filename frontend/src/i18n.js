@@ -78,7 +78,10 @@ const messages = {
       timestamp: "时间戳",
       copied: "已复制！",
       copyFailed: "复制失败",
-      noMatch: "没有匹配筛选条件的项目。"
+      noMatch: "没有匹配筛选条件的项目。",
+      retry: "重试",
+      error: "错误",
+      unavailable: "不可用"
     },
     upload: {
       chooseFile: "选择 .log 或 .txt 文件",
@@ -86,7 +89,13 @@ const messages = {
       autoDetect: "自动检测",
       selectedFiles: "已选择 {count} 个文件",
       analyzeFiles: "分析 {count} 个文件",
-      selectFileHint: "选择日志文件后点击「分析」开始"
+      selectFileHint: "选择日志文件后点击「分析」开始",
+      analysisInProgress: "分析进行中，请稍候...",
+      analysisFailed: "分析失败",
+      backendUnavailable: "后端服务不可用，请确认服务器已启动后重试。",
+      unsupportedFormat: "不支持的日志格式，请选择 .log 或 .txt 文件。",
+      emptyFile: "所选文件为空，请选择包含日志内容的文件。",
+      retryHint: "请重试，或检查日志文件和服务器状态。"
     },
     history: {
       title: "最近的分析",
@@ -98,7 +107,8 @@ const messages = {
       skipped: "个跳过",
       sanitizedCached: "已缓存脱敏结果",
       tuned: "已调优",
-      batch: "批量"
+      batch: "批量",
+      statusFailed: "失败"
     },
     summary: {
       title: "概览统计",
@@ -222,7 +232,8 @@ const messages = {
       downloadSummary: "下载摘要 (.json)",
       downloadEvidencePack: "下载证据包",
       warningBanner: "脱敏下载需要原始文件。请重新上传日志或使用带有缓存脱敏结果的历史记录。",
-      infoBanner: "脱敏报告会屏蔽 IP 地址和敏感参数，以便更安全地共享。外部使用前请检查。"
+      infoBanner: "脱敏报告会屏蔽 IP 地址和敏感参数，以便更安全地共享。外部使用前请检查。",
+      previewUnavailable: "报告预览不可用，需要先完成分析。"
     },
     analysisContext: {
       ariaLabel: "分析上下文摘要",
@@ -361,6 +372,7 @@ const messages = {
       title: "Evidence Pack 导出预览",
       empty: "运行分析后可预览 Evidence Pack 导出内容。",
       emptyHint: "上传日志并完成分析，即可预览和导出 Evidence Pack。",
+      unavailableHint: "需要完成分析后才能预览 Evidence Pack。",
       sectionNavigator: "章节导航",
       handoffSummaryTitle: "交接摘要",
       handoffSummaryNote: "仅用于快速复核，不会写入导出 Markdown。",
@@ -901,7 +913,10 @@ const messages = {
       timestamp: "Timestamp",
       copied: "Copied!",
       copyFailed: "Copy failed",
-      noMatch: "No items match your filters."
+      noMatch: "No items match your filters.",
+      retry: "Retry",
+      error: "Error",
+      unavailable: "Unavailable"
     },
     upload: {
       chooseFile: "Choose a .log or .txt file",
@@ -909,7 +924,13 @@ const messages = {
       autoDetect: "Auto Detect",
       selectedFiles: "{count} files selected",
       analyzeFiles: "Analyze {count} files",
-      selectFileHint: "Select log files, then click Analyze"
+      selectFileHint: "Select log files, then click Analyze",
+      analysisInProgress: "Analysis in progress, please wait...",
+      analysisFailed: "Analysis failed",
+      backendUnavailable: "Backend service is unavailable. Please check the server and try again.",
+      unsupportedFormat: "Unsupported log format. Please select a .log or .txt file.",
+      emptyFile: "The selected file is empty. Please choose a file with log content.",
+      retryHint: "Please retry, or check your log file and server status."
     },
     history: {
       title: "Recent Analyses",
@@ -921,7 +942,8 @@ const messages = {
       skipped: "skipped",
       sanitizedCached: "Sanitized cached",
       tuned: "Tuned",
-      batch: "Batch"
+      batch: "Batch",
+      statusFailed: "Failed"
     },
     summary: {
       title: "Overview Statistics",
@@ -1045,7 +1067,8 @@ const messages = {
       downloadSummary: "Download Summary (.json)",
       downloadEvidencePack: "Download Evidence Pack",
       warningBanner: "Sanitized download requires the original file. Please re-upload the log or use a history entry with cached sanitized result.",
-      infoBanner: "Sanitized report masks IP addresses and sensitive parameters for safer sharing. Please review before external use."
+      infoBanner: "Sanitized report masks IP addresses and sensitive parameters for safer sharing. Please review before external use.",
+      previewUnavailable: "Report preview is unavailable. An analysis result is required first."
     },
     analysisContext: {
       ariaLabel: "Analysis context summary",
@@ -1184,6 +1207,7 @@ const messages = {
       title: "Evidence Pack Export Preview",
       empty: "Run an analysis to preview the Evidence Pack export.",
       emptyHint: "Upload logs and complete analysis to preview and export the Evidence Pack.",
+      unavailableHint: "Complete an analysis to preview the Evidence Pack.",
       sectionNavigator: "Section navigator",
       handoffSummaryTitle: "Handoff summary",
       handoffSummaryNote: "Quick preview only, never included in exported Markdown.",

@@ -8,11 +8,11 @@
         </p>
       </div>
 
-      <div v-if="result" class="preview-actions">
-        <Button variant="outline" size="sm" class="preview-btn" @click="togglePreview">
+      <div class="preview-actions" data-testid="evidence-pack-preview-actions">
+        <Button variant="outline" size="sm" class="preview-btn" :disabled="!result" :aria-disabled="!result" @click="togglePreview">
           {{ isOpen ? t('evidencePackPreview.hidePreview') : t('evidencePackPreview.showPreview') }}
         </Button>
-        <Button variant="outline" size="sm" class="preview-btn copy-btn" @click="copyMarkdown" :aria-label="t('evidencePackPreview.copyMarkdown')" data-testid="copy-markdown-btn">
+        <Button variant="outline" size="sm" class="preview-btn copy-btn" :disabled="!result || !previewMarkdown" :aria-disabled="!result || !previewMarkdown" @click="copyMarkdown" :aria-label="t('evidencePackPreview.copyMarkdown')" data-testid="copy-markdown-btn">
           {{ copyFeedbackKey === 'evidencePackPreview.copySuccess' ? t('common.copied') : t('evidencePackPreview.copyMarkdown') }}
         </Button>
       </div>
@@ -20,7 +20,7 @@
 
     <div v-if="!result" class="empty-state" data-testid="evidence-pack-preview-empty">
       <h4>{{ t('evidencePackPreview.empty') }}</h4>
-      <p>{{ t('evidencePackPreview.emptyHint') }}</p>
+      <p>{{ t('evidencePackPreview.unavailableHint') }}</p>
     </div>
 
     <template v-else>
@@ -888,6 +888,16 @@ onBeforeUnmount(() => {
 
 .preview-btn {
   font-weight: 600;
+}
+
+.preview-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.copy-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .copy-btn {

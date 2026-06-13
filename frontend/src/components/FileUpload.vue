@@ -28,12 +28,24 @@
       @click="emitAnalyze"
       :disabled="selectedFiles.length === 0 || props.loading"
       :aria-disabled="selectedFiles.length === 0 || props.loading"
+      :aria-busy="props.loading"
       class="analyze-btn"
       :class="{ 'is-loading': props.loading }"
       data-testid="analyze-btn"
     >
       {{ analyzeButtonLabel }}
     </Button>
+
+    <div v-if="props.loading" class="loading-status" data-testid="upload-loading-status">
+      <span class="loading-spinner" aria-hidden="true"></span>
+      <span>{{ t('upload.analysisInProgress') }}</span>
+    </div>
+
+    <div v-if="props.error && !props.loading" class="error-callout" role="alert" data-testid="upload-error-callout">
+      <div class="error-title">{{ t('upload.analysisFailed') }}</div>
+      <div class="error-reason">{{ props.error }}</div>
+      <div class="error-hint">{{ t('upload.retryHint') }}</div>
+    </div>
 
     <p v-if="selectedFiles.length === 0 && !props.loading" class="upload-hint" data-testid="upload-hint">
       {{ t('upload.selectFileHint') }}
@@ -50,6 +62,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  error: {
+    type: String,
+    default: ''
   }
 })
 
@@ -200,6 +216,59 @@ const emitAnalyze = () => {
   text-align: center;
   margin-top: 0.25rem;
   line-height: 1.4;
+}
+
+.loading-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid var(--border);
+  border-top-color: var(--foreground);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-callout {
+  margin-top: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background: oklch(0.97 0.02 25);
+  border: 1px solid oklch(0.88 0.06 25);
+  border-left: 3px solid oklch(0.55 0.2 25);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.75rem;
+  color: oklch(0.4 0.15 25);
+}
+
+.error-title {
+  font-weight: 700;
+  margin-bottom: 0.125rem;
+}
+
+.error-reason {
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.error-hint {
+  font-size: 0.6875rem;
+  color: oklch(0.5 0.12 25);
 }
 
 @media (max-width: 640px) {
