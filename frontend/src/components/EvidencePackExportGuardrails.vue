@@ -1,64 +1,68 @@
 <template>
-  <section class="guardrails-container">
-    <div class="guardrails-header">
-      <div>
-        <h3>{{ t('evidencePackGuardrails.title') }}</h3>
-        <p v-if="result" class="summary-text">
-          {{ t(guardrails.summaryKey) }}
+  <Card class="guardrails-container">
+    <CardHeader>
+      <div class="guardrails-header">
+        <div>
+          <CardTitle>{{ t('evidencePackGuardrails.title') }}</CardTitle>
+          <p v-if="result" class="summary-text">
+            {{ t(guardrails.summaryKey) }}
+          </p>
+        </div>
+        <span v-if="result" class="decision-badge" :class="guardrails.severity">
+          {{ decisionLabel(guardrails.decision) }}
+        </span>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div v-if="!result" class="empty-state">
+        {{ t('evidencePackGuardrails.empty') }}
+      </div>
+
+      <template v-else>
+        <div class="decision-card" :class="guardrails.severity">
+          <div class="decision-row">
+            <span class="meta-label">{{ t('evidencePackGuardrails.decision') }}</span>
+            <span class="decision-value">{{ decisionLabel(guardrails.decision) }}</span>
+          </div>
+          <div v-if="hasScore" class="decision-row">
+            <span class="meta-label">{{ t('evidencePackGuardrails.score') }}</span>
+            <span class="decision-value">{{ guardrails.score }}</span>
+          </div>
+        </div>
+
+        <div class="list-grid">
+          <article class="list-card">
+            <h4>{{ t('evidencePackGuardrails.blockers') }}</h4>
+            <ul v-if="guardrails.blockers.length > 0">
+              <li v-for="blocker in guardrails.blockers" :key="blocker.id">
+                {{ t(blocker.labelKey) }}
+              </li>
+            </ul>
+            <p v-else class="empty-list">{{ t('evidencePackGuardrails.noBlockers') }}</p>
+          </article>
+
+          <article class="list-card">
+            <h4>{{ t('evidencePackGuardrails.recommendations') }}</h4>
+            <ul v-if="guardrails.recommendations.length > 0">
+              <li v-for="recommendation in guardrails.recommendations" :key="recommendation.id">
+                {{ t(recommendation.labelKey) }}
+              </li>
+            </ul>
+            <p v-else class="empty-list">{{ t('evidencePackGuardrails.noRecommendations') }}</p>
+          </article>
+        </div>
+
+        <p class="export-note">
+          {{ t('evidencePackGuardrails.exportNotBlocked') }}
         </p>
-      </div>
-      <span v-if="result" class="decision-badge" :class="guardrails.severity">
-        {{ decisionLabel(guardrails.decision) }}
-      </span>
-    </div>
-
-    <div v-if="!result" class="empty-state">
-      {{ t('evidencePackGuardrails.empty') }}
-    </div>
-
-    <template v-else>
-      <div class="decision-card" :class="guardrails.severity">
-        <div class="decision-row">
-          <span class="meta-label">{{ t('evidencePackGuardrails.decision') }}</span>
-          <span class="decision-value">{{ decisionLabel(guardrails.decision) }}</span>
-        </div>
-        <div v-if="hasScore" class="decision-row">
-          <span class="meta-label">{{ t('evidencePackGuardrails.score') }}</span>
-          <span class="decision-value">{{ guardrails.score }}</span>
-        </div>
-      </div>
-
-      <div class="list-grid">
-        <article class="list-card">
-          <h4>{{ t('evidencePackGuardrails.blockers') }}</h4>
-          <ul v-if="guardrails.blockers.length > 0">
-            <li v-for="blocker in guardrails.blockers" :key="blocker.id">
-              {{ t(blocker.labelKey) }}
-            </li>
-          </ul>
-          <p v-else class="empty-list">{{ t('evidencePackGuardrails.noBlockers') }}</p>
-        </article>
-
-        <article class="list-card">
-          <h4>{{ t('evidencePackGuardrails.recommendations') }}</h4>
-          <ul v-if="guardrails.recommendations.length > 0">
-            <li v-for="recommendation in guardrails.recommendations" :key="recommendation.id">
-              {{ t(recommendation.labelKey) }}
-            </li>
-          </ul>
-          <p v-else class="empty-list">{{ t('evidencePackGuardrails.noRecommendations') }}</p>
-        </article>
-      </div>
-
-      <p class="export-note">
-        {{ t('evidencePackGuardrails.exportNotBlocked') }}
-      </p>
-    </template>
-  </section>
+      </template>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import { buildEvidencePackExportGuardrails } from '../utils/evidencePackExportGuardrails'
 
@@ -112,12 +116,7 @@ function decisionLabel(decision) {
 
 <style scoped>
 .guardrails-container {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .guardrails-header {

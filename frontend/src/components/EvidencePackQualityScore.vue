@@ -1,53 +1,57 @@
 <template>
-  <section class="quality-score-container">
-    <div class="quality-score-header">
-      <div>
-        <h3>{{ t('evidencePackQuality.title') }}</h3>
-        <p v-if="result" class="summary-text">
-          {{ quality.summary.passedChecks }} / {{ quality.summary.totalChecks }}
-        </p>
+  <Card class="quality-score-container">
+    <CardHeader>
+      <div class="quality-score-header">
+        <div>
+          <CardTitle>{{ t('evidencePackQuality.title') }}</CardTitle>
+          <p v-if="result" class="summary-text">
+            {{ quality.summary.passedChecks }} / {{ quality.summary.totalChecks }}
+          </p>
+        </div>
+        <span v-if="result" class="overall-badge" :class="quality.status">
+          {{ statusLabel(quality.status) }}
+        </span>
       </div>
-      <span v-if="result" class="overall-badge" :class="quality.status">
-        {{ statusLabel(quality.status) }}
-      </span>
-    </div>
-
-    <div v-if="!result" class="empty-state">
-      {{ t('evidencePackQuality.empty') }}
-    </div>
-
-    <template v-else>
-      <div class="score-card" :class="quality.status">
-        <div class="score-label">{{ t('evidencePackQuality.score') }}</div>
-        <div class="score-value">{{ quality.score }} / {{ quality.summary.maxScore }}</div>
-        <div class="score-status">{{ statusLabel(quality.status) }}</div>
+    </CardHeader>
+    <CardContent>
+      <div v-if="!result" class="empty-state">
+        {{ t('evidencePackQuality.empty') }}
       </div>
 
-      <div class="checklist">
-        <article
-          v-for="check in quality.checks"
-          :key="check.id"
-          class="check-card"
-          :class="check.status"
-        >
-          <div class="check-header">
-            <div>
-              <h4>{{ t(check.labelKey) }}</h4>
-              <p class="check-points">{{ check.earned }} / {{ check.points }}</p>
+      <template v-else>
+        <div class="score-card" :class="quality.status">
+          <div class="score-label">{{ t('evidencePackQuality.score') }}</div>
+          <div class="score-value">{{ quality.score }} / {{ quality.summary.maxScore }}</div>
+          <div class="score-status">{{ statusLabel(quality.status) }}</div>
+        </div>
+
+        <div class="checklist">
+          <article
+            v-for="check in quality.checks"
+            :key="check.id"
+            class="check-card"
+            :class="check.status"
+          >
+            <div class="check-header">
+              <div>
+                <h4>{{ t(check.labelKey) }}</h4>
+                <p class="check-points">{{ check.earned }} / {{ check.points }}</p>
+              </div>
+              <span class="status-pill" :class="check.status">
+                {{ checkStatusLabel(check.status) }}
+              </span>
             </div>
-            <span class="status-pill" :class="check.status">
-              {{ checkStatusLabel(check.status) }}
-            </span>
-          </div>
-          <p class="check-recommendation">{{ t(check.recommendationKey) }}</p>
-        </article>
-      </div>
-    </template>
-  </section>
+            <p class="check-recommendation">{{ t(check.recommendationKey) }}</p>
+          </article>
+        </div>
+      </template>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import { buildEvidencePackQuality } from '../utils/evidencePackQuality'
 
@@ -96,12 +100,7 @@ function checkStatusLabel(status) {
 
 <style scoped>
 .quality-score-container {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .quality-score-header {

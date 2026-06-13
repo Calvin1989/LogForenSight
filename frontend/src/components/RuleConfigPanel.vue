@@ -1,43 +1,47 @@
 <template>
-  <section class="rule-card">
-    <div class="header">
-      <h2>{{ t('ruleConfig.title', 'Active Rule Configuration') }}</h2>
-      <span class="source-tag" :class="sourceClass">{{ rules.source }}</span>
-    </div>
+  <Card class="rule-card">
+    <CardHeader>
+      <div class="header">
+        <CardTitle>{{ t('ruleConfig.title', 'Active Rule Configuration') }}</CardTitle>
+        <span class="source-tag" :class="sourceClass">{{ rules.source }}</span>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div class="rules-grid">
+        <div class="rule-item">
+          <label>{{ t('ruleConfig.highFrequencyThreshold', 'High Frequency Threshold') }}</label>
+          <div class="value">{{ rules.high_frequency_threshold }} {{ t('ruleConfig.requests', 'requests') }}</div>
+        </div>
+        <div class="rule-item">
+          <label>{{ t('ruleConfig.pathScanningThreshold', 'Path Scanning Threshold') }}</label>
+          <div class="value">{{ rules.path_scanning_404_threshold }} 404s</div>
+        </div>
+      </div>
 
-    <div class="rules-grid">
-      <div class="rule-item">
-        <label>{{ t('ruleConfig.highFrequencyThreshold', 'High Frequency Threshold') }}</label>
-        <div class="value">{{ rules.high_frequency_threshold }} {{ t('ruleConfig.requests', 'requests') }}</div>
+      <div class="list-section">
+        <label>{{ t('ruleConfig.sensitivePaths', 'Sensitive Paths') }}</label>
+        <div class="tag-container">
+          <span v-for="path in rules.sensitive_paths" :key="path" class="tag path-tag">
+            {{ path }}
+          </span>
+        </div>
       </div>
-      <div class="rule-item">
-        <label>{{ t('ruleConfig.pathScanningThreshold', 'Path Scanning Threshold') }}</label>
-        <div class="value">{{ rules.path_scanning_404_threshold }} 404s</div>
-      </div>
-    </div>
 
-    <div class="list-section">
-      <label>{{ t('ruleConfig.sensitivePaths', 'Sensitive Paths') }}</label>
-      <div class="tag-container">
-        <span v-for="path in rules.sensitive_paths" :key="path" class="tag path-tag">
-          {{ path }}
-        </span>
+      <div class="list-section">
+        <label>{{ t('ruleConfig.suspiciousUserAgents', 'Suspicious User-Agents') }}</label>
+        <div class="tag-container">
+          <span v-for="ua in rules.suspicious_user_agents" :key="ua" class="tag ua-tag">
+            {{ ua }}
+          </span>
+        </div>
       </div>
-    </div>
-
-    <div class="list-section">
-      <label>{{ t('ruleConfig.suspiciousUserAgents', 'Suspicious User-Agents') }}</label>
-      <div class="tag-container">
-        <span v-for="ua in rules.suspicious_user_agents" :key="ua" class="tag ua-tag">
-          {{ ua }}
-        </span>
-      </div>
-    </div>
-  </section>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 
 const props = defineProps({
@@ -54,10 +58,6 @@ const sourceClass = computed(() => {
 
 <style scoped>
 .rule-card {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-bottom: 2rem;
 }
 
@@ -70,7 +70,7 @@ const sourceClass = computed(() => {
   padding-bottom: 0.5rem;
 }
 
-.header h2 {
+.header h3 {
   margin: 0;
   font-size: 1.1rem;
   color: #495057;

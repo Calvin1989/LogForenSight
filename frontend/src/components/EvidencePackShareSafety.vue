@@ -1,74 +1,78 @@
 <template>
-  <section class="share-safety-container">
-    <div class="share-safety-header">
-      <div>
-        <h3>{{ t('evidencePackShareSafety.title') }}</h3>
-        <p v-if="hasInput" class="summary-text">
-          {{ t(safety.summaryKey) }}
+  <Card class="share-safety-container">
+    <CardHeader>
+      <div class="share-safety-header">
+        <div>
+          <CardTitle>{{ t('evidencePackShareSafety.title') }}</CardTitle>
+          <p v-if="hasInput" class="summary-text">
+            {{ t(safety.summaryKey) }}
+          </p>
+        </div>
+        <span v-if="hasInput" class="status-badge" :class="safety.status">
+          {{ statusLabel(safety.status) }}
+        </span>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div v-if="!hasInput" class="empty-state">
+        {{ t('evidencePackShareSafety.empty') }}
+      </div>
+
+      <template v-else>
+        <div class="status-card" :class="safety.status">
+          <div class="status-row">
+            <span class="meta-label">{{ t('evidencePackShareSafety.statusLabel') }}</span>
+            <span class="status-value">{{ statusLabel(safety.status) }}</span>
+          </div>
+          <div class="status-row">
+            <span class="meta-label">{{ t('evidencePackShareSafety.findingsCount') }}</span>
+            <span class="status-value">{{ safety.findings.length }}</span>
+          </div>
+        </div>
+
+        <div class="list-grid">
+          <article class="list-card">
+            <h4>{{ t('evidencePackShareSafety.findingsTitle') }}</h4>
+            <ul v-if="safety.findings.length > 0">
+              <li v-for="finding in safety.findings" :key="finding.id">
+                {{ t(finding.labelKey, { count: finding.count, samples: formatSamples(finding.samples) }) }}
+              </li>
+            </ul>
+            <p v-else class="empty-list">{{ t('evidencePackShareSafety.noFindings') }}</p>
+          </article>
+
+          <article class="list-card">
+            <h4>{{ t('evidencePackShareSafety.warningsTitle') }}</h4>
+            <ul v-if="safety.warnings.length > 0">
+              <li v-for="warning in safety.warnings" :key="warning.id">
+                {{ t(warning.labelKey) }}
+              </li>
+            </ul>
+            <p v-else class="empty-list">{{ t('evidencePackShareSafety.noWarnings') }}</p>
+          </article>
+        </div>
+
+        <article class="list-card recommendations-card">
+          <h4>{{ t('evidencePackShareSafety.recommendationsTitle') }}</h4>
+          <ul v-if="safety.recommendations.length > 0">
+            <li v-for="recommendation in safety.recommendations" :key="recommendation.id">
+              {{ t(recommendation.labelKey) }}
+            </li>
+          </ul>
+          <p v-else class="empty-list">{{ t('evidencePackShareSafety.noRecommendations') }}</p>
+        </article>
+
+        <p class="export-note">
+          {{ t('evidencePackShareSafety.exportNotBlocked') }}
         </p>
-      </div>
-      <span v-if="hasInput" class="status-badge" :class="safety.status">
-        {{ statusLabel(safety.status) }}
-      </span>
-    </div>
-
-    <div v-if="!hasInput" class="empty-state">
-      {{ t('evidencePackShareSafety.empty') }}
-    </div>
-
-    <template v-else>
-      <div class="status-card" :class="safety.status">
-        <div class="status-row">
-          <span class="meta-label">{{ t('evidencePackShareSafety.statusLabel') }}</span>
-          <span class="status-value">{{ statusLabel(safety.status) }}</span>
-        </div>
-        <div class="status-row">
-          <span class="meta-label">{{ t('evidencePackShareSafety.findingsCount') }}</span>
-          <span class="status-value">{{ safety.findings.length }}</span>
-        </div>
-      </div>
-
-      <div class="list-grid">
-        <article class="list-card">
-          <h4>{{ t('evidencePackShareSafety.findingsTitle') }}</h4>
-          <ul v-if="safety.findings.length > 0">
-            <li v-for="finding in safety.findings" :key="finding.id">
-              {{ t(finding.labelKey, { count: finding.count, samples: formatSamples(finding.samples) }) }}
-            </li>
-          </ul>
-          <p v-else class="empty-list">{{ t('evidencePackShareSafety.noFindings') }}</p>
-        </article>
-
-        <article class="list-card">
-          <h4>{{ t('evidencePackShareSafety.warningsTitle') }}</h4>
-          <ul v-if="safety.warnings.length > 0">
-            <li v-for="warning in safety.warnings" :key="warning.id">
-              {{ t(warning.labelKey) }}
-            </li>
-          </ul>
-          <p v-else class="empty-list">{{ t('evidencePackShareSafety.noWarnings') }}</p>
-        </article>
-      </div>
-
-      <article class="list-card recommendations-card">
-        <h4>{{ t('evidencePackShareSafety.recommendationsTitle') }}</h4>
-        <ul v-if="safety.recommendations.length > 0">
-          <li v-for="recommendation in safety.recommendations" :key="recommendation.id">
-            {{ t(recommendation.labelKey) }}
-          </li>
-        </ul>
-        <p v-else class="empty-list">{{ t('evidencePackShareSafety.noRecommendations') }}</p>
-      </article>
-
-      <p class="export-note">
-        {{ t('evidencePackShareSafety.exportNotBlocked') }}
-      </p>
-    </template>
-  </section>
+      </template>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import { buildEvidencePackShareSafety } from '../utils/evidencePackShareSafety'
 
@@ -111,12 +115,7 @@ function formatSamples(samples) {
 
 <style scoped>
 .share-safety-container {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .share-safety-header {

@@ -1,50 +1,54 @@
 <template>
-  <section class="review-readiness-container">
-    <div class="review-readiness-header">
-      <div>
-        <h3>{{ t('reviewReadiness.title') }}</h3>
-        <p class="summary-text">{{ summaryText }}</p>
+  <Card class="review-readiness-container">
+    <CardHeader>
+      <div class="review-readiness-header">
+        <div>
+          <CardTitle>{{ t('reviewReadiness.title') }}</CardTitle>
+          <p class="summary-text">{{ summaryText }}</p>
+        </div>
+        <span class="overall-badge" :class="readiness.status">
+          {{ overallStatusLabel }}
+        </span>
       </div>
-      <span class="overall-badge" :class="readiness.status">
-        {{ overallStatusLabel }}
-      </span>
-    </div>
-
-    <div v-if="!result" class="empty-state">
-      {{ t('reviewReadiness.empty') }}
-    </div>
-
-    <template v-else>
-      <div class="overall-card" :class="readiness.status">
-        <div class="overall-label">{{ t('reviewReadiness.evidencePack') }}</div>
-        <div class="overall-value">{{ overallStatusLabel }}</div>
-        <div class="overall-description">{{ overallDescription }}</div>
+    </CardHeader>
+    <CardContent>
+      <div v-if="!result" class="empty-state">
+        {{ t('reviewReadiness.empty') }}
       </div>
 
-      <div class="checklist">
-        <article
-          v-for="check in readiness.checks"
-          :key="check.id"
-          class="check-card"
-          :class="check.status"
-        >
-          <div class="check-header">
-            <span class="status-pill" :class="check.status">
-              {{ statusLabel(check.status) }}
-            </span>
-            <h4>{{ t(check.labelKey) }}</h4>
-          </div>
+      <template v-else>
+        <div class="overall-card" :class="readiness.status">
+          <div class="overall-label">{{ t('reviewReadiness.evidencePack') }}</div>
+          <div class="overall-value">{{ overallStatusLabel }}</div>
+          <div class="overall-description">{{ overallDescription }}</div>
+        </div>
 
-          <p class="check-summary">{{ checkSummary(check) }}</p>
-          <p class="check-recommendation">{{ t(check.recommendationKey) }}</p>
-        </article>
-      </div>
-    </template>
-  </section>
+        <div class="checklist">
+          <article
+            v-for="check in readiness.checks"
+            :key="check.id"
+            class="check-card"
+            :class="check.status"
+          >
+            <div class="check-header">
+              <span class="status-pill" :class="check.status">
+                {{ statusLabel(check.status) }}
+              </span>
+              <h4>{{ t(check.labelKey) }}</h4>
+            </div>
+
+            <p class="check-summary">{{ checkSummary(check) }}</p>
+            <p class="check-recommendation">{{ t(check.recommendationKey) }}</p>
+          </article>
+        </div>
+      </template>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import { getCaseNotesSummary } from '../utils/caseNotesStorage'
 import { buildReviewReadiness } from '../utils/reviewReadiness'
@@ -169,12 +173,7 @@ function checkSummary(check) {
 
 <style scoped>
 .review-readiness-container {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .review-readiness-header {
