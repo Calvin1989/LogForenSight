@@ -22,7 +22,7 @@ describe('SeverityDistribution.vue', () => {
     expect(wrapper.text()).toContain('Incident Severity')
 
     const findingCard = wrapper.find('[data-testid="finding-distribution"]')
-    const findingItems = findingCard.findAll('.severity-item')
+    const findingItems = findingCard.findAll('.severity-row')
 
     expect(findingItems[0].find('.severity-label').text()).toBe('High')
     expect(findingItems[0].find('.count').text()).toBe('2')
@@ -34,7 +34,7 @@ describe('SeverityDistribution.vue', () => {
     expect(findingItems[2].find('.count').text()).toBe('0')
 
     const incidentCard = wrapper.find('[data-testid="incident-distribution"]')
-    const incidentItems = incidentCard.findAll('.severity-item')
+    const incidentItems = incidentCard.findAll('.severity-row')
 
     expect(incidentItems[0].find('.severity-label').text()).toBe('High')
     expect(incidentItems[0].find('.count').text()).toBe('1')

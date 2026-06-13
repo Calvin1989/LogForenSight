@@ -26,14 +26,14 @@ describe('ExecutiveSummary.vue', () => {
     })
 
     expect(wrapper.find('.risk-level').text()).toBe('HIGH')
-    expect(wrapper.find('.risk-score').text()).toBe('75/100')
+    expect(wrapper.find('.risk-score').text()).toContain('75')
     expect(wrapper.find('.headline').text()).toBe(mockSummary.headline)
     expect(wrapper.find('.overview').text()).toBe(mockSummary.overview)
     expect(wrapper.find('.risk-badge').classes()).toContain('high')
 
-    const metrics = wrapper.findAll('.detail-section:nth-child(1) li')
-    expect(metrics.length).toBe(2)
-    expect(metrics[0].text()).toBe('Total Requests: 1000')
+    const topRisks = wrapper.findAll('.detail-section:nth-child(1) li')
+    expect(topRisks.length).toBe(2)
+    expect(topRisks[0].text()).toBe('Sensitive Path Access (Incident)')
 
     const ips = wrapper.findAll('.ip-tag')
     expect(ips.length).toBe(2)

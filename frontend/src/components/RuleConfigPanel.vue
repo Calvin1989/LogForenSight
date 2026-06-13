@@ -90,8 +90,8 @@ const sourceClass = computed(() => {
 }
 
 .source-custom {
-  background: #e7f5ff;
-  color: #228be6;
+  background: var(--accent);
+  color: var(--foreground);
 }
 
 .rules-grid {
@@ -144,13 +144,13 @@ const sourceClass = computed(() => {
 }
 
 .path-tag {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.97 0.04 60);
+  color: oklch(0.45 0.1 60);
 }
 
 .ua-tag {
-  background: #f3f0ff;
-  color: #5f3dc4;
+  background: oklch(0.95 0.04 300);
+  color: oklch(0.4 0.1 300);
 }
 
 

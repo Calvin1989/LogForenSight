@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { computed, defineComponent, h, ref } from 'vue'
 import { setLanguage } from '../i18n'
+import App from '../App.vue'
 
 function makeStub(testId, propNames = [], textFactory) {
   return defineComponent({
@@ -186,6 +187,12 @@ vi.mock('../components/ReviewReadinessPanel.vue', () => ({
 vi.mock('../components/CaseClosureChecklist.vue', () => ({
   default: makeStub('case-closure-checklist', ['shareSafety'])
 }))
+vi.mock('../components/CaseClosureEvidenceGaps.vue', () => ({
+  default: makeStub('case-closure-evidence-gaps')
+}))
+vi.mock('../components/CaseClosureNextActions.vue', () => ({
+  default: makeStub('case-closure-next-actions')
+}))
 vi.mock('../components/EvidencePackQualityScore.vue', () => ({
   default: makeStub('evidence-pack-quality-score', ['triageState'], (props) => `triage:${Object.keys(props.triageState || {}).length}`)
 }))
@@ -250,8 +257,6 @@ const batchResult = {
   ]
 }
 
-let App
-
 function resetState() {
   hoisted.state.loading.value = false
   hoisted.state.result.value = null
@@ -294,8 +299,7 @@ function resetState() {
 }
 
 describe('App.vue workspace shell', () => {
-  beforeEach(async () => {
-    App = (await import('../App.vue')).default
+  beforeEach(() => {
     localStorage.clear()
     setLanguage('en')
     resetState()

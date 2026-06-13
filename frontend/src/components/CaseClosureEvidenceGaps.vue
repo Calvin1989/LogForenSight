@@ -49,66 +49,75 @@ defineProps({
 
 <style scoped>
 .evidence-gaps {
-  margin-top: 1rem;
+  margin-top: 0;
+  border-top: 2px solid var(--border);
+  padding-top: 0.75rem;
 }
 
 .evidence-gaps-header h4 {
-  margin: 0 0 0.35rem;
-  font-size: 1rem;
+  margin: 0 0 0.125rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .evidence-gaps-header p {
   margin: 0;
-  color: var(--muted-foreground);
-  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  font-size: 0.6875rem;
 }
 
 .no-gaps {
-  margin: 0.9rem 0 0;
+  margin: 0.5rem 0 0;
   color: var(--foreground);
   font-weight: 600;
+  font-size: 0.75rem;
 }
 
 .gap-list {
   display: grid;
-  gap: 0.85rem;
-  margin-top: 0.9rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: 0.5rem;
 }
 
 .gap-item {
-  border: 1px solid var(--border);
-  border-left-width: 4px;
-  border-radius: 8px;
-  padding: 0.85rem;
+  border: none;
+  border-left: 3px solid var(--border);
+  border-radius: 0;
+  padding: 0.5rem 0.625rem;
   background: var(--surface-elevated);
 }
 
 .gap-item.is-warning {
-  border-left-color: #d9480f;
-  background: #fffaf4;
+  border-left-color: oklch(0.65 0.15 55);
+  background: oklch(0.98 0.02 60);
 }
 
 .gap-item.is-danger {
-  border-left-color: #c92a2a;
-  background: #fff7f7;
+  border-left-color: oklch(0.5 0.18 25);
+  background: oklch(0.98 0.02 25);
 }
 
 .gap-item.is-neutral {
   border-left-color: var(--border);
-  background: var(--surface-subtle);
+  background: var(--surface-elevated);
 }
 
 .gap-item-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .gap-item-header h5 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--foreground);
 }
 
@@ -116,20 +125,21 @@ defineProps({
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.75rem;
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.5625rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .gap-status.is-warning {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.95 0.06 60);
+  color: oklch(0.5 0.12 60);
 }
 
 .gap-status.is-danger {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.95 0.04 25);
+  color: oklch(0.45 0.15 25);
 }
 
 .gap-status.is-neutral {
@@ -138,15 +148,16 @@ defineProps({
 }
 
 .gap-description {
-  margin: 0.45rem 0 0;
+  margin: 0.125rem 0 0;
   color: var(--text-secondary);
+  font-size: 0.6875rem;
+  line-height: 1.4;
 }
 
 @media (max-width: 768px) {
   .gap-item-header {
     flex-direction: column;
+    align-items: flex-start;
   }
 }
-
-
 </style>

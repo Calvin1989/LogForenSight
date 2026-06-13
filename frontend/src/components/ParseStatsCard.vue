@@ -104,52 +104,62 @@ const sourceFiles = computed(() => {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 1rem;
+  padding-bottom: 0.75rem;
 }
 
 .parse-rate {
-  font-size: 0.8rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
 }
 
-.rate-good { background: var(--surface-subtle); color: #2b8a3e; }
-.rate-warn { background: var(--surface-subtle); color: #f08c00; }
-.rate-bad { background: var(--surface-subtle); color: #e03131; }
+.rate-good { background: oklch(0.95 0.05 145); color: oklch(0.4 0.12 145); }
+.rate-warn { background: oklch(0.95 0.06 85); color: oklch(0.5 0.12 85); }
+.rate-bad { background: oklch(0.95 0.04 25); color: oklch(0.45 0.15 25); }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--border);
+  margin-bottom: 0.75rem;
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
+  gap: 0.0625rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--surface-elevated);
 }
 
 .stat-item .label {
-  font-size: 0.75rem;
-  color: var(--muted-foreground);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.06em;
 }
 
 .stat-item .value {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--foreground);
+  font-variant-numeric: tabular-nums;
 }
 
-.value.success { color: #2b8a3e; }
-.value.warning { color: #f08c00; }
+.value.success { color: oklch(0.45 0.14 145); }
+.value.warning { color: oklch(0.55 0.14 85); }
 
 .format-info {
-  font-size: 0.8rem;
-  color: var(--muted-foreground);
-  padding-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding-top: 0.625rem;
   border-top: 1px solid var(--border);
 }
 

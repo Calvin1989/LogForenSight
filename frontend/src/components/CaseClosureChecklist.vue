@@ -29,24 +29,17 @@
           <p class="check-item-description">{{ item.description }}</p>
         </article>
       </div>
-
-      <CaseClosureEvidenceGaps :gap-items="gapItems" />
-
-      <CaseClosureNextActions
-        :gap-items="gapItems"
-        :handoff-readiness="handoffReadiness"
-      />
     </CardContent>
   </Card>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
-import CaseClosureEvidenceGaps from './CaseClosureEvidenceGaps.vue'
-import CaseClosureNextActions from './CaseClosureNextActions.vue'
 import { buildCaseClosureGapItems } from '../utils/caseClosureGapItems'
+
+const emit = defineEmits(['update:closureData'])
 
 const props = defineProps({
   result: {
@@ -441,76 +434,86 @@ const gapItems = computed(() => {
     handoffReadiness: handoffReadiness.value
   })
 })
+
+watch([gapItems, handoffReadiness], ([gaps, readiness]) => {
+  emit('update:closureData', { gapItems: gaps, handoffReadiness: readiness })
+}, { immediate: true })
 </script>
 
 <style scoped>
 .case-closure-checklist {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .checklist-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .checklist-header h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
+  margin: 0 0 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .subtitle {
   margin: 0;
-  color: var(--muted-foreground);
-  font-size: 0.92rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 .checklist-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .check-item {
-  border: 1px solid var(--border);
-  border-left-width: 4px;
-  border-radius: 8px;
-  padding: 1rem;
+  border: none;
+  border-left: 3px solid var(--border);
+  border-radius: 0;
+  padding: 0.625rem 0.75rem;
   background: var(--surface-elevated);
 }
 
 .check-item.is-positive {
-  border-left-color: #2b8a3e;
-  background: #f8fff9;
+  border-left-color: oklch(0.55 0.14 145);
+  background: oklch(0.98 0.02 145);
 }
 
 .check-item.is-warning {
-  border-left-color: #d9480f;
-  background: #fffaf4;
+  border-left-color: oklch(0.65 0.15 55);
+  background: oklch(0.98 0.02 60);
 }
 
 .check-item.is-danger {
-  border-left-color: #c92a2a;
-  background: #fff7f7;
+  border-left-color: oklch(0.5 0.18 25);
+  background: oklch(0.98 0.02 25);
 }
 
 .check-item.is-neutral {
   border-left-color: var(--border);
-  background: var(--surface-subtle);
+  background: var(--surface-elevated);
 }
 
 .check-item-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.625rem;
 }
 
 .check-item-header h4 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
   color: var(--foreground);
 }
 
@@ -519,28 +522,29 @@ const gapItems = computed(() => {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.5625rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .status-pill.is-positive,
 .summary-badge.positive {
-  background: #ebfbee;
-  color: #2b8a3e;
+  background: oklch(0.95 0.05 145);
+  color: oklch(0.4 0.12 145);
 }
 
 .status-pill.is-warning,
 .summary-badge.warning {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.95 0.06 60);
+  color: oklch(0.5 0.12 60);
 }
 
 .status-pill.is-danger,
 .summary-badge.danger {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.95 0.04 25);
+  color: oklch(0.45 0.15 25);
 }
 
 .status-pill.is-neutral,
@@ -550,8 +554,9 @@ const gapItems = computed(() => {
 }
 
 .check-item-description {
-  margin: 0.5rem 0 0;
+  margin: 0.25rem 0 0;
   color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 @media (max-width: 768px) {

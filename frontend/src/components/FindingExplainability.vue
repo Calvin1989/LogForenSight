@@ -150,21 +150,22 @@ function globalSummaryText(summary) {
 
 <style scoped>
 .finding-explainability {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .explainability-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.625rem;
 }
 
 .explainability-block h4 {
-  margin: 0 0 0.4rem 0;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  margin: 0 0 0.25rem 0;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  font-weight: 600;
 }
 
 .explainability-list {
@@ -247,7 +248,7 @@ function globalSummaryText(summary) {
 
 .indicator-kind {
   font-weight: 600;
-  color: #1971c2;
+  color: var(--foreground);
 }
 
 .indicator-value {
@@ -258,14 +259,14 @@ function globalSummaryText(summary) {
 .evidence-snippet {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 0.5rem 0.75rem;
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   white-space: pre-wrap;
   word-break: break-all;
-  color: #e83e8c;
-  font-family: 'Courier New', Courier, monospace;
+  color: oklch(0.55 0.18 350);
+  font-family: var(--font-mono);
 }
 
 .evidence-truncated {
@@ -304,7 +305,7 @@ function globalSummaryText(summary) {
 
 .entity-type {
   font-weight: 600;
-  color: #1971c2;
+  color: var(--foreground);
   text-transform: uppercase;
   font-size: 0.7rem;
   letter-spacing: 0.05em;

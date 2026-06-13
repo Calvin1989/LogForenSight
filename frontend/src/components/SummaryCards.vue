@@ -40,31 +40,47 @@ defineProps({
 
 <style scoped>
 .summary-cards {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--border);
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
+  gap: 0.0625rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface-elevated);
 }
 
 .stat-label {
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--foreground);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 </style>

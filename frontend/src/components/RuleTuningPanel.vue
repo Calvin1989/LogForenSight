@@ -220,28 +220,29 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 
 <style scoped>
 .rule-tuning-panel {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .subtitle {
-  color: var(--muted-foreground);
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.125rem;
 }
 
 .notice {
   background-color: var(--surface-subtle);
-  border-left: 4px solid #1971c2;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  border-radius: 8px;
+  border-left: 3px solid oklch(0.55 0.15 250);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .notice small {
   display: block;
-  margin-top: 0.25rem;
+  margin-top: 0.125rem;
   opacity: 0.8;
+  font-size: 0.6875rem;
 }
 
 .batch-hint {
@@ -251,32 +252,32 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 .tuning-summary-box {
   background-color: var(--surface-subtle);
   border: 1px solid var(--border);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
 }
 
 .summary-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  color: var(--muted-foreground);
+  gap: 0.75rem;
+  margin-top: 0.375rem;
+  color: var(--text-secondary);
 }
 
 .disabled-count {
-  color: #c92a2a;
+  color: oklch(0.5 0.18 25);
   font-weight: 600;
 }
 
 .warnings-box {
   background-color: var(--surface-subtle);
-  border: 1px solid #d9480f;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border: 1px solid oklch(0.7 0.15 55);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
 }
 
 .warnings-box ul {
@@ -287,8 +288,8 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -300,75 +301,73 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.375rem;
 }
 
 .form-group label {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .form-control {
-  padding: 0.6rem;
+  padding: 0.4375rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-family: inherit;
-  font-size: 0.9rem;
-  background-color: var(--surface-subtle);
+  font-size: 0.8125rem;
+  background-color: var(--surface-elevated);
   color: var(--foreground);
 }
 
 .form-control:focus {
   outline: none;
-  border-color: #1971c2;
-  box-shadow: 0 0 0 2px rgba(25, 113, 194, 0.15);
+  border-color: var(--ring);
 }
 
 textarea.form-control {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
 }
 
 .error-text {
-  color: #c92a2a;
-  font-size: 0.8rem;
+  color: oklch(0.5 0.18 25);
+  font-size: 0.6875rem;
   margin: 0;
 }
 
 .checkbox-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
   background-color: var(--surface-subtle);
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
   cursor: pointer;
 }
 
 .form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
-  color: var(--muted-foreground);
-  font-style: italic;
+  padding: 1.5rem;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
 }
-
-
-
-
 </style>

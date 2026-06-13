@@ -1,29 +1,31 @@
 <template>
   <Card v-if="summary" class="executive-summary" data-testid="executive-summary">
     <CardContent>
-      <div class="summary-header">
-        <div class="risk-badge" :class="summary.overall_risk_level.toLowerCase()">
+      <div class="dashboard-hero">
+        <div class="dashboard-hero-score risk-badge" :class="summary.overall_risk_level.toLowerCase()">
           <span class="risk-level">{{ translateRiskLevel(summary.overall_risk_level).toUpperCase() }}</span>
-          <span class="risk-score">{{ summary.risk_score }}/100</span>
+          <span class="risk-score">{{ summary.risk_score }}<span class="risk-denom">/100</span></span>
         </div>
-        <div class="headline-container">
+
+        <div class="dashboard-hero-main">
           <h2 class="headline">{{ summary.headline }}</h2>
-          <Button variant="outline" size="sm" @click="downloadMarkdown" data-testid="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
+          <p class="overview">{{ summary.overview }}</p>
+          <div class="mini-metrics">
+            <div v-for="(metric, idx) in parsedMetrics" :key="idx" class="mini-metric-item">
+              <span class="mini-metric-label">{{ metric.label }}</span>
+              <span class="mini-metric-value">{{ metric.value }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-hero-actions">
+          <Button variant="outline" size="sm" class="compact-download-btn" @click="downloadMarkdown" data-testid="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
             {{ t('actions.downloadMd') }}
           </Button>
         </div>
       </div>
 
-      <p class="overview">{{ summary.overview }}</p>
-
       <div class="summary-details">
-        <div class="detail-section">
-          <h3>{{ t('executive.keyMetrics') }}</h3>
-          <ul>
-            <li v-for="metric in summary.key_metrics" :key="metric">{{ metric }}</li>
-          </ul>
-        </div>
-
         <div class="detail-section">
           <h3>{{ t('executive.topRisks') }}</h3>
           <ul>
@@ -55,6 +57,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { t, translateRiskLevel } from '../i18n'
@@ -65,6 +68,18 @@ const props = defineProps({
     required: false,
     default: null
   }
+})
+
+const parsedMetrics = computed(() => {
+  if (!props.summary?.key_metrics) return []
+  return props.summary.key_metrics.slice(0, 3).map(m => {
+    const sep = m.includes(':') ? ':' : m.includes('：') ? '：' : null
+    if (sep) {
+      const parts = m.split(sep)
+      return { label: parts[0].trim(), value: parts.slice(1).join(sep).trim() }
+    }
+    return { label: '', value: m }
+  })
 })
 
 const downloadMarkdown = () => {
@@ -107,91 +122,119 @@ const downloadMarkdown = () => {
 
 <style scoped>
 .executive-summary {
-  margin-bottom: 2rem;
-  border-left: 5px solid #6c757d;
+  margin-bottom: 0;
+  border-left: 3px solid var(--border);
 }
 
-.summary-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+.executive-summary :deep(.chard-content) {
+  padding: 1.25rem;
 }
 
 .risk-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  border-radius: 8px;
-  min-width: 100px;
   color: white;
-  background: #6c757d;
+  background: var(--muted-foreground);
+  width: 88px;
+  padding: 0.75rem 0.5rem;
+  align-self: start;
+  margin-top: 0.25rem;
 }
 
-.risk-badge.critical { background: #dc3545; }
-.risk-badge.high { background: #fd7e14; }
-.risk-badge.medium { background: #ffc107; color: #212529; }
-.risk-badge.low { background: #0dcaf0; color: #212529; }
-.risk-badge.informational { background: #198754; }
+.risk-badge.critical { background: oklch(0.55 0.22 25); }
+.risk-badge.high { background: oklch(0.65 0.18 55); }
+.risk-badge.medium { background: oklch(0.75 0.15 85); color: oklch(0.2 0 0); }
+.risk-badge.low { background: oklch(0.6 0.12 200); color: oklch(0.2 0 0); }
+.risk-badge.informational { background: oklch(0.55 0.12 145); }
 
 .risk-level {
-  font-weight: 800;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 .risk-score {
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
-.headline-container {
-  flex-grow: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.risk-denom {
+  font-size: 0.625rem;
+  font-weight: 600;
+  opacity: 0.75;
 }
 
 .headline {
   margin: 0;
-  font-size: 1.5rem;
-  color: #212529;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1.25;
 }
 
 .overview {
-  font-size: 1.1rem;
-  color: #495057;
-  margin-bottom: 2rem;
-  line-height: 1.5;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.55;
+  max-width: 72ch;
+}
+
+.mini-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.375rem;
+}
+
+.mini-metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mini-metric-label {
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.mini-metric-value {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--foreground);
 }
 
 .summary-details {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
 
 .detail-section h3 {
-  font-size: 0.9rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
-  color: #6c757d;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
   margin-top: 0;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid #f1f3f5;
-  padding-bottom: 0.25rem;
+  margin-bottom: 0.375rem;
+  font-weight: 600;
 }
 
 .detail-section ul {
   margin: 0;
-  padding-left: 1.25rem;
-  font-size: 0.95rem;
+  padding-left: 1rem;
+  font-size: 0.75rem;
 }
 
 .detail-section li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.125rem;
+  color: var(--text-secondary);
 }
 
 .full-width {
@@ -201,44 +244,53 @@ const downloadMarkdown = () => {
 .ip-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .ip-tag {
-  background: #f1f3f5;
-  color: #495057;
-  padding: 0.2rem 0.5rem;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 0.85rem;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  padding: 0.0625rem 0.3125rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  border: 1px solid var(--border);
 }
 
 .no-data {
-  color: #adb5bd;
+  color: var(--text-tertiary);
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 .methodology-note {
-  font-size: 0.8rem;
-  color: #6c757d;
-  border-top: 1px solid #f1f3f5;
-  padding-top: 1rem;
-  font-style: italic;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 @media (max-width: 600px) {
-  .summary-header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .dashboard-hero {
+    grid-template-columns: 1fr;
   }
 
-  .headline-container {
-    flex-direction: column;
-    gap: 1rem;
+  .dashboard-hero-score {
+    width: 100%;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    margin-top: 0;
+  }
+
+  .dashboard-hero-actions {
+    align-self: stretch;
+  }
+
+  .summary-details {
+    grid-template-columns: 1fr;
   }
 }
-
-
 </style>

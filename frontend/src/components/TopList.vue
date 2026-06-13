@@ -45,7 +45,7 @@ defineProps({
 
 <style scoped>
 .top-list {
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 table {
@@ -55,21 +55,23 @@ table {
 
 th, td {
   text-align: left;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
 }
 
 th {
-  color: var(--muted-foreground);
+  color: var(--text-tertiary);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .item-cell {
-  max-width: 250px;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 </style>

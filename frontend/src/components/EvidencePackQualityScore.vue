@@ -100,71 +100,78 @@ function checkStatusLabel(status) {
 
 <style scoped>
 .quality-score-container {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .quality-score-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
 .quality-score-header h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
+  margin: 0 0 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
-  font-size: 0.9rem;
-  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
 }
 
 .score-card {
   border: 1px solid var(--border);
-  border-left-width: 4px;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-left: 3px solid var(--border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.5rem 0.625rem;
+  margin-bottom: 0.75rem;
   background: var(--surface-subtle);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .score-card.ready {
-  border-left-color: #2b8a3e;
+  border-left-color: oklch(0.55 0.14 145);
 }
 
 .score-card.good {
-  border-left-color: #1971c2;
+  border-left-color: oklch(0.55 0.15 250);
 }
 
 .score-card.partial {
-  border-left-color: #d9480f;
+  border-left-color: oklch(0.65 0.15 55);
 }
 
 .score-card.missing {
-  border-left-color: #c92a2a;
+  border-left-color: oklch(0.5 0.18 25);
 }
 
 .score-label {
-  font-size: 0.8rem;
-  color: var(--muted-foreground);
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
 .score-value {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--foreground);
-  margin: 0.25rem 0;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
 
 .score-status {
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
+  margin-left: auto;
 }
 
 .overall-badge,
@@ -172,80 +179,87 @@ function checkStatusLabel(status) {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.5625rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .overall-badge.ready {
-  background: #ebfbee;
-  color: #2b8a3e;
+  background: oklch(0.95 0.05 145);
+  color: oklch(0.4 0.12 145);
 }
 
 .overall-badge.good {
-  background: #e7f5ff;
-  color: #1971c2;
+  background: oklch(0.95 0.05 250);
+  color: oklch(0.4 0.12 250);
 }
 
 .overall-badge.partial {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.95 0.06 60);
+  color: oklch(0.5 0.12 60);
 }
 
 .overall-badge.missing {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.95 0.04 25);
+  color: oklch(0.45 0.15 25);
 }
 
 .status-pill.pass {
-  background: #ebfbee;
-  color: #2b8a3e;
+  background: oklch(0.95 0.05 145);
+  color: oklch(0.4 0.12 145);
 }
 
 .status-pill.attention {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.95 0.06 60);
+  color: oklch(0.5 0.12 60);
 }
 
 .status-pill.missing {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.95 0.04 25);
+  color: oklch(0.45 0.15 25);
 }
 
 .checklist {
   display: grid;
-  gap: 1rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .check-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border: none;
+  border-radius: 0;
+  padding: 0.5rem 0.625rem;
+  background: var(--surface-elevated);
 }
 
 .check-card.pass {
-  background: #f8fff9;
+  background: oklch(0.99 0.01 145);
 }
 
 .check-card.attention {
-  background: #fffaf4;
+  background: oklch(0.99 0.01 60);
 }
 
 .check-card.missing {
-  background: #fff7f7;
+  background: oklch(0.99 0.01 25);
 }
 
 .check-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .check-header h4 {
-  margin: 0 0 0.35rem;
-  font-size: 1rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--foreground);
 }
 
@@ -253,23 +267,26 @@ function checkStatusLabel(status) {
 .check-recommendation {
   margin: 0;
   color: var(--text-secondary);
+  font-size: 0.6875rem;
 }
 
 .check-points {
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .check-recommendation {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+  margin-top: 0.125rem;
+  line-height: 1.4;
 }
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
   color: var(--text-tertiary);
+  font-size: 0.75rem;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 768px) {
@@ -278,6 +295,4 @@ function checkStatusLabel(status) {
     flex-direction: column;
   }
 }
-
-
 </style>

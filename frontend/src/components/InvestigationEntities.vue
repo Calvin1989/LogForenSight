@@ -1,19 +1,20 @@
 <template>
   <Card class="investigation-entities" data-testid="investigation-entities">
     <CardHeader>
-      <div class="section-header">
-        <div>
+      <div class="entity-header-grid">
+        <div class="entity-header-left">
           <CardTitle>{{ t('entities.title') }} ({{ entities.length }})</CardTitle>
           <p class="intro-text">{{ t('entities.intro') }}</p>
         </div>
-        <div class="type-summary" v-if="entities.length > 0">
-          <span
+        <div class="entity-header-right" v-if="entities.length > 0">
+          <div
             v-for="summary in typeSummaries"
             :key="summary.type"
-            class="summary-pill"
+            class="metric-tile"
           >
-            {{ entityTypeLabel(summary.type) }}: {{ summary.count }}
-          </span>
+            <span class="metric-tile-label">{{ entityTypeLabel(summary.type) }}</span>
+            <span class="metric-tile-value">{{ summary.count }}</span>
+          </div>
         </div>
       </div>
     </CardHeader>
@@ -94,61 +95,77 @@ function formatSourceFiles(sourceFiles) {
 
 <style scoped>
 .investigation-entities {
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
+.entity-header-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+  align-items: start;
 }
 
-.section-header h2 {
-  margin: 0 0 0.4rem 0;
-  font-size: 1.25rem;
+.entity-header-left h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .intro-text {
   margin: 0;
   color: var(--muted-foreground);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
-.type-summary {
+.entity-header-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem;
+}
+
+.metric-tile {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.375rem 0.5rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-width: 5rem;
 }
 
-.summary-pill {
-  background: var(--surface-subtle);
-  color: var(--text-secondary);
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.8rem;
+.metric-tile-label {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
   font-weight: 600;
+}
+
+.metric-tile-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
 }
 
 .entities-table {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
+  max-height: 22rem;
+  overflow-y: auto;
 }
 
 .entity-row {
   display: grid;
-  grid-template-columns: minmax(120px, 1.2fr) minmax(180px, 2fr) repeat(3, minmax(100px, 1fr)) minmax(180px, 1.6fr);
-  gap: 0.75rem;
-  padding: 0.85rem 1rem;
+  grid-template-columns: minmax(100px, 1.2fr) minmax(160px, 2fr) repeat(3, minmax(80px, 1fr)) minmax(140px, 1.6fr);
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-top: 1px solid var(--border);
   align-items: center;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .entity-row:first-child {
@@ -159,6 +176,9 @@ function formatSourceFiles(sourceFiles) {
   background: var(--surface-subtle);
   font-weight: 700;
   color: var(--text-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .type-label {
@@ -173,25 +193,24 @@ function formatSourceFiles(sourceFiles) {
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
   color: var(--muted-foreground);
   background: var(--surface-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
 }
 
 @media (max-width: 900px) {
-  .section-header {
-    flex-direction: column;
+  .entity-header-grid {
+    grid-template-columns: 1fr;
   }
 
-  .type-summary {
-    justify-content: flex-start;
+  .entity-header-right {
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
   }
 
   .entity-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
-
 </style>

@@ -1,31 +1,33 @@
 <template>
   <section class="upload-section">
-    <div class="file-input-group">
-      <input
-        type="file"
-        id="logFile"
-        accept=".log,.txt"
-        multiple
-        @change="onFileChange"
-      />
-      <label for="logFile" class="file-label">
-        {{ selectedFileLabel }}
-      </label>
-    </div>
+    <div class="upload-row">
+      <div class="file-input-group">
+        <input
+          type="file"
+          id="logFile"
+          accept=".log,.txt"
+          multiple
+          @change="onFileChange"
+        />
+        <label for="logFile" class="file-label">
+          {{ selectedFileLabel }}
+        </label>
+      </div>
 
-    <div class="options-group">
-      <label for="logFormat">{{ t('upload.logFormat') }}:</label>
-      <select id="logFormat" v-model="logFormat" class="format-select">
-        <option value="auto">{{ t('upload.autoDetect') }}</option>
-        <option value="nginx">Nginx</option>
-        <option value="apache">Apache</option>
-      </select>
+      <div class="options-group">
+        <label for="logFormat">{{ t('upload.logFormat') }}</label>
+        <select id="logFormat" v-model="logFormat" class="format-select">
+          <option value="auto">{{ t('upload.autoDetect') }}</option>
+          <option value="nginx">Nginx</option>
+          <option value="apache">Apache</option>
+        </select>
+      </div>
     </div>
 
     <Button
       @click="emitAnalyze"
       :disabled="selectedFiles.length === 0 || props.loading"
-      size="lg"
+      class="analyze-btn"
     >
       {{ analyzeButtonLabel }}
     </Button>
@@ -82,46 +84,50 @@ const emitAnalyze = () => {
 <style scoped>
 .upload-section {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1.35rem;
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: linear-gradient(180deg, var(--surface-elevated) 0%, var(--shell-bg) 100%);
-  border: 2px dashed var(--border);
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+  gap: 0.75rem;
+}
+
+.upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .file-input-group {
   position: relative;
+  flex: 1;
+  min-width: 10rem;
 }
 
 .options-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+  gap: 0.375rem;
+}
+
+.options-group label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  white-space: nowrap;
 }
 
 .format-select {
-  padding: 0.48rem 0.8rem;
+  padding: 0.4375rem 0.625rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background-color: var(--surface-elevated);
+  font-size: 0.8125rem;
   cursor: pointer;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.format-select:hover {
-  border-color: var(--muted-foreground);
 }
 
 .format-select:focus-visible {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2);
+  border-color: var(--ring);
 }
 
 #logFile {
@@ -132,45 +138,52 @@ const emitAnalyze = () => {
 }
 
 .file-label {
-  display: inline-block;
-  min-width: 12rem;
-  padding: 0.85rem 1.5rem;
+  display: block;
+  padding: 0.4375rem 0.75rem;
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-weight: 600;
-  text-align: center;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: border-color 0.1s ease;
 }
 
 .file-label:hover {
-  border-color: #9ec5fe;
-  background: #f4f9ff;
-  box-shadow: 0 8px 20px rgba(13, 110, 253, 0.08);
+  border-color: var(--ring);
 }
 
 #logFile:focus-visible + .file-label {
-  outline: 3px solid rgba(13, 110, 253, 0.22);
-  outline-offset: 3px;
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.analyze-btn {
+  flex-shrink: 0;
 }
 
 @media (max-width: 640px) {
   .upload-section {
+    flex-direction: column;
     align-items: stretch;
-    padding: 1.25rem;
+  }
+
+  .upload-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .options-group {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 0.45rem;
+    justify-content: space-between;
   }
 
   .file-label,
-  .format-select {
+  .format-select,
+  .analyze-btn {
     width: 100%;
   }
 }
-
 </style>

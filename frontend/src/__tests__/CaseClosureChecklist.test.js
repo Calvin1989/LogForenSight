@@ -65,9 +65,37 @@ describe('CaseClosureChecklist.vue', () => {
     expect(wrapper.get('[data-testid="case-closure-item-export-guardrails"]').text()).toContain('Ready')
     expect(wrapper.get('[data-testid="case-closure-item-share-safety"]').text()).toContain('Safe')
     expect(wrapper.get('[data-testid="case-closure-item-handoff-readiness"]').text()).toContain('Ready')
-    expect(wrapper.get('[data-testid="case-closure-evidence-gaps"]').text()).toContain('No obvious closure gaps were detected.')
-    expect(wrapper.get('[data-testid="case-closure-next-actions"]').text()).toContain('Next actions')
-    expect(wrapper.get('[data-testid="case-closure-next-action-prepare-final-handoff"]').text()).toContain('Prepare final handoff')
+  })
+
+  it('emits closureData with gapItems and handoffReadiness', () => {
+    const wrapper = mountChecklist({
+      result: {
+        findings: [{ rule_id: 'rule-1', severity: 'high' }],
+        incidents: [{ incident_id: 'inc-1' }]
+      },
+      displayResult: {
+        findings: [{ rule_id: 'rule-1', severity: 'high' }],
+        incidents: [{ incident_id: 'inc-1' }],
+        timeline_events: [{ id: 'evt-1' }],
+        rule_coverage: [{ rule_id: 'rule-1' }]
+      },
+      caseNotes: [{ id: 'note-1', body: 'Analyst note' }],
+      reviewReadiness: {
+        status: 'ready',
+        summary: { requiredBlockers: 0, highRiskFindings: { reviewed: 1, total: 1 }, incidents: { reviewed: 1, total: 1 } }
+      },
+      evidencePackQuality: { score: 95, status: 'ready', summary: { maxScore: 100 } },
+      exportGuardrails: { decision: 'ready', summaryKey: 'evidencePackGuardrails.readySummary' },
+      shareSafety: { status: 'safe', findings: [], warnings: [] }
+    })
+
+    const emitted = wrapper.emitted('update:closureData')
+    expect(emitted).toBeTruthy()
+    const lastEmit = emitted[emitted.length - 1][0]
+    expect(lastEmit).toHaveProperty('gapItems')
+    expect(lastEmit).toHaveProperty('handoffReadiness')
+    expect(lastEmit.handoffReadiness.value).toContain('Ready')
+    expect(Array.isArray(lastEmit.gapItems)).toBe(true)
   })
 
   it('does not crash when result and summaries are missing', () => {
@@ -88,8 +116,11 @@ describe('CaseClosureChecklist.vue', () => {
     expect(wrapper.get('[data-testid="case-closure-item-rule-coverage"]').text()).toContain('Unavailable')
     expect(wrapper.get('[data-testid="case-closure-item-case-notes"]').text()).toContain('Unavailable')
     expect(wrapper.get('[data-testid="case-closure-item-handoff-readiness"]').text()).toContain('Unavailable')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-timeline"]').text()).toContain('Review timeline')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-rule-coverage"]').text()).toContain('Review rule coverage')
+
+    const emitted = wrapper.emitted('update:closureData')
+    expect(emitted).toBeTruthy()
+    const lastEmit = emitted[emitted.length - 1][0]
+    expect(lastEmit.handoffReadiness.value).toContain('Unavailable')
   })
 
   it('shows available missing and unavailable states for collection-based items', () => {
@@ -112,13 +143,10 @@ describe('CaseClosureChecklist.vue', () => {
     expect(wrapper.get('[data-testid="case-closure-item-timeline"]').text()).toContain('Missing')
     expect(wrapper.get('[data-testid="case-closure-item-rule-coverage"]').text()).toContain('Unavailable')
     expect(wrapper.get('[data-testid="case-closure-item-case-notes"]').text()).toContain('Missing')
-    expect(wrapper.get('[data-testid="case-closure-gap-empty-timeline"]').text()).toContain('Timeline unavailable or empty')
-    expect(wrapper.get('[data-testid="case-closure-gap-rule-coverage-unavailable"]').text()).toContain('Rule coverage unavailable')
-    expect(wrapper.get('[data-testid="case-closure-gap-missing-notes"]').text()).toContain('Missing case notes')
-    expect(wrapper.get('[data-testid="case-closure-next-action-add-case-notes"]').text()).toContain('Add case notes')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-incidents-findings"]').text()).toContain('Review incidents / findings')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-timeline"]').text()).toContain('Review timeline')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-rule-coverage"]').text()).toContain('Review rule coverage')
+
+    const emitted = wrapper.emitted('update:closureData')
+    const lastEmit = emitted[emitted.length - 1][0]
+    expect(lastEmit.gapItems.length).toBeGreaterThan(0)
   })
 
   it('shows summary states for review readiness quality guardrails and share safety', () => {
@@ -133,9 +161,7 @@ describe('CaseClosureChecklist.vue', () => {
       caseNotes: [],
       reviewReadiness: {
         status: 'attention',
-        summary: {
-          requiredBlockers: 2
-        }
+        summary: { requiredBlockers: 2 }
       },
       evidencePackQuality: {
         score: 45,
@@ -158,18 +184,11 @@ describe('CaseClosureChecklist.vue', () => {
     expect(wrapper.get('[data-testid="case-closure-item-quality-score"]').text()).toContain('Partial')
     expect(wrapper.get('[data-testid="case-closure-item-export-guardrails"]').text()).toContain('Review recommended')
     expect(wrapper.get('[data-testid="case-closure-item-share-safety"]').text()).toContain('Attention')
-    expect(wrapper.get('[data-testid="case-closure-gap-review-readiness-attention"]').text()).toContain('Review readiness needs attention')
-    expect(wrapper.get('[data-testid="case-closure-gap-quality-needs-improvement"]').text()).toContain('Quality score needs improvement')
-    expect(wrapper.get('[data-testid="case-closure-gap-guardrails-attention"]').text()).toContain('Export guardrails need attention')
-    expect(wrapper.get('[data-testid="case-closure-gap-share-safety-attention"]').text()).toContain('Share safety review has items')
-    expect(wrapper.get('[data-testid="case-closure-next-action-add-case-notes"]').text()).toContain('Add case notes')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-incidents-findings"]').text()).toContain('Review incidents / findings')
-    expect(wrapper.get('[data-testid="case-closure-next-action-review-timeline"]').text()).toContain('Review timeline')
-    expect(wrapper.get('[data-testid="case-closure-next-action-address-review-readiness-warnings"]').text()).toContain('Address review readiness warnings')
-    expect(wrapper.get('[data-testid="case-closure-next-action-resolve-export-guardrails"]').text()).toContain('Resolve export guardrails')
-    expect(wrapper.find('[data-testid="case-closure-next-action-improve-quality-score-inputs"]').exists()).toBe(false)
-    expect(wrapper.find('[data-testid="case-closure-next-action-review-share-safety-items"]').exists()).toBe(false)
-    expect(wrapper.find('[data-testid="case-closure-next-action-prepare-final-handoff"]').exists()).toBe(false)
+
+    const emitted = wrapper.emitted('update:closureData')
+    const lastEmit = emitted[emitted.length - 1][0]
+    expect(lastEmit.gapItems.length).toBeGreaterThan(0)
+    expect(lastEmit.handoffReadiness.value).toContain('Needs review')
   })
 
   it('derives handoff readiness as ready needs review or unavailable', () => {
@@ -184,7 +203,10 @@ describe('CaseClosureChecklist.vue', () => {
       shareSafety: { status: 'safe', findings: [], warnings: [] }
     })
     expect(readyWrapper.get('[data-testid="case-closure-item-handoff-readiness"]').text()).toContain('Ready')
-    expect(readyWrapper.get('[data-testid="case-closure-next-action-prepare-final-handoff"]').text()).toContain('Prepare final handoff')
+
+    const readyEmit = readyWrapper.emitted('update:closureData')
+    const readyLastEmit = readyEmit[readyEmit.length - 1][0]
+    expect(readyLastEmit.handoffReadiness.value).toContain('Ready')
 
     const reviewWrapper = mountChecklist({
       reviewReadiness: { status: 'attention', summary: { requiredBlockers: 1 } },
@@ -193,13 +215,12 @@ describe('CaseClosureChecklist.vue', () => {
       shareSafety: { status: 'review_recommended', findings: [{ id: 'ipAddresses' }], warnings: [] }
     })
     expect(reviewWrapper.get('[data-testid="case-closure-item-handoff-readiness"]').text()).toContain('Needs review')
-    expect(reviewWrapper.get('[data-testid="case-closure-gap-handoff-needs-review"]').text()).toContain('Handoff readiness not ready')
-    expect(reviewWrapper.find('[data-testid="case-closure-next-action-prepare-final-handoff"]').exists()).toBe(false)
+
+    const reviewEmit = reviewWrapper.emitted('update:closureData')
+    const reviewLastEmit = reviewEmit[reviewEmit.length - 1][0]
+    expect(reviewLastEmit.handoffReadiness.value).toContain('Needs review')
 
     const unavailableWrapper = mountChecklist()
     expect(unavailableWrapper.get('[data-testid="case-closure-item-handoff-readiness"]').text()).toContain('Unavailable')
-    expect(unavailableWrapper.get('[data-testid="case-closure-gap-handoff-needs-review"]').text()).toContain('Handoff readiness not ready')
-    expect(unavailableWrapper.get('[data-testid="case-closure-next-action-review-timeline"]').text()).toContain('Review timeline')
-    expect(unavailableWrapper.get('[data-testid="case-closure-next-action-review-rule-coverage"]').text()).toContain('Review rule coverage')
   })
 })

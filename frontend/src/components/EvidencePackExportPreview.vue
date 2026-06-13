@@ -852,36 +852,36 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .preview-container {
-  background: var(--card);
+  background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 0;
 }
 
 .preview-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .preview-header h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
+  margin: 0 0 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
 .preview-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.375rem;
   flex-wrap: wrap;
 }
 
@@ -890,9 +890,9 @@ onBeforeUnmount(() => {
 }
 
 .copy-btn {
-  background: #eef7ff;
-  border-color: #b6d4fe;
-  color: #0b5ed7;
+  background: var(--accent);
+  border-color: var(--border);
+  color: var(--foreground);
 }
 
 .copy-feedback {
@@ -952,18 +952,18 @@ onBeforeUnmount(() => {
 }
 
 .handoff-summary-item.is-positive {
-  border-color: #c3e6cb;
-  background: #f4fbf5;
+  border-color: oklch(0.88 0.06 145);
+  background: oklch(0.98 0.02 145);
 }
 
 .handoff-summary-item.is-warning {
-  border-color: #ffd8a8;
-  background: #fff9f1;
+  border-color: oklch(0.88 0.08 60);
+  background: oklch(0.98 0.02 60);
 }
 
 .handoff-summary-item.is-danger {
-  border-color: #ffc9c9;
-  background: #fff5f5;
+  border-color: oklch(0.88 0.06 25);
+  background: oklch(0.98 0.02 25);
 }
 
 .handoff-summary-item.is-neutral {
@@ -1053,13 +1053,13 @@ onBeforeUnmount(() => {
 }
 
 .export-manifest-compatibility.is-safe {
-  border-color: #d7f0df;
-  background: #f6fcf8;
+  border-color: oklch(0.88 0.06 145);
+  background: oklch(0.98 0.02 145);
 }
 
 .export-manifest-compatibility.is-unsafe {
-  border-color: #f3d7d7;
-  background: #fff7f7;
+  border-color: oklch(0.88 0.06 25);
+  background: oklch(0.98 0.02 25);
 }
 
 .export-manifest-compatibility-label {
@@ -1196,17 +1196,18 @@ onBeforeUnmount(() => {
 }
 
 .preview-markdown {
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   background: var(--muted);
   color: var(--foreground);
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   line-height: 1.55;
   white-space: pre-wrap;
   word-break: break-word;
-  max-height: 26rem;
+  max-height: 20rem;
   overflow: auto;
+  font-family: var(--font-mono);
 }
 
 .preview-section + .preview-section {

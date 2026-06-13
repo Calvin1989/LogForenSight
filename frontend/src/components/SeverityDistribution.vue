@@ -1,18 +1,16 @@
 <template>
   <div class="severity-distribution" data-testid="severity-distribution">
-    <h2>{{ t('distribution.title') }}</h2>
-    <div class="distribution-grid">
+    <h2 class="section-title">{{ t('distribution.title') }}</h2>
+    <div class="severity-matrix">
       <Card class="distribution-card" data-testid="finding-distribution">
         <CardHeader>
           <CardTitle>{{ t('distribution.findingSeverity') }}</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="severity-bars">
-            <div v-for="(count, severity) in findingCounts" :key="severity" class="severity-item">
-              <div class="severity-label">
-                <span class="dot" :class="severity"></span>
-                {{ translateSeverity(severity) }}
-              </div>
+            <div v-for="(count, severity) in findingCounts" :key="severity" class="severity-row">
+              <span class="dot" :class="severity"></span>
+              <span class="severity-label">{{ translateSeverity(severity) }}</span>
               <div class="bar-container">
                 <div
                   class="bar"
@@ -20,7 +18,7 @@
                   :style="{ width: getPercentage(count, totalFindings) + '%' }"
                 ></div>
               </div>
-              <div class="count">{{ count }}</div>
+              <span class="count">{{ count }}</span>
             </div>
           </div>
         </CardContent>
@@ -32,11 +30,9 @@
         </CardHeader>
         <CardContent>
           <div class="severity-bars">
-            <div v-for="(count, severity) in incidentCounts" :key="severity" class="severity-item">
-              <div class="severity-label">
-                <span class="dot" :class="severity"></span>
-                {{ translateSeverity(severity) }}
-              </div>
+            <div v-for="(count, severity) in incidentCounts" :key="severity" class="severity-row">
+              <span class="dot" :class="severity"></span>
+              <span class="severity-label">{{ translateSeverity(severity) }}</span>
               <div class="bar-container">
                 <div
                   class="bar"
@@ -44,7 +40,7 @@
                   :style="{ width: getPercentage(count, totalIncidents) + '%' }"
                 ></div>
               </div>
-              <div class="count">{{ count }}</div>
+              <span class="count">{{ count }}</span>
             </div>
           </div>
         </CardContent>
@@ -92,21 +88,16 @@ const getPercentage = (count, total) => {
 
 <style scoped>
 .severity-distribution {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
-h2 {
-  font-size: 1.125rem;
-  font-weight: 600;
+.section-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.01em;
   color: var(--foreground);
-}
-
-.distribution-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  margin: 0 0 0.625rem;
 }
 
 .distribution-card {
@@ -116,38 +107,39 @@ h2 {
 .severity-bars {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.375rem;
 }
 
-.severity-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.severity-label {
-  width: 80px;
-  font-size: 0.9rem;
+.severity-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.125rem 0;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.dot.high { background-color: #e74c3c; }
-.dot.medium { background-color: #f39c12; }
-.dot.low { background-color: #3498db; }
+.dot.high { background-color: oklch(0.55 0.2 25); }
+.dot.medium { background-color: oklch(0.7 0.15 85); }
+.dot.low { background-color: oklch(0.55 0.15 250); }
+
+.severity-label {
+  width: 56px;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
 
 .bar-container {
   flex-grow: 1;
-  height: 8px;
+  height: 5px;
   background-color: var(--muted);
-  border-radius: 8px;
+  border-radius: 999px;
   overflow: hidden;
 }
 
@@ -156,17 +148,17 @@ h2 {
   transition: width 0.2s ease;
 }
 
-.bar.high { background-color: #e74c3c; }
-.bar.medium { background-color: #f39c12; }
-.bar.low { background-color: #3498db; }
+.bar.high { background-color: oklch(0.55 0.2 25); }
+.bar.medium { background-color: oklch(0.7 0.15 85); }
+.bar.low { background-color: oklch(0.55 0.15 250); }
 
 .count {
-  width: 30px;
+  width: 2rem;
   text-align: right;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
-
-
 </style>

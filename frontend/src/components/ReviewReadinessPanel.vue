@@ -17,28 +17,28 @@
       </div>
 
       <template v-else>
-        <div class="overall-card" :class="readiness.status">
-          <div class="overall-label">{{ t('reviewReadiness.evidencePack') }}</div>
-          <div class="overall-value">{{ overallStatusLabel }}</div>
-          <div class="overall-description">{{ overallDescription }}</div>
+        <div class="overall-strip" :class="readiness.status">
+          <span class="overall-label">{{ t('reviewReadiness.evidencePack') }}</span>
+          <span class="overall-value">{{ overallStatusLabel }}</span>
+          <span class="overall-desc">{{ overallDescription }}</span>
         </div>
 
-        <div class="checklist">
+        <div class="review-cockpit-grid">
           <article
             v-for="check in readiness.checks"
             :key="check.id"
-            class="check-card"
+            class="review-status-row"
             :class="check.status"
           >
-            <div class="check-header">
+            <div class="status-badge-col">
               <span class="status-pill" :class="check.status">
                 {{ statusLabel(check.status) }}
               </span>
-              <h4>{{ t(check.labelKey) }}</h4>
             </div>
-
-            <p class="check-summary">{{ checkSummary(check) }}</p>
-            <p class="check-recommendation">{{ t(check.recommendationKey) }}</p>
+            <div class="content-col">
+              <h4>{{ t(check.labelKey) }}</h4>
+              <p class="check-summary">{{ checkSummary(check) }}</p>
+            </div>
           </article>
         </div>
       </template>
@@ -173,27 +173,27 @@ function checkSummary(check) {
 
 <style scoped>
 .review-readiness-container {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .review-readiness-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
 .review-readiness-header h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
+  margin: 0 0 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
-  font-size: 0.9rem;
-  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
 }
 
 .overall-badge,
@@ -201,130 +201,154 @@ function checkSummary(check) {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.5625rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .overall-badge.ready,
 .status-pill.ready {
-  background: #ebfbee;
-  color: #2b8a3e;
+  background: oklch(0.95 0.05 145);
+  color: oklch(0.4 0.12 145);
 }
 
 .overall-badge.attention,
 .status-pill.attention {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.95 0.06 60);
+  color: oklch(0.5 0.12 60);
 }
 
 .overall-badge.missing,
 .status-pill.missing {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.95 0.04 25);
+  color: oklch(0.45 0.15 25);
 }
 
-.overall-card {
+.overall-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  margin-bottom: 0.75rem;
   border: 1px solid var(--border);
-  border-left-width: 4px;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-left: 3px solid var(--border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   background: var(--surface-subtle);
 }
 
-.overall-card.ready {
-  border-left-color: #2b8a3e;
+.overall-strip.ready {
+  border-left-color: oklch(0.55 0.14 145);
 }
 
-.overall-card.attention {
-  border-left-color: #d9480f;
+.overall-strip.attention {
+  border-left-color: oklch(0.65 0.15 55);
 }
 
 .overall-label {
-  font-size: 0.8rem;
-  color: var(--muted-foreground);
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
 .overall-value {
-  font-size: 1.2rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: var(--foreground);
-  margin: 0.25rem 0;
+  flex-shrink: 0;
 }
 
-.overall-description {
-  font-size: 0.9rem;
+.overall-desc {
+  font-size: 0.75rem;
   color: var(--text-secondary);
+  margin-left: auto;
 }
 
-.checklist {
+.review-cockpit-grid {
   display: grid;
-  gap: 1rem;
-}
-
-.check-card {
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-.check-card.ready {
-  background: #f8fff9;
-}
-
-.check-card.attention {
-  background: #fffaf4;
-}
-
-.check-card.missing {
-  background: #fff7f7;
-}
-
-.check-header {
+.review-status-row {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--surface-elevated);
+  border: none;
+  border-radius: 0;
 }
 
-.check-header h4 {
+.review-status-row.ready {
+  background: oklch(0.99 0.01 145);
+}
+
+.review-status-row.attention {
+  background: oklch(0.99 0.01 60);
+}
+
+.review-status-row.missing {
+  background: oklch(0.99 0.01 25);
+}
+
+.status-badge-col {
+  flex-shrink: 0;
+  padding-top: 0.125rem;
+}
+
+.content-col {
+  min-width: 0;
+  flex: 1;
+}
+
+.content-col h4 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--foreground);
-}
-
-.check-summary,
-.check-recommendation {
-  margin: 0;
-  color: var(--text-secondary);
 }
 
 .check-summary {
-  font-weight: 600;
-}
-
-.check-recommendation {
-  margin-top: 0.35rem;
-  font-size: 0.9rem;
+  margin: 0.125rem 0 0;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
   color: var(--text-tertiary);
+  font-size: 0.75rem;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 768px) {
   .review-readiness-header {
     flex-direction: column;
   }
+
+  .overall-strip {
+    flex-wrap: wrap;
+  }
+
+  .overall-desc {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .review-cockpit-grid {
+    grid-template-columns: 1fr;
+  }
 }
-
-
 </style>

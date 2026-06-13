@@ -198,68 +198,66 @@ const handleImport = (event) => {
 .workspace-container {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.25rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 0;
 }
 
 .workspace-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .header-main {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .header-main h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .local-badge {
-  font-size: 0.7rem;
-  background: var(--surface-subtle);
-  color: var(--muted-foreground);
-  padding: 2px 6px;
-  border-radius: 8px;
+  font-size: 0.5625rem;
+  background: var(--muted);
+  color: var(--text-tertiary);
+  padding: 0.0625rem 0.375rem;
+  border-radius: var(--radius-sm);
   text-transform: uppercase;
   font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .header-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.375rem;
 }
-
-
 
 .clear-btn {
   background: none;
   border: none;
-  color: var(--muted-foreground);
-  font-size: 0.85rem;
-  text-decoration: underline;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
   cursor: pointer;
-  padding: 0.4rem 0.8rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .clear-btn.danger:hover {
-  color: #dc3545;
+  color: oklch(0.55 0.2 25);
 }
 
 .workspace-controls {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .search-box {
@@ -268,87 +266,98 @@ const handleImport = (event) => {
 
 .filter-input, .filter-select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.3125rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  outline: none;
+}
+
+.filter-input:focus, .filter-select:focus {
+  border-color: var(--ring);
 }
 
 .filter-select {
   width: auto;
-  min-width: 150px;
+  min-width: 120px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem;
+  padding: 1.5rem;
   color: var(--text-tertiary);
-  border: 2px dashed var(--border);
-  border-radius: 8px;
+  font-size: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .case-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .case-item {
   display: flex;
-  border: 1px solid var(--border);
-  border-left: 4px solid #dee2e6;
-  border-radius: 8px;
+  border: none;
+  border-left: 3px solid var(--border);
+  border-radius: 0;
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.1s ease;
+  background: var(--surface-elevated);
 }
 
 .case-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  background: var(--surface-subtle);
 }
 
 .case-main {
   flex: 1;
-  padding: 1rem;
+  padding: 0.625rem 0.75rem;
   cursor: pointer;
 }
 
 .case-title-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.4rem;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .case-title {
   font-weight: 600;
   color: var(--foreground);
-  font-size: 1rem;
+  font-size: 0.8125rem;
 }
 
 .case-mode-tag {
-  font-size: 0.7rem;
-  padding: 1px 6px;
-  border-radius: 8px;
+  font-size: 0.5625rem;
+  padding: 0.0625rem 0.3125rem;
+  border-radius: var(--radius-sm);
   font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
 .case-mode-tag.batch {
-  background: #e7f5ff;
-  color: #1971c2;
+  background: var(--accent);
+  color: var(--foreground);
 }
 
 .case-mode-tag.single {
-  background: #f8f9fa;
-  color: #495057;
+  background: var(--muted);
+  color: var(--text-secondary);
 }
 
 .case-info {
   display: flex;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--muted-foreground);
-  margin-bottom: 0.75rem;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  margin-bottom: 0.375rem;
 }
 
 .separator {
@@ -357,34 +366,35 @@ const handleImport = (event) => {
 
 .case-stats {
   display: flex;
-  gap: 1.25rem;
-  font-size: 0.85rem;
+  gap: 0.75rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
 .stat strong {
   color: var(--foreground);
+  font-variant-numeric: tabular-nums;
 }
 
 .case-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
+  gap: 0.25rem;
+  margin-top: 0.375rem;
 }
 
 .tag {
-  font-size: 0.7rem;
-  background: var(--surface-subtle);
+  font-size: 0.5625rem;
+  background: var(--muted);
   color: var(--text-secondary);
-  padding: 1px 6px;
-  border-radius: 8px;
+  padding: 0.0625rem 0.3125rem;
+  border-radius: var(--radius-sm);
 }
 
 .case-actions {
   display: flex;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
   background: var(--surface-subtle);
   border-left: 1px solid var(--border);
 }
@@ -393,9 +403,9 @@ const handleImport = (event) => {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  opacity: 0.5;
-  transition: opacity 0.15s ease;
+  font-size: 0.875rem;
+  opacity: 0.4;
+  transition: opacity 0.1s ease;
 }
 
 .delete-btn:hover {
@@ -403,14 +413,11 @@ const handleImport = (event) => {
 }
 
 /* Risk Levels */
-.risk-critical { border-left-color: #721c24; }
-.risk-high { border-left-color: #dc3545; }
-.risk-medium { border-left-color: #fd7e14; }
-.risk-low { border-left-color: #ffc107; }
-.risk-info { border-left-color: #17a2b8; }
-
-
-
+.risk-critical { border-left-color: oklch(0.45 0.18 25); }
+.risk-high { border-left-color: oklch(0.55 0.2 25); }
+.risk-medium { border-left-color: oklch(0.7 0.15 55); }
+.risk-low { border-left-color: oklch(0.75 0.15 85); }
+.risk-info { border-left-color: oklch(0.55 0.12 200); }
 
 @media (max-width: 720px) {
   .workspace-controls,
@@ -424,7 +431,4 @@ const handleImport = (event) => {
     flex-direction: column;
   }
 }
-
-
-
 </style>

@@ -272,184 +272,204 @@ const handleExport = () => {
 .triage-container {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 0;
 }
 
 .triage-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .header-main {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .header-main h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .local-badge {
-  font-size: 0.7rem;
-  background: var(--surface-subtle);
-  color: var(--muted-foreground);
-  padding: 2px 6px;
-  border-radius: 8px;
+  font-size: 0.5625rem;
+  background: var(--muted);
+  color: var(--text-tertiary);
+  padding: 0.0625rem 0.375rem;
+  border-radius: var(--radius-sm);
   text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .header-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.375rem;
 }
 
 .triage-summary-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
 
 .triage-status-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.375rem;
   align-items: center;
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.625rem;
   background: var(--surface-subtle);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .triage-status-summary.empty {
-  color: var(--muted-foreground);
+  color: var(--text-tertiary);
 }
 
 .summary-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-secondary);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .summary-text {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
 .summary-card {
-  background: var(--surface-subtle);
-  padding: 0.75rem;
-  border-radius: 8px;
+  background: var(--surface-elevated);
+  padding: 0.5rem 0.625rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .summary-card.danger {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.97 0.02 25);
+  color: oklch(0.5 0.15 25);
 }
 
 .summary-card .label {
-  font-size: 0.75rem;
-  color: var(--muted-foreground);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .summary-card.danger .label {
-  color: #c92a2a;
+  color: oklch(0.5 0.15 25);
 }
 
 .summary-card .value {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .triage-controls {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .filter-select {
-  padding: 0.4rem;
+  padding: 0.3125rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: var(--ring);
 }
 
 .triage-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
   color: var(--text-tertiary);
-  border: 1px dashed var(--border);
-  border-radius: 8px;
+  font-size: 0.75rem;
 }
 
 .triage-row {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border: none;
+  border-radius: 0;
+  padding: 0.75rem 0.875rem;
+  background: var(--surface-elevated);
 }
 
 .row-info {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .item-type-tag {
-  font-size: 0.7rem;
-  padding: 1px 6px;
-  border-radius: 8px;
-  margin-right: 0.5rem;
+  font-size: 0.5625rem;
+  padding: 0.0625rem 0.3125rem;
+  border-radius: var(--radius-sm);
+  margin-right: 0.375rem;
   text-transform: uppercase;
   font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
-.item-type-tag.incident { background: #e7f5ff; color: #1971c2; }
-.item-type-tag.finding { background: #fff4e6; color: #d9480f; }
+.item-type-tag.incident { background: var(--accent); color: var(--foreground); }
+.item-type-tag.finding { background: oklch(0.97 0.04 60); color: oklch(0.45 0.1 60); }
 
 .item-id {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.8125rem;
 }
 
 .item-desc {
-  font-size: 0.85rem;
-  color: var(--muted-foreground);
-  margin: 0.25rem 0 0 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0.125rem 0 0 0;
 }
 
 .item-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: 0.375rem;
+  margin-top: 0.375rem;
 }
 
 .meta-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
+  gap: 0.125rem;
+  font-size: 0.625rem;
   color: var(--text-secondary);
   background: var(--surface-subtle);
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
+  padding: 0.0625rem 0.375rem;
 }
 
 .note-chip {
@@ -460,41 +480,42 @@ const handleExport = () => {
 .row-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.625rem;
   background: var(--surface-subtle);
-  padding: 0.75rem;
-  border-radius: 8px;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.125rem;
 }
 
 .input-group label {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .input-group select, .input-group textarea {
-  padding: 0.3rem;
+  padding: 0.3125rem 0.375rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
 }
 
 .input-group.full-width {
   flex: 1;
-  min-width: 250px;
+  min-width: 200px;
 }
 
 .input-group textarea {
-  min-height: 40px;
+  min-height: 2rem;
   resize: vertical;
 }
-
 
 @media (max-width: 720px) {
   .triage-header,
@@ -510,7 +531,4 @@ const handleExport = () => {
     flex-direction: column;
   }
 }
-
-
-
 </style>

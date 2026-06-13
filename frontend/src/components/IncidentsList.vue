@@ -267,66 +267,68 @@ const new_date_str = () => {
 
 <style scoped>
 .result-card {
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 .incidents-intro {
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--border);
-  padding-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
 }
 
 .incidents-intro h2 {
   margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.9375rem;
   color: var(--foreground);
 }
 
 .intro-text {
-  font-size: 0.9rem;
-  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
   margin: 0;
 }
 
 .filter-controls {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.625rem;
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
-  padding: 0.75rem;
+  padding: 0.5rem 0.625rem;
   background: var(--surface-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
 }
 
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
 }
 
 .filter-group label {
-  font-size: 0.85rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  white-space: nowrap;
 }
 
 .filter-select, .filter-input {
-  padding: 0.35rem 0.6rem;
+  padding: 0.3125rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
   outline: none;
 }
 
 .filter-select:focus, .filter-input:focus {
-  border-color: #80bdff;
+  border-color: var(--ring);
 }
 
 .filter-stats {
-  font-size: 0.85rem;
-  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
 }
 
 .action-group {
@@ -334,13 +336,13 @@ const new_date_str = () => {
 }
 
 .export-warning {
-  font-size: 0.8rem;
-  color: #856404;
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+  color: oklch(0.55 0.12 85);
+  background-color: oklch(0.97 0.04 85);
+  border: 1px solid oklch(0.9 0.06 85);
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
 }
 
 .empty-state {
@@ -355,78 +357,85 @@ const new_date_str = () => {
 .incidents-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .incident-item {
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border: none;
+  border-left: 3px solid var(--border);
+  border-radius: 0;
+  padding: 0.75rem 0.875rem;
   background: var(--surface-elevated);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.1s ease;
 }
 
 .incident-item:hover {
-  border-color: #ced4da;
+  background: var(--surface-subtle);
 }
 
 .incident-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+  gap: 0.625rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 }
 
 .incident-header h3 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   flex-grow: 1;
   color: var(--foreground);
 }
 
 .severity-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.625rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
   background: #eee;
 }
 
-.severity-badge[data-severity="high"] { background: #dc3545; color: white; }
-.severity-badge[data-severity="medium"] { background: #fd7e14; color: white; }
-.severity-badge[data-severity="low"] { background: #17a2b8; color: white; }
+.severity-badge[data-severity="high"] { background: oklch(0.55 0.2 25); color: white; }
+.severity-badge[data-severity="medium"] { background: oklch(0.7 0.15 55); color: white; }
+.severity-badge[data-severity="low"] { background: oklch(0.55 0.12 200); color: white; }
 
 .triage-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.2rem 0.65rem;
+  padding: 0.125rem 0.375rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   font-weight: 700;
 }
 
 .triage-badge.needs-review {
-  background: #fff3bf;
-  color: #8f5b00;
-  border: 1px solid #ffe066;
+  background: oklch(0.95 0.08 85);
+  color: oklch(0.5 0.12 85);
+  border: 1px solid oklch(0.88 0.08 85);
 }
 
 .ip-badge {
   background: var(--surface-subtle);
-  padding: 0.25rem 0.75rem;
-  border-radius: 8px;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.95rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
   border: 1px solid var(--border);
 }
 
 .summary {
-  font-size: 1.05rem;
+  font-size: 0.8125rem;
   font-weight: 400;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.625rem;
   color: var(--foreground);
   line-height: 1.5;
 }
@@ -500,11 +509,11 @@ const new_date_str = () => {
 }
 
 .evidence-preview code {
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   word-break: break-all;
   white-space: pre-wrap;
-  color: #e83e8c;
-  font-family: 'Courier New', Courier, monospace;
+  color: oklch(0.55 0.18 350);
+  font-family: var(--font-mono);
 }
 
 

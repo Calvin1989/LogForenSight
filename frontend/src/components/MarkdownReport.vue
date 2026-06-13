@@ -235,99 +235,97 @@ const downloadEvidencePackMarkdown = () => {
 .result-card {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 0;
 }
 
 .header-with-action {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--border);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .header-with-action h2 {
   margin: 0;
-  font-size: 1.25rem;
-  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--foreground);
 }
 
 .markdown-report-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
 }
 
 .action-group {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.375rem;
   flex-wrap: wrap;
 }
 
 .download-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.3125rem 0.625rem;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .toggle-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.3125rem 0.625rem;
   background-color: var(--surface-subtle);
   color: var(--text-secondary);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .toggle-btn:hover {
-  background-color: #e9ecef;
+  background-color: var(--accent);
 }
 
 .download-btn.raw {
-  background-color: #28a745;
+  background-color: oklch(0.55 0.16 145);
 }
 .download-btn.raw:hover {
-  background-color: #218838;
+  background-color: oklch(0.5 0.16 145);
 }
 
 .download-btn.sanitized {
-  background-color: #17a2b8;
+  background-color: oklch(0.55 0.12 200);
 }
 .download-btn.sanitized:hover:not(:disabled) {
-  background-color: #138496;
+  background-color: oklch(0.5 0.12 200);
 }
 .download-btn.sanitized:disabled {
-  background-color: #6c757d;
+  background-color: var(--muted-foreground);
   cursor: not-allowed;
 }
 
 .download-btn.summary {
-  background-color: #6f42c1;
+  background-color: oklch(0.45 0.16 300);
 }
 .download-btn.summary:hover {
-  background-color: #5a32a3;
+  background-color: oklch(0.4 0.16 300);
 }
 
 .download-btn.evidence-pack {
-  background-color: #e67700;
+  background-color: oklch(0.6 0.16 55);
 }
 .download-btn.evidence-pack:hover {
-  background-color: #d46b08;
+  background-color: oklch(0.55 0.16 55);
 }
 
 .mini-error {
@@ -337,107 +335,125 @@ const downloadEvidencePackMarkdown = () => {
 }
 
 .info-banner {
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   background-color: var(--surface-subtle);
-  padding: 0.75rem 1rem;
-  border-left: 4px solid #17a2b8;
-  margin-bottom: 1.5rem;
-  border-radius: 0 4px 4px 0;
+  padding: 0.625rem 0.875rem;
+  border-left: 3px solid oklch(0.55 0.12 200);
+  margin-bottom: 1rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .warning-banner {
-  font-size: 0.85rem;
-  color: #856404;
-  background-color: #fff3cd;
-  padding: 0.75rem 1rem;
-  border-left: 4px solid #ffc107;
-  margin-bottom: 1rem;
-  border-radius: 0 4px 4px 0;
+  font-size: 0.8125rem;
+  color: oklch(0.55 0.12 85);
+  background-color: oklch(0.97 0.04 85);
+  padding: 0.625rem 0.875rem;
+  border-left: 3px solid oklch(0.7 0.15 85);
+  margin-bottom: 0.75rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .report-preview-container {
   background: var(--surface-elevated);
   color: var(--foreground);
-  padding: 2rem;
+  padding: 1.25rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow-x: auto;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  max-height: 32rem;
+  overflow-y: auto;
 }
 
 .report-preview-container h2 {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.3rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.25rem;
   border-bottom: 1px solid var(--border);
-  font-size: 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
+.report-preview-container h2:first-child {
+  margin-top: 0;
+}
+
 .report-preview-container h3 {
-  margin-top: 1.25rem;
-  margin-bottom: 0.75rem;
-  font-size: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .report-preview-container h4 {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 .report-preview-container p {
-  margin-bottom: 1rem;
+  margin-bottom: 0.625rem;
+  max-width: 48rem;
 }
 
 .md-li {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
-  padding-left: 0.5rem;
+  gap: 0.375rem;
+  margin-bottom: 0.25rem;
+  padding-left: 0.375rem;
+  font-size: 0.8125rem;
 }
 
 .bullet {
-  color: #339af0;
+  color: var(--foreground);
   font-weight: bold;
 }
 
 blockquote {
-  margin: 1rem 0;
-  padding: 0.5rem 1rem;
+  margin: 0.75rem 0;
+  padding: 0.5rem 0.75rem;
   color: var(--text-secondary);
-  border-left: 0.25rem solid var(--border);
+  border-left: 3px solid var(--border);
   background: var(--surface-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.8125rem;
 }
 
 .md-code {
   background: var(--surface-subtle);
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 0.625rem;
+  border-radius: var(--radius-sm);
   overflow-x: auto;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 0.85rem;
-  margin: 1rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  margin: 0.625rem 0;
   border: 1px solid var(--border);
+  max-height: 12rem;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .md-tr {
   display: flex;
   border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
 }
 
 .md-tr:first-child {
-  font-weight: bold;
+  font-weight: 600;
   background: var(--surface-subtle);
   border-top: 1px solid var(--border);
 }
 
 .md-td {
   flex: 1;
-  padding: 0.5rem;
+  padding: 0.375rem 0.5rem;
   border-right: 1px solid var(--border);
 }
 
@@ -448,8 +464,9 @@ blockquote {
 .empty-preview {
   text-align: center;
   color: var(--text-tertiary);
-  padding: 2rem;
+  padding: 1.5rem;
   font-style: italic;
+  font-size: 0.75rem;
 }
 
 

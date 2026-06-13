@@ -191,77 +191,88 @@ function formatTimestamp(value) {
 .case-notes-container {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 0;
 }
 
 .case-notes-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .header-main {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .header-main h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .local-badge {
-  font-size: 0.7rem;
-  background: var(--surface-subtle);
-  color: var(--muted-foreground);
-  padding: 2px 6px;
-  border-radius: 8px;
+  font-size: 0.5625rem;
+  background: var(--muted);
+  color: var(--text-tertiary);
+  padding: 0.0625rem 0.375rem;
+  border-radius: var(--radius-sm);
   text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .editor-card {
   background: var(--surface-subtle);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .editor-grid {
   display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 1rem;
+  grid-template-columns: 140px 1fr;
+  gap: 0.625rem;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
+  gap: 0.25rem;
+  margin-bottom: 0.625rem;
 }
 
 .field span {
-  font-size: 0.8rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .field input,
 .field select,
 .field textarea {
   width: 100%;
-  padding: 0.55rem 0.7rem;
+  padding: 0.375rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
   box-sizing: border-box;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--ring);
+  outline: none;
 }
 
 .field textarea {
@@ -271,92 +282,101 @@ function formatTimestamp(value) {
 .editor-actions,
 .note-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.375rem;
 }
-
-
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
   color: var(--text-tertiary);
+  font-size: 0.75rem;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .notes-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .note-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border: none;
+  border-radius: 0;
+  padding: 0.625rem 0.75rem;
+  background: var(--surface-elevated);
 }
 
 .note-head {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   align-items: flex-start;
 }
 
 .note-title-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .note-title-group h4 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
   color: var(--foreground);
 }
 
 .note-type-tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
+  padding: 0.0625rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.5625rem;
   font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .note-type-tag.observation {
-  background: #e7f5ff;
-  color: #1971c2;
+  background: var(--accent);
+  color: var(--foreground);
 }
 
 .note-type-tag.hypothesis {
-  background: #f3f0ff;
-  color: #6741d9;
+  background: oklch(0.95 0.04 300);
+  color: oklch(0.4 0.1 300);
 }
 
 .note-type-tag.action {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.97 0.04 60);
+  color: oklch(0.45 0.1 60);
 }
 
 .note-type-tag.decision {
-  background: #ebfbee;
-  color: #2b8a3e;
+  background: oklch(0.95 0.05 145);
+  color: oklch(0.4 0.12 145);
 }
 
 .note-body {
-  margin: 0.85rem 0;
+  margin: 0.5rem 0;
   white-space: pre-wrap;
   color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 .note-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.8rem;
-  color: var(--muted-foreground);
+  gap: 0.75rem;
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
 }
 
 @media (max-width: 768px) {
@@ -370,10 +390,4 @@ function formatTimestamp(value) {
     grid-template-columns: 1fr;
   }
 }
-
-
-
-
-
-
 </style>

@@ -46,35 +46,42 @@
               <p class="view-description">{{ t('workspaceShell.workspaceDescription') }}</p>
             </div>
 
-            <FileUpload
-              :loading="loading"
-              @analyze="onAnalyze"
-            />
-
-            <div class="main-actions" v-if="result || error || selectedFile">
-              <Button variant="outline" @click="onClearCurrentResult">
-                {{ t('app.clearCurrentResult') }}
-              </Button>
-              <Button v-if="result" @click="onSaveCase">
-                {{ t('workspace.saveCase') }}
-              </Button>
+            <div class="workspace-primary">
+              <FileUpload
+                :loading="loading"
+                @analyze="onAnalyze"
+              />
+              <div class="main-actions" v-if="result || error || selectedFile">
+                <Button variant="outline" size="sm" @click="onClearCurrentResult">
+                  {{ t('app.clearCurrentResult') }}
+                </Button>
+                <Button v-if="result" size="sm" @click="onSaveCase">
+                  {{ t('workspace.saveCase') }}
+                </Button>
+              </div>
             </div>
 
-            <RecentAnalyses
-              :history="recentAnalyses"
-              @select="onRestoreRecord"
-              @clear="handleClearHistory"
-            />
+            <div class="workspace-secondary">
+              <RecentAnalyses
+                :history="recentAnalyses"
+                @select="onRestoreRecord"
+                @clear="handleClearHistory"
+              />
+            </div>
 
-            <CaseWorkspace
-              :cases="savedCases"
-              @select="onSelectCase"
-              @refresh="handleRefreshCases"
-            />
+            <div class="workspace-tertiary">
+              <CaseWorkspace
+                :cases="savedCases"
+                @select="onSelectCase"
+                @refresh="handleRefreshCases"
+              />
+            </div>
 
-            <ReportComparison
-              :history="recentAnalyses"
-            />
+            <div class="workspace-tertiary">
+              <ReportComparison
+                :history="recentAnalyses"
+              />
+            </div>
           </section>
 
           <section
@@ -91,32 +98,38 @@
             <template v-if="displayResult">
               <AnalysisContextBar :analysisResult="displayResult" />
 
-              <SummaryCards :summary="displayResult.summary" />
+              <div class="overview-dashboard">
+                <div class="overview-primary">
+                  <ExecutiveSummary :summary="displayResult.executive_summary" />
+                </div>
 
-              <ExecutiveSummary :summary="displayResult.executive_summary" />
+                <div class="overview-stats-row">
+                  <SummaryCards :summary="displayResult.summary" />
+                  <SeverityDistribution
+                    :findingSeverityCounts="displayResult.summary.finding_severity_counts"
+                    :incidentSeverityCounts="displayResult.summary.incident_severity_counts"
+                  />
+                </div>
 
-              <SeverityDistribution
-                :findingSeverityCounts="displayResult.summary.finding_severity_counts"
-                :incidentSeverityCounts="displayResult.summary.incident_severity_counts"
-              />
+                <div class="overview-secondary">
+                  <ParseStatsCard :stats="displayResult.parse_stats" />
+                  <InvestigationEntities :analysisResult="result" />
+                </div>
 
-              <ParseStatsCard :stats="displayResult.parse_stats" />
-
-              <InvestigationEntities :analysisResult="result" />
-
-              <div class="side-by-side">
-                <TopList
-                  :title="t('app.topIps')"
-                  :items="displayResult.summary.top_ips"
-                  itemKey="ip"
-                  :itemLabel="t('app.ipAddress')"
-                />
-                <TopList
-                  :title="t('app.topPaths')"
-                  :items="displayResult.summary.top_paths"
-                  itemKey="path"
-                  :itemLabel="t('app.path')"
-                />
+                <div class="side-by-side">
+                  <TopList
+                    :title="t('app.topIps')"
+                    :items="displayResult.summary.top_ips"
+                    itemKey="ip"
+                    :itemLabel="t('app.ipAddress')"
+                  />
+                  <TopList
+                    :title="t('app.topPaths')"
+                    :items="displayResult.summary.top_paths"
+                    itemKey="path"
+                    :itemLabel="t('app.path')"
+                  />
+                </div>
               </div>
             </template>
 
@@ -236,7 +249,7 @@
                     <h3 class="group-title">{{ t('triageReview.readinessTitle') }}</h3>
                     <span class="group-description">{{ t('triageReview.readinessDescription') }}</span>
                   </div>
-                  <div class="group-content">
+                  <div class="readiness-grid">
                     <ReviewReadinessPanel
                       :key="reviewReadinessKey"
                       :result="result"
@@ -251,6 +264,12 @@
                       :evidencePackQuality="evidencePackQualityForGuardrails"
                       :exportGuardrails="exportGuardrails"
                       :shareSafety="evidencePackShareSafetySummary"
+                      @update:closureData="handleClosureData"
+                    />
+                    <CaseClosureEvidenceGaps :gap-items="closureData.gapItems" />
+                    <CaseClosureNextActions
+                      :gap-items="closureData.gapItems"
+                      :handoff-readiness="closureData.handoffReadiness"
                     />
                   </div>
                 </div>
@@ -416,6 +435,8 @@ import EvidencePackExportGuardrails from './components/EvidencePackExportGuardra
 import EvidencePackShareSafety from './components/EvidencePackShareSafety.vue'
 import EvidencePackExportPreview from './components/EvidencePackExportPreview.vue'
 import CaseClosureChecklist from './components/CaseClosureChecklist.vue'
+import CaseClosureEvidenceGaps from './components/CaseClosureEvidenceGaps.vue'
+import CaseClosureNextActions from './components/CaseClosureNextActions.vue'
 import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
@@ -470,6 +491,7 @@ const displayResult = computed(() => {
 const activeView = ref('workspace')
 const triageState = ref({})
 const caseNotesRevision = ref(0)
+const closureData = ref({ gapItems: [], handoffReadiness: null })
 
 const hasDisplayResult = computed(() => Boolean(displayResult.value))
 
@@ -604,6 +626,10 @@ const handleCaseNotesChange = () => {
   caseNotesRevision.value += 1
 }
 
+const handleClosureData = (data) => {
+  closureData.value = data
+}
+
 const onClearCurrentResult = () => {
   clearCurrentResult()
   triageState.value = {}
@@ -649,18 +675,16 @@ const onSelectCase = (caseItem) => {
 
 <style scoped>
 .app-shell {
-  max-width: 1280px;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--layout-gutter);
+  padding-top: 1rem;
 }
 
 .app-header {
-  margin-bottom: 2rem;
-  padding: 1.5rem 2rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  background: var(--card);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  margin-bottom: var(--layout-section-gap);
+  padding: 0 0 0.625rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .app-header-inner {
@@ -673,33 +697,33 @@ const onSelectCase = (caseItem) => {
 .app-header-copy {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.0625rem;
 }
 
 .app-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--foreground);
+  letter-spacing: -0.01em;
 }
 
 .app-subtitle {
   margin: 0;
-  font-size: 0.9rem;
-  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
 }
 
 .main-actions {
   display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .shell-main {
   min-width: 0;
   display: grid;
-  gap: 1.5rem;
+  gap: 0;
 }
 
 .results-anchor {
@@ -708,104 +732,164 @@ const onSelectCase = (caseItem) => {
 
 .view-panel {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .view-header {
-  margin-bottom: 1.25rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.625rem;
   border-bottom: 1px solid var(--border);
 }
 
 .view-header h2 {
-  margin: 0.25rem 0 0.35rem;
-  font-size: 1.35rem;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--foreground);
+  letter-spacing: -0.01em;
 }
 
 .view-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 700;
+  display: block;
+  margin-bottom: 0.125rem;
+  font-size: 0.625rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted-foreground);
+  color: var(--text-tertiary);
 }
 
 .view-description {
-  margin: 0;
-  max-width: 46rem;
-  color: var(--muted-foreground);
+  margin: 0.25rem 0 0;
+  max-width: 42rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 .empty-view-state {
   border: 1px dashed var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--secondary);
-  padding: 2rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+  padding: 2rem 1.25rem;
   text-align: center;
 }
 
 .empty-view-state h3 {
-  margin: 0.35rem 0 0.5rem;
+  margin: 0.125rem 0 0.25rem;
+  font-size: 0.875rem;
   color: var(--foreground);
 }
 
 .empty-view-state p {
   margin: 0;
-  color: var(--muted-foreground);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 .empty-view-eyebrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.2rem 0.6rem;
+  padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: var(--secondary);
-  color: var(--secondary-foreground);
-  font-size: 0.74rem;
-  font-weight: 700;
+  background: var(--muted);
+  color: var(--text-secondary);
+  font-size: 0.6875rem;
+  font-weight: 600;
 }
 
 .empty-view-hint {
-  margin-top: 0.75rem !important;
+  margin-top: 0.375rem !important;
   color: var(--foreground) !important;
+  font-size: 0.75rem !important;
+}
+
+.workspace-primary {
+  padding: 1rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.workspace-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.workspace-tertiary {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .side-by-side {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: var(--layout-section-gap);
+}
+
+.overview-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.overview-primary {
+  min-width: 0;
+}
+
+.overview-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--layout-section-gap);
+}
+
+.overview-stats-row > * {
+  min-width: 0;
+}
+
+.overview-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--layout-section-gap);
+}
+
+.overview-secondary > * {
+  min-width: 0;
 }
 
 .triage-review-layout,
 .investigation-layout {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .triage-review-intro,
 .investigation-intro {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: var(--secondary);
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--surface-subtle);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
 }
 
 .triage-review-intro-icon,
 .investigation-intro-icon {
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .triage-review-intro-text,
 .investigation-intro-text {
   margin: 0;
-  color: var(--muted-foreground);
-  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 .triage-review-decisions-group,
@@ -814,48 +898,55 @@ const onSelectCase = (caseItem) => {
 .investigation-findings-rules-group {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .group-header {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--border);
+  gap: 0.0625rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .group-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: var(--foreground);
 }
 
 .group-description {
-  font-size: 0.85rem;
-  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
 }
 
 .group-content {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding-top: 0.25rem;
+  gap: 1rem;
+  padding-top: 0;
 }
 
 .group-content > * {
   margin-top: 0 !important;
 }
 
+.readiness-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 0;
+}
+
+.readiness-grid > * {
+  min-width: 0;
+  margin-top: 0 !important;
+}
+
 @media (max-width: 768px) {
   .app-shell {
-    padding: 1rem;
-  }
-
-  .app-header {
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius-lg);
+    padding: 0.75rem;
   }
 
   .app-header-inner {
@@ -864,6 +955,12 @@ const onSelectCase = (caseItem) => {
   }
 
   .side-by-side {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-stats-row,
+  .overview-secondary,
+  .readiness-grid {
     grid-template-columns: 1fr;
   }
 
@@ -876,11 +973,6 @@ const onSelectCase = (caseItem) => {
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    padding: 1rem;
-  }
-
-  .group-content {
-    gap: 1rem;
   }
 }
 </style>

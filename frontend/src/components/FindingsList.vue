@@ -369,51 +369,44 @@ const new_date_str = () => {
 
 <style scoped>
 .result-card {
-  margin-bottom: 2rem;
-}
-
-.result-card h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-  border-bottom: 2px solid var(--border);
-  padding-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .filter-controls {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  gap: 0.625rem;
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
-  padding: 0.75rem;
+  padding: 0.5rem 0.625rem;
   background: var(--surface-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
 }
 
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
 }
 
 .filter-group.search {
   flex-grow: 1;
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .filter-group label {
-  font-size: 0.85rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  white-space: nowrap;
 }
 
 .filter-select, .filter-input {
-  padding: 0.35rem 0.6rem;
+  padding: 0.3125rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
   outline: none;
   width: 100%;
 }
@@ -424,12 +417,12 @@ const new_date_str = () => {
 }
 
 .filter-select:focus, .filter-input:focus {
-  border-color: #80bdff;
+  border-color: var(--ring);
 }
 
 .filter-stats {
-  font-size: 0.85rem;
-  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
   white-space: nowrap;
 }
 
@@ -438,13 +431,13 @@ const new_date_str = () => {
 }
 
 .export-warning {
-  font-size: 0.8rem;
-  color: #856404;
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+  color: oklch(0.55 0.12 85);
+  background-color: oklch(0.97 0.04 85);
+  border: 1px solid oklch(0.9 0.06 85);
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
 }
 
 .empty-state {
@@ -459,27 +452,32 @@ const new_date_str = () => {
 .findings-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .finding-item {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border: none;
+  border-radius: 0;
+  padding: 0.75rem 0.875rem;
   background: var(--surface-elevated);
 }
 
 .finding-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.625rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 }
 
 .finding-header h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   flex-grow: 1;
 }
 
@@ -493,16 +491,17 @@ const new_date_str = () => {
 }
 
 .severity-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.625rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
   background: #eee;
 }
 
-.severity-badge[data-severity="high"] { background: #f8d7da; color: #721c24; }
-.severity-badge[data-severity="medium"] { background: #fff3cd; color: #856404; }
-.severity-badge[data-severity="low"] { background: #d1ecf1; color: #0c5460; }
+.severity-badge[data-severity="high"] { background: oklch(0.95 0.04 25); color: oklch(0.45 0.15 25); }
+.severity-badge[data-severity="medium"] { background: oklch(0.95 0.06 85); color: oklch(0.5 0.12 85); }
+.severity-badge[data-severity="low"] { background: oklch(0.95 0.04 250); color: oklch(0.4 0.1 250); }
 
 .triage-badge {
   display: inline-flex;
@@ -543,21 +542,20 @@ const new_date_str = () => {
 .explainability-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
-  background: #e7f5ff;
-  border: 1px solid #a5d8ff;
-  color: #1971c2;
-  border-radius: 8px;
-  font-size: 0.8rem;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--accent);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  transition: background-color 0.1s ease;
 }
 
 .explainability-toggle:hover {
-  background: #d0ebff;
-  border-color: #74c0fc;
+  background: var(--muted);
 }
 
 .explainability-toggle .toggle-icon {
@@ -660,11 +658,11 @@ const new_date_str = () => {
 }
 
 .finding-evidence code {
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   word-break: break-all;
   white-space: pre-wrap;
-  color: #e83e8c;
-  font-family: 'Courier New', Courier, monospace;
+  color: oklch(0.55 0.18 350);
+  font-family: var(--font-mono);
 }
 
 

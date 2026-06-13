@@ -1,43 +1,38 @@
 <template>
-  <Card
+  <div
     v-if="analysisResult"
-    class="analysis-context-bar"
+    class="compact-summary-strip analysis-context-bar"
     data-testid="analysis-context-bar"
     :aria-label="t('analysisContext.ariaLabel')"
   >
-    <CardContent>
-      <div class="context-metrics">
-        <span class="context-pill context-pill-primary">
-          {{ modeLabel }}
-        </span>
-        <span v-if="isBatch" class="context-pill">
-          {{ sourceFilesLabel }}
-        </span>
-        <span class="context-pill">
-          {{ requestCountLabel }}
-        </span>
-        <span class="context-pill">
-          {{ parseRateLabel }}
-        </span>
-        <span class="context-pill">
-          {{ findingsIncidentsLabel }}
-        </span>
-      </div>
-
-      <p
-        v-if="isBatch && sourceNamesLabel"
-        class="source-summary"
-        data-testid="analysis-context-sources"
-      >
-        {{ sourceNamesLabel }}
-      </p>
-    </CardContent>
-  </Card>
+    <span class="compact-stat-pill is-primary">
+      {{ modeLabel }}
+    </span>
+    <span v-if="isBatch" class="compact-stat-pill">
+      {{ sourceFilesLabel }}
+    </span>
+    <span class="compact-stat-pill">
+      {{ requestCountLabel }}
+    </span>
+    <span class="compact-stat-pill">
+      {{ parseRateLabel }}
+    </span>
+    <span class="compact-stat-pill">
+      {{ findingsIncidentsLabel }}
+    </span>
+    <span
+      v-if="isBatch && sourceNamesLabel"
+      class="compact-stat-pill"
+      data-testid="analysis-context-sources"
+      :title="sourceNamesLabel"
+    >
+      {{ sourceNamesLabel }}
+    </span>
+  </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { Card, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 
 const props = defineProps({
@@ -124,42 +119,7 @@ function formatSourceName(filename) {
 
 <style scoped>
 .analysis-context-bar {
-  margin-top: 0.9rem;
+  max-width: 100%;
+  overflow: hidden;
 }
-
-.context-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-}
-
-.context-pill {
-  display: inline-flex;
-  align-items: center;
-  min-width: 0;
-  padding: 0.3rem 0.65rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface-elevated);
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.context-pill-primary {
-  border-color: #a5d8ff;
-  background: #e7f5ff;
-  color: #1864ab;
-}
-
-.source-summary {
-  margin: 0.65rem 0 0;
-  color: var(--muted-foreground);
-  font-size: 0.8rem;
-  line-height: 1.45;
-  word-break: break-word;
-}
-
-
 </style>

@@ -116,80 +116,82 @@ function decisionLabel(decision) {
 
 <style scoped>
 .guardrails-container {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .guardrails-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
 .guardrails-header h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
+  margin: 0 0 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
-  font-size: 0.9rem;
-  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
 }
 
 .decision-badge {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
 .decision-badge.success {
-  background: #ebfbee;
-  color: #2b8a3e;
+  background: oklch(0.95 0.05 145);
+  color: oklch(0.4 0.12 145);
 }
 
 .decision-badge.attention {
-  background: #fff4e6;
-  color: #d9480f;
+  background: oklch(0.95 0.06 60);
+  color: oklch(0.5 0.12 60);
 }
 
 .decision-badge.warning {
-  background: #fff5f5;
-  color: #c92a2a;
+  background: oklch(0.95 0.04 25);
+  color: oklch(0.45 0.15 25);
 }
 
 .decision-card {
   border: 1px solid var(--border);
-  border-left-width: 4px;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-left: 3px solid var(--border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.5rem 0.625rem;
+  margin-bottom: 0.75rem;
   background: var(--surface-subtle);
 }
 
 .decision-card.success {
-  border-left-color: #2b8a3e;
+  border-left-color: oklch(0.55 0.14 145);
 }
 
 .decision-card.attention {
-  border-left-color: #d9480f;
+  border-left-color: oklch(0.65 0.15 55);
 }
 
 .decision-card.warning {
-  border-left-color: #c92a2a;
+  border-left-color: oklch(0.5 0.18 25);
 }
 
 .decision-row {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .decision-row:last-child {
@@ -197,64 +199,76 @@ function decisionLabel(decision) {
 }
 
 .meta-label {
-  color: var(--muted-foreground);
-  font-size: 0.85rem;
-  font-weight: 700;
+  color: var(--text-tertiary);
+  font-size: 0.6875rem;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .decision-value {
   color: var(--foreground);
   font-weight: 700;
+  font-size: 0.8125rem;
   text-align: right;
 }
 
 .list-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .list-card {
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.625rem;
   background: var(--surface-elevated);
 }
 
 .list-card h4 {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  color: var(--foreground);
+  margin: 0 0 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .list-card ul {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: 1rem;
   color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  max-height: 9rem;
+  overflow-y: auto;
 }
 
 .list-card li + li {
-  margin-top: 0.5rem;
+  margin-top: 0.125rem;
 }
 
 .empty-list,
 .export-note {
   margin: 0;
   color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 .export-note {
-  margin-top: 1rem;
-  font-size: 0.92rem;
+  margin-top: 0.75rem;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
 }
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.25rem;
   color: var(--text-tertiary);
+  font-size: 0.75rem;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 768px) {
@@ -271,6 +285,4 @@ function decisionLabel(decision) {
     text-align: left;
   }
 }
-
-
 </style>
