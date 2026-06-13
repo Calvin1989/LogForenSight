@@ -1,24 +1,29 @@
 <template>
-  <section class="result-card">
-    <h2>{{ title }}</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>{{ itemLabel }}</th>
-          <th>{{ t('common.count') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in items" :key="index">
-          <td class="item-cell" :title="item[itemKey]">{{ item[itemKey] }}</td>
-          <td>{{ item.count }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <Card class="top-list" data-testid="top-list">
+    <CardHeader>
+      <CardTitle>{{ title }}</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <table>
+        <thead>
+          <tr>
+            <th>{{ itemLabel }}</th>
+            <th>{{ t('common.count') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in items" :key="index">
+            <td class="item-cell" :title="item[itemKey]">{{ item[itemKey] }}</td>
+            <td>{{ item.count }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 
 defineProps({
@@ -39,22 +44,8 @@ defineProps({
 </script>
 
 <style scoped>
-.result-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
+.top-list {
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.result-card h2 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  font-size: 1.25rem;
-  color: #495057;
-  border-bottom: 2px solid #f1f3f5;
-  padding-bottom: 0.5rem;
 }
 
 table {
