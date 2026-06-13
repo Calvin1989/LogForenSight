@@ -1,5 +1,5 @@
 <template>
-  <Card data-testid="summary-cards">
+  <Card class="summary-cards" data-testid="summary-cards">
     <CardHeader>
       <CardTitle>{{ t('summary.title') }}</CardTitle>
     </CardHeader>
@@ -39,6 +39,10 @@ defineProps({
 </script>
 
 <style scoped>
+.summary-cards {
+  margin-bottom: 1.5rem;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

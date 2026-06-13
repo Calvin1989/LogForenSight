@@ -92,13 +92,14 @@ const getPercentage = (count, total) => {
 
 <style scoped>
 .severity-distribution {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 h2 {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.025em;
   color: #2c3e50;
 }
 
