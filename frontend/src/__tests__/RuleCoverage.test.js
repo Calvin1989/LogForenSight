@@ -121,11 +121,11 @@ describe('RuleCoverage.vue', () => {
       props: { ruleCoverage: mockCoverage }
     })
 
-    expect(wrapper.find('h2').text()).toBe('Rule Coverage & Detection Explainability')
+    expect(wrapper.find('h3').text()).toBe('Rule Coverage & Detection Explainability')
 
     setLanguage('zh')
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find('h2').text()).toBe('规则覆盖与检测解释')
+    expect(wrapper.find('h3').text()).toBe('规则覆盖与检测解释')
   })
 })

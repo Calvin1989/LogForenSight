@@ -1,143 +1,147 @@
 <template>
-  <section class="result-card">
-    <div class="incidents-intro">
-      <h2>{{ t('incidents.title') }} ({{ incidents.length }})</h2>
-      <p class="intro-text">
-        {{ t('incidents.intro') }}
-      </p>
-    </div>
-
-    <!-- Filter Controls -->
-    <div class="filter-controls">
-      <div class="filter-group">
-        <label>{{ t('common.severity') }}:</label>
-        <select v-model="severityFilter" class="filter-select">
-          <option value="all">{{ t('incidents.allSeverities') }}</option>
-          <option value="high">{{ translateSeverity('high') }}</option>
-          <option value="medium">{{ translateSeverity('medium') }}</option>
-          <option value="low">{{ translateSeverity('low') }}</option>
-        </select>
+  <Card class="result-card">
+    <CardHeader>
+      <div class="incidents-intro">
+        <CardTitle>{{ t('incidents.title') }} ({{ incidents.length }})</CardTitle>
+        <p class="intro-text">
+          {{ t('incidents.intro') }}
+        </p>
       </div>
-      
-      <div class="filter-group">
-        <label>{{ t('common.sourceIp') }}:</label>
-        <input
-          v-model="ipSearch"
-          type="text"
-          :placeholder="t('common.searchPlaceholder')"
-          class="filter-input"
-        />
-      </div>
-
-      <button 
-        v-if="isFiltered" 
-        @click="clearFilters" 
-        class="clear-btn"
-      >
-        {{ t('actions.clear') }}
-      </button>
-
-      <div v-if="isFiltered" class="filter-stats">
-        {{ t('incidents.showingIncidents', 'Showing {filtered} of {total} incidents').replace('{filtered}', filteredIncidents.length).replace('{total}', incidents.length) }}
-      </div>
-
-      <div class="action-group">
-        <button 
-          @click="copyJson" 
-          :disabled="filteredIncidents.length === 0"
-          class="copy-btn"
-          :title="t('actions.copyJson')"
-        >
-          {{ copyStatus ? t('common.copied') : t('actions.copyJson') }}
-        </button>
-        <button 
-          @click="exportJson" 
-          :disabled="filteredIncidents.length === 0"
-          class="export-btn"
-          :title="t('actions.downloadJson')"
-        >
-          {{ t('actions.downloadJson') }}
-        </button>
-        <button 
-          @click="exportCsv" 
-          :disabled="filteredIncidents.length === 0"
-          class="export-btn"
-          :title="t('actions.downloadCsv')"
-        >
-          {{ t('actions.downloadCsv') }}
-        </button>
-      </div>
-    </div>
-
-    <div v-if="filteredIncidents.length > 0" class="export-warning">
-      {{ t('incidents.exportWarning') }}
-    </div>
-
-    <div v-if="filteredIncidents.length === 0" class="empty-state">
-      {{ incidents.length === 0 ? t('incidents.emptyState') : t('common.noMatch') }}
-    </div>
-
-    <div v-else class="incidents-list">
-      <div v-for="incident in filteredIncidents" :key="incident.incident_id" class="incident-item">
-        <div class="incident-header">
-          <span class="severity-badge" :data-severity="incident.severity.toLowerCase()">
-            {{ translateSeverity(incident.severity).toUpperCase() }}
-          </span>
-          <h3>{{ incident.title }}</h3>
-          <span class="ip-badge">{{ incident.source_ip }}</span>
-          <span v-if="showNeedsReview(incident)" class="triage-badge needs-review">
-            {{ t('triage.needsReview') }}
-          </span>
+    </CardHeader>
+    <CardContent>
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>{{ t('common.severity') }}:</label>
+          <select v-model="severityFilter" class="filter-select">
+            <option value="all">{{ t('incidents.allSeverities') }}</option>
+            <option value="high">{{ translateSeverity('high') }}</option>
+            <option value="medium">{{ translateSeverity('medium') }}</option>
+            <option value="low">{{ translateSeverity('low') }}</option>
+          </select>
         </div>
-        
-        <div class="incident-body">
-          <p class="summary">{{ incident.summary }}</p>
-          <div v-if="getFormattedUpdatedAt(incident) || getAnalystNote(incident)" class="triage-meta">
-            <span v-if="getFormattedUpdatedAt(incident)">
-              <strong>{{ t('triage.lastUpdated') }}:</strong> {{ getFormattedUpdatedAt(incident) }}
+
+        <div class="filter-group">
+          <label>{{ t('common.sourceIp') }}:</label>
+          <input
+            v-model="ipSearch"
+            type="text"
+            :placeholder="t('common.searchPlaceholder')"
+            class="filter-input"
+          />
+        </div>
+
+        <button
+          v-if="isFiltered"
+          @click="clearFilters"
+          class="clear-btn"
+        >
+          {{ t('actions.clear') }}
+        </button>
+
+        <div v-if="isFiltered" class="filter-stats">
+          {{ t('incidents.showingIncidents', 'Showing {filtered} of {total} incidents').replace('{filtered}', filteredIncidents.length).replace('{total}', incidents.length) }}
+        </div>
+
+        <div class="action-group">
+          <button
+            @click="copyJson"
+            :disabled="filteredIncidents.length === 0"
+            class="copy-btn"
+            :title="t('actions.copyJson')"
+          >
+            {{ copyStatus ? t('common.copied') : t('actions.copyJson') }}
+          </button>
+          <button
+            @click="exportJson"
+            :disabled="filteredIncidents.length === 0"
+            class="export-btn"
+            :title="t('actions.downloadJson')"
+          >
+            {{ t('actions.downloadJson') }}
+          </button>
+          <button
+            @click="exportCsv"
+            :disabled="filteredIncidents.length === 0"
+            class="export-btn"
+            :title="t('actions.downloadCsv')"
+          >
+            {{ t('actions.downloadCsv') }}
+          </button>
+        </div>
+      </div>
+
+      <div v-if="filteredIncidents.length > 0" class="export-warning">
+        {{ t('incidents.exportWarning') }}
+      </div>
+
+      <div v-if="filteredIncidents.length === 0" class="empty-state">
+        {{ incidents.length === 0 ? t('incidents.emptyState') : t('common.noMatch') }}
+      </div>
+
+      <div v-else class="incidents-list">
+        <div v-for="incident in filteredIncidents" :key="incident.incident_id" class="incident-item">
+          <div class="incident-header">
+            <span class="severity-badge" :data-severity="incident.severity.toLowerCase()">
+              {{ translateSeverity(incident.severity).toUpperCase() }}
             </span>
-            <span v-if="getAnalystNote(incident)">
-              <strong>{{ t('triage.analystNote') }}:</strong> {{ getAnalystNote(incident) }}
+            <h3>{{ incident.title }}</h3>
+            <span class="ip-badge">{{ incident.source_ip }}</span>
+            <span v-if="showNeedsReview(incident)" class="triage-badge needs-review">
+              {{ t('triage.needsReview') }}
             </span>
-          </div>
-          
-          <div class="meta-info">
-            <span><strong>{{ t('common.confidence') }}:</strong> {{ translateRiskLevel(incident.confidence).toUpperCase() }}</span>
-            <span><strong>{{ t('incidents.rulesInvolved') }}:</strong> {{ incident.related_rule_ids.join(', ') }}</span>
           </div>
 
-          <div v-if="incident.recommendations.length > 0" class="recommendations">
-            <strong>{{ t('incidents.recommendedActions') }}:</strong>
-            <ul>
-              <li v-for="(rec, index) in incident.recommendations" :key="index">{{ rec }}</li>
-            </ul>
-          </div>
-
-          <div v-if="incident.evidence.length > 0" class="evidence-preview">
-            <div class="evidence-header">
-              <strong>{{ t('incidents.evidenceSamples') }}:</strong>
-              <button 
-                v-if="incident.evidence.length > 2" 
-                @click="toggleEvidence(incident.incident_id)" 
-                class="toggle-evidence-btn"
-              >
-                {{ expandedIncidents.has(incident.incident_id) ? t('actions.showLess') : t('actions.showAllEvidence') }}
-              </button>
+          <div class="incident-body">
+            <p class="summary">{{ incident.summary }}</p>
+            <div v-if="getFormattedUpdatedAt(incident) || getAnalystNote(incident)" class="triage-meta">
+              <span v-if="getFormattedUpdatedAt(incident)">
+                <strong>{{ t('triage.lastUpdated') }}:</strong> {{ getFormattedUpdatedAt(incident) }}
+              </span>
+              <span v-if="getAnalystNote(incident)">
+                <strong>{{ t('triage.analystNote') }}:</strong> {{ getAnalystNote(incident) }}
+              </span>
             </div>
-            <ul>
-              <li v-for="(ev, index) in getVisibleEvidence(incident)" :key="index">
-                <code>{{ ev }}</code>
-              </li>
-            </ul>
+
+            <div class="meta-info">
+              <span><strong>{{ t('common.confidence') }}:</strong> {{ translateRiskLevel(incident.confidence).toUpperCase() }}</span>
+              <span><strong>{{ t('incidents.rulesInvolved') }}:</strong> {{ incident.related_rule_ids.join(', ') }}</span>
+            </div>
+
+            <div v-if="incident.recommendations.length > 0" class="recommendations">
+              <strong>{{ t('incidents.recommendedActions') }}:</strong>
+              <ul>
+                <li v-for="(rec, index) in incident.recommendations" :key="index">{{ rec }}</li>
+              </ul>
+            </div>
+
+            <div v-if="incident.evidence.length > 0" class="evidence-preview">
+              <div class="evidence-header">
+                <strong>{{ t('incidents.evidenceSamples') }}:</strong>
+                <button
+                  v-if="incident.evidence.length > 2"
+                  @click="toggleEvidence(incident.incident_id)"
+                  class="toggle-evidence-btn"
+                >
+                  {{ expandedIncidents.has(incident.incident_id) ? t('actions.showLess') : t('actions.showAllEvidence') }}
+                </button>
+              </div>
+              <ul>
+                <li v-for="(ev, index) in getVisibleEvidence(incident)" :key="index">
+                  <code>{{ ev }}</code>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { downloadJson, downloadTextFile, convertIncidentsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity, translateRiskLevel } from '../i18n'
 import { getTriageItemUpdatedAt, needsTriageReview } from '../utils/triageStorage'
@@ -253,12 +257,7 @@ const new_date_str = () => {
 
 <style scoped>
 .result-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .incidents-intro {

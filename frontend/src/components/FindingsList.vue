@@ -1,182 +1,186 @@
 <template>
-  <section class="result-card">
-    <h2>{{ t('findings.title') }} ({{ findings.length }})</h2>
-
-    <!-- Filter Controls -->
-    <div class="filter-controls">
-      <div class="filter-group">
-        <label>{{ t('common.severity') }}:</label>
-        <select v-model="severityFilter" class="filter-select">
-          <option value="all">{{ t('common.all') }}</option>
-          <option value="high">{{ translateSeverity('high') }}</option>
-          <option value="medium">{{ translateSeverity('medium') }}</option>
-          <option value="low">{{ translateSeverity('low') }}</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>{{ t('common.rule') }}:</label>
-        <select v-model="ruleFilter" class="filter-select">
-          <option value="all">{{ t('findings.allRules') }}</option>
-          <option v-for="rule in availableRules" :key="rule" :value="rule">
-            {{ rule }}
-          </option>
-        </select>
-      </div>
-      
-      <div class="filter-group search">
-        <label>{{ t('common.search') }}:</label>
-        <input
-          v-model="textSearch"
-          type="text"
-          :placeholder="t('findings.searchPlaceholder')"
-          class="filter-input"
-        />
-      </div>
-
-      <button 
-        v-if="isFiltered" 
-        @click="clearFilters" 
-        class="clear-btn"
-      >
-        {{ t('actions.clear') }}
-      </button>
-
-      <div v-if="isFiltered" class="filter-stats">
-        {{ t('findings.showingFindings', 'Showing {filtered} of {total}').replace('{filtered}', filteredFindings.length).replace('{total}', findings.length) }}
-      </div>
-
-      <div class="action-group">
-        <button 
-          @click="copyJson" 
-          :disabled="filteredFindings.length === 0"
-          class="copy-btn"
-          :title="t('actions.copyJson')"
-        >
-          {{ copyStatus ? t('common.copied') : t('actions.copyJson') }}
-        </button>
-        <button 
-          @click="exportJson" 
-          :disabled="filteredFindings.length === 0"
-          class="export-btn"
-          :title="t('actions.downloadJson')"
-        >
-          {{ t('actions.downloadJson') }}
-        </button>
-        <button 
-          @click="exportCsv" 
-          :disabled="filteredFindings.length === 0"
-          class="export-btn"
-          :title="t('actions.downloadCsv')"
-        >
-          {{ t('actions.downloadCsv') }}
-        </button>
-      </div>
-    </div>
-
-    <div v-if="filteredFindings.length > 0" class="export-warning">
-      {{ t('incidents.exportWarning') }}
-    </div>
-
-    <div v-if="filteredFindings.length === 0" class="empty-state">
-      {{ findings.length === 0 ? t('findings.emptyState') : t('findings.noMatch') }}
-    </div>
-
-    <div v-else class="findings-list">
-      <div v-for="(finding, index) in filteredFindings" :key="index" class="finding-item">
-        <div class="finding-header">
-          <span class="severity-badge" :data-severity="finding.severity.toLowerCase()">
-            {{ translateSeverity(finding.severity).toUpperCase() }}
-          </span>
-          <h3>{{ finding.title }}</h3>
-          <span class="rule-id">{{ t('common.rule') }}: {{ finding.rule_id }}</span>
-          <span v-if="showNeedsReview(finding)" class="triage-badge needs-review">
-            {{ t('triage.needsReview') }}
-          </span>
-        </div>
-        <p class="finding-desc"><strong>{{ t('common.description') }}:</strong> {{ finding.description }}</p>
-        <p class="finding-rec"><strong>{{ t('common.recommendation') }}:</strong> {{ finding.recommendation }}</p>
-        <div v-if="getFormattedUpdatedAt(finding) || getAnalystNote(finding)" class="triage-meta">
-          <span v-if="getFormattedUpdatedAt(finding)">
-            <strong>{{ t('triage.lastUpdated') }}:</strong> {{ getFormattedUpdatedAt(finding) }}
-          </span>
-          <span v-if="getAnalystNote(finding)">
-            <strong>{{ t('triage.analystNote') }}:</strong> {{ getAnalystNote(finding) }}
-          </span>
+  <Card class="result-card">
+    <CardHeader>
+      <CardTitle>{{ t('findings.title') }} ({{ findings.length }})</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>{{ t('common.severity') }}:</label>
+          <select v-model="severityFilter" class="filter-select">
+            <option value="all">{{ t('common.all') }}</option>
+            <option value="high">{{ translateSeverity('high') }}</option>
+            <option value="medium">{{ translateSeverity('medium') }}</option>
+            <option value="low">{{ translateSeverity('low') }}</option>
+          </select>
         </div>
 
-        <div class="finding-actions">
+        <div class="filter-group">
+          <label>{{ t('common.rule') }}:</label>
+          <select v-model="ruleFilter" class="filter-select">
+            <option value="all">{{ t('findings.allRules') }}</option>
+            <option v-for="rule in availableRules" :key="rule" :value="rule">
+              {{ rule }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group search">
+          <label>{{ t('common.search') }}:</label>
+          <input
+            v-model="textSearch"
+            type="text"
+            :placeholder="t('findings.searchPlaceholder')"
+            class="filter-input"
+          />
+        </div>
+
+        <button
+          v-if="isFiltered"
+          @click="clearFilters"
+          class="clear-btn"
+        >
+          {{ t('actions.clear') }}
+        </button>
+
+        <div v-if="isFiltered" class="filter-stats">
+          {{ t('findings.showingFindings', 'Showing {filtered} of {total}').replace('{filtered}', filteredFindings.length).replace('{total}', findings.length) }}
+        </div>
+
+        <div class="action-group">
           <button
-            class="explainability-toggle"
-            :aria-expanded="expandedExplanations.has(index)"
-            @click="toggleExplanation(index)"
+            @click="copyJson"
+            :disabled="filteredFindings.length === 0"
+            class="copy-btn"
+            :title="t('actions.copyJson')"
           >
-            <span class="toggle-icon">{{ expandedExplanations.has(index) ? '▼' : '▶' }}</span>
-            <span>{{ expandedExplanations.has(index) ? t('findings.hideExplanation') : t('findings.showExplanation') }}</span>
-            <span class="toggle-meta">{{ t('findings.explainability') }}</span>
+            {{ copyStatus ? t('common.copied') : t('actions.copyJson') }}
+          </button>
+          <button
+            @click="exportJson"
+            :disabled="filteredFindings.length === 0"
+            class="export-btn"
+            :title="t('actions.downloadJson')"
+          >
+            {{ t('actions.downloadJson') }}
+          </button>
+          <button
+            @click="exportCsv"
+            :disabled="filteredFindings.length === 0"
+            class="export-btn"
+            :title="t('actions.downloadCsv')"
+          >
+            {{ t('actions.downloadCsv') }}
           </button>
         </div>
+      </div>
 
-        <FindingExplainability
-          v-if="expandedExplanations.has(index)"
-          :finding="finding"
-          :analysisResult="analysisContext"
-        />
-        
-        <div v-if="hasMatchedDetails(finding)" class="finding-matched-details">
-          <div class="matched-details-header">
-            <strong>{{ t('findings.matchedDetails') }}:</strong>
-          </div>
-          <div class="matched-info">
-            <span class="matched-stat">{{ t('common.count') }}: <strong>{{ finding.matched_count || 0 }}</strong></span>
-            <span class="matched-stat">{{ t('findings.fields') }}: <code>{{ (finding.matched_fields || []).join(', ') }}</code></span>
-          </div>
-          <div class="matched-values-list" v-if="finding.matched_values && finding.matched_values.length > 0">
-            <div class="matched-values-header">
-              <span class="values-label">{{ t('findings.values') }}:</span>
-              <button 
-                v-if="finding.matched_values.length > 5" 
-                @click="toggleMatchedValues(index)" 
-                class="toggle-matched-btn"
-              >
-                {{ expandedMatchedValues.has(index) ? t('actions.showLess') : t('actions.showAllMatchedValues') }}
-              </button>
-            </div>
-            <div class="matched-tags">
-              <span v-for="(val, vIdx) in getVisibleMatchedValues(finding, index)" :key="vIdx" class="matched-tag">
-                {{ val }}
-              </span>
-              <span v-if="finding.matched_values.length > 5 && !expandedMatchedValues.has(index)" class="matched-tag-more">
-                +{{ finding.matched_values.length - 5 }} {{ t('common.more') }}
-              </span>
-            </div>
-          </div>
-        </div>
+      <div v-if="filteredFindings.length > 0" class="export-warning">
+        {{ t('incidents.exportWarning') }}
+      </div>
 
-        <div class="finding-evidence">
-          <div class="evidence-header">
-            <strong>{{ t('common.evidence') }}:</strong>
-            <button 
-              v-if="finding.evidence.length > 2" 
-              @click="toggleEvidence(index)" 
-              class="toggle-evidence-btn"
+      <div v-if="filteredFindings.length === 0" class="empty-state">
+        {{ findings.length === 0 ? t('findings.emptyState') : t('findings.noMatch') }}
+      </div>
+
+      <div v-else class="findings-list">
+        <div v-for="(finding, index) in filteredFindings" :key="index" class="finding-item">
+          <div class="finding-header">
+            <span class="severity-badge" :data-severity="finding.severity.toLowerCase()">
+              {{ translateSeverity(finding.severity).toUpperCase() }}
+            </span>
+            <h3>{{ finding.title }}</h3>
+            <span class="rule-id">{{ t('common.rule') }}: {{ finding.rule_id }}</span>
+            <span v-if="showNeedsReview(finding)" class="triage-badge needs-review">
+              {{ t('triage.needsReview') }}
+            </span>
+          </div>
+          <p class="finding-desc"><strong>{{ t('common.description') }}:</strong> {{ finding.description }}</p>
+          <p class="finding-rec"><strong>{{ t('common.recommendation') }}:</strong> {{ finding.recommendation }}</p>
+          <div v-if="getFormattedUpdatedAt(finding) || getAnalystNote(finding)" class="triage-meta">
+            <span v-if="getFormattedUpdatedAt(finding)">
+              <strong>{{ t('triage.lastUpdated') }}:</strong> {{ getFormattedUpdatedAt(finding) }}
+            </span>
+            <span v-if="getAnalystNote(finding)">
+              <strong>{{ t('triage.analystNote') }}:</strong> {{ getAnalystNote(finding) }}
+            </span>
+          </div>
+
+          <div class="finding-actions">
+            <button
+              class="explainability-toggle"
+              :aria-expanded="expandedExplanations.has(index)"
+              @click="toggleExplanation(index)"
             >
-              {{ expandedFindings.has(index) ? t('actions.showLess') : t('actions.showAllEvidence') }}
+              <span class="toggle-icon">{{ expandedExplanations.has(index) ? '▼' : '▶' }}</span>
+              <span>{{ expandedExplanations.has(index) ? t('findings.hideExplanation') : t('findings.showExplanation') }}</span>
+              <span class="toggle-meta">{{ t('findings.explainability') }}</span>
             </button>
           </div>
-          <ul>
-            <li v-for="(ev, evIdx) in getVisibleEvidence(finding, index)" :key="evIdx">
-              <code>{{ ev }}</code>
-            </li>
-          </ul>
+
+          <FindingExplainability
+            v-if="expandedExplanations.has(index)"
+            :finding="finding"
+            :analysisResult="analysisContext"
+          />
+
+          <div v-if="hasMatchedDetails(finding)" class="finding-matched-details">
+            <div class="matched-details-header">
+              <strong>{{ t('findings.matchedDetails') }}:</strong>
+            </div>
+            <div class="matched-info">
+              <span class="matched-stat">{{ t('common.count') }}: <strong>{{ finding.matched_count || 0 }}</strong></span>
+              <span class="matched-stat">{{ t('findings.fields') }}: <code>{{ (finding.matched_fields || []).join(', ') }}</code></span>
+            </div>
+            <div class="matched-values-list" v-if="finding.matched_values && finding.matched_values.length > 0">
+              <div class="matched-values-header">
+                <span class="values-label">{{ t('findings.values') }}:</span>
+                <button
+                  v-if="finding.matched_values.length > 5"
+                  @click="toggleMatchedValues(index)"
+                  class="toggle-matched-btn"
+                >
+                  {{ expandedMatchedValues.has(index) ? t('actions.showLess') : t('actions.showAllMatchedValues') }}
+                </button>
+              </div>
+              <div class="matched-tags">
+                <span v-for="(val, vIdx) in getVisibleMatchedValues(finding, index)" :key="vIdx" class="matched-tag">
+                  {{ val }}
+                </span>
+                <span v-if="finding.matched_values.length > 5 && !expandedMatchedValues.has(index)" class="matched-tag-more">
+                  +{{ finding.matched_values.length - 5 }} {{ t('common.more') }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="finding-evidence">
+            <div class="evidence-header">
+              <strong>{{ t('common.evidence') }}:</strong>
+              <button
+                v-if="finding.evidence.length > 2"
+                @click="toggleEvidence(index)"
+                class="toggle-evidence-btn"
+              >
+                {{ expandedFindings.has(index) ? t('actions.showLess') : t('actions.showAllEvidence') }}
+              </button>
+            </div>
+            <ul>
+              <li v-for="(ev, evIdx) in getVisibleEvidence(finding, index)" :key="evIdx">
+                <code>{{ ev }}</code>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { downloadJson, downloadTextFile, convertFindingsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity } from '../i18n'
 import FindingExplainability from './FindingExplainability.vue'
@@ -351,15 +355,10 @@ const new_date_str = () => {
 
 <style scoped>
 .result-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.result-card h2 {
+.result-card h3 {
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.25rem;

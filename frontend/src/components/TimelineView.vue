@@ -1,90 +1,94 @@
 <template>
-  <section class="result-card">
-    <div class="timeline-intro">
-      <h2>{{ t('timeline.title') }} ({{ (timelineEvents || []).length }})</h2>
-      <p class="intro-text">
-        {{ t('timeline.intro') }}
-      </p>
-    </div>
-
-    <!-- Filter Controls -->
-    <div class="filter-controls">
-      <div class="filter-group">
-        <label>{{ t('common.severity') }}:</label>
-        <select v-model="severityFilter" class="filter-select">
-          <option value="all">{{ t('common.all') }}</option>
-          <option value="high">{{ translateSeverity('high') }}</option>
-          <option value="medium">{{ translateSeverity('medium') }}</option>
-          <option value="low">{{ translateSeverity('low') }}</option>
-        </select>
+  <Card class="result-card">
+    <CardHeader>
+      <div class="timeline-intro">
+        <CardTitle>{{ t('timeline.title') }} ({{ (timelineEvents || []).length }})</CardTitle>
+        <p class="intro-text">
+          {{ t('timeline.intro') }}
+        </p>
       </div>
-      
-      <div class="filter-group">
-        <label>{{ t('common.sourceIp') }}:</label>
-        <input
-          v-model="ipSearch"
-          type="text"
-          :placeholder="t('common.searchPlaceholder')"
-          class="filter-input"
-        />
-      </div>
-
-      <button 
-        v-if="isFiltered" 
-        @click="clearFilters" 
-        class="clear-btn"
-      >
-        {{ t('actions.clear') }}
-      </button>
-
-      <div v-if="isFiltered" class="filter-stats">
-        {{ t('timeline.showingEvents', 'Showing {filtered} of {total} events').replace('{filtered}', filteredEvents.length).replace('{total}', (timelineEvents || []).length) }}
-      </div>
-    </div>
-
-    <div v-if="filteredEvents.length === 0" class="empty-state">
-      {{ (timelineEvents || []).length === 0 ? t('timeline.emptyState') : t('timeline.noMatch') }}
-    </div>
-
-    <div v-else class="timeline-container">
-      <div v-for="event in filteredEvents" :key="event.event_id" class="timeline-item">
-        <div class="timeline-marker">
-          <div class="marker-dot" :class="event.severity.toLowerCase()"></div>
-          <div class="marker-line"></div>
+    </CardHeader>
+    <CardContent>
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>{{ t('common.severity') }}:</label>
+          <select v-model="severityFilter" class="filter-select">
+            <option value="all">{{ t('common.all') }}</option>
+            <option value="high">{{ translateSeverity('high') }}</option>
+            <option value="medium">{{ translateSeverity('medium') }}</option>
+            <option value="low">{{ translateSeverity('low') }}</option>
+          </select>
         </div>
-        
-        <div class="timeline-content">
-          <div class="event-header">
-            <span class="event-time">{{ event.timestamp }}</span>
-            <span class="severity-badge" :data-severity="event.severity.toLowerCase()">
-              {{ translateSeverity(event.severity).toUpperCase() }}
-            </span>
-            <span class="event-type-badge">{{ formatEventType(event.event_type) }}</span>
-            <span class="ip-badge">{{ event.source_ip }}</span>
-          </div>
-          
-          <div class="event-body">
-            <h4 class="event-title">{{ event.title }}</h4>
-            <p class="event-desc">{{ event.description }}</p>
-            
-            <div v-if="event.evidence" class="event-evidence">
-              <strong>{{ t('common.evidence') }}:</strong>
-              <pre><code>{{ event.evidence }}</code></pre>
-            </div>
-            
-            <div class="event-meta" v-if="event.related_rule_id">
-              <span class="meta-tag">{{ t('common.rule') }}: {{ event.related_rule_id }}</span>
-              <span class="meta-tag" v-if="event.related_incident_id">ID: {{ event.related_incident_id }}</span>
-            </div>
-          </div>
+
+        <div class="filter-group">
+          <label>{{ t('common.sourceIp') }}:</label>
+          <input
+            v-model="ipSearch"
+            type="text"
+            :placeholder="t('common.searchPlaceholder')"
+            class="filter-input"
+          />
+        </div>
+
+        <button
+          v-if="isFiltered"
+          @click="clearFilters"
+          class="clear-btn"
+        >
+          {{ t('actions.clear') }}
+        </button>
+
+        <div v-if="isFiltered" class="filter-stats">
+          {{ t('timeline.showingEvents', 'Showing {filtered} of {total} events').replace('{filtered}', filteredEvents.length).replace('{total}', (timelineEvents || []).length) }}
         </div>
       </div>
-    </div>
-  </section>
+
+      <div v-if="filteredEvents.length === 0" class="empty-state">
+        {{ (timelineEvents || []).length === 0 ? t('timeline.emptyState') : t('timeline.noMatch') }}
+      </div>
+
+      <div v-else class="timeline-container">
+        <div v-for="event in filteredEvents" :key="event.event_id" class="timeline-item">
+          <div class="timeline-marker">
+            <div class="marker-dot" :class="event.severity.toLowerCase()"></div>
+            <div class="marker-line"></div>
+          </div>
+
+          <div class="timeline-content">
+            <div class="event-header">
+              <span class="event-time">{{ event.timestamp }}</span>
+              <span class="severity-badge" :data-severity="event.severity.toLowerCase()">
+                {{ translateSeverity(event.severity).toUpperCase() }}
+              </span>
+              <span class="event-type-badge">{{ formatEventType(event.event_type) }}</span>
+              <span class="ip-badge">{{ event.source_ip }}</span>
+            </div>
+
+            <div class="event-body">
+              <h4 class="event-title">{{ event.title }}</h4>
+              <p class="event-desc">{{ event.description }}</p>
+
+              <div v-if="event.evidence" class="event-evidence">
+                <strong>{{ t('common.evidence') }}:</strong>
+                <pre><code>{{ event.evidence }}</code></pre>
+              </div>
+
+              <div class="event-meta" v-if="event.related_rule_id">
+                <span class="meta-tag">{{ t('common.rule') }}: {{ event.related_rule_id }}</span>
+                <span class="meta-tag" v-if="event.related_incident_id">ID: {{ event.related_incident_id }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t, translateSeverity } from '../i18n'
 
 const props = defineProps({
@@ -121,12 +125,7 @@ const formatEventType = (type) => {
 
 <style scoped>
 .result-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .timeline-intro {
@@ -135,7 +134,7 @@ const formatEventType = (type) => {
   padding-bottom: 1rem;
 }
 
-.timeline-intro h2 {
+.timeline-intro h3 {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-size: 1.25rem;

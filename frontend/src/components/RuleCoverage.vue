@@ -1,143 +1,146 @@
 <template>
-  <section class="result-card" v-if="ruleCoverage && ruleCoverage.length > 0">
-    <div class="card-header">
-      <h2>{{ t('ruleCoverage.title') }}</h2>
-      <p class="subtitle">{{ t('ruleCoverage.subtitle') }}</p>
-    </div>
-
-    <!-- Overview Stats -->
-    <div class="coverage-stats">
-      <div class="stat-item">
-        <span class="stat-value">{{ ruleCoverage.length }}</span>
-        <span class="stat-label">{{ t('ruleCoverage.totalRules') }}</span>
+  <Card class="result-card" v-if="ruleCoverage && ruleCoverage.length > 0">
+    <CardHeader>
+      <div class="card-header">
+        <CardTitle>{{ t('ruleCoverage.title') }}</CardTitle>
+        <p class="subtitle">{{ t('ruleCoverage.subtitle') }}</p>
       </div>
-      <div class="stat-item">
-        <span class="stat-value">{{ enabledCount }}</span>
-        <span class="stat-label">{{ t('ruleCoverage.enabledRules') }}</span>
-      </div>
-      <div class="stat-item triggered">
-        <span class="stat-value">{{ triggeredCount }}</span>
-        <span class="stat-label">{{ t('ruleCoverage.triggeredRules') }}</span>
-      </div>
-      <div class="stat-item untriggered">
-        <span class="stat-value">{{ ruleCoverage.length - triggeredCount }}</span>
-        <span class="stat-label">{{ t('ruleCoverage.notTriggeredRules') }}</span>
-      </div>
-    </div>
-
-    <!-- Filter Controls -->
-    <div class="filter-controls">
-      <div class="filter-group">
-        <label>{{ t('common.status') }}:</label>
-        <select v-model="statusFilter" class="filter-select">
-          <option value="all">{{ t('ruleCoverage.filterAll') }}</option>
-          <option value="triggered">{{ t('ruleCoverage.filterTriggered') }}</option>
-          <option value="not_triggered">{{ t('ruleCoverage.filterNotTriggered') }}</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>{{ t('common.severity') }}:</label>
-        <select v-model="severityFilter" class="filter-select">
-          <option value="all">{{ t('common.all') }}</option>
-          <option value="high">{{ translateSeverity('high') }}</option>
-          <option value="medium">{{ translateSeverity('medium') }}</option>
-          <option value="low">{{ translateSeverity('low') }}</option>
-        </select>
-      </div>
-
-      <div class="action-group">
-        <button @click="copyJson" class="copy-btn" :title="t('ruleCoverage.copyJson')">
-          {{ copyStatus ? t('common.copied') : t('ruleCoverage.copyJson') }}
-        </button>
-        <button @click="exportJson" class="export-btn" :title="t('ruleCoverage.downloadJson')">
-          {{ t('ruleCoverage.downloadJson') }}
-        </button>
-        <button @click="exportMarkdown" class="export-btn" :title="t('ruleCoverage.downloadMarkdown')">
-          {{ t('ruleCoverage.downloadMarkdown') }}
-        </button>
-      </div>
-    </div>
-
-    <div v-if="filteredRules.length === 0" class="empty-state">
-      {{ t('findings.noMatch') }}
-    </div>
-
-    <div v-else class="rules-list">
-      <div v-for="(rule, index) in filteredRules" :key="rule.rule_id" class="rule-item" :class="{ 'is-triggered': rule.triggered }">
-        <div class="rule-header">
-          <div class="rule-title-group">
-            <span class="severity-badge" :data-severity="rule.severity.toLowerCase()">
-              {{ translateSeverity(rule.severity).toUpperCase() }}
-            </span>
-            <h3>{{ rule.title }}</h3>
-            <span class="rule-id">{{ rule.rule_id }}</span>
-          </div>
-          <div class="rule-badges">
-            <span v-if="rule.enabled" class="status-badge enabled">ENABLED</span>
-            <span v-if="rule.triggered" class="status-badge triggered">TRIGGERED</span>
-            <span v-else class="status-badge untriggered">NOT TRIGGERED</span>
-          </div>
+    </CardHeader>
+    <CardContent>
+      <!-- Overview Stats -->
+      <div class="coverage-stats">
+        <div class="stat-item">
+          <span class="stat-value">{{ ruleCoverage.length }}</span>
+          <span class="stat-label">{{ t('ruleCoverage.totalRules') }}</span>
         </div>
-
-        <div class="rule-content">
-          <div class="rule-info-grid">
-            <div class="info-block">
-              <label>{{ t('common.description') }}:</label>
-              <p>{{ rule.description }}</p>
-            </div>
-            <div class="info-block">
-              <label>{{ t('ruleCoverage.explanation') }}:</label>
-              <p class="explanation-text">{{ rule.explanation }}</p>
-            </div>
-          </div>
-
-          <div v-if="rule.triggered" class="rule-metrics">
-            <div class="metric">
-              <span class="metric-label">{{ t('ruleCoverage.findings') }}:</span>
-              <span class="metric-value">{{ rule.finding_count }}</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">{{ t('ruleCoverage.incidents') }}:</span>
-              <span class="metric-value">{{ rule.incident_count }}</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">{{ t('common.count') }}:</span>
-              <span class="metric-value">{{ rule.matched_count }}</span>
-            </div>
-          </div>
-
-          <div v-if="rule.triggered && rule.matched_fields.length > 0" class="rule-fields">
-            <label>{{ t('ruleCoverage.matchedFields') }}:</label>
-            <div class="field-tags">
-              <code v-for="field in rule.matched_fields" :key="field" class="field-tag">{{ field }}</code>
-            </div>
-          </div>
-
-          <div v-if="rule.triggered && rule.sample_matched_values.length > 0" class="rule-values">
-            <label>{{ t('ruleCoverage.matchedValues') }}:</label>
-            <div class="value-tags">
-              <span v-for="val in rule.sample_matched_values" :key="val" class="value-tag">{{ val }}</span>
-            </div>
-          </div>
-
-          <div v-if="rule.triggered && rule.sample_evidence.length > 0" class="rule-evidence">
-            <div class="evidence-header">
-              <label>{{ t('ruleCoverage.sampleEvidence') }}:</label>
-              <button @click="toggleEvidence(rule.rule_id)" class="toggle-btn">
-                {{ expandedRules.has(rule.rule_id) ? t('ruleCoverage.hideEvidence') : t('ruleCoverage.showEvidence') }}
-              </button>
-            </div>
-            <ul v-if="expandedRules.has(rule.rule_id)" class="evidence-list">
-              <li v-for="(ev, evIdx) in rule.sample_evidence" :key="evIdx">
-                <code>{{ ev }}</code>
-              </li>
-            </ul>
-          </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ enabledCount }}</span>
+          <span class="stat-label">{{ t('ruleCoverage.enabledRules') }}</span>
+        </div>
+        <div class="stat-item triggered">
+          <span class="stat-value">{{ triggeredCount }}</span>
+          <span class="stat-label">{{ t('ruleCoverage.triggeredRules') }}</span>
+        </div>
+        <div class="stat-item untriggered">
+          <span class="stat-value">{{ ruleCoverage.length - triggeredCount }}</span>
+          <span class="stat-label">{{ t('ruleCoverage.notTriggeredRules') }}</span>
         </div>
       </div>
-    </div>
-  </section>
+
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label>{{ t('common.status') }}:</label>
+          <select v-model="statusFilter" class="filter-select">
+            <option value="all">{{ t('ruleCoverage.filterAll') }}</option>
+            <option value="triggered">{{ t('ruleCoverage.filterTriggered') }}</option>
+            <option value="not_triggered">{{ t('ruleCoverage.filterNotTriggered') }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>{{ t('common.severity') }}:</label>
+          <select v-model="severityFilter" class="filter-select">
+            <option value="all">{{ t('common.all') }}</option>
+            <option value="high">{{ translateSeverity('high') }}</option>
+            <option value="medium">{{ translateSeverity('medium') }}</option>
+            <option value="low">{{ translateSeverity('low') }}</option>
+          </select>
+        </div>
+
+        <div class="action-group">
+          <button @click="copyJson" class="copy-btn" :title="t('ruleCoverage.copyJson')">
+            {{ copyStatus ? t('common.copied') : t('ruleCoverage.copyJson') }}
+          </button>
+          <button @click="exportJson" class="export-btn" :title="t('ruleCoverage.downloadJson')">
+            {{ t('ruleCoverage.downloadJson') }}
+          </button>
+          <button @click="exportMarkdown" class="export-btn" :title="t('ruleCoverage.downloadMarkdown')">
+            {{ t('ruleCoverage.downloadMarkdown') }}
+          </button>
+        </div>
+      </div>
+
+      <div v-if="filteredRules.length === 0" class="empty-state">
+        {{ t('findings.noMatch') }}
+      </div>
+
+      <div v-else class="rules-list">
+        <div v-for="(rule, index) in filteredRules" :key="rule.rule_id" class="rule-item" :class="{ 'is-triggered': rule.triggered }">
+          <div class="rule-header">
+            <div class="rule-title-group">
+              <span class="severity-badge" :data-severity="rule.severity.toLowerCase()">
+                {{ translateSeverity(rule.severity).toUpperCase() }}
+              </span>
+              <h3>{{ rule.title }}</h3>
+              <span class="rule-id">{{ rule.rule_id }}</span>
+            </div>
+            <div class="rule-badges">
+              <span v-if="rule.enabled" class="status-badge enabled">ENABLED</span>
+              <span v-if="rule.triggered" class="status-badge triggered">TRIGGERED</span>
+              <span v-else class="status-badge untriggered">NOT TRIGGERED</span>
+            </div>
+          </div>
+
+          <div class="rule-content">
+            <div class="rule-info-grid">
+              <div class="info-block">
+                <label>{{ t('common.description') }}:</label>
+                <p>{{ rule.description }}</p>
+              </div>
+              <div class="info-block">
+                <label>{{ t('ruleCoverage.explanation') }}:</label>
+                <p class="explanation-text">{{ rule.explanation }}</p>
+              </div>
+            </div>
+
+            <div v-if="rule.triggered" class="rule-metrics">
+              <div class="metric">
+                <span class="metric-label">{{ t('ruleCoverage.findings') }}:</span>
+                <span class="metric-value">{{ rule.finding_count }}</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">{{ t('ruleCoverage.incidents') }}:</span>
+                <span class="metric-value">{{ rule.incident_count }}</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">{{ t('common.count') }}:</span>
+                <span class="metric-value">{{ rule.matched_count }}</span>
+              </div>
+            </div>
+
+            <div v-if="rule.triggered && rule.matched_fields.length > 0" class="rule-fields">
+              <label>{{ t('ruleCoverage.matchedFields') }}:</label>
+              <div class="field-tags">
+                <code v-for="field in rule.matched_fields" :key="field" class="field-tag">{{ field }}</code>
+              </div>
+            </div>
+
+            <div v-if="rule.triggered && rule.sample_matched_values.length > 0" class="rule-values">
+              <label>{{ t('ruleCoverage.matchedValues') }}:</label>
+              <div class="value-tags">
+                <span v-for="val in rule.sample_matched_values" :key="val" class="value-tag">{{ val }}</span>
+              </div>
+            </div>
+
+            <div v-if="rule.triggered && rule.sample_evidence.length > 0" class="rule-evidence">
+              <div class="evidence-header">
+                <label>{{ t('ruleCoverage.sampleEvidence') }}:</label>
+                <button @click="toggleEvidence(rule.rule_id)" class="toggle-btn">
+                  {{ expandedRules.has(rule.rule_id) ? t('ruleCoverage.hideEvidence') : t('ruleCoverage.showEvidence') }}
+                </button>
+              </div>
+              <ul v-if="expandedRules.has(rule.rule_id)" class="evidence-list">
+                <li v-for="(ev, evIdx) in rule.sample_evidence" :key="evIdx">
+                  <code>{{ ev }}</code>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
   <div v-else-if="ruleCoverage && ruleCoverage.length === 0" class="result-card empty-card">
     <p>{{ t('ruleCoverage.noData') }}</p>
   </div>
@@ -145,6 +148,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t, translateSeverity } from '../i18n'
 import { downloadJson, downloadTextFile } from '../utils/exportUtils'
 
@@ -224,12 +228,7 @@ const exportMarkdown = () => {
 
 <style scoped>
 .result-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .card-header {
@@ -238,7 +237,7 @@ const exportMarkdown = () => {
   padding-bottom: 0.5rem;
 }
 
-.result-card h2 {
+.result-card h3 {
   margin: 0;
   font-size: 1.25rem;
   color: #495057;
