@@ -1,53 +1,57 @@
 <template>
-  <section class="result-card">
-    <div class="section-header">
-      <div>
-        <h2>{{ t('entities.title') }} ({{ entities.length }})</h2>
-        <p class="intro-text">{{ t('entities.intro') }}</p>
+  <Card class="investigation-entities" data-testid="investigation-entities">
+    <CardHeader>
+      <div class="section-header">
+        <div>
+          <CardTitle>{{ t('entities.title') }} ({{ entities.length }})</CardTitle>
+          <p class="intro-text">{{ t('entities.intro') }}</p>
+        </div>
+        <div class="type-summary" v-if="entities.length > 0">
+          <span
+            v-for="summary in typeSummaries"
+            :key="summary.type"
+            class="summary-pill"
+          >
+            {{ entityTypeLabel(summary.type) }}: {{ summary.count }}
+          </span>
+        </div>
       </div>
-      <div class="type-summary" v-if="entities.length > 0">
-        <span
-          v-for="summary in typeSummaries"
-          :key="summary.type"
-          class="summary-pill"
+    </CardHeader>
+    <CardContent>
+      <div v-if="entities.length === 0" class="empty-state">
+        {{ t('evidencePack.notAvailable') }}
+      </div>
+
+      <div v-else class="entities-table">
+        <div class="entity-row entity-header">
+          <span>{{ t('entities.type') }}</span>
+          <span>{{ t('entities.value') }}</span>
+          <span>{{ t('common.count') }}</span>
+          <span>{{ t('entities.firstSeen') }}</span>
+          <span>{{ t('entities.lastSeen') }}</span>
+          <span>{{ t('entities.relatedSourceFiles') }}</span>
+        </div>
+
+        <div
+          v-for="entity in entities"
+          :key="`${entity.type}:${entity.value}`"
+          class="entity-row"
         >
-          {{ entityTypeLabel(summary.type) }}: {{ summary.count }}
-        </span>
+          <span class="type-label">{{ entityTypeLabel(entity.type) }}</span>
+          <span class="entity-value">{{ entity.value }}</span>
+          <span>{{ entity.count }}</span>
+          <span>{{ formatTimestamp(entity.firstSeen) }}</span>
+          <span>{{ formatTimestamp(entity.lastSeen) }}</span>
+          <span>{{ formatSourceFiles(entity.relatedSourceFiles) }}</span>
+        </div>
       </div>
-    </div>
-
-    <div v-if="entities.length === 0" class="empty-state">
-      {{ t('evidencePack.notAvailable') }}
-    </div>
-
-    <div v-else class="entities-table">
-      <div class="entity-row entity-header">
-        <span>{{ t('entities.type') }}</span>
-        <span>{{ t('entities.value') }}</span>
-        <span>{{ t('common.count') }}</span>
-        <span>{{ t('entities.firstSeen') }}</span>
-        <span>{{ t('entities.lastSeen') }}</span>
-        <span>{{ t('entities.relatedSourceFiles') }}</span>
-      </div>
-
-      <div
-        v-for="entity in entities"
-        :key="`${entity.type}:${entity.value}`"
-        class="entity-row"
-      >
-        <span class="type-label">{{ entityTypeLabel(entity.type) }}</span>
-        <span class="entity-value">{{ entity.value }}</span>
-        <span>{{ entity.count }}</span>
-        <span>{{ formatTimestamp(entity.firstSeen) }}</span>
-        <span>{{ formatTimestamp(entity.lastSeen) }}</span>
-        <span>{{ formatSourceFiles(entity.relatedSourceFiles) }}</span>
-      </div>
-    </div>
-  </section>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t, currentLanguage } from '../i18n'
 import { extractInvestigationEntities } from '../utils/iocExtraction'
 
@@ -89,13 +93,8 @@ function formatSourceFiles(sourceFiles) {
 </script>
 
 <style scoped>
-.result-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
+.investigation-entities {
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .section-header {

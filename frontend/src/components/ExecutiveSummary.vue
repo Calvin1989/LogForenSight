@@ -1,58 +1,61 @@
 <template>
-  <section v-if="summary" class="executive-summary-card">
-    <div class="summary-header">
-      <div class="risk-badge" :class="summary.overall_risk_level.toLowerCase()">
-        <span class="risk-level">{{ translateRiskLevel(summary.overall_risk_level).toUpperCase() }}</span>
-        <span class="risk-score">{{ summary.risk_score }}/100</span>
-      </div>
-      <div class="headline-container">
-        <h2 class="headline">{{ summary.headline }}</h2>
-        <button @click="downloadMarkdown" class="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
-          {{ t('actions.downloadMd') }}
-        </button>
-      </div>
-    </div>
-
-    <p class="overview">{{ summary.overview }}</p>
-
-    <div class="summary-details">
-      <div class="detail-section">
-        <h3>{{ t('executive.keyMetrics') }}</h3>
-        <ul>
-          <li v-for="metric in summary.key_metrics" :key="metric">{{ metric }}</li>
-        </ul>
-      </div>
-
-      <div class="detail-section">
-        <h3>{{ t('executive.topRisks') }}</h3>
-        <ul>
-          <li v-for="risk in summary.top_risks" :key="risk">{{ risk }}</li>
-        </ul>
-      </div>
-
-      <div class="detail-section">
-        <h3>{{ t('executive.keyAffectedIps') }}</h3>
-        <div class="ip-tags">
-          <span v-for="ip in summary.key_affected_ips" :key="ip" class="ip-tag">{{ ip }}</span>
-          <span v-if="summary.key_affected_ips.length === 0" class="no-data">{{ t('executive.noneDetected') }}</span>
+  <Card v-if="summary" class="executive-summary" data-testid="executive-summary">
+    <CardContent>
+      <div class="summary-header">
+        <div class="risk-badge" :class="summary.overall_risk_level.toLowerCase()">
+          <span class="risk-level">{{ translateRiskLevel(summary.overall_risk_level).toUpperCase() }}</span>
+          <span class="risk-score">{{ summary.risk_score }}/100</span>
+        </div>
+        <div class="headline-container">
+          <h2 class="headline">{{ summary.headline }}</h2>
+          <button @click="downloadMarkdown" class="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
+            {{ t('actions.downloadMd') }}
+          </button>
         </div>
       </div>
 
-      <div class="detail-section full-width">
-        <h3>{{ t('executive.recommendedNextSteps') }}</h3>
-        <ul>
-          <li v-for="step in summary.recommended_next_steps" :key="step">{{ step }}</li>
-        </ul>
-      </div>
-    </div>
+      <p class="overview">{{ summary.overview }}</p>
 
-    <div class="methodology-note">
-      <strong>{{ t('executive.methodology') }}:</strong> {{ summary.methodology }}
-    </div>
-  </section>
+      <div class="summary-details">
+        <div class="detail-section">
+          <h3>{{ t('executive.keyMetrics') }}</h3>
+          <ul>
+            <li v-for="metric in summary.key_metrics" :key="metric">{{ metric }}</li>
+          </ul>
+        </div>
+
+        <div class="detail-section">
+          <h3>{{ t('executive.topRisks') }}</h3>
+          <ul>
+            <li v-for="risk in summary.top_risks" :key="risk">{{ risk }}</li>
+          </ul>
+        </div>
+
+        <div class="detail-section">
+          <h3>{{ t('executive.keyAffectedIps') }}</h3>
+          <div class="ip-tags">
+            <span v-for="ip in summary.key_affected_ips" :key="ip" class="ip-tag">{{ ip }}</span>
+            <span v-if="summary.key_affected_ips.length === 0" class="no-data">{{ t('executive.noneDetected') }}</span>
+          </div>
+        </div>
+
+        <div class="detail-section full-width">
+          <h3>{{ t('executive.recommendedNextSteps') }}</h3>
+          <ul>
+            <li v-for="step in summary.recommended_next_steps" :key="step">{{ step }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="methodology-note">
+        <strong>{{ t('executive.methodology') }}:</strong> {{ summary.methodology }}
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
+import { Card, CardContent } from '@/components/ui/card'
 import { t, translateRiskLevel } from '../i18n'
 
 const props = defineProps({
@@ -102,13 +105,8 @@ const downloadMarkdown = () => {
 </script>
 
 <style scoped>
-.executive-summary-card {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
+.executive-summary {
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   border-left: 5px solid #6c757d;
 }
 

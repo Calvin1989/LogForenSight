@@ -44,7 +44,7 @@ describe('ExecutiveSummary.vue', () => {
     const wrapper = mount(ExecutiveSummary, {
       props: { summary: null }
     })
-    expect(wrapper.find('.executive-summary-card').exists()).toBe(false)
+    expect(wrapper.find('.executive-summary').exists()).toBe(false)
   })
 
   it('triggers download when download button is clicked', () => {
