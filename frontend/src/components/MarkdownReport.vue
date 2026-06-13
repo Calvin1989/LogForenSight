@@ -4,47 +4,44 @@
       <h2>{{ t('report.title') }}</h2>
       <div class="markdown-report-actions" data-testid="markdown-report-actions">
         <div class="action-group preview-actions" data-testid="markdown-preview-actions">
-          <button
-            @click="showPreview = !showPreview"
-            class="toggle-btn"
-          >
+          <Button @click="showPreview = !showPreview" variant="outline" size="sm" class="toggle-btn">
             {{ showPreview ? t('actions.hidePreview') : t('actions.showPreview') }}
-          </button>
+          </Button>
         </div>
         <div class="action-group report-downloads" data-testid="markdown-report-downloads">
-          <button
+          <Button
             v-if="localizedReport"
             @click="downloadLocalizedReport"
-            class="download-btn raw"
+            variant="default" size="sm" class="raw download-btn"
           >
             {{ t('report.downloadReport') }}
-          </button>
-          <button
+          </Button>
+          <Button
             v-if="reportMarkdown"
             @click="$emit('download-sanitized')"
             :disabled="sanitizing || !sanitizedAvailable"
-            class="download-btn sanitized"
+            variant="default" size="sm" class="sanitized"
           >
             {{ sanitizing ? t('actions.processing') : t('report.downloadSanitized') }}
-          </button>
+          </Button>
         </div>
         <div class="action-group export-downloads" data-testid="markdown-export-downloads">
-          <button
+          <Button
             v-if="result"
             @click="downloadSummaryJson"
-            class="download-btn summary"
+            variant="default" size="sm" class="summary"
             :title="t('report.downloadSummary')"
           >
             {{ t('report.downloadSummary') }}
-          </button>
-          <button
+          </Button>
+          <Button
             v-if="result"
             @click="downloadEvidencePackMarkdown"
-            class="download-btn evidence-pack"
+            variant="default" size="sm" class="evidence-pack download-btn"
             :title="t('report.downloadEvidencePack')"
           >
             {{ t('report.downloadEvidencePack') }}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -81,6 +78,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Button } from '@/components/ui/button'
 import { downloadJson, buildAnalysisSummaryExport } from '../utils/exportUtils'
 import { t, currentLanguage } from '../i18n'
 import { loadCaseNotes } from '../utils/caseNotesStorage'
@@ -235,8 +233,8 @@ const downloadEvidencePackMarkdown = () => {
 
 <style scoped>
 .result-card {
-  background: white;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -248,7 +246,7 @@ const downloadEvidencePackMarkdown = () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f1f3f5;
+  border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
   flex-wrap: wrap;
   gap: 1rem;
@@ -257,7 +255,7 @@ const downloadEvidencePackMarkdown = () => {
 .header-with-action h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .markdown-report-actions {
@@ -286,9 +284,9 @@ const downloadEvidencePackMarkdown = () => {
 
 .toggle-btn {
   padding: 0.5rem 1rem;
-  background-color: #f8f9fa;
-  color: #495057;
-  border: 1px solid #dee2e6;
+  background-color: var(--surface-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -340,8 +338,8 @@ const downloadEvidencePackMarkdown = () => {
 
 .info-banner {
   font-size: 0.85rem;
-  color: #666;
-  background-color: #f8f9fa;
+  color: var(--text-secondary);
+  background-color: var(--surface-subtle);
   padding: 0.75rem 1rem;
   border-left: 4px solid #17a2b8;
   margin-bottom: 1.5rem;
@@ -359,10 +357,10 @@ const downloadEvidencePackMarkdown = () => {
 }
 
 .report-preview-container {
-  background: #fff;
-  color: #212529;
+  background: var(--surface-elevated);
+  color: var(--foreground);
   padding: 2rem;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border);
   border-radius: 8px;
   overflow-x: auto;
   font-size: 1rem;
@@ -373,16 +371,16 @@ const downloadEvidencePackMarkdown = () => {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   padding-bottom: 0.3rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   font-size: 1.5rem;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .report-preview-container h3 {
   margin-top: 1.25rem;
   margin-bottom: 0.75rem;
   font-size: 1.2rem;
-  color: #34495e;
+  color: var(--foreground);
 }
 
 .report-preview-container h4 {
@@ -410,138 +408,49 @@ const downloadEvidencePackMarkdown = () => {
 blockquote {
   margin: 1rem 0;
   padding: 0.5rem 1rem;
-  color: #6a737d;
-  border-left: 0.25rem solid #dfe2e5;
-  background: #f8f9fa;
+  color: var(--text-secondary);
+  border-left: 0.25rem solid var(--border);
+  background: var(--surface-subtle);
 }
 
 .md-code {
-  background: #f1f3f5;
+  background: var(--surface-subtle);
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.85rem;
   margin: 1rem 0;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
 }
 
 .md-tr {
   display: flex;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--border);
 }
 
 .md-tr:first-child {
   font-weight: bold;
-  background: #f8f9fa;
-  border-top: 1px solid #dee2e6;
+  background: var(--surface-subtle);
+  border-top: 1px solid var(--border);
 }
 
 .md-td {
   flex: 1;
   padding: 0.5rem;
-  border-right: 1px solid #dee2e6;
+  border-right: 1px solid var(--border);
 }
 
 .md-td:first-child {
-  border-left: 1px solid #dee2e6;
+  border-left: 1px solid var(--border);
 }
 
 .empty-preview {
   text-align: center;
-  color: #adb5bd;
+  color: var(--text-tertiary);
   padding: 2rem;
   font-style: italic;
 }
 
-
-/* v2.38 report polish: action clusters and preview readability */
-.download-btn,
-.toggle-btn,
-.warning-banner,
-.info-banner,
-.report-preview-container,
-.empty-preview,
-.md-code,
-.md-tr,
-.md-td {
-  border-radius: 8px;
-}
-
-.download-btn,
-.toggle-btn,
-.report-preview-container,
-.md-tr,
-.md-td {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.download-btn:hover:not(:disabled),
-.toggle-btn:hover,
-.report-preview-container:hover {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-}
-
-.download-btn:focus-visible,
-.toggle-btn:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
-}
-
-.action-group {
-  align-items: center;
-}
-
-.report-preview-container {
-  line-height: 1.55;
-}
-
-.md-li {
-  margin: 0.35rem 0;
-}
-
-.md-code {
-  border: 1px solid #e9ecef;
-}
-
-@media (max-width: 720px) {
-  .markdown-report-actions,
-  .action-group,
-  .download-btn,
-  .toggle-btn {
-    width: 100%;
-  }
-
-  .download-btn,
-  .toggle-btn {
-    justify-content: center;
-    text-align: center;
-  }
-}
-
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

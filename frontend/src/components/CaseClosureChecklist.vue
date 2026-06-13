@@ -459,12 +459,12 @@ const gapItems = computed(() => {
 .checklist-header h3 {
   margin: 0 0 0.35rem;
   font-size: 1.1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .subtitle {
   margin: 0;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.92rem;
 }
 
@@ -474,11 +474,11 @@ const gapItems = computed(() => {
 }
 
 .check-item {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-left-width: 4px;
   border-radius: 8px;
   padding: 1rem;
-  background: #fff;
+  background: var(--surface-elevated);
 }
 
 .check-item.is-positive {
@@ -497,8 +497,8 @@ const gapItems = computed(() => {
 }
 
 .check-item.is-neutral {
-  border-left-color: #adb5bd;
-  background: #f8f9fa;
+  border-left-color: var(--border);
+  background: var(--surface-subtle);
 }
 
 .check-item-header {
@@ -511,7 +511,7 @@ const gapItems = computed(() => {
 .check-item-header h4 {
   margin: 0;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .status-pill,
@@ -545,13 +545,13 @@ const gapItems = computed(() => {
 
 .status-pill.is-neutral,
 .summary-badge.neutral {
-  background: #f1f3f5;
-  color: #495057;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
 }
 
 .check-item-description {
   margin: 0.5rem 0 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
@@ -561,28 +561,5 @@ const gapItems = computed(() => {
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

@@ -85,12 +85,21 @@
 }
 
 
-/* Global frontend polish */
+/* Forensic dashboard theme */
 :root {
-  --lfs-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.18);
-  --lfs-focus-outline: rgba(37, 99, 235, 0.32);
-  --lfs-surface-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-  --lfs-surface-shadow-hover: 0 16px 36px rgba(15, 23, 42, 0.09);
+  --shell-bg: oklch(0.97 0.005 240);
+  --surface-elevated: oklch(1 0 0);
+  --surface-subtle: oklch(0.965 0.003 240);
+  --text-secondary: oklch(0.45 0.01 240);
+  --text-tertiary: oklch(0.6 0.01 240);
+}
+
+.dark {
+  --shell-bg: oklch(0.12 0.005 240);
+  --surface-elevated: oklch(0.16 0.005 240);
+  --surface-subtle: oklch(0.14 0.005 240);
+  --text-secondary: oklch(0.7 0.01 240);
+  --text-tertiary: oklch(0.55 0.01 240);
 }
 
 html {
@@ -99,20 +108,12 @@ html {
 
 body {
   min-width: 320px;
+  background: var(--shell-bg);
+  color: var(--foreground);
+  font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
 }
 
 button:disabled,
@@ -120,16 +121,10 @@ button:disabled,
   cursor: not-allowed;
 }
 
-:focus-visible {
-  outline: 3px solid var(--lfs-focus-outline);
-  outline-offset: 2px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-
   *,
   *::before,
   *::after {

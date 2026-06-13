@@ -49,15 +49,15 @@
         </div>
 
         <div class="action-group">
-          <button @click="copyJson" class="copy-btn" :title="t('ruleCoverage.copyJson')">
+          <Button @click="copyJson" variant="outline" size="sm" :title="t('ruleCoverage.copyJson')">
             {{ copyStatus ? t('common.copied') : t('ruleCoverage.copyJson') }}
-          </button>
-          <button @click="exportJson" class="export-btn" :title="t('ruleCoverage.downloadJson')">
+          </Button>
+          <Button @click="exportJson" variant="outline" size="sm" :title="t('ruleCoverage.downloadJson')">
             {{ t('ruleCoverage.downloadJson') }}
-          </button>
-          <button @click="exportMarkdown" class="export-btn" :title="t('ruleCoverage.downloadMarkdown')">
+          </Button>
+          <Button @click="exportMarkdown" variant="outline" size="sm" :title="t('ruleCoverage.downloadMarkdown')">
             {{ t('ruleCoverage.downloadMarkdown') }}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -126,9 +126,9 @@
             <div v-if="rule.triggered && rule.sample_evidence.length > 0" class="rule-evidence">
               <div class="evidence-header">
                 <label>{{ t('ruleCoverage.sampleEvidence') }}:</label>
-                <button @click="toggleEvidence(rule.rule_id)" class="toggle-btn">
+                <Button @click="toggleEvidence(rule.rule_id)" variant="link" size="sm" class="toggle-btn">
                   {{ expandedRules.has(rule.rule_id) ? t('ruleCoverage.hideEvidence') : t('ruleCoverage.showEvidence') }}
-                </button>
+                </Button>
               </div>
               <ul v-if="expandedRules.has(rule.rule_id)" class="evidence-list">
                 <li v-for="(ev, evIdx) in rule.sample_evidence" :key="evIdx">
@@ -148,6 +148,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t, translateSeverity } from '../i18n'
 import { downloadJson, downloadTextFile } from '../utils/exportUtils'
@@ -233,20 +234,20 @@ const exportMarkdown = () => {
 
 .card-header {
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f1f3f5;
+  border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
 .result-card h3 {
   margin: 0;
   font-size: 1.25rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .subtitle {
   margin: 0.25rem 0 0 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .coverage-stats {
@@ -261,20 +262,20 @@ const exportMarkdown = () => {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
 }
 
 .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .stat-label {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 0.25rem;
@@ -290,7 +291,7 @@ const exportMarkdown = () => {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -303,47 +304,22 @@ const exportMarkdown = () => {
 .filter-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .filter-select {
   padding: 0.35rem 0.6rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
-  background: white;
+  background: var(--surface-elevated);
 }
 
 .action-group {
   margin-left: auto;
   display: flex;
   gap: 0.5rem;
-}
-
-.copy-btn, .export-btn {
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-
-.copy-btn {
-  background-color: #e9ecef;
-  border: 1px solid #dee2e6;
-  color: #495057;
-}
-
-.export-btn {
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-  color: #495057;
-}
-
-.copy-btn:hover, .export-btn:hover {
-  background-color: #dee2e6;
 }
 
 .rules-list {
@@ -353,10 +329,10 @@ const exportMarkdown = () => {
 }
 
 .rule-item {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
-  background: #fff;
+  background: var(--surface-elevated);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -385,9 +361,9 @@ const exportMarkdown = () => {
 
 .rule-id {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-family: monospace;
-  background: #f1f3f5;
+  background: var(--surface-subtle);
   padding: 0.1rem 0.4rem;
   border-radius: 8px;
 }
@@ -411,9 +387,9 @@ const exportMarkdown = () => {
   margin-left: 0.5rem;
 }
 
-.status-badge.enabled { background: #e2e3e5; color: #383d41; }
+.status-badge.enabled { background: var(--surface-subtle); color: var(--text-secondary); }
 .status-badge.triggered { background: #f8d7da; color: #721c24; }
-.status-badge.untriggered { background: #e2e3e5; color: #6c757d; opacity: 0.7; }
+.status-badge.untriggered { background: var(--surface-subtle); color: var(--muted-foreground); opacity: 0.7; }
 
 .rule-info-grid {
   display: grid;
@@ -426,25 +402,25 @@ const exportMarkdown = () => {
   display: block;
   font-size: 0.8rem;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .info-block p {
   margin: 0;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--foreground);
 }
 
 .explanation-text {
   font-style: italic;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .rule-metrics {
   display: flex;
   gap: 2rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -458,13 +434,13 @@ const exportMarkdown = () => {
 
 .metric-label {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .metric-value {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .rule-fields, .rule-values, .rule-evidence {
@@ -474,7 +450,7 @@ const exportMarkdown = () => {
 .rule-fields label, .rule-values label, .rule-evidence label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   display: block;
   margin-bottom: 0.4rem;
 }
@@ -487,7 +463,7 @@ const exportMarkdown = () => {
 
 .field-tag {
   font-size: 0.75rem;
-  background: #e9ecef;
+  background: var(--surface-subtle);
   padding: 0.1rem 0.4rem;
   border-radius: 8px;
   font-family: monospace;
@@ -495,8 +471,8 @@ const exportMarkdown = () => {
 
 .value-tag {
   font-size: 0.75rem;
-  background: #fff;
-  border: 1px solid #dee2e6;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   padding: 0.1rem 0.4rem;
   border-radius: 8px;
   font-family: monospace;
@@ -508,20 +484,10 @@ const exportMarkdown = () => {
   align-items: center;
 }
 
-.toggle-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.75rem;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-}
-
 .evidence-list {
   margin: 0.5rem 0 0 0;
   padding-left: 1.25rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 0.75rem;
   border-radius: 8px;
 }
@@ -540,14 +506,14 @@ const exportMarkdown = () => {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-style: italic;
 }
 
 .empty-card {
   text-align: center;
   padding: 2rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 @media (max-width: 600px) {
@@ -559,28 +525,5 @@ const exportMarkdown = () => {
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

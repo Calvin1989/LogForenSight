@@ -66,14 +66,14 @@ const sourceClass = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
 .header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .source-tag {
@@ -85,8 +85,8 @@ const sourceClass = computed(() => {
 }
 
 .source-default {
-  background: #e9ecef;
-  color: #6c757d;
+  background: var(--surface-subtle);
+  color: var(--muted-foreground);
 }
 
 .source-custom {
@@ -105,13 +105,13 @@ const sourceClass = computed(() => {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #868e96;
+  color: var(--text-tertiary);
   margin-bottom: 0.25rem;
 }
 
 .rule-item .value {
   font-weight: 600;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .list-section {
@@ -126,7 +126,7 @@ const sourceClass = computed(() => {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #868e96;
+  color: var(--text-tertiary);
   margin-bottom: 0.5rem;
 }
 
@@ -153,28 +153,5 @@ const sourceClass = computed(() => {
   color: #5f3dc4;
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

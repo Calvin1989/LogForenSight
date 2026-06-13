@@ -100,7 +100,7 @@ h2 {
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.025em;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .distribution-grid {
@@ -146,7 +146,7 @@ h2 {
 .bar-container {
   flex-grow: 1;
   height: 8px;
-  background-color: #f0f0f0;
+  background-color: var(--muted);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -165,31 +165,8 @@ h2 {
   text-align: right;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--foreground);
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

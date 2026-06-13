@@ -31,13 +31,13 @@
           />
         </div>
 
-        <button
+        <Button
           v-if="isFiltered"
           @click="clearFilters"
-          class="clear-btn"
+          variant="ghost" size="sm" class="clear-btn"
         >
           {{ t('actions.clear') }}
-        </button>
+        </Button>
 
         <div v-if="isFiltered" class="filter-stats">
           {{ t('timeline.showingEvents', 'Showing {filtered} of {total} events').replace('{filtered}', filteredEvents.length).replace('{total}', (timelineEvents || []).length) }}
@@ -88,6 +88,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t, translateSeverity } from '../i18n'
 
@@ -130,7 +131,7 @@ const formatEventType = (type) => {
 
 .timeline-intro {
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f1f3f5;
+  border-bottom: 2px solid var(--border);
   padding-bottom: 1rem;
 }
 
@@ -138,12 +139,12 @@ const formatEventType = (type) => {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .intro-text {
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   margin: 0;
 }
 
@@ -154,9 +155,9 @@ const formatEventType = (type) => {
   margin-bottom: 1.75rem;
   flex-wrap: wrap;
   padding: 0.875rem 1rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--surface-subtle);
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .filter-group {
@@ -168,12 +169,12 @@ const formatEventType = (type) => {
 .filter-group label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 .filter-select, .filter-input {
   padding: 0.4375rem 0.75rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.875rem;
   outline: none;
@@ -185,26 +186,9 @@ const formatEventType = (type) => {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.clear-btn {
-  background: none;
-  border: none;
-  color: #2563eb;
-  font-size: 0.875rem;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
-  text-decoration: underline;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-
-.clear-btn:hover {
-  background: #dbeafe;
-  text-decoration: none;
-}
-
 .filter-stats {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--muted-foreground);
   margin-left: auto;
   font-weight: 500;
 }
@@ -230,10 +214,10 @@ const formatEventType = (type) => {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #cbd5e1;
+  background: var(--border);
   margin-top: 0.5rem;
   z-index: 1;
-  box-shadow: 0 0 0 3px #f1f5f9;
+  box-shadow: 0 0 0 3px var(--surface-subtle);
 }
 
 .marker-dot.high { background-color: #dc2626; }
@@ -243,7 +227,7 @@ const formatEventType = (type) => {
 .marker-line {
   flex-grow: 1;
   width: 2px;
-  background: #e2e8f0;
+  background: var(--border);
 }
 
 .timeline-item:last-child .marker-line {
@@ -266,7 +250,7 @@ const formatEventType = (type) => {
 .event-time {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #475569;
+  color: var(--text-secondary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -286,17 +270,17 @@ const formatEventType = (type) => {
 .event-type-badge {
   font-size: 0.75rem;
   padding: 0.1875rem 0.625rem;
-  background-color: #f1f5f9;
-  color: #475569;
+  background-color: var(--surface-subtle);
+  color: var(--text-secondary);
   border-radius: 999px;
   font-weight: 600;
 }
 
 .ip-badge {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: var(--muted-foreground);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  background: #f8fafc;
+  background: var(--surface-subtle);
   padding: 0.1875rem 0.5rem;
   border-radius: 8px;
 }
@@ -305,29 +289,29 @@ const formatEventType = (type) => {
   margin: 0 0 0.625rem 0;
   font-size: 1.0625rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--foreground);
 }
 
 .event-desc {
   font-size: 0.9375rem;
-  color: #475569;
+  color: var(--text-secondary);
   margin: 0 0 0.875rem 0;
   line-height: 1.6;
 }
 
 .event-evidence {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--surface-subtle);
   padding: 0.875rem;
   border-radius: 8px;
   margin-bottom: 0.875rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .event-evidence strong {
   display: block;
   font-size: 0.75rem;
   margin-bottom: 0.5rem;
-  color: #64748b;
+  color: var(--muted-foreground);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -338,7 +322,7 @@ const formatEventType = (type) => {
   white-space: pre-wrap;
   word-break: break-all;
   font-size: 0.8125rem;
-  color: #1e293b;
+  color: var(--foreground);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   line-height: 1.5;
 }
@@ -350,40 +334,17 @@ const formatEventType = (type) => {
 
 .meta-tag {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-tertiary);
   font-weight: 500;
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #64748b;
-  background: #f8fafc;
+  color: var(--muted-foreground);
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

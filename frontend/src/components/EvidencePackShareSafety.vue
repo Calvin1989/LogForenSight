@@ -129,13 +129,13 @@ function formatSamples(samples) {
 .share-safety-header h3 {
   margin: 0 0 0.35rem;
   font-size: 1.1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .status-badge {
@@ -164,12 +164,12 @@ function formatSamples(samples) {
 }
 
 .status-card {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-left-width: 4px;
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
 }
 
 .status-card.safe {
@@ -196,14 +196,14 @@ function formatSamples(samples) {
 }
 
 .meta-label {
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .status-value {
-  color: #212529;
+  color: var(--foreground);
   font-weight: 700;
   text-align: right;
 }
@@ -215,22 +215,22 @@ function formatSamples(samples) {
 }
 
 .list-card {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
-  background: #fff;
+  background: var(--surface-elevated);
 }
 
 .list-card h4 {
   margin: 0 0 0.75rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .list-card ul {
   margin: 0;
   padding-left: 1.25rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .list-card li + li {
@@ -244,7 +244,7 @@ function formatSamples(samples) {
 .empty-list,
 .export-note {
   margin: 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .export-note {
@@ -255,8 +255,8 @@ function formatSamples(samples) {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #868e96;
-  border: 1px dashed #dee2e6;
+  color: var(--text-tertiary);
+  border: 1px dashed var(--border);
   border-radius: 8px;
 }
 
@@ -275,28 +275,5 @@ function formatSamples(samples) {
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

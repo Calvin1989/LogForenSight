@@ -77,7 +77,7 @@ describe('ExecutiveSummary.vue', () => {
       props: { summary: mockSummary }
     })
 
-    wrapper.find('.download-btn').trigger('click')
+    wrapper.find('[data-testid="download-btn"]').trigger('click')
 
     expect(mockAnchor.click).toHaveBeenCalled()
     expect(createObjectURLMock).toHaveBeenCalled()

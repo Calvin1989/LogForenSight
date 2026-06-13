@@ -139,9 +139,9 @@ function formatSourceName(filename) {
   min-width: 0;
   padding: 0.3rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid #d0d7de;
-  background: #ffffff;
-  color: #495057;
+  border: 1px solid var(--border);
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.4;
@@ -155,34 +155,11 @@ function formatSourceName(filename) {
 
 .source-summary {
   margin: 0.65rem 0 0;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.8rem;
   line-height: 1.45;
   word-break: break-word;
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

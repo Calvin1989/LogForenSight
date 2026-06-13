@@ -56,7 +56,7 @@ defineProps({
 
 .stat-label {
   font-size: 0.875rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -64,31 +64,7 @@ defineProps({
 .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #212529;
-}
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
+  color: var(--foreground);
 }
 
 </style>

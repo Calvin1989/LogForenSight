@@ -68,9 +68,9 @@ defineEmits(['select'])
 .workspace-nav {
   position: sticky;
   top: 1.25rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 16px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  background: linear-gradient(180deg, var(--surface-elevated) 0%, var(--shell-bg) 100%);
   padding: 1rem;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
 }
@@ -82,14 +82,14 @@ defineEmits(['select'])
 .nav-header h2 {
   margin: 0 0 0.35rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .nav-header p {
   margin: 0;
   font-size: 0.88rem;
   line-height: 1.45;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .nav-list {
@@ -103,10 +103,10 @@ defineEmits(['select'])
   align-items: flex-start;
   gap: 0.75rem;
   width: 100%;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: white;
-  color: #212529;
+  background: var(--surface-elevated);
+  color: var(--foreground);
   padding: 0.9rem 0.95rem;
   text-align: left;
   cursor: pointer;
@@ -134,7 +134,7 @@ defineEmits(['select'])
 .nav-item:disabled {
   cursor: not-allowed;
   opacity: 0.78;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
 }
 
 .nav-item-copy {
@@ -167,7 +167,7 @@ defineEmits(['select'])
 .nav-description {
   font-size: 0.8rem;
   line-height: 1.45;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .nav-state {
@@ -183,9 +183,9 @@ defineEmits(['select'])
 }
 
 .nav-state.locked {
-  color: #868e96;
-  background: #f1f3f5;
-  border-color: #dee2e6;
+  color: var(--text-tertiary);
+  background: var(--surface-subtle);
+  border-color: var(--border);
 }
 
 .nav-state.active {
@@ -197,10 +197,10 @@ defineEmits(['select'])
 .nav-footer {
   margin: 1rem 0 0;
   padding-top: 1rem;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border);
   font-size: 0.8rem;
   line-height: 1.5;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 @media (max-width: 960px) {
@@ -218,30 +218,6 @@ defineEmits(['select'])
     flex-direction: column;
     gap: 0.55rem;
     padding: 0.85rem;
-  }
-}
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
   }
 }
 

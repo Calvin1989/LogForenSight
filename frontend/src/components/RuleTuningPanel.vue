@@ -1,4 +1,5 @@
 <script setup>
+import { Button } from '@/components/ui/button';
 import { ref, watch, computed } from 'vue';
 import { currentAnalysisResult } from '../composables/useAnalysisState';
 import { t } from '../i18n';
@@ -195,20 +196,22 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
         </div>
 
         <div class="form-actions">
-          <button
+          <Button
             @click="handleApply"
-            class="btn btn-primary"
+            variant="default"
+            class="btn-primary"
             :disabled="isAnalyzing || !isValid"
           >
             {{ isAnalyzing ? t('ruleTuning.loading') : t('ruleTuning.apply') }}
-          </button>
-          <button
+          </Button>
+          <Button
             @click="handleReset"
-            class="btn btn-secondary"
+            variant="outline"
+            class="btn-secondary"
             :disabled="isAnalyzing"
           >
             {{ t('ruleTuning.reset') }}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -221,14 +224,14 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 }
 
 .subtitle {
-  color: var(--text-light);
+  color: var(--muted-foreground);
   font-size: 0.9rem;
   margin-top: 0.25rem;
 }
 
 .notice {
-  background-color: var(--bg-info-light);
-  border-left: 4px solid var(--info-color);
+  background-color: var(--surface-subtle);
+  border-left: 4px solid #1971c2;
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
@@ -246,8 +249,8 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 }
 
 .tuning-summary-box {
-  background-color: var(--bg-input);
-  border: 1px solid var(--border-color);
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border);
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -259,17 +262,17 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 0.5rem;
-  color: var(--text-light);
+  color: var(--muted-foreground);
 }
 
 .disabled-count {
-  color: var(--danger-color);
+  color: #c92a2a;
   font-weight: 600;
 }
 
 .warnings-box {
-  background-color: var(--bg-warning-light);
-  border: 1px solid var(--warning-color);
+  background-color: var(--surface-subtle);
+  border: 1px solid #d9480f;
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -307,18 +310,18 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 
 .form-control {
   padding: 0.6rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-family: inherit;
   font-size: 0.9rem;
-  background-color: var(--bg-input);
-  color: var(--text-main);
+  background-color: var(--surface-subtle);
+  color: var(--foreground);
 }
 
 .form-control:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px var(--primary-light);
+  border-color: #1971c2;
+  box-shadow: 0 0 0 2px rgba(25, 113, 194, 0.15);
 }
 
 textarea.form-control {
@@ -327,7 +330,7 @@ textarea.form-control {
 }
 
 .error-text {
-  color: var(--danger-color);
+  color: #c92a2a;
   font-size: 0.8rem;
   margin: 0;
 }
@@ -336,9 +339,9 @@ textarea.form-control {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.75rem;
-  background-color: var(--bg-input);
+  background-color: var(--surface-subtle);
   padding: 1rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border);
   border-radius: 8px;
 }
 
@@ -355,128 +358,17 @@ textarea.form-control {
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border);
 }
 
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: var(--text-light);
+  color: var(--muted-foreground);
   font-style: italic;
 }
 
-.btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-  border: none;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.btn-primary:not(:disabled):hover {
-  background-color: var(--primary-dark);
-}
-
-.btn-secondary {
-  background-color: var(--bg-secondary);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-}
-
-.btn-secondary:not(:disabled):hover {
-  background-color: var(--bg-secondary-hover);
-}
 
 
-/* v2.38 workflow polish: tuning form controls */
-.notice,
-.tuning-summary-box,
-.warnings-box,
-.checkbox-grid,
-.empty-state,
-.form-control,
-.btn {
-  border-radius: 8px;
-}
-
-.form-control,
-.checkbox-label,
-.btn,
-.notice,
-.tuning-summary-box,
-.warnings-box {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.form-control:hover {
-  border-color: var(--primary-color);
-}
-
-.form-control:focus-visible,
-.btn:focus-visible,
-.checkbox-label:focus-within {
-  outline: 2px solid var(--primary-light);
-  outline-offset: 2px;
-}
-
-.notice,
-.tuning-summary-box,
-.warnings-box,
-.checkbox-grid {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
-}
-
-.checkbox-label {
-  border-radius: 8px;
-  padding: 0.25rem 0.35rem;
-}
-
-.checkbox-label:hover {
-  background-color: var(--bg-secondary);
-}
-
-.btn:not(:disabled):hover {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-}
-
-.summary-items {
-  row-gap: 0.5rem;
-}
-
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

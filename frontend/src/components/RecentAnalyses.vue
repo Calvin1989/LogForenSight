@@ -2,9 +2,9 @@
   <section class="history-container">
     <div class="history-header">
       <h3>{{ t('history.title') }}</h3>
-      <button v-if="history.length > 0" @click="$emit('clear')" class="clear-btn">
+      <Button v-if="history.length > 0" @click="$emit('clear')" variant="ghost" size="sm">
         {{ t('history.clearHistory') }}
-      </button>
+      </Button>
     </div>
 
     <div v-if="history.length === 0" class="empty-state">
@@ -40,6 +40,7 @@
 
 <script setup>
 import { t } from '../i18n'
+import { Button } from '@/components/ui/button'
 
 defineProps({
   history: {
@@ -68,8 +69,8 @@ const formatParseRate = (parseRate) => {
 
 <style scoped>
 .history-container {
-  background: white;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 2rem;
@@ -86,34 +87,12 @@ const formatParseRate = (parseRate) => {
 .history-header h3 {
   margin: 0;
   font-size: 1rem;
-  color: #495057;
-}
-
-.clear-btn {
-  background: none;
-  border: none;
-  color: #6c757d;
-  font-size: 0.8rem;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
-  transition: color 0.15s ease, background-color 0.15s ease;
-}
-
-.clear-btn:hover {
-  color: #e03131;
-  background: #fff5f5;
-}
-
-.clear-btn:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
+  color: var(--text-secondary);
 }
 
 .empty-state {
   font-size: 0.85rem;
-  color: #adb5bd;
+  color: var(--text-tertiary);
   font-style: italic;
   text-align: center;
   padding: 1.5rem 0;
@@ -127,7 +106,7 @@ const formatParseRate = (parseRate) => {
 
 .history-item {
   padding: 0.85rem 1rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
@@ -155,12 +134,12 @@ const formatParseRate = (parseRate) => {
 .file-name {
   font-weight: 600;
   font-size: 0.9rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .timestamp {
   font-size: 0.75rem;
-  color: #868e96;
+  color: var(--text-tertiary);
   flex-shrink: 0;
   margin-left: 1rem;
 }
@@ -179,7 +158,7 @@ const formatParseRate = (parseRate) => {
   text-transform: uppercase;
 }
 
-.stat-tag.format { background: #e9ecef; color: #495057; }
+.stat-tag.format { background: var(--surface-subtle); color: var(--text-secondary); }
 .stat-tag.success { background: #ebfbee; color: #2b8a3e; }
 .stat-tag.incident { background: #fff5f5; color: #e03131; }
 .stat-tag.finding { background: #fff9db; color: #f08c00; }
@@ -187,29 +166,5 @@ const formatParseRate = (parseRate) => {
 .stat-tag.cached { background: #e3fafc; color: #0b7285; }
 .stat-tag.tuned { background: #e7f5ff; color: #1971c2; border: 1px solid #a5d8ff; }
 .stat-tag.batch { background: #f3f0ff; color: #6741d9; border: 1px solid #d0bfff; }
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>
