@@ -227,15 +227,22 @@ const formatDate = (isoString) => {
   background: #339af0;
   color: white;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
   font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .download-btn:hover {
   background: #228be6;
+  box-shadow: 0 2px 6px rgba(34,139,230,0.3);
+}
+
+.download-btn:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
 }
 
 .empty-state {
@@ -244,27 +251,27 @@ const formatDate = (isoString) => {
   text-align: center;
   padding: 1.5rem 0;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .selection-ui {
   background: #f8f9fa;
   padding: 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 1.5rem;
 }
 
 .selector-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: flex-end;
 }
 
 .selector {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex: 1;
   min-width: 200px;
 }
@@ -276,11 +283,22 @@ const formatDate = (isoString) => {
 }
 
 .selector select {
-  padding: 0.5rem;
+  padding: 0.5rem 0.6rem;
   border: 1px solid #dee2e6;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.9rem;
   background: white;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.selector select:hover {
+  border-color: #adb5bd;
+}
+
+.selector select:focus-visible {
+  outline: none;
+  border-color: #74c0fc;
+  box-shadow: 0 0 0 3px rgba(116,192,252,0.25);
 }
 
 .compare-btn {
@@ -288,19 +306,26 @@ const formatDate = (isoString) => {
   color: white;
   border: none;
   padding: 0.55rem 1.25rem;
-  border-radius: 4px;
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .compare-btn:hover:not(:disabled) {
   background: #40c057;
+  box-shadow: 0 2px 6px rgba(64,192,87,0.3);
+}
+
+.compare-btn:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
 }
 
 .compare-btn:disabled {
   background: #adb5bd;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .results-ui {
@@ -310,9 +335,9 @@ const formatDate = (isoString) => {
 
 .narrative-summary {
   margin-bottom: 1.5rem;
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   background: #f1f3f5;
-  border-radius: 6px;
+  border-radius: 8px;
   border-left: 4px solid #339af0;
 }
 
@@ -344,8 +369,13 @@ const formatDate = (isoString) => {
   padding: 1rem;
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   text-align: center;
+  transition: box-shadow 0.15s ease;
+}
+
+.delta-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .delta-card.risk-up { border-top: 3px solid #fa5252; background: #fff5f5; }
@@ -377,7 +407,7 @@ const formatDate = (isoString) => {
 .severity-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .severity-item {
@@ -386,7 +416,7 @@ const formatDate = (isoString) => {
   gap: 0.6rem;
   padding: 0.4rem 0.8rem;
   background: #f8f9fa;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.85rem;
 }
 
@@ -394,8 +424,8 @@ const formatDate = (isoString) => {
   font-weight: 700;
   font-size: 0.7rem;
   text-transform: uppercase;
-  padding: 0.1rem 0.3rem;
-  border-radius: 2px;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
 }
 
 .sev-tag.critical { background: #fff5f5; color: #e03131; }
@@ -414,8 +444,8 @@ const formatDate = (isoString) => {
 
 .changes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .change-section h4 {
@@ -427,12 +457,12 @@ const formatDate = (isoString) => {
 .change-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .change-group {
-  padding: 0.75rem;
-  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
 }
 
 .change-group.added { background: #ebfbee; border: 1px solid #d3f9d8; }
@@ -465,6 +495,7 @@ const formatDate = (isoString) => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .sev-dot.critical { background: #e03131; }

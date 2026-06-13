@@ -96,11 +96,19 @@ const formatParseRate = (parseRate) => {
   font-size: 0.8rem;
   text-decoration: underline;
   cursor: pointer;
-  padding: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .clear-btn:hover {
   color: #e03131;
+  background: #fff5f5;
+}
+
+.clear-btn:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
 }
 
 .empty-state {
@@ -108,7 +116,7 @@ const formatParseRate = (parseRate) => {
   color: #adb5bd;
   font-style: italic;
   text-align: center;
-  padding: 1rem 0;
+  padding: 1.5rem 0;
 }
 
 .history-list {
@@ -118,23 +126,29 @@ const formatParseRate = (parseRate) => {
 }
 
 .history-item {
-  padding: 0.75rem;
+  padding: 0.85rem 1rem;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   border: 1px solid transparent;
 }
 
 .history-item:hover {
   background: #e7f5ff;
   border-color: #a5d8ff;
-  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.history-item:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
 }
 
 .item-main {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   margin-bottom: 0.5rem;
 }
 
@@ -147,6 +161,8 @@ const formatParseRate = (parseRate) => {
 .timestamp {
   font-size: 0.75rem;
   color: #868e96;
+  flex-shrink: 0;
+  margin-left: 1rem;
 }
 
 .item-stats {
@@ -158,8 +174,8 @@ const formatParseRate = (parseRate) => {
 .stat-tag {
   font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.1rem 0.4rem;
-  border-radius: 3px;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
   text-transform: uppercase;
 }
 
