@@ -9,12 +9,12 @@
       </div>
 
       <div v-if="result" class="preview-actions">
-        <button type="button" class="preview-btn" @click="togglePreview">
+        <Button variant="outline" size="sm" class="preview-btn" @click="togglePreview">
           {{ isOpen ? t('evidencePackPreview.hidePreview') : t('evidencePackPreview.showPreview') }}
-        </button>
-        <button type="button" class="preview-btn copy-btn" @click="copyMarkdown">
+        </Button>
+        <Button variant="outline" size="sm" class="preview-btn copy-btn" @click="copyMarkdown">
           {{ t('evidencePackPreview.copyMarkdown') }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -169,15 +169,16 @@
             :aria-label="t('evidencePackPreview.sectionNavigator')"
           >
             <div class="navigator-title">{{ t('evidencePackPreview.sectionNavigator') }}</div>
-            <button
+            <Button
               v-for="section in navigatorSections"
               :key="section.key"
-              type="button"
+              variant="ghost"
+              size="sm"
               class="navigator-link"
               @click="scrollToSection(section.targetId)"
             >
               {{ section.label }}
-            </button>
+            </Button>
           </nav>
 
           <div class="preview-content">
@@ -192,15 +193,16 @@
                 :data-section-key="section.navigationKey || 'other'"
               >
                 <div v-if="section.title" class="preview-section-actions">
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     class="preview-section-copy-btn"
                     data-testid="copy-section-button"
                     :aria-label="t('evidencePackPreview.copySectionWithTitle', { title: section.title })"
                     @click="copySection(section)"
                   >
                     {{ t('evidencePackPreview.copySection') }}
-                  </button>
+                  </Button>
                   <span
                     v-if="sectionCopyFeedback.targetId === section.targetId && sectionCopyFeedback.key"
                     class="section-copy-feedback"
@@ -220,6 +222,7 @@
 </template>
 
 <script setup>
+import { Button } from '@/components/ui/button'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { currentLanguage, t } from '../i18n'
 import { buildEvidencePackMarkdown } from '../utils/evidencePackExport'
@@ -849,9 +852,9 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .preview-container {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   margin-top: 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -867,13 +870,13 @@ onBeforeUnmount(() => {
 .preview-header h3 {
   margin: 0 0 0.35rem;
   font-size: 1.1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--text-secondary);
 }
 
 .preview-actions {
@@ -883,19 +886,7 @@ onBeforeUnmount(() => {
 }
 
 .preview-btn {
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  padding: 0.5rem 0.85rem;
-  background: #f8f9fa;
-  color: #212529;
   font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.preview-btn:hover {
-  background: #e9ecef;
-  border-color: #adb5bd;
 }
 
 .copy-btn {
@@ -906,13 +897,13 @@ onBeforeUnmount(() => {
 
 .copy-feedback {
   margin: 1rem 0 0;
-  color: #2b8a3e;
+  color: var(--foreground);
   font-size: 0.92rem;
   font-weight: 600;
 }
 
 .copy-feedback.error {
-  color: #c92a2a;
+  color: var(--destructive);
 }
 
 .preview-body {
@@ -921,9 +912,9 @@ onBeforeUnmount(() => {
 
 .handoff-summary-bar {
   margin-top: 1rem;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--muted);
   padding: 0.9rem 1rem 1rem;
 }
 
@@ -936,13 +927,13 @@ onBeforeUnmount(() => {
 }
 
 .handoff-summary-title {
-  color: #212529;
+  color: var(--foreground);
   font-size: 0.92rem;
   font-weight: 700;
 }
 
 .handoff-summary-note {
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.82rem;
 }
 
@@ -953,10 +944,10 @@ onBeforeUnmount(() => {
 }
 
 .handoff-summary-item {
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 0.8rem;
-  border: 1px solid #dee2e6;
-  background: white;
+  border: 1px solid var(--border);
+  background: var(--card);
   min-width: 0;
 }
 
@@ -976,25 +967,25 @@ onBeforeUnmount(() => {
 }
 
 .handoff-summary-item.is-neutral {
-  border-color: #dee2e6;
-  background: #ffffff;
+  border-color: var(--border);
+  background: var(--card);
 }
 
 .handoff-summary-label {
-  color: #495057;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
 .handoff-summary-value {
-  color: #212529;
+  color: var(--foreground);
   font-size: 0.95rem;
   font-weight: 700;
 }
 
 .handoff-summary-detail {
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.82rem;
   margin-top: 0.25rem;
   line-height: 1.45;
@@ -1002,9 +993,9 @@ onBeforeUnmount(() => {
 
 .export-manifest-card {
   margin-top: 1rem;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: #fcfcfd;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
   padding: 1rem;
 }
 
@@ -1019,12 +1010,12 @@ onBeforeUnmount(() => {
 .export-manifest-header h4 {
   margin: 0 0 0.35rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .export-manifest-header p {
   margin: 0;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -1035,14 +1026,14 @@ onBeforeUnmount(() => {
 
 .export-manifest-meta-label {
   display: block;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 700;
 }
 
 .export-manifest-meta-value {
   display: block;
-  color: #212529;
+  color: var(--foreground);
   font-size: 0.88rem;
   word-break: break-word;
 }
@@ -1056,9 +1047,9 @@ onBeforeUnmount(() => {
 .export-manifest-compatibility {
   margin-top: 0.9rem;
   padding: 0.85rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid #dbe7f3;
-  background: #f8fbff;
+  background: var(--surface-subtle);
 }
 
 .export-manifest-compatibility.is-safe {
@@ -1076,26 +1067,26 @@ onBeforeUnmount(() => {
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #6c757d;
+  color: var(--text-secondary);
 }
 
 .export-manifest-compatibility-value {
   display: block;
   margin-top: 0.2rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .export-manifest-compatibility-note {
   margin: 0.35rem 0 0;
-  color: #495057;
+  color: var(--text-secondary);
   font-size: 0.92rem;
 }
 
 .export-manifest-audit-trail {
   margin-top: 0.9rem;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
   padding: 0.85rem 1rem;
 }
 
@@ -1109,18 +1100,18 @@ onBeforeUnmount(() => {
 
 .export-manifest-audit-trail-header h5 {
   margin: 0 0 0.25rem;
-  color: #212529;
+  color: var(--foreground);
   font-size: 0.9rem;
 }
 
 .export-manifest-audit-trail-header p {
   margin: 0;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
 .export-manifest-audit-trail-note {
-  color: #495057;
+  color: var(--text-secondary);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1128,15 +1119,15 @@ onBeforeUnmount(() => {
 }
 
 .export-manifest-section {
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
   padding: 0.85rem;
 }
 
 .export-manifest-section h5 {
   margin: 0 0 0.7rem;
-  color: #212529;
+  color: var(--foreground);
   font-size: 0.9rem;
 }
 
@@ -1152,12 +1143,12 @@ onBeforeUnmount(() => {
 }
 
 .export-manifest-row dt {
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .export-manifest-row dd {
   margin: 0;
-  color: #212529;
+  color: var(--foreground);
   font-weight: 700;
   text-align: right;
 }
@@ -1170,9 +1161,9 @@ onBeforeUnmount(() => {
 }
 
 .section-navigator {
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--muted);
   padding: 0.85rem;
   position: sticky;
   top: 0;
@@ -1180,7 +1171,7 @@ onBeforeUnmount(() => {
 
 .navigator-title {
   margin-bottom: 0.65rem;
-  color: #212529;
+  color: var(--foreground);
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1188,20 +1179,9 @@ onBeforeUnmount(() => {
 }
 
 .navigator-link {
-  display: block;
   width: 100%;
-  border: 0;
-  background: transparent;
-  padding: 0.35rem 0;
-  color: #0b5ed7;
-  font-size: 0.92rem;
   text-align: left;
-  cursor: pointer;
-}
-
-.navigator-link:hover {
-  color: #084298;
-  text-decoration: underline;
+  justify-content: flex-start;
 }
 
 .preview-content {
@@ -1210,17 +1190,17 @@ onBeforeUnmount(() => {
 
 .preview-label {
   margin-bottom: 0.5rem;
-  color: #495057;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 700;
 }
 
 .preview-markdown {
   padding: 1rem;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: #f8f9fa;
-  color: #212529;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--muted);
+  color: var(--foreground);
   font-size: 0.9rem;
   line-height: 1.55;
   white-space: pre-wrap;
@@ -1242,28 +1222,20 @@ onBeforeUnmount(() => {
 }
 
 .preview-section-copy-btn {
-  border: 0;
-  background: transparent;
-  color: #0b5ed7;
   font-size: 0.8rem;
   font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-}
-
-.preview-section-copy-btn:hover {
-  color: #084298;
-  text-decoration: underline;
+  height: auto;
+  padding: 0.1rem 0.4rem;
 }
 
 .section-copy-feedback {
-  color: #2b8a3e;
+  color: var(--foreground);
   font-size: 0.8rem;
   font-weight: 600;
 }
 
 .section-copy-feedback.error {
-  color: #c92a2a;
+  color: var(--destructive);
 }
 
 .preview-block {
@@ -1271,14 +1243,15 @@ onBeforeUnmount(() => {
   font: inherit;
   white-space: pre-wrap;
   word-break: break-word;
+  line-height: 1.55;
 }
 
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #868e96;
-  border: 1px dashed #dee2e6;
-  border-radius: 8px;
+  color: var(--text-tertiary);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
   margin-top: 1rem;
 }
 
@@ -1321,54 +1294,6 @@ onBeforeUnmount(() => {
   }
 }
 
-
-/* v2.38 evidence pack polish: preview controls and dense metadata blocks */
-.preview-btn,
-.copy-btn,
-.export-manifest-card,
-.export-manifest-section,
-.export-manifest-compatibility,
-.export-manifest-audit-trail,
-.section-navigator,
-.navigator-link,
-.preview-content,
-.preview-markdown,
-.preview-block,
-.preview-section,
-.preview-section-copy-btn,
-.handoff-summary-bar,
-.handoff-summary-item {
-  border-radius: 8px;
-}
-
-.preview-btn,
-.navigator-link,
-.preview-section-copy-btn,
-.export-manifest-card,
-.handoff-summary-item,
-.preview-section {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.preview-btn:hover,
-.navigator-link:hover,
-.preview-section-copy-btn:hover,
-.handoff-summary-item:hover,
-.preview-section:hover {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-}
-
-.preview-btn:focus-visible,
-.navigator-link:focus-visible,
-.preview-section-copy-btn:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
-}
-
-.preview-block {
-  line-height: 1.55;
-}
-
 .export-manifest-row,
 .handoff-summary-item {
   min-width: 0;
@@ -1386,12 +1311,6 @@ onBeforeUnmount(() => {
   .export-manifest-header,
   .handoff-summary-header {
     align-items: stretch;
-  }
-
-  .preview-header,
-  .preview-actions,
-  .export-manifest-header,
-  .handoff-summary-header {
     flex-direction: column;
   }
 
@@ -1399,31 +1318,6 @@ onBeforeUnmount(() => {
   .navigator-link,
   .preview-section-copy-btn {
     width: 100%;
-  }
-}
-
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
   }
 }
 

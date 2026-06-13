@@ -108,12 +108,12 @@ function formatSourceFiles(sourceFiles) {
 .section-header h2 {
   margin: 0 0 0.4rem 0;
   font-size: 1.25rem;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .intro-text {
   margin: 0;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.9rem;
 }
 
@@ -125,8 +125,8 @@ function formatSourceFiles(sourceFiles) {
 }
 
 .summary-pill {
-  background: #f1f3f5;
-  color: #495057;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   border-radius: 999px;
   padding: 0.25rem 0.7rem;
   font-size: 0.8rem;
@@ -136,7 +136,7 @@ function formatSourceFiles(sourceFiles) {
 .entities-table {
   display: flex;
   flex-direction: column;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -146,7 +146,7 @@ function formatSourceFiles(sourceFiles) {
   grid-template-columns: minmax(120px, 1.2fr) minmax(180px, 2fr) repeat(3, minmax(100px, 1fr)) minmax(180px, 1.6fr);
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  border-top: 1px solid #f1f3f5;
+  border-top: 1px solid var(--border);
   align-items: center;
   font-size: 0.85rem;
 }
@@ -156,14 +156,14 @@ function formatSourceFiles(sourceFiles) {
 }
 
 .entity-header {
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .type-label {
   font-weight: 600;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .entity-value {
@@ -174,8 +174,8 @@ function formatSourceFiles(sourceFiles) {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #6c757d;
-  background: #f8f9fa;
+  color: var(--muted-foreground);
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -193,28 +193,5 @@ function formatSourceFiles(sourceFiles) {
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

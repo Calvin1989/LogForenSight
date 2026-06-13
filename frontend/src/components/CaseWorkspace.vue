@@ -6,12 +6,12 @@
         <span class="local-badge">{{ t('workspace.localOnly') }}</span>
       </div>
       <div class="header-actions">
-        <button @click="handleExport" class="action-btn" :disabled="cases.length === 0">
+        <Button variant="outline" size="sm" @click="handleExport" :disabled="cases.length === 0">
           {{ t('workspace.export') }}
-        </button>
-        <button @click="triggerImport" class="action-btn">
+        </Button>
+        <Button variant="outline" size="sm" @click="triggerImport">
           {{ t('workspace.import') }}
-        </button>
+        </Button>
         <input 
           type="file" 
           ref="importFile" 
@@ -19,9 +19,9 @@
           accept=".json" 
           @change="handleImport"
         />
-        <button v-if="cases.length > 0" @click="handleClear" class="clear-btn danger">
+        <Button variant="ghost" size="sm" class="danger clear-btn" v-if="cases.length > 0" @click="handleClear">
           {{ t('workspace.clearAll') }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -97,6 +97,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { t } from '../i18n'
+import { Button } from '@/components/ui/button'
 import * as storage from '../utils/caseWorkspaceStorage'
 
 const props = defineProps({
@@ -195,8 +196,8 @@ const handleImport = (event) => {
 
 <style scoped>
 .workspace-container {
-  background: white;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 2rem;
@@ -221,13 +222,13 @@ const handleImport = (event) => {
 .header-main h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .local-badge {
   font-size: 0.7rem;
-  background: #f1f3f5;
-  color: #6c757d;
+  background: var(--surface-subtle);
+  color: var(--muted-foreground);
   padding: 2px 6px;
   border-radius: 8px;
   text-transform: uppercase;
@@ -239,31 +240,12 @@ const handleImport = (event) => {
   gap: 0.5rem;
 }
 
-.action-btn {
-  background: white;
-  border: 1px solid #ced4da;
-  color: #495057;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
 
-.action-btn:hover:not(:disabled) {
-  border-color: #adb5bd;
-  background: #f8f9fa;
-}
-
-.action-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 
 .clear-btn {
   background: none;
   border: none;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.85rem;
   text-decoration: underline;
   cursor: pointer;
@@ -287,7 +269,7 @@ const handleImport = (event) => {
 .filter-input, .filter-select {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.9rem;
 }
@@ -300,8 +282,8 @@ const handleImport = (event) => {
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #adb5bd;
-  border: 2px dashed #f1f3f5;
+  color: var(--text-tertiary);
+  border: 2px dashed var(--border);
   border-radius: 8px;
 }
 
@@ -313,7 +295,7 @@ const handleImport = (event) => {
 
 .case-item {
   display: flex;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-left: 4px solid #dee2e6;
   border-radius: 8px;
   overflow: hidden;
@@ -340,7 +322,7 @@ const handleImport = (event) => {
 
 .case-title {
   font-weight: 600;
-  color: #212529;
+  color: var(--foreground);
   font-size: 1rem;
 }
 
@@ -365,23 +347,23 @@ const handleImport = (event) => {
   display: flex;
   gap: 0.5rem;
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   margin-bottom: 0.75rem;
 }
 
 .separator {
-  color: #dee2e6;
+  color: var(--border);
 }
 
 .case-stats {
   display: flex;
   gap: 1.25rem;
   font-size: 0.85rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .stat strong {
-  color: #212529;
+  color: var(--foreground);
 }
 
 .case-tags {
@@ -393,8 +375,8 @@ const handleImport = (event) => {
 
 .tag {
   font-size: 0.7rem;
-  background: #f1f3f5;
-  color: #495057;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   padding: 1px 6px;
   border-radius: 8px;
 }
@@ -403,8 +385,8 @@ const handleImport = (event) => {
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  background: #f8f9fa;
-  border-left: 1px solid #e9ecef;
+  background: var(--surface-subtle);
+  border-left: 1px solid var(--border);
 }
 
 .delete-btn {
@@ -428,63 +410,7 @@ const handleImport = (event) => {
 .risk-info { border-left-color: #17a2b8; }
 
 
-/* v2.38 workflow polish: workspace controls and case rows */
-.workspace-container,
-.empty-state,
-.case-item,
-.filter-input,
-.filter-select {
-  border-radius: 8px;
-}
 
-.action-btn,
-.clear-btn,
-.delete-btn,
-.filter-input,
-.filter-select,
-.case-item {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.action-btn:hover:not(:disabled),
-.clear-btn:hover,
-.delete-btn:hover,
-.case-item:hover {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-}
-
-.filter-input:hover,
-.filter-select:hover {
-  border-color: #adb5bd;
-}
-
-.action-btn:focus-visible,
-.clear-btn:focus-visible,
-.delete-btn:focus-visible,
-.filter-input:focus-visible,
-.filter-select:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
-}
-
-.case-item:hover {
-  border-color: #d0d7de;
-}
-
-.case-item:focus-within {
-  border-color: #74c0fc;
-  box-shadow: 0 0 0 3px rgba(116, 192, 252, 0.2);
-}
-
-.case-mode-tag,
-.tag,
-.local-badge {
-  letter-spacing: 0.02em;
-}
-
-.timestamp {
-  flex-shrink: 0;
-}
 
 @media (max-width: 720px) {
   .workspace-controls,
@@ -500,28 +426,5 @@ const handleImport = (event) => {
 }
 
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

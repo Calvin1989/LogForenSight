@@ -6,12 +6,12 @@
         <span class="local-badge">{{ t('triage.localOnly') }}</span>
       </div>
       <div class="header-actions">
-        <button @click="handleExport" class="action-btn" :disabled="!hasTriageData">
+        <Button @click="handleExport" variant="outline" size="sm" :disabled="!hasTriageData" class="action-btn">
           {{ t('triage.exportMarkdown') }}
-        </button>
-        <button v-if="hasTriageData" @click="handleClear" class="clear-btn danger">
+        </Button>
+        <Button v-if="hasTriageData" @click="handleClear" variant="ghost" size="sm">
           {{ t('actions.clear') }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -124,6 +124,7 @@
 </template>
 
 <script setup>
+import { Button } from '@/components/ui/button'
 import { ref, computed, watch } from 'vue'
 import { t } from '../i18n'
 import * as storage from '../utils/triageStorage'
@@ -269,8 +270,8 @@ const handleExport = () => {
 
 <style scoped>
 .triage-container {
-  background: white;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.5rem;
   margin-top: 2rem;
@@ -293,13 +294,13 @@ const handleExport = () => {
 .header-main h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .local-badge {
   font-size: 0.7rem;
-  background: #f1f3f5;
-  color: #6c757d;
+  background: var(--surface-subtle);
+  color: var(--muted-foreground);
   padding: 2px 6px;
   border-radius: 8px;
   text-transform: uppercase;
@@ -308,28 +309,6 @@ const handleExport = () => {
 .header-actions {
   display: flex;
   gap: 0.75rem;
-}
-
-.action-btn {
-  background: white;
-  border: 1px solid #ced4da;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.clear-btn {
-  background: none;
-  border: none;
-  color: #6c757d;
-  font-size: 0.85rem;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.clear-btn.danger:hover {
-  color: #dc3545;
 }
 
 .triage-summary-cards {
@@ -346,29 +325,29 @@ const handleExport = () => {
   align-items: center;
   margin-bottom: 1rem;
   padding: 0.75rem 1rem;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
   border-radius: 8px;
 }
 
 .triage-status-summary.empty {
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .summary-label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   text-transform: uppercase;
 }
 
 .summary-text {
   font-size: 0.9rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .summary-card {
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 0.75rem;
   border-radius: 8px;
   display: flex;
@@ -383,7 +362,7 @@ const handleExport = () => {
 
 .summary-card .label {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .summary-card.danger .label {
@@ -403,7 +382,7 @@ const handleExport = () => {
 
 .filter-select {
   padding: 0.4rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.9rem;
 }
@@ -417,13 +396,13 @@ const handleExport = () => {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #adb5bd;
-  border: 1px dashed #dee2e6;
+  color: var(--text-tertiary);
+  border: 1px dashed var(--border);
   border-radius: 8px;
 }
 
 .triage-row {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
 }
@@ -451,7 +430,7 @@ const handleExport = () => {
 
 .item-desc {
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   margin: 0.25rem 0 0 0;
 }
 
@@ -467,8 +446,8 @@ const handleExport = () => {
   align-items: center;
   gap: 0.25rem;
   font-size: 0.75rem;
-  color: #495057;
-  background: #f1f3f5;
+  color: var(--text-secondary);
+  background: var(--surface-subtle);
   border-radius: 999px;
   padding: 0.2rem 0.55rem;
 }
@@ -482,7 +461,7 @@ const handleExport = () => {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 0.75rem;
   border-radius: 8px;
 }
@@ -495,13 +474,13 @@ const handleExport = () => {
 
 .input-group label {
   font-size: 0.75rem;
-  color: #495057;
+  color: var(--text-secondary);
   font-weight: 600;
 }
 
 .input-group select, .input-group textarea {
   padding: 0.3rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.85rem;
 }
@@ -516,63 +495,6 @@ const handleExport = () => {
   resize: vertical;
 }
 
-
-/* v2.38 workflow polish: triage controls and row editing */
-.triage-container,
-.triage-status-summary,
-.summary-card,
-.empty-state,
-.triage-row,
-.row-actions,
-.filter-select,
-.input-group select,
-.input-group textarea {
-  border-radius: 8px;
-}
-
-.action-btn,
-.clear-btn,
-.filter-select,
-.input-group select,
-.input-group textarea,
-.triage-row,
-.summary-card {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.action-btn:hover:not(:disabled),
-.clear-btn:hover,
-.summary-card:hover,
-.triage-row:hover {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-}
-
-.filter-select:hover,
-.input-group select:hover,
-.input-group textarea:hover,
-.triage-row:hover {
-  border-color: #d0d7de;
-}
-
-.action-btn:focus-visible,
-.clear-btn:focus-visible,
-.filter-select:focus-visible,
-.input-group select:focus-visible,
-.input-group textarea:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
-}
-
-.triage-row:focus-within {
-  border-color: #74c0fc;
-  box-shadow: 0 0 0 3px rgba(116, 192, 252, 0.2);
-}
-
-.item-type-tag,
-.meta-chip,
-.local-badge {
-  letter-spacing: 0.02em;
-}
 
 @media (max-width: 720px) {
   .triage-header,
@@ -590,28 +512,5 @@ const handleExport = () => {
 }
 
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

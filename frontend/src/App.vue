@@ -1,9 +1,13 @@
 <template>
-  <div class="container">
-    <header>
-      <h1>{{ t('app.title') }}</h1>
-      <p>{{ t('app.subtitle') }}</p>
-      <LanguageToggle />
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-inner">
+        <div class="app-header-copy">
+          <h1 class="app-title">{{ t('app.title') }}</h1>
+          <p class="app-subtitle">{{ t('app.subtitle') }}</p>
+        </div>
+        <LanguageToggle />
+      </div>
     </header>
 
     <main>
@@ -19,13 +23,17 @@
         </template>
 
         <div class="shell-main">
-          <div v-if="rulesError" class="mini-warning">
-            {{ t('app.rulesError', 'Note: Could not load rule configuration ({error}). Using defaults.').replace('{error}', rulesError) }}
-          </div>
+            <Alert v-if="rulesError" variant="default" class="mb-4">
+            <AlertDescription>
+              {{ t('app.rulesError', 'Note: Could not load rule configuration ({error}). Using defaults.').replace('{error}', rulesError) }}
+            </AlertDescription>
+          </Alert>
 
-          <div v-if="error" class="error-msg">
-            {{ t('app.error', 'Error: {error}').replace('{error}', error) }}
-          </div>
+          <Alert v-if="error" variant="destructive">
+            <AlertDescription>
+              {{ t('app.error', 'Error: {error}').replace('{error}', error) }}
+            </AlertDescription>
+          </Alert>
 
           <section
             v-if="activeView === 'workspace'"
@@ -44,12 +52,12 @@
             />
 
             <div class="main-actions" v-if="result || error || selectedFile">
-              <button @click="onClearCurrentResult" class="clear-current-btn">
+              <Button variant="outline" @click="onClearCurrentResult">
                 {{ t('app.clearCurrentResult') }}
-              </button>
-              <button v-if="result" @click="onSaveCase" class="save-case-btn">
+              </Button>
+              <Button v-if="result" @click="onSaveCase">
                 {{ t('workspace.saveCase') }}
-              </button>
+              </Button>
             </div>
 
             <RecentAnalyses
@@ -412,6 +420,8 @@ import ReviewReadinessPanel from './components/ReviewReadinessPanel.vue'
 import TriagePanel from './components/TriagePanel.vue'
 import InvestigationEntities from './components/InvestigationEntities.vue'
 import AnalysisContextBar from './components/AnalysisContextBar.vue'
+import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { loadCaseNotes } from './utils/caseNotesStorage'
 import { getTriageState } from './utils/triageStorage'
 import { buildEvidencePackMarkdown } from './utils/evidencePackExport'
@@ -638,34 +648,51 @@ const onSelectCase = (caseItem) => {
 </script>
 
 <style scoped>
-.container {
+.app-shell {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #333;
-  line-height: 1.6;
 }
 
-header {
-  text-align: center;
+.app-header {
   margin-bottom: 2rem;
-  padding: 2.5rem 2rem;
-  border: 1px solid #e9ecef;
-  border-radius: 24px;
-  background: radial-gradient(circle at top, #f8fbff 0%, #ffffff 52%, #fcfdff 100%);
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
-header h1 {
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
+.app-header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.app-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
 }
 
 .main-actions {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
@@ -686,48 +713,45 @@ header h1 {
 .view-header {
   margin-bottom: 1.25rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #edf2f7;
+  border-bottom: 1px solid var(--border);
 }
 
 .view-header h2 {
   margin: 0.25rem 0 0.35rem;
   font-size: 1.35rem;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .view-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1c7ed6;
+  color: var(--muted-foreground);
 }
 
 .view-description {
   margin: 0;
   max-width: 46rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .empty-view-state {
-  border: 1px dashed #dee2e6;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--secondary);
   padding: 2rem;
   text-align: center;
 }
 
 .empty-view-state h3 {
   margin: 0.35rem 0 0.5rem;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .empty-view-state p {
   margin: 0;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .empty-view-eyebrow {
@@ -736,63 +760,15 @@ header h1 {
   justify-content: center;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  background: #e7f5ff;
-  color: #1864ab;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
   font-size: 0.74rem;
   font-weight: 700;
 }
 
 .empty-view-hint {
   margin-top: 0.75rem !important;
-  color: #495057 !important;
-}
-
-.clear-current-btn, .save-case-btn {
-  padding: 0.6rem 1.2rem;
-  background-color: #f8f9fa;
-  color: #495057;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-
-.clear-current-btn:hover, .save-case-btn:hover {
-  background-color: #e9ecef;
-  border-color: #adb5bd;
-  color: #212529;
-}
-
-.save-case-btn {
-  background-color: #e7f5ff;
-  color: #1971c2;
-  border-color: #a5d8ff;
-}
-
-.save-case-btn:hover {
-  background-color: #d0ebff;
-  border-color: #74c0fc;
-}
-
-.error-msg {
-  padding: 1rem;
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
-
-.mini-warning {
-  font-size: 0.85rem;
-  color: #856404;
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  color: var(--foreground) !important;
 }
 
 .side-by-side {
@@ -801,52 +777,41 @@ header h1 {
   gap: 2rem;
 }
 
-@media (max-width: 768px) {
-  header {
-    padding: 2rem 1rem;
-    border-radius: 18px;
-  }
-
-  .side-by-side {
-    grid-template-columns: 1fr;
-  }
-
-  .main-actions {
-    flex-direction: column;
-  }
-}
-
-/* Triage/Review Layout Styles */
-.triage-review-layout {
+.triage-review-layout,
+.investigation-layout {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.triage-review-intro {
+.triage-review-intro,
+.investigation-intro {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
-  border: 1px solid #e0f2fe;
-  border-radius: 10px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
-.triage-review-intro-icon {
-  font-size: 1.75rem;
+.triage-review-intro-icon,
+.investigation-intro-icon {
+  font-size: 1.5rem;
   line-height: 1;
 }
 
-.triage-review-intro-text {
+.triage-review-intro-text,
+.investigation-intro-text {
   margin: 0;
-  color: #475569;
+  color: var(--muted-foreground);
   font-size: 0.9rem;
-  line-height: 1.5;
 }
 
 .triage-review-decisions-group,
-.triage-review-readiness-group {
+.triage-review-readiness-group,
+.investigation-timeline-incidents-group,
+.investigation-findings-rules-group {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -857,19 +822,19 @@ header h1 {
   flex-direction: column;
   gap: 0.25rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #f1f5f9;
+  border-bottom: 2px solid var(--border);
 }
 
 .group-title {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--foreground);
 }
 
 .group-description {
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--muted-foreground);
 }
 
 .group-content {
@@ -879,65 +844,34 @@ header h1 {
   padding-top: 0.25rem;
 }
 
-/* Remove top margins from components that already have them */
 .group-content > * {
   margin-top: 0 !important;
 }
 
 @media (max-width: 768px) {
-  .triage-review-intro {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+  .app-shell {
     padding: 1rem;
   }
 
-  .triage-review-intro-icon {
-    font-size: 1.5rem;
+  .app-header {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
   }
 
-  .group-content {
-    gap: 1rem;
+  .app-header-inner {
+    flex-direction: column;
+    text-align: center;
   }
-}
 
-/* Investigation Layout Styles */
-.investigation-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+  .side-by-side {
+    grid-template-columns: 1fr;
+  }
 
-.investigation-intro {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%);
-  border: 1px solid #dcfce7;
-  border-radius: 10px;
-}
+  .main-actions {
+    flex-direction: column;
+  }
 
-.investigation-intro-icon {
-  font-size: 1.75rem;
-  line-height: 1;
-}
-
-.investigation-intro-text {
-  margin: 0;
-  color: #475569;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-.investigation-timeline-incidents-group,
-.investigation-findings-rules-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-@media (max-width: 768px) {
+  .triage-review-intro,
   .investigation-intro {
     flex-direction: column;
     align-items: flex-start;
@@ -945,33 +879,8 @@ header h1 {
     padding: 1rem;
   }
 
-  .investigation-intro-icon {
-    font-size: 1.5rem;
+  .group-content {
+    gap: 1rem;
   }
 }
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 </style>

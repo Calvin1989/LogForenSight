@@ -23,7 +23,7 @@
 
         <div class="filter-group">
           <label>{{ t('common.sourceIp') }}:</label>
-          <input
+          <Input
             v-model="ipSearch"
             type="text"
             :placeholder="t('common.searchPlaceholder')"
@@ -31,43 +31,50 @@
           />
         </div>
 
-        <button
+        <Button
           v-if="isFiltered"
           @click="clearFilters"
-          class="clear-btn"
+          variant="ghost"
+          size="sm"
         >
           {{ t('actions.clear') }}
-        </button>
+        </Button>
 
         <div v-if="isFiltered" class="filter-stats">
           {{ t('incidents.showingIncidents', 'Showing {filtered} of {total} incidents').replace('{filtered}', filteredIncidents.length).replace('{total}', incidents.length) }}
         </div>
 
         <div class="action-group">
-          <button
+          <Button
             @click="copyJson"
             :disabled="filteredIncidents.length === 0"
-            class="copy-btn"
+            variant="outline"
+            size="sm"
+            class="export-btn"
             :title="t('actions.copyJson')"
           >
             {{ copyStatus ? t('common.copied') : t('actions.copyJson') }}
-          </button>
-          <button
+          </Button>
+          <Button
             @click="exportJson"
             :disabled="filteredIncidents.length === 0"
+            variant="outline"
+            size="sm"
             class="export-btn"
             :title="t('actions.downloadJson')"
           >
             {{ t('actions.downloadJson') }}
-          </button>
-          <button
+          </Button>
+          <Button
             @click="exportCsv"
             :disabled="filteredIncidents.length === 0"
+            variant="outline"
+            size="sm"
             class="export-btn"
             :title="t('actions.downloadCsv')"
           >
             {{ t('actions.downloadCsv') }}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -118,13 +125,14 @@
             <div v-if="incident.evidence.length > 0" class="evidence-preview">
               <div class="evidence-header">
                 <strong>{{ t('incidents.evidenceSamples') }}:</strong>
-                <button
+                <Button
                   v-if="incident.evidence.length > 2"
                   @click="toggleEvidence(incident.incident_id)"
-                  class="toggle-evidence-btn"
+                  variant="link"
+                  size="sm"
                 >
                   {{ expandedIncidents.has(incident.incident_id) ? t('actions.showLess') : t('actions.showAllEvidence') }}
-                </button>
+                </Button>
               </div>
               <ul>
                 <li v-for="(ev, index) in getVisibleEvidence(incident)" :key="index">
@@ -142,6 +150,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { downloadJson, downloadTextFile, convertIncidentsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity, translateRiskLevel } from '../i18n'
 import { getTriageItemUpdatedAt, needsTriageReview } from '../utils/triageStorage'
@@ -262,7 +272,7 @@ const new_date_str = () => {
 
 .incidents-intro {
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f1f3f5;
+  border-bottom: 2px solid var(--border);
   padding-bottom: 1rem;
 }
 
@@ -270,12 +280,12 @@ const new_date_str = () => {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
-  color: #2c3e50;
+  color: var(--foreground);
 }
 
 .intro-text {
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   margin: 0;
 }
 
@@ -286,7 +296,7 @@ const new_date_str = () => {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -299,12 +309,12 @@ const new_date_str = () => {
 .filter-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .filter-select, .filter-input {
   padding: 0.35rem 0.6rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
@@ -314,62 +324,13 @@ const new_date_str = () => {
   border-color: #80bdff;
 }
 
-.clear-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.85rem;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.clear-btn:hover {
-  color: #0056b3;
-}
-
 .filter-stats {
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .action-group {
   margin-left: auto;
-}
-
-.copy-btn, .export-btn {
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-
-.copy-btn {
-  background-color: #e9ecef;
-  border: 1px solid #dee2e6;
-  color: #495057;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background-color: #dee2e6;
-}
-
-.export-btn {
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-  color: #495057;
-}
-
-.export-btn:hover:not(:disabled) {
-  background-color: #e9ecef;
-  border-color: #adb5bd;
-}
-
-.copy-btn:disabled, .export-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .export-warning {
@@ -385,9 +346,9 @@ const new_date_str = () => {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-style: italic;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -398,10 +359,10 @@ const new_date_str = () => {
 }
 
 .incident-item {
-  border: 2px solid #dee2e6;
+  border: 2px solid var(--border);
   border-radius: 8px;
   padding: 1.5rem;
-  background: #fff;
+  background: var(--surface-elevated);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -421,7 +382,7 @@ const new_date_str = () => {
   margin: 0;
   font-size: 1.25rem;
   flex-grow: 1;
-  color: #343a40;
+  color: var(--foreground);
 }
 
 .severity-badge {
@@ -452,21 +413,21 @@ const new_date_str = () => {
 }
 
 .ip-badge {
-  background: #f1f3f5;
+  background: var(--surface-subtle);
   padding: 0.25rem 0.75rem;
   border-radius: 8px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #495057;
-  border: 1px solid #dee2e6;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
 
 .summary {
   font-size: 1.05rem;
   font-weight: 400;
   margin-bottom: 1.25rem;
-  color: #212529;
+  color: var(--foreground);
   line-height: 1.5;
 }
 
@@ -476,16 +437,16 @@ const new_date_str = () => {
   gap: 1rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .meta-info {
   display: flex;
   gap: 2rem;
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   margin-bottom: 1.25rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 0.5rem 1rem;
   border-radius: 8px;
 }
@@ -497,7 +458,7 @@ const new_date_str = () => {
 .recommendations strong {
   display: block;
   margin-bottom: 0.5rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .recommendations ul {
@@ -510,10 +471,10 @@ const new_date_str = () => {
 }
 
 .evidence-preview {
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
 }
 
 .evidence-header {
@@ -527,25 +488,10 @@ const new_date_str = () => {
   margin-bottom: 0 !important;
 }
 
-.toggle-evidence-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.toggle-evidence-btn:hover {
-  color: #0056b3;
-}
-
 .evidence-preview strong {
   display: block;
   margin-bottom: 0.5rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .evidence-preview ul {
@@ -561,28 +507,5 @@ const new_date_str = () => {
   font-family: 'Courier New', Courier, monospace;
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

@@ -28,7 +28,7 @@
 
         <div class="filter-group search">
           <label>{{ t('common.search') }}:</label>
-          <input
+          <Input
             v-model="textSearch"
             type="text"
             :placeholder="t('findings.searchPlaceholder')"
@@ -36,43 +36,50 @@
           />
         </div>
 
-        <button
+        <Button
           v-if="isFiltered"
           @click="clearFilters"
-          class="clear-btn"
+          variant="ghost"
+          size="sm"
         >
           {{ t('actions.clear') }}
-        </button>
+        </Button>
 
         <div v-if="isFiltered" class="filter-stats">
           {{ t('findings.showingFindings', 'Showing {filtered} of {total}').replace('{filtered}', filteredFindings.length).replace('{total}', findings.length) }}
         </div>
 
         <div class="action-group">
-          <button
+          <Button
             @click="copyJson"
             :disabled="filteredFindings.length === 0"
-            class="copy-btn"
+            variant="outline"
+            size="sm"
+            class="export-btn"
             :title="t('actions.copyJson')"
           >
             {{ copyStatus ? t('common.copied') : t('actions.copyJson') }}
-          </button>
-          <button
+          </Button>
+          <Button
             @click="exportJson"
             :disabled="filteredFindings.length === 0"
+            variant="outline"
+            size="sm"
             class="export-btn"
             :title="t('actions.downloadJson')"
           >
             {{ t('actions.downloadJson') }}
-          </button>
-          <button
+          </Button>
+          <Button
             @click="exportCsv"
             :disabled="filteredFindings.length === 0"
+            variant="outline"
+            size="sm"
             class="export-btn"
             :title="t('actions.downloadCsv')"
           >
             {{ t('actions.downloadCsv') }}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -108,7 +115,9 @@
           </div>
 
           <div class="finding-actions">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               class="explainability-toggle"
               :aria-expanded="expandedExplanations.has(index)"
               @click="toggleExplanation(index)"
@@ -116,7 +125,7 @@
               <span class="toggle-icon">{{ expandedExplanations.has(index) ? '▼' : '▶' }}</span>
               <span>{{ expandedExplanations.has(index) ? t('findings.hideExplanation') : t('findings.showExplanation') }}</span>
               <span class="toggle-meta">{{ t('findings.explainability') }}</span>
-            </button>
+            </Button>
           </div>
 
           <FindingExplainability
@@ -136,13 +145,15 @@
             <div class="matched-values-list" v-if="finding.matched_values && finding.matched_values.length > 0">
               <div class="matched-values-header">
                 <span class="values-label">{{ t('findings.values') }}:</span>
-                <button
+                <Button
                   v-if="finding.matched_values.length > 5"
                   @click="toggleMatchedValues(index)"
+                  variant="link"
+                  size="sm"
                   class="toggle-matched-btn"
                 >
                   {{ expandedMatchedValues.has(index) ? t('actions.showLess') : t('actions.showAllMatchedValues') }}
-                </button>
+                </Button>
               </div>
               <div class="matched-tags">
                 <span v-for="(val, vIdx) in getVisibleMatchedValues(finding, index)" :key="vIdx" class="matched-tag">
@@ -158,13 +169,14 @@
           <div class="finding-evidence">
             <div class="evidence-header">
               <strong>{{ t('common.evidence') }}:</strong>
-              <button
+              <Button
                 v-if="finding.evidence.length > 2"
                 @click="toggleEvidence(index)"
-                class="toggle-evidence-btn"
+                variant="link"
+                size="sm"
               >
                 {{ expandedFindings.has(index) ? t('actions.showLess') : t('actions.showAllEvidence') }}
-              </button>
+              </Button>
             </div>
             <ul>
               <li v-for="(ev, evIdx) in getVisibleEvidence(finding, index)" :key="evIdx">
@@ -181,6 +193,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { downloadJson, downloadTextFile, convertFindingsToCsv } from '../utils/exportUtils'
 import { t, translateSeverity } from '../i18n'
 import FindingExplainability from './FindingExplainability.vue'
@@ -362,8 +376,8 @@ const new_date_str = () => {
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.25rem;
-  color: #495057;
-  border-bottom: 2px solid #f1f3f5;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
@@ -374,7 +388,7 @@ const new_date_str = () => {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -392,12 +406,12 @@ const new_date_str = () => {
 .filter-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .filter-select, .filter-input {
   padding: 0.35rem 0.6rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
@@ -413,63 +427,14 @@ const new_date_str = () => {
   border-color: #80bdff;
 }
 
-.clear-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.85rem;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.clear-btn:hover {
-  color: #0056b3;
-}
-
 .filter-stats {
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   white-space: nowrap;
 }
 
 .action-group {
   margin-left: auto;
-}
-
-.copy-btn, .export-btn {
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-
-.copy-btn {
-  background-color: #e9ecef;
-  border: 1px solid #dee2e6;
-  color: #495057;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background-color: #dee2e6;
-}
-
-.export-btn {
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-  color: #495057;
-}
-
-.export-btn:hover:not(:disabled) {
-  background-color: #e9ecef;
-  border-color: #adb5bd;
-}
-
-.copy-btn:disabled, .export-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .export-warning {
@@ -485,9 +450,9 @@ const new_date_str = () => {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-style: italic;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -498,10 +463,10 @@ const new_date_str = () => {
 }
 
 .finding-item {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
-  background: #fff;
+  background: var(--surface-elevated);
 }
 
 .finding-header {
@@ -520,9 +485,9 @@ const new_date_str = () => {
 
 .rule-id {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-family: monospace;
-  background: #f1f3f5;
+  background: var(--surface-subtle);
   padding: 0.1rem 0.4rem;
   border-radius: 8px;
 }
@@ -565,7 +530,7 @@ const new_date_str = () => {
   gap: 1rem;
   margin: 0.5rem 0 0 0;
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .finding-actions {
@@ -602,7 +567,7 @@ const new_date_str = () => {
 
 .explainability-toggle .toggle-meta {
   font-weight: 400;
-  color: #495057;
+  color: var(--text-secondary);
   font-size: 0.75rem;
   border-left: 1px solid #a5d8ff;
   padding-left: 0.4rem;
@@ -611,7 +576,7 @@ const new_date_str = () => {
 .finding-matched-details {
   margin-top: 1rem;
   padding: 0.75rem;
-  background: #f1f3f5;
+  background: var(--surface-subtle);
   border-radius: 8px;
   border-left: 4px solid #adb5bd;
 }
@@ -629,10 +594,10 @@ const new_date_str = () => {
 }
 
 .matched-stat code {
-  background: #e9ecef;
+  background: var(--surface-subtle);
   padding: 0.1rem 0.3rem;
   border-radius: 8px;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .matched-values-header {
@@ -645,18 +610,7 @@ const new_date_str = () => {
 .values-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #495057;
-}
-
-.toggle-matched-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
+  color: var(--text-secondary);
 }
 
 .matched-tags {
@@ -667,24 +621,24 @@ const new_date_str = () => {
 
 .matched-tag {
   font-size: 0.75rem;
-  background: #fff;
-  border: 1px solid #dee2e6;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   padding: 0.1rem 0.4rem;
   border-radius: 8px;
-  color: #495057;
+  color: var(--text-secondary);
   font-family: monospace;
 }
 
 .matched-tag-more {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-style: italic;
   align-self: center;
 }
 
 .finding-evidence {
   margin-top: 1rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 0.75rem;
   border-radius: 8px;
 }
@@ -700,21 +654,6 @@ const new_date_str = () => {
   margin-bottom: 0 !important;
 }
 
-.toggle-evidence-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.toggle-evidence-btn:hover {
-  color: #0056b3;
-}
-
 .finding-evidence ul {
   margin: 0.5rem 0 0 0;
   padding-left: 1.5rem;
@@ -728,28 +667,5 @@ const new_date_str = () => {
   font-family: 'Courier New', Courier, monospace;
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

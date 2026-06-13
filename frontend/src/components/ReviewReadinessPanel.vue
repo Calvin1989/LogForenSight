@@ -187,13 +187,13 @@ function checkSummary(check) {
 .review-readiness-header h3 {
   margin: 0 0 0.35rem;
   font-size: 1.1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .summary-text {
   margin: 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .overall-badge,
@@ -226,12 +226,12 @@ function checkSummary(check) {
 }
 
 .overall-card {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-left-width: 4px;
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
 }
 
 .overall-card.ready {
@@ -244,7 +244,7 @@ function checkSummary(check) {
 
 .overall-label {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -252,13 +252,13 @@ function checkSummary(check) {
 .overall-value {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #212529;
+  color: var(--foreground);
   margin: 0.25rem 0;
 }
 
 .overall-description {
   font-size: 0.9rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .checklist {
@@ -267,7 +267,7 @@ function checkSummary(check) {
 }
 
 .check-card {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
 }
@@ -294,13 +294,13 @@ function checkSummary(check) {
 .check-header h4 {
   margin: 0;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .check-summary,
 .check-recommendation {
   margin: 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .check-summary {
@@ -315,8 +315,8 @@ function checkSummary(check) {
 .empty-state {
   text-align: center;
   padding: 2rem;
-  color: #868e96;
-  border: 1px dashed #dee2e6;
+  color: var(--text-tertiary);
+  border: 1px dashed var(--border);
   border-radius: 8px;
 }
 
@@ -326,28 +326,5 @@ function checkSummary(check) {
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

@@ -3,9 +3,9 @@
     <div class="comparison-header">
       <h3>{{ t('comparison.title') }}</h3>
       <div class="header-actions">
-        <button v-if="comparison" @click="downloadMarkdown" class="download-btn">
+        <Button v-if="comparison" @click="downloadMarkdown" variant="outline" size="sm" class="download-btn">
           {{ t('comparison.downloadReport') }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -36,9 +36,9 @@
           </select>
         </div>
 
-        <button @click="performComparison" :disabled="!baseId || !targetId || baseId === targetId" class="compare-btn">
+        <Button @click="performComparison" :disabled="!baseId || !targetId || baseId === targetId" variant="default" class="compare-btn">
           {{ t('comparison.startComparison') }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -146,6 +146,7 @@ import { ref, watch } from 'vue'
 import { compareAnalyses, generateComparisonMarkdown } from '../utils/comparisonUtils'
 import { downloadTextFile } from '../utils/exportUtils'
 import { t, translateSeverity, currentLanguage } from '../i18n'
+import { Button } from '@/components/ui/button'
 
 const props = defineProps({
   history: {
@@ -202,8 +203,8 @@ const formatDate = (isoString) => {
 
 <style scoped>
 .comparison-container {
-  background: white;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 2rem;
@@ -220,42 +221,20 @@ const formatDate = (isoString) => {
 .comparison-header h3 {
   margin: 0;
   font-size: 1rem;
-  color: #495057;
-}
-
-.download-btn {
-  background: #339af0;
-  color: white;
-  border: none;
-  padding: 0.45rem 0.9rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.download-btn:hover {
-  background: #228be6;
-  box-shadow: 0 2px 6px rgba(34,139,230,0.3);
-}
-
-.download-btn:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
+  color: var(--text-secondary);
 }
 
 .empty-state {
   font-size: 0.85rem;
-  color: #868e96;
+  color: var(--text-tertiary);
   text-align: center;
   padding: 1.5rem 0;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
 .selection-ui {
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
@@ -279,15 +258,15 @@ const formatDate = (isoString) => {
 .selector label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .selector select {
   padding: 0.5rem 0.6rem;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.9rem;
-  background: white;
+  background: var(--surface-elevated);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -301,60 +280,33 @@ const formatDate = (isoString) => {
   box-shadow: 0 0 0 3px rgba(116,192,252,0.25);
 }
 
-.compare-btn {
-  background: #51cf66;
-  color: white;
-  border: none;
-  padding: 0.55rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.compare-btn:hover:not(:disabled) {
-  background: #40c057;
-  box-shadow: 0 2px 6px rgba(64,192,87,0.3);
-}
-
-.compare-btn:focus-visible {
-  outline: 2px solid #74c0fc;
-  outline-offset: 2px;
-}
-
-.compare-btn:disabled {
-  background: #adb5bd;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
 .results-ui {
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border);
   padding-top: 1.5rem;
 }
 
 .narrative-summary {
   margin-bottom: 1.5rem;
   padding: 1rem 1.25rem;
-  background: #f1f3f5;
+  background: var(--surface-subtle);
   border-radius: 8px;
   border-left: 4px solid #339af0;
 }
 
 .narrative-summary h4 {
   margin: 0 0 0.5rem 0;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .overview {
   font-weight: 600;
   margin-bottom: 0.4rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .key-changes {
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   margin: 0;
 }
 
@@ -367,8 +319,8 @@ const formatDate = (isoString) => {
 
 .delta-card {
   padding: 1rem;
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   text-align: center;
   transition: box-shadow 0.15s ease;
@@ -383,7 +335,7 @@ const formatDate = (isoString) => {
 
 .delta-label {
   font-size: 0.75rem;
-  color: #868e96;
+  color: var(--text-tertiary);
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
@@ -391,7 +343,7 @@ const formatDate = (isoString) => {
 .delta-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .severity-grid {
@@ -401,7 +353,7 @@ const formatDate = (isoString) => {
 .severity-grid h4 {
   font-size: 0.9rem;
   margin-bottom: 1rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .severity-items {
@@ -415,7 +367,7 @@ const formatDate = (isoString) => {
   align-items: center;
   gap: 0.6rem;
   padding: 0.4rem 0.8rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
   font-size: 0.85rem;
 }
@@ -435,7 +387,7 @@ const formatDate = (isoString) => {
 .sev-tag.info, .sev-tag.informational { background: #e7f5ff; color: #1971c2; }
 
 .sev-counts {
-  color: #495057;
+  color: var(--text-secondary);
   font-family: monospace;
 }
 
@@ -451,7 +403,7 @@ const formatDate = (isoString) => {
 .change-section h4 {
   font-size: 0.9rem;
   margin-bottom: 1rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .change-list {
@@ -466,7 +418,7 @@ const formatDate = (isoString) => {
 }
 
 .change-group.added { background: #ebfbee; border: 1px solid #d3f9d8; }
-.change-group.removed { background: #f8f9fa; border: 1px solid #e9ecef; }
+.change-group.removed { background: var(--surface-subtle); border: 1px solid var(--border); }
 
 .change-group h5 {
   margin: 0 0 0.5rem 0;
@@ -475,7 +427,7 @@ const formatDate = (isoString) => {
 }
 
 .change-group.added h5 { color: #2b8a3e; }
-.change-group.removed h5 { color: #868e96; }
+.change-group.removed h5 { color: var(--text-tertiary); }
 
 .change-group ul {
   margin: 0;
@@ -506,38 +458,14 @@ const formatDate = (isoString) => {
 
 .more {
   font-style: italic;
-  color: #868e96;
+  color: var(--text-tertiary);
   font-size: 0.75rem !important;
 }
 
 .no-changes {
   font-size: 0.85rem;
-  color: #adb5bd;
+  color: var(--text-tertiary);
   font-style: italic;
-}
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 
 </style>

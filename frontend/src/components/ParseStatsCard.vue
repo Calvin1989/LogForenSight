@@ -114,9 +114,9 @@ const sourceFiles = computed(() => {
   border-radius: 8px;
 }
 
-.rate-good { background: #ebfbee; color: #2b8a3e; }
-.rate-warn { background: #fff9db; color: #f08c00; }
-.rate-bad { background: #fff5f5; color: #e03131; }
+.rate-good { background: var(--surface-subtle); color: #2b8a3e; }
+.rate-warn { background: var(--surface-subtle); color: #f08c00; }
+.rate-bad { background: var(--surface-subtle); color: #e03131; }
 
 .stats-grid {
   display: grid;
@@ -132,7 +132,7 @@ const sourceFiles = computed(() => {
 
 .stat-item .label {
   font-size: 0.75rem;
-  color: #868e96;
+  color: var(--muted-foreground);
   text-transform: uppercase;
   margin-bottom: 0.25rem;
 }
@@ -140,7 +140,7 @@ const sourceFiles = computed(() => {
 .stat-item .value {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .value.success { color: #2b8a3e; }
@@ -148,20 +148,20 @@ const sourceFiles = computed(() => {
 
 .format-info {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   padding-top: 0.75rem;
-  border-top: 1px solid #f1f3f5;
+  border-top: 1px solid var(--border);
 }
 
 .separator {
   margin: 0 0.5rem;
-  color: #dee2e6;
+  color: var(--border);
 }
 
 .parse-warning {
   margin-top: 1rem;
   padding: 0.75rem;
-  background-color: #fff9db;
+  background-color: var(--surface-subtle);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -171,26 +171,26 @@ const sourceFiles = computed(() => {
 .parse-warning .icon { font-size: 1rem; }
 .parse-warning .text {
   font-size: 0.8rem;
-  color: #856404;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .skipped-samples {
   margin-top: 1.5rem;
-  border-top: 1px solid #f1f3f5;
+  border-top: 1px solid var(--border);
   padding-top: 1rem;
 }
 
 .skipped-samples h4 {
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .sample-item {
   margin-bottom: 0.75rem;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -207,14 +207,14 @@ const sourceFiles = computed(() => {
 .line-num {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .reason {
   font-size: 0.7rem;
   color: #e03131;
   font-family: monospace;
-  background: #fff5f5;
+  background: var(--surface-subtle);
   padding: 0.1rem 0.3rem;
   border-radius: 8px;
 }
@@ -223,27 +223,27 @@ const sourceFiles = computed(() => {
   margin: 0;
   font-family: monospace;
   font-size: 0.8rem;
-  color: #495057;
+  color: var(--text-secondary);
   white-space: pre-wrap;
   word-break: break-all;
 }
 
 .source-files {
   margin-top: 1.5rem;
-  border-top: 1px solid #f1f3f5;
+  border-top: 1px solid var(--border);
   padding-top: 1rem;
 }
 
 .source-files h4 {
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .source-files-table {
   display: flex;
   flex-direction: column;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -254,7 +254,7 @@ const sourceFiles = computed(() => {
   gap: 0.75rem;
   padding: 0.75rem;
   font-size: 0.8rem;
-  border-top: 1px solid #f1f3f5;
+  border-top: 1px solid var(--border);
   align-items: center;
 }
 
@@ -263,38 +263,14 @@ const sourceFiles = computed(() => {
 }
 
 .source-header {
-  background: #f8f9fa;
+  background: var(--surface-subtle);
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
   .source-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
   }
 }
 

@@ -162,7 +162,7 @@ function globalSummaryText(summary) {
 .explainability-block h4 {
   margin: 0 0 0.4rem 0;
   font-size: 0.85rem;
-  color: #495057;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -184,22 +184,22 @@ function globalSummaryText(summary) {
 
 .explainability-row dt {
   font-weight: 600;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .explainability-row dd {
   margin: 0;
-  color: #212529;
+  color: var(--foreground);
   word-break: break-word;
 }
 
 .explainability-row code {
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.1rem 0.4rem;
   font-size: 0.8rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .rationale-text,
@@ -207,7 +207,7 @@ function globalSummaryText(summary) {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .context-summary {
@@ -218,11 +218,11 @@ function globalSummaryText(summary) {
 .context-summary code {
   display: inline-block;
   padding: 0.2rem 0.5rem;
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 0.85rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .indicator-list {
@@ -238,8 +238,8 @@ function globalSummaryText(summary) {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   padding: 0.2rem 0.5rem;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -252,12 +252,12 @@ function globalSummaryText(summary) {
 
 .indicator-value {
   font-family: monospace;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .evidence-snippet {
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.5rem 0.75rem;
   margin: 0;
@@ -278,7 +278,7 @@ function globalSummaryText(summary) {
 .global-summary {
   margin: 0;
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .related-entity-list {
@@ -296,8 +296,8 @@ function globalSummaryText(summary) {
   gap: 0.5rem;
   align-items: center;
   font-size: 0.85rem;
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.3rem 0.5rem;
 }
@@ -312,44 +312,21 @@ function globalSummaryText(summary) {
 
 .entity-value {
   font-family: monospace;
-  color: #495057;
+  color: var(--text-secondary);
   word-break: break-all;
 }
 
 .entity-count {
   text-align: right;
-  color: #6c757d;
+  color: var(--muted-foreground);
 }
 
 .explainability-empty {
   margin: 0;
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-style: italic;
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

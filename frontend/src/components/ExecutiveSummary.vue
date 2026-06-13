@@ -8,9 +8,9 @@
         </div>
         <div class="headline-container">
           <h2 class="headline">{{ summary.headline }}</h2>
-          <button @click="downloadMarkdown" class="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
+          <Button variant="outline" size="sm" @click="downloadMarkdown" data-testid="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
             {{ t('actions.downloadMd') }}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -56,6 +56,7 @@
 
 <script setup>
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { t, translateRiskLevel } from '../i18n'
 
 const props = defineProps({
@@ -159,19 +160,6 @@ const downloadMarkdown = () => {
   color: #212529;
 }
 
-.download-btn {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.download-btn:hover {
-  background: #e9ecef;
-}
-
 .overview {
   font-size: 1.1rem;
   color: #495057;
@@ -252,28 +240,5 @@ const downloadMarkdown = () => {
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

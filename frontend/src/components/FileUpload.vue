@@ -1,10 +1,10 @@
 <template>
   <section class="upload-section">
     <div class="file-input-group">
-      <input 
-        type="file" 
-        id="logFile" 
-        accept=".log,.txt" 
+      <input
+        type="file"
+        id="logFile"
+        accept=".log,.txt"
         multiple
         @change="onFileChange"
       />
@@ -22,19 +22,20 @@
       </select>
     </div>
 
-    <button 
+    <Button
       @click="emitAnalyze"
       :disabled="selectedFiles.length === 0 || props.loading"
-      class="analyze-btn"
+      size="lg"
     >
       {{ analyzeButtonLabel }}
-    </button>
+    </Button>
   </section>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
 import { t } from '../i18n'
+import { Button } from '@/components/ui/button'
 
 const props = defineProps({
   loading: {
@@ -86,8 +87,8 @@ const emitAnalyze = () => {
   gap: 1.35rem;
   margin-bottom: 3rem;
   padding: 2rem;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 2px dashed #d7e3f1;
+  background: linear-gradient(180deg, var(--surface-elevated) 0%, var(--shell-bg) 100%);
+  border: 2px dashed var(--border);
   border-radius: 16px;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
 }
@@ -101,21 +102,21 @@ const emitAnalyze = () => {
   align-items: center;
   gap: 0.75rem;
   font-size: 0.9rem;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .format-select {
   padding: 0.48rem 0.8rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--surface-elevated);
   cursor: pointer;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .format-select:hover {
-  border-color: #adb5bd;
+  border-color: var(--muted-foreground);
 }
 
 .format-select:focus-visible {
@@ -134,8 +135,8 @@ const emitAnalyze = () => {
   display: inline-block;
   min-width: 12rem;
   padding: 0.85rem 1.5rem;
-  background: white;
-  border: 1px solid #ced4da;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
@@ -154,34 +155,6 @@ const emitAnalyze = () => {
   outline-offset: 3px;
 }
 
-.analyze-btn {
-  padding: 0.78rem 2.5rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.analyze-btn:hover:not(:disabled) {
-  background-color: #0056b3;
-  box-shadow: 0 10px 22px rgba(0, 86, 179, 0.18);
-}
-
-.analyze-btn:focus-visible {
-  outline: 3px solid rgba(13, 110, 253, 0.22);
-  outline-offset: 3px;
-}
-
-.analyze-btn:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-
 @media (max-width: 640px) {
   .upload-section {
     align-items: stretch;
@@ -195,33 +168,8 @@ const emitAnalyze = () => {
   }
 
   .file-label,
-  .analyze-btn,
   .format-select {
     width: 100%;
-  }
-}
-
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
   }
 }
 

@@ -72,18 +72,18 @@ const nextActions = computed(() => {
 .next-actions-header h4 {
   margin: 0 0 0.35rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .next-actions-header p {
   margin: 0;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.9rem;
 }
 
 .no-actions {
   margin: 0.9rem 0 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .action-list {
@@ -93,45 +93,22 @@ const nextActions = computed(() => {
 }
 
 .action-item {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.85rem;
-  background: #fff;
+  background: var(--surface-elevated);
 }
 
 .action-item h5 {
   margin: 0;
   font-size: 0.95rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .action-item p {
   margin: 0.45rem 0 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>

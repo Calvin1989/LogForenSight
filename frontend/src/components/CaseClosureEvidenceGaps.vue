@@ -55,18 +55,18 @@ defineProps({
 .evidence-gaps-header h4 {
   margin: 0 0 0.35rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .evidence-gaps-header p {
   margin: 0;
-  color: #6c757d;
+  color: var(--muted-foreground);
   font-size: 0.9rem;
 }
 
 .no-gaps {
   margin: 0.9rem 0 0;
-  color: #2b8a3e;
+  color: var(--foreground);
   font-weight: 600;
 }
 
@@ -77,11 +77,11 @@ defineProps({
 }
 
 .gap-item {
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border);
   border-left-width: 4px;
   border-radius: 8px;
   padding: 0.85rem;
-  background: #fff;
+  background: var(--surface-elevated);
 }
 
 .gap-item.is-warning {
@@ -95,8 +95,8 @@ defineProps({
 }
 
 .gap-item.is-neutral {
-  border-left-color: #868e96;
-  background: #f8f9fa;
+  border-left-color: var(--border);
+  background: var(--surface-subtle);
 }
 
 .gap-item-header {
@@ -109,7 +109,7 @@ defineProps({
 .gap-item-header h5 {
   margin: 0;
   font-size: 0.95rem;
-  color: #212529;
+  color: var(--foreground);
 }
 
 .gap-status {
@@ -133,13 +133,13 @@ defineProps({
 }
 
 .gap-status.is-neutral {
-  background: #f1f3f5;
-  color: #495057;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
 }
 
 .gap-description {
   margin: 0.45rem 0 0;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
@@ -148,28 +148,5 @@ defineProps({
   }
 }
 
-
-/* Frontend-wide interaction polish */
-:where(button, [role="button"], input, select, textarea, a):focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-:where(button, [role="button"]) {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(input, select, textarea) {
-  min-width: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :where(*) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 </style>
