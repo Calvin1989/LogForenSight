@@ -174,10 +174,10 @@ const formatEventType = (type) => {
 .filter-select, .filter-input {
   padding: 0.4375rem 0.75rem;
   border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.875rem;
   outline: none;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .filter-select:focus, .filter-input:focus {
@@ -192,9 +192,9 @@ const formatEventType = (type) => {
   font-size: 0.875rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   text-decoration: underline;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .clear-btn:hover {
@@ -273,7 +273,7 @@ const formatEventType = (type) => {
 .severity-badge {
   font-size: 0.6875rem;
   padding: 0.1875rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-weight: 800;
   color: white;
   letter-spacing: 0.025em;
@@ -298,7 +298,7 @@ const formatEventType = (type) => {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   background: #f8fafc;
   padding: 0.1875rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .event-title {
@@ -318,7 +318,7 @@ const formatEventType = (type) => {
 .event-evidence {
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   padding: 0.875rem;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 0.875rem;
   border: 1px solid #e2e8f0;
 }
@@ -361,4 +361,29 @@ const formatEventType = (type) => {
   background: #f8fafc;
   border-radius: 8px;
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

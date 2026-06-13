@@ -67,19 +67,20 @@ defineEmits(['select'])
 <style scoped>
 .workspace-nav {
   position: sticky;
-  top: 1.5rem;
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  background: #f8f9fa;
+  top: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
   padding: 1rem;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
 }
 
 .nav-header {
-  margin-bottom: 0.9rem;
+  margin-bottom: 1rem;
 }
 
 .nav-header h2 {
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.35rem;
   font-size: 1rem;
   color: #212529;
 }
@@ -87,12 +88,13 @@ defineEmits(['select'])
 .nav-header p {
   margin: 0;
   font-size: 0.88rem;
+  line-height: 1.45;
   color: #6c757d;
 }
 
 .nav-list {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.6rem;
 }
 
 .nav-item {
@@ -101,21 +103,25 @@ defineEmits(['select'])
   align-items: flex-start;
   gap: 0.75rem;
   width: 100%;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
   background: white;
   color: #212529;
-  padding: 0.85rem 0.9rem;
+  padding: 0.9rem 0.95rem;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .nav-item:hover:not(:disabled) {
-  background: #eef7ff;
+  background: #f4f9ff;
   border-color: #b6d4fe;
-  transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(11, 94, 215, 0.08);
+}
+
+.nav-item:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.22);
+  outline-offset: 2px;
 }
 
 .nav-item.active {
@@ -128,12 +134,12 @@ defineEmits(['select'])
 .nav-item:disabled {
   cursor: not-allowed;
   opacity: 0.78;
-  background: #f1f3f5;
+  background: #f8f9fa;
 }
 
 .nav-item-copy {
   display: grid;
-  gap: 0.3rem;
+  gap: 0.35rem;
   min-width: 0;
   flex: 1;
 }
@@ -150,6 +156,7 @@ defineEmits(['select'])
 }
 
 .nav-indicator {
+  flex-shrink: 0;
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 999px;
@@ -172,7 +179,7 @@ defineEmits(['select'])
   background: #e7f5ff;
   border: 1px solid #a5d8ff;
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
+  padding: 0.22rem 0.6rem;
 }
 
 .nav-state.locked {
@@ -188,8 +195,8 @@ defineEmits(['select'])
 }
 
 .nav-footer {
-  margin: 0.9rem 0 0;
-  padding-top: 0.9rem;
+  margin: 1rem 0 0;
+  padding-top: 1rem;
   border-top: 1px solid #e9ecef;
   font-size: 0.8rem;
   line-height: 1.5;
@@ -203,8 +210,39 @@ defineEmits(['select'])
 }
 
 @media (max-width: 768px) {
+  .workspace-nav {
+    padding: 0.9rem;
+  }
+
   .nav-item {
-    padding: 0.8rem;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.85rem;
   }
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

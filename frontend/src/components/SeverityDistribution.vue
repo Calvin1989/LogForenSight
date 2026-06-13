@@ -147,13 +147,13 @@ h2 {
   flex-grow: 1;
   height: 8px;
   background-color: #f0f0f0;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .bar {
   height: 100%;
-  transition: width 0.3s ease;
+  transition: width 0.2s ease;
 }
 
 .bar.high { background-color: #e74c3c; }
@@ -167,4 +167,29 @@ h2 {
   font-weight: 600;
   color: #333;
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

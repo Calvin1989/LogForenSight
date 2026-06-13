@@ -83,12 +83,13 @@ const emitAnalyze = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.35rem;
   margin-bottom: 3rem;
   padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 2px dashed #dee2e6;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 2px dashed #d7e3f1;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
 }
 
 .file-input-group {
@@ -104,17 +105,22 @@ const emitAnalyze = () => {
 }
 
 .format-select {
-  padding: 0.4rem 0.75rem;
+  padding: 0.48rem 0.8rem;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: white;
   cursor: pointer;
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.format-select:focus {
+.format-select:hover {
+  border-color: #adb5bd;
+}
+
+.format-select:focus-visible {
   border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2);
 }
 
 #logFile {
@@ -126,38 +132,97 @@ const emitAnalyze = () => {
 
 .file-label {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  min-width: 12rem;
+  padding: 0.85rem 1.5rem;
   background: white;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .file-label:hover {
-  border-color: #adb5bd;
-  background: #f1f3f5;
+  border-color: #9ec5fe;
+  background: #f4f9ff;
+  box-shadow: 0 8px 20px rgba(13, 110, 253, 0.08);
+}
+
+#logFile:focus-visible + .file-label {
+  outline: 3px solid rgba(13, 110, 253, 0.22);
+  outline-offset: 3px;
 }
 
 .analyze-btn {
-  padding: 0.75rem 2.5rem;
+  padding: 0.78rem 2.5rem;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .analyze-btn:hover:not(:disabled) {
   background-color: #0056b3;
+  box-shadow: 0 10px 22px rgba(0, 86, 179, 0.18);
+}
+
+.analyze-btn:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.22);
+  outline-offset: 3px;
 }
 
 .analyze-btn:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.65;
 }
+
+@media (max-width: 640px) {
+  .upload-section {
+    align-items: stretch;
+    padding: 1.25rem;
+  }
+
+  .options-group {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .file-label,
+  .analyze-btn,
+  .format-select {
+    width: 100%;
+  }
+}
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

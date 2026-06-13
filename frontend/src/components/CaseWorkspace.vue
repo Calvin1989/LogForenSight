@@ -229,7 +229,7 @@ const handleImport = (event) => {
   background: #f1f3f5;
   color: #6c757d;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 8px;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -244,10 +244,10 @@ const handleImport = (event) => {
   border: 1px solid #ced4da;
   color: #495057;
   padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .action-btn:hover:not(:disabled) {
@@ -288,7 +288,7 @@ const handleImport = (event) => {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
 }
 
@@ -315,9 +315,9 @@ const handleImport = (event) => {
   display: flex;
   border: 1px solid #e9ecef;
   border-left: 4px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  transition: transform 0.1s, box-shadow 0.1s;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .case-item:hover {
@@ -347,7 +347,7 @@ const handleImport = (event) => {
 .case-mode-tag {
   font-size: 0.7rem;
   padding: 1px 6px;
-  border-radius: 3px;
+  border-radius: 8px;
   font-weight: 600;
 }
 
@@ -396,7 +396,7 @@ const handleImport = (event) => {
   background: #f1f3f5;
   color: #495057;
   padding: 1px 6px;
-  border-radius: 3px;
+  border-radius: 8px;
 }
 
 .case-actions {
@@ -413,7 +413,7 @@ const handleImport = (event) => {
   cursor: pointer;
   font-size: 1.1rem;
   opacity: 0.5;
-  transition: opacity 0.2s;
+  transition: opacity 0.15s ease;
 }
 
 .delete-btn:hover {
@@ -426,4 +426,102 @@ const handleImport = (event) => {
 .risk-medium { border-left-color: #fd7e14; }
 .risk-low { border-left-color: #ffc107; }
 .risk-info { border-left-color: #17a2b8; }
+
+
+/* v2.38 workflow polish: workspace controls and case rows */
+.workspace-container,
+.empty-state,
+.case-item,
+.filter-input,
+.filter-select {
+  border-radius: 8px;
+}
+
+.action-btn,
+.clear-btn,
+.delete-btn,
+.filter-input,
+.filter-select,
+.case-item {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.action-btn:hover:not(:disabled),
+.clear-btn:hover,
+.delete-btn:hover,
+.case-item:hover {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.filter-input:hover,
+.filter-select:hover {
+  border-color: #adb5bd;
+}
+
+.action-btn:focus-visible,
+.clear-btn:focus-visible,
+.delete-btn:focus-visible,
+.filter-input:focus-visible,
+.filter-select:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
+}
+
+.case-item:hover {
+  border-color: #d0d7de;
+}
+
+.case-item:focus-within {
+  border-color: #74c0fc;
+  box-shadow: 0 0 0 3px rgba(116, 192, 252, 0.2);
+}
+
+.case-mode-tag,
+.tag,
+.local-badge {
+  letter-spacing: 0.02em;
+}
+
+.timestamp {
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .workspace-controls,
+  .workspace-header,
+  .header-actions {
+    align-items: stretch;
+  }
+
+  .workspace-controls,
+  .header-actions {
+    flex-direction: column;
+  }
+}
+
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

@@ -228,7 +228,7 @@ const formatDate = (isoString) => {
   color: white;
   border: none;
   padding: 0.45rem 0.9rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -285,7 +285,7 @@ const formatDate = (isoString) => {
 .selector select {
   padding: 0.5rem 0.6rem;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.9rem;
   background: white;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -306,7 +306,7 @@ const formatDate = (isoString) => {
   color: white;
   border: none;
   padding: 0.55rem 1.25rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
@@ -416,7 +416,7 @@ const formatDate = (isoString) => {
   gap: 0.6rem;
   padding: 0.4rem 0.8rem;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.85rem;
 }
 
@@ -425,7 +425,7 @@ const formatDate = (isoString) => {
   font-size: 0.7rem;
   text-transform: uppercase;
   padding: 0.15rem 0.35rem;
-  border-radius: 3px;
+  border-radius: 8px;
 }
 
 .sev-tag.critical { background: #fff5f5; color: #e03131; }
@@ -515,4 +515,29 @@ const formatDate = (isoString) => {
   color: #adb5bd;
   font-style: italic;
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

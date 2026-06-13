@@ -164,7 +164,7 @@ const downloadMarkdown = () => {
   font-size: 0.8rem;
   background: #f8f9fa;
   border: 1px solid #dee2e6;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -220,7 +220,7 @@ const downloadMarkdown = () => {
   background: #f1f3f5;
   color: #495057;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: monospace;
   font-size: 0.85rem;
 }
@@ -251,4 +251,29 @@ const downloadMarkdown = () => {
     gap: 1rem;
   }
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

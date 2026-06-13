@@ -301,7 +301,7 @@ const handleExport = () => {
   background: #f1f3f5;
   color: #6c757d;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 8px;
   text-transform: uppercase;
 }
 
@@ -314,7 +314,7 @@ const handleExport = () => {
   background: white;
   border: 1px solid #ced4da;
   padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -348,7 +348,7 @@ const handleExport = () => {
   padding: 0.75rem 1rem;
   background: #f8f9fa;
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .triage-status-summary.empty {
@@ -370,7 +370,7 @@ const handleExport = () => {
 .summary-card {
   background: #f8f9fa;
   padding: 0.75rem;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -404,7 +404,7 @@ const handleExport = () => {
 .filter-select {
   padding: 0.4rem;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
 }
 
@@ -419,12 +419,12 @@ const handleExport = () => {
   padding: 2rem;
   color: #adb5bd;
   border: 1px dashed #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .triage-row {
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
 }
 
@@ -435,7 +435,7 @@ const handleExport = () => {
 .item-type-tag {
   font-size: 0.7rem;
   padding: 1px 6px;
-  border-radius: 3px;
+  border-radius: 8px;
   margin-right: 0.5rem;
   text-transform: uppercase;
   font-weight: 600;
@@ -484,7 +484,7 @@ const handleExport = () => {
   gap: 1rem;
   background: #f8f9fa;
   padding: 0.75rem;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .input-group {
@@ -502,7 +502,7 @@ const handleExport = () => {
 .input-group select, .input-group textarea {
   padding: 0.3rem;
   border: 1px solid #ced4da;
-  border-radius: 3px;
+  border-radius: 8px;
   font-size: 0.85rem;
 }
 
@@ -515,4 +515,103 @@ const handleExport = () => {
   min-height: 40px;
   resize: vertical;
 }
+
+
+/* v2.38 workflow polish: triage controls and row editing */
+.triage-container,
+.triage-status-summary,
+.summary-card,
+.empty-state,
+.triage-row,
+.row-actions,
+.filter-select,
+.input-group select,
+.input-group textarea {
+  border-radius: 8px;
+}
+
+.action-btn,
+.clear-btn,
+.filter-select,
+.input-group select,
+.input-group textarea,
+.triage-row,
+.summary-card {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.action-btn:hover:not(:disabled),
+.clear-btn:hover,
+.summary-card:hover,
+.triage-row:hover {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.filter-select:hover,
+.input-group select:hover,
+.input-group textarea:hover,
+.triage-row:hover {
+  border-color: #d0d7de;
+}
+
+.action-btn:focus-visible,
+.clear-btn:focus-visible,
+.filter-select:focus-visible,
+.input-group select:focus-visible,
+.input-group textarea:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
+}
+
+.triage-row:focus-within {
+  border-color: #74c0fc;
+  box-shadow: 0 0 0 3px rgba(116, 192, 252, 0.2);
+}
+
+.item-type-tag,
+.meta-chip,
+.local-badge {
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 720px) {
+  .triage-header,
+  .triage-controls,
+  .header-actions,
+  .row-actions {
+    align-items: stretch;
+  }
+
+  .triage-header,
+  .triage-controls,
+  .header-actions {
+    flex-direction: column;
+  }
+}
+
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

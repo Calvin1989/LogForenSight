@@ -196,7 +196,7 @@ function globalSummaryText(summary) {
 .explainability-row code {
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 3px;
+  border-radius: 8px;
   padding: 0.1rem 0.4rem;
   font-size: 0.8rem;
   color: #495057;
@@ -220,7 +220,7 @@ function globalSummaryText(summary) {
   padding: 0.2rem 0.5rem;
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 3px;
+  border-radius: 8px;
   font-size: 0.85rem;
   color: #495057;
 }
@@ -241,7 +241,7 @@ function globalSummaryText(summary) {
   background: #fff;
   border: 1px solid #e9ecef;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.8rem;
 }
 
@@ -258,7 +258,7 @@ function globalSummaryText(summary) {
 .evidence-snippet {
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0.5rem 0.75rem;
   margin: 0;
   font-size: 0.85rem;
@@ -298,7 +298,7 @@ function globalSummaryText(summary) {
   font-size: 0.85rem;
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0.3rem 0.5rem;
 }
 
@@ -327,4 +327,29 @@ function globalSummaryText(summary) {
   color: #6c757d;
   font-style: italic;
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

@@ -126,7 +126,7 @@ function checkStatusLabel(status) {
 .score-card {
   border: 1px solid #e9ecef;
   border-left-width: 4px;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
   background: #f8f9fa;
@@ -220,7 +220,7 @@ function checkStatusLabel(status) {
 
 .check-card {
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
 }
 
@@ -269,7 +269,7 @@ function checkStatusLabel(status) {
   padding: 2rem;
   color: #868e96;
   border: 1px dashed #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 @media (max-width: 768px) {
@@ -278,4 +278,29 @@ function checkStatusLabel(status) {
     flex-direction: column;
   }
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

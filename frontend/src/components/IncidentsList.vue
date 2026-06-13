@@ -287,7 +287,7 @@ const new_date_str = () => {
   flex-wrap: wrap;
   padding: 0.75rem;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .filter-group {
@@ -305,7 +305,7 @@ const new_date_str = () => {
 .filter-select, .filter-input {
   padding: 0.35rem 0.6rem;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
 }
@@ -339,11 +339,11 @@ const new_date_str = () => {
 
 .copy-btn, .export-btn {
   padding: 0.35rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .copy-btn {
@@ -378,7 +378,7 @@ const new_date_str = () => {
   background-color: #fff3cd;
   border: 1px solid #ffeeba;
   padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 1.5rem;
 }
 
@@ -388,7 +388,7 @@ const new_date_str = () => {
   color: #6c757d;
   font-style: italic;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .incidents-list {
@@ -402,7 +402,7 @@ const new_date_str = () => {
   border-radius: 8px;
   padding: 1.5rem;
   background: #fff;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .incident-item:hover {
@@ -454,7 +454,7 @@ const new_date_str = () => {
 .ip-badge {
   background: #f1f3f5;
   padding: 0.25rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.95rem;
   font-weight: 600;
@@ -487,7 +487,7 @@ const new_date_str = () => {
   margin-bottom: 1.25rem;
   background: #f8f9fa;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .recommendations {
@@ -512,7 +512,7 @@ const new_date_str = () => {
 .evidence-preview {
   background: #f8f9fa;
   padding: 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #e9ecef;
 }
 
@@ -560,4 +560,29 @@ const new_date_str = () => {
   color: #e83e8c;
   font-family: 'Courier New', Courier, monospace;
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

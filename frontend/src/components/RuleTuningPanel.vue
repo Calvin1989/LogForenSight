@@ -232,7 +232,7 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .notice small {
@@ -250,7 +250,7 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
   border: 1px solid var(--border-color);
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
 }
 
@@ -272,7 +272,7 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
   border: 1px solid var(--warning-color);
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
 }
 
@@ -308,7 +308,7 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
 .form-control {
   padding: 0.6rem;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: inherit;
   font-size: 0.9rem;
   background-color: var(--bg-input);
@@ -339,7 +339,7 @@ textarea.form-control {
   background-color: var(--bg-input);
   padding: 1rem;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .checkbox-label {
@@ -367,10 +367,10 @@ textarea.form-control {
 
 .btn {
   padding: 0.6rem 1.2rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
   border: none;
 }
 
@@ -397,4 +397,86 @@ textarea.form-control {
 .btn-secondary:not(:disabled):hover {
   background-color: var(--bg-secondary-hover);
 }
+
+
+/* v2.38 workflow polish: tuning form controls */
+.notice,
+.tuning-summary-box,
+.warnings-box,
+.checkbox-grid,
+.empty-state,
+.form-control,
+.btn {
+  border-radius: 8px;
+}
+
+.form-control,
+.checkbox-label,
+.btn,
+.notice,
+.tuning-summary-box,
+.warnings-box {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.form-control:hover {
+  border-color: var(--primary-color);
+}
+
+.form-control:focus-visible,
+.btn:focus-visible,
+.checkbox-label:focus-within {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.notice,
+.tuning-summary-box,
+.warnings-box,
+.checkbox-grid {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.checkbox-label {
+  border-radius: 8px;
+  padding: 0.25rem 0.35rem;
+}
+
+.checkbox-label:hover {
+  background-color: var(--bg-secondary);
+}
+
+.btn:not(:disabled):hover {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.summary-items {
+  row-gap: 0.5rem;
+}
+
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

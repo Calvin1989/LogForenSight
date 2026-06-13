@@ -111,7 +111,7 @@ const sourceFiles = computed(() => {
   font-size: 0.8rem;
   font-weight: 700;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .rate-good { background: #ebfbee; color: #2b8a3e; }
@@ -162,7 +162,7 @@ const sourceFiles = computed(() => {
   margin-top: 1rem;
   padding: 0.75rem;
   background-color: #fff9db;
-  border-radius: 4px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -191,7 +191,7 @@ const sourceFiles = computed(() => {
   margin-bottom: 0.75rem;
   padding: 0.75rem;
   background: #f8f9fa;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .sample-item:last-child {
@@ -216,7 +216,7 @@ const sourceFiles = computed(() => {
   font-family: monospace;
   background: #fff5f5;
   padding: 0.1rem 0.3rem;
-  border-radius: 3px;
+  border-radius: 8px;
 }
 
 .sample-content {
@@ -244,7 +244,7 @@ const sourceFiles = computed(() => {
   display: flex;
   flex-direction: column;
   border: 1px solid #e9ecef;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -273,4 +273,29 @@ const sourceFiles = computed(() => {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

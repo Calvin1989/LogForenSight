@@ -884,13 +884,13 @@ onBeforeUnmount(() => {
 
 .preview-btn {
   border: 1px solid #ced4da;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 0.5rem 0.85rem;
   background: #f8f9fa;
   color: #212529;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .preview-btn:hover {
@@ -1171,7 +1171,7 @@ onBeforeUnmount(() => {
 
 .section-navigator {
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #f8f9fa;
   padding: 0.85rem;
   position: sticky;
@@ -1218,7 +1218,7 @@ onBeforeUnmount(() => {
 .preview-markdown {
   padding: 1rem;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #f8f9fa;
   color: #212529;
   font-size: 0.9rem;
@@ -1278,7 +1278,7 @@ onBeforeUnmount(() => {
   padding: 2rem;
   color: #868e96;
   border: 1px dashed #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-top: 1rem;
 }
 
@@ -1320,4 +1320,111 @@ onBeforeUnmount(() => {
     width: 100%;
   }
 }
+
+
+/* v2.38 evidence pack polish: preview controls and dense metadata blocks */
+.preview-btn,
+.copy-btn,
+.export-manifest-card,
+.export-manifest-section,
+.export-manifest-compatibility,
+.export-manifest-audit-trail,
+.section-navigator,
+.navigator-link,
+.preview-content,
+.preview-markdown,
+.preview-block,
+.preview-section,
+.preview-section-copy-btn,
+.handoff-summary-bar,
+.handoff-summary-item {
+  border-radius: 8px;
+}
+
+.preview-btn,
+.navigator-link,
+.preview-section-copy-btn,
+.export-manifest-card,
+.handoff-summary-item,
+.preview-section {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.preview-btn:hover,
+.navigator-link:hover,
+.preview-section-copy-btn:hover,
+.handoff-summary-item:hover,
+.preview-section:hover {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.preview-btn:focus-visible,
+.navigator-link:focus-visible,
+.preview-section-copy-btn:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
+}
+
+.preview-block {
+  line-height: 1.55;
+}
+
+.export-manifest-row,
+.handoff-summary-item {
+  min-width: 0;
+}
+
+.export-manifest-meta-value,
+.export-manifest-row dd,
+.handoff-summary-detail {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .preview-header,
+  .preview-actions,
+  .export-manifest-header,
+  .handoff-summary-header {
+    align-items: stretch;
+  }
+
+  .preview-header,
+  .preview-actions,
+  .export-manifest-header,
+  .handoff-summary-header {
+    flex-direction: column;
+  }
+
+  .preview-btn,
+  .navigator-link,
+  .preview-section-copy-btn {
+    width: 100%;
+  }
+}
+
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

@@ -97,7 +97,7 @@ const formatParseRate = (parseRate) => {
   text-decoration: underline;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
@@ -175,7 +175,7 @@ const formatParseRate = (parseRate) => {
   font-size: 0.7rem;
   font-weight: 700;
   padding: 0.15rem 0.45rem;
-  border-radius: 4px;
+  border-radius: 8px;
   text-transform: uppercase;
 }
 
@@ -187,4 +187,29 @@ const formatParseRate = (parseRate) => {
 .stat-tag.cached { background: #e3fafc; color: #0b7285; }
 .stat-tag.tuned { background: #e7f5ff; color: #1971c2; border: 1px solid #a5d8ff; }
 .stat-tag.batch { background: #f3f0ff; color: #6741d9; border: 1px solid #d0bfff; }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

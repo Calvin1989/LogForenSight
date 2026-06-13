@@ -752,11 +752,11 @@ header h1 {
   background-color: #f8f9fa;
   color: #495057;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .clear-current-btn:hover, .save-case-btn:hover {
@@ -781,7 +781,7 @@ header h1 {
   background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 2rem;
 }
 
@@ -791,7 +791,7 @@ header h1 {
   background-color: #fff3cd;
   border: 1px solid #ffeeba;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 1rem;
 }
 
@@ -949,4 +949,29 @@ header h1 {
     font-size: 1.5rem;
   }
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

@@ -221,14 +221,14 @@ function formatTimestamp(value) {
   background: #f1f3f5;
   color: #6c757d;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 8px;
   text-transform: uppercase;
 }
 
 .editor-card {
   background: #f8f9fa;
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
@@ -258,7 +258,7 @@ function formatTimestamp(value) {
   width: 100%;
   padding: 0.55rem 0.7rem;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
   box-sizing: border-box;
 }
@@ -284,7 +284,7 @@ function formatTimestamp(value) {
   background: #1971c2;
   color: white;
   border: 1px solid #1971c2;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0.5rem 0.9rem;
   font-weight: 600;
 }
@@ -297,7 +297,7 @@ function formatTimestamp(value) {
   background: white;
   color: #495057;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0.5rem 0.9rem;
 }
 
@@ -318,7 +318,7 @@ function formatTimestamp(value) {
   padding: 2rem;
   color: #868e96;
   border: 1px dashed #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .notes-list {
@@ -329,7 +329,7 @@ function formatTimestamp(value) {
 
 .note-card {
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
 }
 
@@ -407,4 +407,87 @@ function formatTimestamp(value) {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* v2.38 workflow polish: notes editor and note actions */
+.editor-card,
+.note-card,
+.empty-state {
+  border-radius: 8px;
+}
+
+.editor-card {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.field input,
+.field select,
+.field textarea,
+.primary-btn,
+.secondary-btn,
+.link-btn {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: #adb5bd;
+}
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible,
+.primary-btn:focus-visible,
+.secondary-btn:focus-visible,
+.link-btn:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.link-btn:hover {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.note-card {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.note-card:hover {
+  border-color: #d0d7de;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+}
+
+.note-type-tag,
+.local-badge {
+  letter-spacing: 0.02em;
+}
+
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

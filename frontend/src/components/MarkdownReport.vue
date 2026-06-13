@@ -277,11 +277,11 @@ const downloadEvidencePackMarkdown = () => {
   padding: 0.5rem 1rem;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .toggle-btn {
@@ -289,11 +289,11 @@ const downloadEvidencePackMarkdown = () => {
   background-color: #f8f9fa;
   color: #495057;
   border: 1px solid #dee2e6;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .toggle-btn:hover {
@@ -363,7 +363,7 @@ const downloadEvidencePackMarkdown = () => {
   color: #212529;
   padding: 2rem;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow-x: auto;
   font-size: 1rem;
   line-height: 1.6;
@@ -418,7 +418,7 @@ blockquote {
 .md-code {
   background: #f1f3f5;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow-x: auto;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.85rem;
@@ -453,4 +453,95 @@ blockquote {
   padding: 2rem;
   font-style: italic;
 }
+
+
+/* v2.38 report polish: action clusters and preview readability */
+.download-btn,
+.toggle-btn,
+.warning-banner,
+.info-banner,
+.report-preview-container,
+.empty-preview,
+.md-code,
+.md-tr,
+.md-td {
+  border-radius: 8px;
+}
+
+.download-btn,
+.toggle-btn,
+.report-preview-container,
+.md-tr,
+.md-td {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.download-btn:hover:not(:disabled),
+.toggle-btn:hover,
+.report-preview-container:hover {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.download-btn:focus-visible,
+.toggle-btn:focus-visible {
+  outline: 2px solid #74c0fc;
+  outline-offset: 2px;
+}
+
+.action-group {
+  align-items: center;
+}
+
+.report-preview-container {
+  line-height: 1.55;
+}
+
+.md-li {
+  margin: 0.35rem 0;
+}
+
+.md-code {
+  border: 1px solid #e9ecef;
+}
+
+@media (max-width: 720px) {
+  .markdown-report-actions,
+  .action-group,
+  .download-btn,
+  .toggle-btn {
+    width: 100%;
+  }
+
+  .download-btn,
+  .toggle-btn {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>

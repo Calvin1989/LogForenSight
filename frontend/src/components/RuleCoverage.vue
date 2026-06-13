@@ -262,7 +262,7 @@ const exportMarkdown = () => {
   align-items: center;
   padding: 1rem;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #e9ecef;
 }
 
@@ -291,7 +291,7 @@ const exportMarkdown = () => {
   flex-wrap: wrap;
   padding: 0.75rem;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .filter-group {
@@ -309,7 +309,7 @@ const exportMarkdown = () => {
 .filter-select {
   padding: 0.35rem 0.6rem;
   border: 1px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
   background: white;
@@ -323,11 +323,11 @@ const exportMarkdown = () => {
 
 .copy-btn, .export-btn {
   padding: 0.35rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .copy-btn {
@@ -354,10 +354,10 @@ const exportMarkdown = () => {
 
 .rule-item {
   border: 1px solid #dee2e6;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
   background: #fff;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .rule-item.is-triggered {
@@ -389,12 +389,12 @@ const exportMarkdown = () => {
   font-family: monospace;
   background: #f1f3f5;
   padding: 0.1rem 0.4rem;
-  border-radius: 3px;
+  border-radius: 8px;
 }
 
 .severity-badge {
   padding: 0.2rem 0.4rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.7rem;
   font-weight: 700;
 }
@@ -446,7 +446,7 @@ const exportMarkdown = () => {
   gap: 2rem;
   background: #f8f9fa;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 1rem;
 }
 
@@ -489,7 +489,7 @@ const exportMarkdown = () => {
   font-size: 0.75rem;
   background: #e9ecef;
   padding: 0.1rem 0.4rem;
-  border-radius: 3px;
+  border-radius: 8px;
   font-family: monospace;
 }
 
@@ -498,7 +498,7 @@ const exportMarkdown = () => {
   background: #fff;
   border: 1px solid #dee2e6;
   padding: 0.1rem 0.4rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: monospace;
 }
 
@@ -523,7 +523,7 @@ const exportMarkdown = () => {
   padding-left: 1.25rem;
   background: #f8f9fa;
   padding: 0.75rem;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .evidence-list li {
@@ -558,4 +558,29 @@ const exportMarkdown = () => {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Frontend-wide interaction polish */
+:where(button, [role="button"], input, select, textarea, a):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+:where(button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(input, select, textarea) {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>
