@@ -1,54 +1,61 @@
 <template>
-  <div class="severity-distribution">
+  <div class="severity-distribution" data-testid="severity-distribution">
     <h2>{{ t('distribution.title') }}</h2>
     <div class="distribution-grid">
-      <!-- Findings Distribution -->
-      <div class="distribution-card">
-        <h3>{{ t('distribution.findingSeverity') }}</h3>
-        <div class="severity-bars">
-          <div v-for="(count, severity) in findingCounts" :key="severity" class="severity-item">
-            <div class="severity-label">
-              <span class="dot" :class="severity"></span>
-              {{ translateSeverity(severity) }}
+      <Card class="distribution-card" data-testid="finding-distribution">
+        <CardHeader>
+          <CardTitle>{{ t('distribution.findingSeverity') }}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div class="severity-bars">
+            <div v-for="(count, severity) in findingCounts" :key="severity" class="severity-item">
+              <div class="severity-label">
+                <span class="dot" :class="severity"></span>
+                {{ translateSeverity(severity) }}
+              </div>
+              <div class="bar-container">
+                <div
+                  class="bar"
+                  :class="severity"
+                  :style="{ width: getPercentage(count, totalFindings) + '%' }"
+                ></div>
+              </div>
+              <div class="count">{{ count }}</div>
             </div>
-            <div class="bar-container">
-              <div 
-                class="bar" 
-                :class="severity" 
-                :style="{ width: getPercentage(count, totalFindings) + '%' }"
-              ></div>
-            </div>
-            <div class="count">{{ count }}</div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <!-- Incidents Distribution -->
-      <div class="distribution-card">
-        <h3>{{ t('distribution.incidentSeverity') }}</h3>
-        <div class="severity-bars">
-          <div v-for="(count, severity) in incidentCounts" :key="severity" class="severity-item">
-            <div class="severity-label">
-              <span class="dot" :class="severity"></span>
-              {{ translateSeverity(severity) }}
+      <Card class="distribution-card" data-testid="incident-distribution">
+        <CardHeader>
+          <CardTitle>{{ t('distribution.incidentSeverity') }}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div class="severity-bars">
+            <div v-for="(count, severity) in incidentCounts" :key="severity" class="severity-item">
+              <div class="severity-label">
+                <span class="dot" :class="severity"></span>
+                {{ translateSeverity(severity) }}
+              </div>
+              <div class="bar-container">
+                <div
+                  class="bar"
+                  :class="severity"
+                  :style="{ width: getPercentage(count, totalIncidents) + '%' }"
+                ></div>
+              </div>
+              <div class="count">{{ count }}</div>
             </div>
-            <div class="bar-container">
-              <div 
-                class="bar" 
-                :class="severity" 
-                :style="{ width: getPercentage(count, totalIncidents) + '%' }"
-              ></div>
-            </div>
-            <div class="count">{{ count }}</div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t, translateSeverity } from '../i18n'
 
 const props = defineProps({
@@ -102,18 +109,7 @@ h2 {
 }
 
 .distribution-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  border: 1px solid #eee;
-}
-
-h3 {
-  font-size: 1rem;
-  margin-bottom: 1.25rem;
-  color: #666;
-  font-weight: 500;
+  margin-bottom: 0;
 }
 
 .severity-bars {
