@@ -199,7 +199,7 @@ const handleImport = (event) => {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.875rem;
   margin-bottom: 0;
 }
 
@@ -207,7 +207,7 @@ const handleImport = (event) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
@@ -289,6 +289,7 @@ const handleImport = (event) => {
   font-size: 0.75rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 .case-list {
@@ -317,7 +318,7 @@ const handleImport = (event) => {
 
 .case-main {
   flex: 1;
-  padding: 0.625rem 0.75rem;
+  padding: 0.5rem 0.625rem;
   cursor: pointer;
 }
 
@@ -367,7 +368,7 @@ const handleImport = (event) => {
 .case-stats {
   display: flex;
   gap: 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--text-secondary);
 }
 
@@ -429,6 +430,25 @@ const handleImport = (event) => {
   .workspace-controls,
   .header-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 390px) {
+  .workspace-controls {
+    flex-direction: column;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .case-title-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .case-actions {
+    padding: 0 0.5rem;
   }
 }
 </style>

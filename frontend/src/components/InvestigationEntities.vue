@@ -23,7 +23,7 @@
         {{ t('evidencePack.notAvailable') }}
       </div>
 
-      <div v-else class="entities-table">
+      <div v-else class="entities-table" data-testid="entities-table-panel">
         <div class="entity-row entity-header">
           <span>{{ t('entities.type') }}</span>
           <span>{{ t('entities.value') }}</span>
@@ -154,7 +154,7 @@ function formatSourceFiles(sourceFiles) {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  max-height: 22rem;
+  max-height: 20rem;
   overflow-y: auto;
 }
 
@@ -165,7 +165,7 @@ function formatSourceFiles(sourceFiles) {
   padding: 0.5rem 0.75rem;
   border-top: 1px solid var(--border);
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.71875rem;
 }
 
 .entity-row:first-child {
@@ -193,7 +193,7 @@ function formatSourceFiles(sourceFiles) {
 
 .empty-state {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.25rem;
   color: var(--muted-foreground);
   background: var(--surface-subtle);
   border-radius: var(--radius-sm);
@@ -211,6 +211,21 @@ function formatSourceFiles(sourceFiles) {
 
   .entity-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 390px) {
+  .entity-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .entity-header {
+    display: none;
+  }
+
+  .metric-tile {
+    min-width: auto;
   }
 }
 </style>

@@ -99,10 +99,6 @@ function checkStatusLabel(status) {
 </script>
 
 <style scoped>
-.quality-score-container {
-  margin-top: 0;
-}
-
 .quality-score-header {
   display: flex;
   justify-content: space-between;
@@ -128,7 +124,7 @@ function checkStatusLabel(status) {
   border-left: 3px solid var(--border);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   padding: 0.5rem 0.625rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.625rem;
   background: var(--surface-subtle);
   display: flex;
   align-items: center;
@@ -267,7 +263,7 @@ function checkStatusLabel(status) {
 .check-recommendation {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.6875rem;
+  font-size: 0.65625rem;
 }
 
 .check-points {
@@ -287,12 +283,25 @@ function checkStatusLabel(status) {
   font-size: 0.75rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 @media (max-width: 768px) {
   .quality-score-header,
   .check-header {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 390px) {
+  .score-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+
+  .score-status {
+    margin-left: 0;
   }
 }
 </style>

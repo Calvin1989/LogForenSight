@@ -39,7 +39,7 @@
   min-width: 0;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .workspace-shell {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -47,6 +47,12 @@
 
   .shell-nav-inner {
     position: static;
+  }
+}
+
+@media (max-width: 390px) {
+  .workspace-shell {
+    gap: 0.75rem;
   }
 }
 </style>

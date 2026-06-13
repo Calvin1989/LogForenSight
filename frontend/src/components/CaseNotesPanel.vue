@@ -192,7 +192,7 @@ function formatTimestamp(value) {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.875rem;
   margin-top: 0;
 }
 
@@ -201,7 +201,7 @@ function formatTimestamp(value) {
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.625rem;
 }
 
 .header-main {
@@ -287,11 +287,12 @@ function formatTimestamp(value) {
 
 .empty-state {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.25rem;
   color: var(--text-tertiary);
   font-size: 0.75rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 .notes-list {
@@ -367,7 +368,7 @@ function formatTimestamp(value) {
   margin: 0.5rem 0;
   white-space: pre-wrap;
   color: var(--text-secondary);
-  font-size: 0.75rem;
+  font-size: 0.71875rem;
   line-height: 1.5;
 }
 
@@ -388,6 +389,16 @@ function formatTimestamp(value) {
 
   .editor-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .note-actions {
+    flex-direction: column;
   }
 }
 </style>

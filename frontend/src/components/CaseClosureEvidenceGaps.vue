@@ -88,7 +88,7 @@ defineProps({
   border: none;
   border-left: 3px solid var(--border);
   border-radius: 0;
-  padding: 0.5rem 0.625rem;
+  padding: 0.4375rem 0.5rem;
   background: var(--surface-elevated);
 }
 
@@ -150,7 +150,7 @@ defineProps({
 .gap-description {
   margin: 0.125rem 0 0;
   color: var(--text-secondary);
-  font-size: 0.6875rem;
+  font-size: 0.65625rem;
   line-height: 1.4;
 }
 
@@ -158,6 +158,14 @@ defineProps({
   .gap-item-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 390px) {
+  .gap-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 }
 </style>

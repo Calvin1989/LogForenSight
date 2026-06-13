@@ -153,5 +153,17 @@ const sourceClass = computed(() => {
   color: oklch(0.4 0.1 300);
 }
 
+@media (max-width: 390px) {
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
 
+  .tag-container {
+    gap: 0.375rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+  }
+}
 </style>

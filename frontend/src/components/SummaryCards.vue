@@ -62,7 +62,7 @@ defineProps({
 }
 
 .stat-label {
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 600;
   color: var(--text-tertiary);
   text-transform: uppercase;
@@ -70,7 +70,7 @@ defineProps({
 }
 
 .stat-value {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--foreground);
   letter-spacing: -0.02em;
@@ -81,6 +81,20 @@ defineProps({
 @media (max-width: 640px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 390px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-item {
+    padding: 0.5rem 0.625rem;
+  }
+
+  .stat-value {
+    font-size: 1rem;
   }
 }
 </style>

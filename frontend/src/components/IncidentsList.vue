@@ -347,11 +347,12 @@ const new_date_str = () => {
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.25rem;
   color: var(--muted-foreground);
   font-style: italic;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface-subtle);
-  border-radius: 8px;
 }
 
 .incidents-list {
@@ -516,5 +517,19 @@ const new_date_str = () => {
   font-family: var(--font-mono);
 }
 
+@media (max-width: 390px) {
+  .filter-controls,
+  .incident-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
+  .action-group {
+    flex-direction: column;
+  }
+
+  .action-group button {
+    width: 100%;
+  }
+}
 </style>

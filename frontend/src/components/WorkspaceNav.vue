@@ -109,11 +109,14 @@ defineEmits(['select'])
 .nav-item.active {
   background: var(--accent);
   font-weight: 600;
+  border-left: 2px solid var(--primary);
+  padding-left: calc(0.625rem - 2px);
 }
 
 .nav-item.disabled {
   cursor: not-allowed;
-  opacity: 0.45;
+  opacity: 0.4;
+  color: var(--text-tertiary);
 }
 
 .nav-label {
@@ -141,9 +144,23 @@ defineEmits(['select'])
   border-color: var(--border);
 }
 
+.nav-item.active .nav-dot {
+  transform: scale(1.2);
+}
+
 @media (max-width: 960px) {
   .workspace-nav {
     position: static;
+  }
+}
+
+@media (max-width: 390px) {
+  .nav-item {
+    padding: 0.4375rem 0.5rem;
+  }
+
+  .nav-label {
+    font-size: 0.75rem;
   }
 }
 </style>

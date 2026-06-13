@@ -400,7 +400,7 @@ const exportMarkdown = () => {
 
 .info-block label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
@@ -508,12 +508,18 @@ const exportMarkdown = () => {
   padding: 2rem;
   color: var(--muted-foreground);
   font-style: italic;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 .empty-card {
   text-align: center;
   padding: 2rem;
   color: var(--muted-foreground);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 @media (max-width: 600px) {
@@ -525,5 +531,30 @@ const exportMarkdown = () => {
   }
 }
 
+@media (max-width: 390px) {
+  .coverage-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-group {
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  .rule-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rule-metrics {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
 
 </style>

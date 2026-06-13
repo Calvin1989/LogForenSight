@@ -479,7 +479,7 @@ watch([gapItems, handoffReadiness], ([gaps, readiness]) => {
   border: none;
   border-left: 3px solid var(--border);
   border-radius: 0;
-  padding: 0.625rem 0.75rem;
+  padding: 0.5rem 0.625rem;
   background: var(--surface-elevated);
 }
 
@@ -556,7 +556,7 @@ watch([gapItems, handoffReadiness], ([gaps, readiness]) => {
 .check-item-description {
   margin: 0.25rem 0 0;
   color: var(--text-secondary);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
 }
 
 @media (max-width: 768px) {
@@ -566,5 +566,15 @@ watch([gapItems, handoffReadiness], ([gaps, readiness]) => {
   }
 }
 
+@media (max-width: 390px) {
+  .checklist-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
+  .check-item-header {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
 </style>

@@ -183,6 +183,7 @@ function checkSummary(check) {
   gap: 0.75rem;
 }
 
+
 .review-readiness-header h3 {
   margin: 0 0 0.125rem;
   font-size: 0.875rem;
@@ -319,7 +320,7 @@ function checkSummary(check) {
 
 .check-summary {
   margin: 0.125rem 0 0;
-  font-size: 0.6875rem;
+  font-size: 0.65625rem;
   color: var(--text-secondary);
   line-height: 1.4;
 }
@@ -331,6 +332,7 @@ function checkSummary(check) {
   font-size: 0.75rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 @media (max-width: 768px) {
@@ -349,6 +351,18 @@ function checkSummary(check) {
 
   .review-cockpit-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .overall-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+
+  .overall-desc {
+    margin-left: 0;
   }
 }
 </style>

@@ -114,7 +114,7 @@ const getPercentage = (count, total) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.125rem 0;
+  padding: 0.1875rem 0;
 }
 
 .dot {
@@ -153,12 +153,23 @@ const getPercentage = (count, total) => {
 .bar.low { background-color: oklch(0.55 0.15 250); }
 
 .count {
-  width: 2rem;
+  width: 2.25rem;
   text-align: right;
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--foreground);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
+}
+
+@media (max-width: 390px) {
+  .severity-label {
+    width: 44px;
+    font-size: 0.625rem;
+  }
+
+  .count {
+    font-size: 0.6875rem;
+  }
 }
 </style>

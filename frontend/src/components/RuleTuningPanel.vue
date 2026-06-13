@@ -327,6 +327,11 @@ const isBatchAnalysis = computed(() => currentAnalysisResult.value?.analysis_mod
   border-color: var(--ring);
 }
 
+.form-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 textarea.form-control {
   resize: vertical;
   min-height: 80px;
@@ -366,8 +371,29 @@ textarea.form-control {
 
 .empty-state {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.25rem;
   color: var(--text-tertiary);
   font-size: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+}
+
+@media (max-width: 390px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

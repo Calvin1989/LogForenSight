@@ -115,10 +115,6 @@ function decisionLabel(decision) {
 </script>
 
 <style scoped>
-.guardrails-container {
-  margin-top: 0;
-}
-
 .guardrails-header {
   display: flex;
   justify-content: space-between;
@@ -258,7 +254,7 @@ function decisionLabel(decision) {
 
 .export-note {
   margin-top: 0.75rem;
-  font-size: 0.6875rem;
+  font-size: 0.65625rem;
   color: var(--text-tertiary);
 }
 
@@ -269,6 +265,7 @@ function decisionLabel(decision) {
   font-size: 0.75rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 @media (max-width: 768px) {
@@ -279,6 +276,16 @@ function decisionLabel(decision) {
 
   .list-grid {
     grid-template-columns: 1fr;
+  }
+
+  .decision-value {
+    text-align: left;
+  }
+}
+
+@media (max-width: 390px) {
+  .decision-card {
+    padding: 0.4375rem 0.5rem;
   }
 
   .decision-value {

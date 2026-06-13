@@ -2,12 +2,12 @@
   <Card v-if="summary" class="executive-summary" data-testid="executive-summary">
     <CardContent>
       <div class="dashboard-hero">
-        <div class="dashboard-hero-score risk-badge" :class="summary.overall_risk_level.toLowerCase()">
+        <div class="dashboard-hero-score risk-badge" :class="summary.overall_risk_level.toLowerCase()" data-testid="executive-score">
           <span class="risk-level">{{ translateRiskLevel(summary.overall_risk_level).toUpperCase() }}</span>
           <span class="risk-score">{{ summary.risk_score }}<span class="risk-denom">/100</span></span>
         </div>
 
-        <div class="dashboard-hero-main">
+        <div class="dashboard-hero-main" data-testid="executive-main">
           <h2 class="headline">{{ summary.headline }}</h2>
           <p class="overview">{{ summary.overview }}</p>
           <div class="mini-metrics">
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div class="dashboard-hero-actions">
+        <div class="dashboard-hero-actions" data-testid="executive-actions">
           <Button variant="outline" size="sm" class="compact-download-btn" @click="downloadMarkdown" data-testid="download-btn" :title="t('executive.downloadMdTitle', 'Download Executive Summary as Markdown')">
             {{ t('actions.downloadMd') }}
           </Button>
@@ -126,7 +126,7 @@ const downloadMarkdown = () => {
   border-left: 3px solid var(--border);
 }
 
-.executive-summary :deep(.chard-content) {
+.executive-summary :deep(> *) {
   padding: 1.25rem;
 }
 
@@ -211,8 +211,8 @@ const downloadMarkdown = () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 0.75rem;
+  margin-top: 0.875rem;
+  padding-top: 0.625rem;
   border-top: 1px solid var(--border);
 }
 
@@ -268,7 +268,7 @@ const downloadMarkdown = () => {
   color: var(--text-tertiary);
   border-top: 1px solid var(--border);
   padding-top: 0.5rem;
-  margin-top: 0.75rem;
+  margin-top: 0.625rem;
 }
 
 @media (max-width: 600px) {
@@ -291,6 +291,17 @@ const downloadMarkdown = () => {
 
   .summary-details {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .mini-metrics {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .detail-section ul {
+    padding-left: 0.75rem;
   }
 }
 </style>

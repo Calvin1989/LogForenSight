@@ -1,5 +1,5 @@
 <template>
-  <Card class="share-safety-container">
+  <Card class="share-safety-container" data-testid="evidence-pack-share-safety">
     <CardHeader>
       <div class="share-safety-header">
         <div>
@@ -33,7 +33,7 @@
         <div class="list-grid">
           <article class="list-card">
             <h4>{{ t('evidencePackShareSafety.findingsTitle') }}</h4>
-            <ul v-if="safety.findings.length > 0" class="findings-scroll">
+            <ul v-if="safety.findings.length > 0" class="findings-scroll" data-testid="share-safety-findings-scroll">
               <li v-for="finding in safety.findings" :key="finding.id">
                 {{ t(finding.labelKey, { count: finding.count, samples: formatSamples(finding.samples) }) }}
               </li>
@@ -114,10 +114,6 @@ function formatSamples(samples) {
 </script>
 
 <style scoped>
-.share-safety-container {
-  margin-top: 0;
-}
-
 .share-safety-header {
   display: flex;
   justify-content: space-between;
@@ -244,7 +240,7 @@ function formatSamples(samples) {
 }
 
 .findings-scroll {
-  max-height: 9rem;
+  max-height: 8rem;
   overflow-y: auto;
 }
 
@@ -265,7 +261,7 @@ function formatSamples(samples) {
 
 .export-note {
   margin-top: 0.75rem;
-  font-size: 0.6875rem;
+  font-size: 0.65625rem;
   color: var(--text-tertiary);
 }
 
@@ -276,6 +272,7 @@ function formatSamples(samples) {
   font-size: 0.75rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 @media (max-width: 768px) {
@@ -286,6 +283,16 @@ function formatSamples(samples) {
 
   .list-grid {
     grid-template-columns: 1fr;
+  }
+
+  .status-value {
+    text-align: left;
+  }
+}
+
+@media (max-width: 390px) {
+  .status-card {
+    padding: 0.4375rem 0.5rem;
   }
 
   .status-value {
