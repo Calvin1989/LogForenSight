@@ -100,10 +100,6 @@ const sourceFiles = computed(() => {
 </script>
 
 <style scoped>
-.stats-card {
-  margin-bottom: 1.5rem;
-}
-
 .card-header {
   flex-direction: row;
   justify-content: space-between;
