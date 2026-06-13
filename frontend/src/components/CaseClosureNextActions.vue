@@ -1,37 +1,37 @@
 <template>
-  <section
-    class="next-actions"
-    data-testid="case-closure-next-actions"
-  >
-    <div class="next-actions-header">
-      <h4>{{ t('caseClosureChecklist.nextActionsTitle') }}</h4>
-      <p>{{ t('caseClosureChecklist.nextActionsSubtitle') }}</p>
-    </div>
+  <Card class="next-actions" data-testid="case-closure-next-actions">
+    <CardContent>
+      <div class="next-actions-header">
+        <h4>{{ t('caseClosureChecklist.nextActionsTitle') }}</h4>
+        <p>{{ t('caseClosureChecklist.nextActionsSubtitle') }}</p>
+      </div>
 
-    <p
-      v-if="nextActions.length === 0"
-      class="no-actions"
-      data-testid="case-closure-no-next-actions"
-    >
-      {{ t('caseClosureChecklist.nextActionsEmpty') }}
-    </p>
-
-    <div v-else class="action-list">
-      <article
-        v-for="action in nextActions"
-        :key="action.id"
-        class="action-item"
-        :data-testid="`case-closure-next-action-${action.id}`"
+      <p
+        v-if="nextActions.length === 0"
+        class="no-actions"
+        data-testid="case-closure-no-next-actions"
       >
-        <h5>{{ action.label }}</h5>
-        <p>{{ action.description }}</p>
-      </article>
-    </div>
-  </section>
+        {{ t('caseClosureChecklist.nextActionsEmpty') }}
+      </p>
+
+      <div v-else class="action-list">
+        <article
+          v-for="action in nextActions"
+          :key="action.id"
+          class="action-item"
+          :data-testid="`case-closure-next-action-${action.id}`"
+        >
+          <h5>{{ action.label }}</h5>
+          <p>{{ action.description }}</p>
+        </article>
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import { buildCaseClosureNextActions } from '../utils/caseClosureNextActions'
 
@@ -67,10 +67,6 @@ const nextActions = computed(() => {
 <style scoped>
 .next-actions {
   margin-top: 1rem;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 1rem;
-  background: #fcfcfd;
 }
 
 .next-actions-header h4 {

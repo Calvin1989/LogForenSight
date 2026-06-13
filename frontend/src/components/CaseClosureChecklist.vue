@@ -1,47 +1,48 @@
 <template>
-  <section
-    class="case-closure-checklist"
-    data-testid="case-closure-checklist"
-  >
-    <div class="checklist-header">
-      <div>
-        <h3>{{ t('caseClosureChecklist.title') }}</h3>
-        <p class="subtitle">{{ t('caseClosureChecklist.subtitle') }}</p>
-      </div>
-      <span class="summary-badge" :class="handoffReadiness.tone">
-        {{ handoffReadiness.value }}
-      </span>
-    </div>
-
-    <div class="checklist-grid">
-      <article
-        v-for="item in checklistItems"
-        :key="item.id"
-        class="check-item"
-        :class="`is-${item.tone}`"
-        :data-testid="`case-closure-item-${item.id}`"
-      >
-        <div class="check-item-header">
-          <h4>{{ item.label }}</h4>
-          <span class="status-pill" :class="`is-${item.tone}`">
-            {{ item.value }}
-          </span>
+  <Card class="case-closure-checklist" data-testid="case-closure-checklist">
+    <CardHeader>
+      <div class="checklist-header">
+        <div>
+          <CardTitle>{{ t('caseClosureChecklist.title') }}</CardTitle>
+          <p class="subtitle">{{ t('caseClosureChecklist.subtitle') }}</p>
         </div>
-        <p class="check-item-description">{{ item.description }}</p>
-      </article>
-    </div>
+        <span class="summary-badge" :class="handoffReadiness.tone">
+          {{ handoffReadiness.value }}
+        </span>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div class="checklist-grid">
+        <article
+          v-for="item in checklistItems"
+          :key="item.id"
+          class="check-item"
+          :class="`is-${item.tone}`"
+          :data-testid="`case-closure-item-${item.id}`"
+        >
+          <div class="check-item-header">
+            <h4>{{ item.label }}</h4>
+            <span class="status-pill" :class="`is-${item.tone}`">
+              {{ item.value }}
+            </span>
+          </div>
+          <p class="check-item-description">{{ item.description }}</p>
+        </article>
+      </div>
 
-    <CaseClosureEvidenceGaps :gap-items="gapItems" />
+      <CaseClosureEvidenceGaps :gap-items="gapItems" />
 
-    <CaseClosureNextActions
-      :gap-items="gapItems"
-      :handoff-readiness="handoffReadiness"
-    />
-  </section>
+      <CaseClosureNextActions
+        :gap-items="gapItems"
+        :handoff-readiness="handoffReadiness"
+      />
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 import CaseClosureEvidenceGaps from './CaseClosureEvidenceGaps.vue'
 import CaseClosureNextActions from './CaseClosureNextActions.vue'
@@ -444,12 +445,7 @@ const gapItems = computed(() => {
 
 <style scoped>
 .case-closure-checklist {
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 1.5rem;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .checklist-header {
