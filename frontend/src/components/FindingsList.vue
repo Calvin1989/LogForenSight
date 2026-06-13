@@ -375,7 +375,7 @@ const new_date_str = () => {
 .filter-controls {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
   flex-wrap: wrap;
   padding: 0.5rem 0.625rem;
@@ -442,11 +442,12 @@ const new_date_str = () => {
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.25rem;
   color: var(--muted-foreground);
   font-style: italic;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface-subtle);
-  border-radius: 8px;
 }
 
 .findings-list {
@@ -468,7 +469,7 @@ const new_date_str = () => {
 
 .finding-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.625rem;
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
@@ -665,5 +666,27 @@ const new_date_str = () => {
   font-family: var(--font-mono);
 }
 
+@media (max-width: 390px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-select,
+  .filter-input {
+    width: 100%;
+  }
+
+  .action-group {
+    flex-direction: column;
+  }
+
+  .action-group .export-btn {
+    width: 100%;
+  }
+}
 </style>

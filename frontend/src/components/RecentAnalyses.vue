@@ -72,7 +72,7 @@ const formatParseRate = (parseRate) => {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 0.875rem;
 }
 
 .history-header {
@@ -84,7 +84,7 @@ const formatParseRate = (parseRate) => {
 
 .history-header h3 {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -109,7 +109,7 @@ const formatParseRate = (parseRate) => {
 }
 
 .history-item {
-  padding: 0.5rem 0.625rem;
+  padding: 0.4375rem 0.625rem;
   background: var(--surface-elevated);
   cursor: pointer;
   transition: background-color 0.1s ease;
@@ -128,7 +128,7 @@ const formatParseRate = (parseRate) => {
 
 .file-name {
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--foreground);
   min-width: 0;
   overflow: hidden;
@@ -151,9 +151,9 @@ const formatParseRate = (parseRate) => {
 }
 
 .stat-tag {
-  font-size: 0.5625rem;
+  font-size: 0.5rem;
   font-weight: 600;
-  padding: 0.0625rem 0.3125rem;
+  padding: 0.0625rem 0.25rem;
   border-radius: var(--radius-sm);
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -168,4 +168,15 @@ const formatParseRate = (parseRate) => {
 .stat-tag.cached { background: oklch(0.95 0.04 200); color: oklch(0.4 0.08 200); }
 .stat-tag.tuned { background: var(--accent); color: var(--foreground); border: 1px solid var(--border); }
 .stat-tag.batch { background: var(--muted); color: var(--text-secondary); border: 1px solid var(--border); }
+
+@media (max-width: 390px) {
+  .item-main {
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .timestamp {
+    margin-left: 0;
+  }
+}
 </style>

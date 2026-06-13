@@ -172,7 +172,7 @@ const sourceFiles = computed(() => {
   margin-top: 1rem;
   padding: 0.75rem;
   background-color: var(--surface-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -201,7 +201,7 @@ const sourceFiles = computed(() => {
   margin-bottom: 0.75rem;
   padding: 0.75rem;
   background: var(--surface-subtle);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .sample-item:last-child {
@@ -226,7 +226,7 @@ const sourceFiles = computed(() => {
   font-family: monospace;
   background: var(--surface-subtle);
   padding: 0.1rem 0.3rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .sample-content {
@@ -254,7 +254,7 @@ const sourceFiles = computed(() => {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
@@ -281,6 +281,21 @@ const sourceFiles = computed(() => {
 @media (max-width: 768px) {
   .source-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 390px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .source-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .source-header {
+    display: none;
   }
 }
 

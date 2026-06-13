@@ -54,7 +54,7 @@
       {{ t('report.infoBanner') }}
     </div>
 
-    <div v-if="showPreview" class="report-preview-container">
+    <div v-if="showPreview" class="report-preview-container" data-testid="report-preview-container">
       <template v-for="(block, idx) in parsedBlocks" :key="idx">
         <h2 v-if="block.type === 'h1' || block.type === 'h2'">{{ block.content }}</h2>
         <h3 v-else-if="block.type === 'h3'">{{ block.content }}</h3>
@@ -236,7 +236,7 @@ const downloadEvidencePackMarkdown = () => {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.875rem;
   margin-bottom: 0;
 }
 
@@ -335,20 +335,20 @@ const downloadEvidencePackMarkdown = () => {
 }
 
 .info-banner {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   background-color: var(--surface-subtle);
-  padding: 0.625rem 0.875rem;
+  padding: 0.5rem 0.75rem;
   border-left: 3px solid oklch(0.55 0.12 200);
   margin-bottom: 1rem;
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .warning-banner {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: oklch(0.55 0.12 85);
   background-color: oklch(0.97 0.04 85);
-  padding: 0.625rem 0.875rem;
+  padding: 0.5rem 0.75rem;
   border-left: 3px solid oklch(0.7 0.15 85);
   margin-bottom: 0.75rem;
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
@@ -357,13 +357,13 @@ const downloadEvidencePackMarkdown = () => {
 .report-preview-container {
   background: var(--surface-elevated);
   color: var(--foreground);
-  padding: 1.25rem;
+  padding: 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.65;
-  max-height: 32rem;
+  max-height: 28rem;
   overflow-y: auto;
 }
 
@@ -430,10 +430,10 @@ blockquote {
   border-radius: var(--radius-sm);
   overflow-x: auto;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   margin: 0.625rem 0;
   border: 1px solid var(--border);
-  max-height: 12rem;
+  max-height: 10rem;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-all;
@@ -464,10 +464,32 @@ blockquote {
 .empty-preview {
   text-align: center;
   color: var(--text-tertiary);
-  padding: 1.5rem;
+  padding: 1.25rem;
   font-style: italic;
   font-size: 0.75rem;
 }
 
+@media (max-width: 390px) {
+  .header-with-action {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
+  .markdown-report-actions {
+    width: 100%;
+  }
+
+  .action-group {
+    width: 100%;
+  }
+
+  .action-group button {
+    width: 100%;
+  }
+
+  .report-preview-container {
+    padding: 0.75rem;
+    max-height: 20rem;
+  }
+}
 </style>

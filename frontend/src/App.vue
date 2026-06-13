@@ -103,7 +103,7 @@
                   <ExecutiveSummary :summary="displayResult.executive_summary" />
                 </div>
 
-                <div class="overview-stats-row">
+                <div class="overview-stats-row" data-testid="overview-stats-row">
                   <SummaryCards :summary="displayResult.summary" />
                   <SeverityDistribution
                     :findingSeverityCounts="displayResult.summary.finding_severity_counts"
@@ -111,12 +111,12 @@
                   />
                 </div>
 
-                <div class="overview-secondary">
+                <div class="overview-secondary" data-testid="overview-secondary">
                   <ParseStatsCard :stats="displayResult.parse_stats" />
                   <InvestigationEntities :analysisResult="result" />
                 </div>
 
-                <div class="side-by-side">
+                <div class="side-by-side" data-testid="overview-side-by-side">
                   <TopList
                     :title="t('app.topIps')"
                     :items="displayResult.summary.top_ips"
@@ -249,7 +249,7 @@
                     <h3 class="group-title">{{ t('triageReview.readinessTitle') }}</h3>
                     <span class="group-description">{{ t('triageReview.readinessDescription') }}</span>
                   </div>
-                  <div class="readiness-grid">
+                  <div class="readiness-grid" data-testid="readiness-grid">
                     <ReviewReadinessPanel
                       :key="reviewReadinessKey"
                       :result="result"
@@ -771,8 +771,12 @@ const onSelectCase = (caseItem) => {
   border: 1px dashed var(--border);
   border-radius: var(--radius-md);
   background: var(--surface-subtle);
-  padding: 2rem 1.25rem;
+  padding: 2.5rem 1.5rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .empty-view-state h3 {
@@ -806,9 +810,12 @@ const onSelectCase = (caseItem) => {
 }
 
 .workspace-primary {
+  position: relative;
+  overflow: hidden;
   padding: 1rem;
   background: var(--surface-subtle);
   border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
   border-radius: var(--radius-md);
 }
 
@@ -942,6 +949,31 @@ const onSelectCase = (caseItem) => {
 .readiness-grid > * {
   min-width: 0;
   margin-top: 0 !important;
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .overview-stats-row,
+  .overview-secondary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .app-shell {
+    padding: 0.5rem;
+  }
+
+  .view-header h2 {
+    font-size: 0.875rem;
+  }
+
+  .group-title {
+    font-size: 0.75rem;
+  }
+
+  .workspace-primary {
+    padding: 0.75rem;
+  }
 }
 
 @media (max-width: 768px) {

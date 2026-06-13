@@ -250,6 +250,7 @@ const formatEventType = (type) => {
   font-weight: 700;
   color: var(--text-secondary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .severity-badge {
@@ -337,11 +338,16 @@ const formatEventType = (type) => {
 
 .empty-state {
   text-align: center;
-  padding: 3rem;
+  padding: 1.25rem;
   color: var(--muted-foreground);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface-subtle);
-  border-radius: 8px;
 }
 
-
+@media (max-width: 390px) {
+  .timeline-event {
+    padding: 0.5rem;
+  }
+}
 </style>

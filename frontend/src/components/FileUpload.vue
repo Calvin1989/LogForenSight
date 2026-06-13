@@ -84,8 +84,8 @@ const emitAnalyze = () => {
 <style scoped>
 .upload-section {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: stretch;
+  gap: 0.875rem;
 }
 
 .upload-row {
@@ -165,10 +165,18 @@ const emitAnalyze = () => {
   flex-shrink: 0;
 }
 
+.upload-hint {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
 @media (max-width: 640px) {
   .upload-section {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.625rem;
   }
 
   .upload-row {

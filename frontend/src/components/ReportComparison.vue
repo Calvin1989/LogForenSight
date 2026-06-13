@@ -229,8 +229,9 @@ const formatDate = (isoString) => {
   color: var(--text-tertiary);
   text-align: center;
   padding: 1.25rem;
-  background: var(--surface-subtle);
+  border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 .selection-ui {
@@ -464,4 +465,21 @@ const formatDate = (isoString) => {
   font-style: italic;
 }
 
+@media (max-width: 390px) {
+  .selector-group {
+    flex-direction: column;
+  }
+
+  .selector {
+    min-width: 100%;
+  }
+
+  .delta-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .changes-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

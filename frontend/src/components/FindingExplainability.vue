@@ -273,9 +273,22 @@ function globalSummaryText(summary) {
   margin: 0.4rem 0 0 0;
   font-size: 0.75rem;
   color: #856404;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  padding: 0.5rem;
 }
 
-.no-entities,
+.no-entities {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  padding: 0.5rem;
+}
+
 .global-summary {
   margin: 0;
   font-size: 0.85rem;
@@ -327,7 +340,25 @@ function globalSummaryText(summary) {
   font-size: 0.85rem;
   color: var(--muted-foreground);
   font-style: italic;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  padding: 1rem;
 }
 
+@media (max-width: 390px) {
+  .explainability-row {
+    grid-template-columns: 1fr;
+  }
+
+  .related-entity-item {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .indicator-list {
+    flex-direction: column;
+  }
+}
 
 </style>

@@ -855,7 +855,7 @@ onBeforeUnmount(() => {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.875rem;
   margin-top: 0;
 }
 
@@ -915,7 +915,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--muted);
-  padding: 0.9rem 1rem 1rem;
+  padding: 0.75rem 0.875rem;
 }
 
 .handoff-summary-header {
@@ -980,13 +980,13 @@ onBeforeUnmount(() => {
 
 .handoff-summary-value {
   color: var(--foreground);
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   font-weight: 700;
 }
 
 .handoff-summary-detail {
   color: var(--text-secondary);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   margin-top: 0.25rem;
   line-height: 1.45;
 }
@@ -996,7 +996,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--card);
-  padding: 1rem;
+  padding: 0.875rem;
 }
 
 .export-manifest-header {
@@ -1016,7 +1016,7 @@ onBeforeUnmount(() => {
 .export-manifest-header p {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
 }
 
 .export-manifest-generated {
@@ -1079,7 +1079,7 @@ onBeforeUnmount(() => {
 .export-manifest-compatibility-note {
   margin: 0.35rem 0 0;
   color: var(--text-secondary);
-  font-size: 0.92rem;
+  font-size: 0.8125rem;
 }
 
 .export-manifest-audit-trail {
@@ -1128,7 +1128,7 @@ onBeforeUnmount(() => {
 .export-manifest-section h5 {
   margin: 0 0 0.7rem;
   color: var(--foreground);
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
 }
 
 .export-manifest-list {
@@ -1172,7 +1172,7 @@ onBeforeUnmount(() => {
 .navigator-title {
   margin-bottom: 0.65rem;
   color: var(--foreground);
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -1191,7 +1191,7 @@ onBeforeUnmount(() => {
 .preview-label {
   margin-bottom: 0.5rem;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   font-weight: 700;
 }
 
@@ -1205,7 +1205,7 @@ onBeforeUnmount(() => {
   line-height: 1.55;
   white-space: pre-wrap;
   word-break: break-word;
-  max-height: 20rem;
+  max-height: 18rem;
   overflow: auto;
   font-family: var(--font-mono);
 }
@@ -1254,6 +1254,7 @@ onBeforeUnmount(() => {
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
   margin-top: 1rem;
+  background: var(--surface-subtle);
 }
 
 @media (max-width: 768px) {
@@ -1319,6 +1320,20 @@ onBeforeUnmount(() => {
   .navigator-link,
   .preview-section-copy-btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 390px) {
+  .preview-container {
+    padding: 0.625rem;
+  }
+
+  .handoff-summary-bar {
+    padding: 0.5rem;
+  }
+
+  .export-manifest-card {
+    padding: 0.625rem;
   }
 }
 

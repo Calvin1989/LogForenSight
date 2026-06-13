@@ -273,7 +273,7 @@ const handleExport = () => {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.875rem;
   margin-top: 0;
 }
 
@@ -281,7 +281,7 @@ const handleExport = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .header-main {
@@ -321,7 +321,7 @@ const handleExport = () => {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .triage-status-summary {
@@ -379,7 +379,7 @@ const handleExport = () => {
 }
 
 .summary-card .value {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -414,9 +414,12 @@ const handleExport = () => {
 
 .empty-state {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.25rem;
   color: var(--text-tertiary);
   font-size: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
 }
 
 .triage-row {
@@ -529,6 +532,24 @@ const handleExport = () => {
   .triage-controls,
   .header-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 390px) {
+  .triage-controls {
+    flex-direction: column;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .row-actions {
+    flex-direction: column;
+  }
+
+  .input-group.full-width {
+    min-width: auto;
   }
 }
 </style>

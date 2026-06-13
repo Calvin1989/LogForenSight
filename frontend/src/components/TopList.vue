@@ -55,7 +55,7 @@ table {
 
 th, td {
   text-align: left;
-  padding: 0.5rem 0.75rem;
+  padding: 0.4375rem 0.625rem;
   border-bottom: 1px solid var(--border);
   font-size: 0.8125rem;
 }
@@ -69,9 +69,20 @@ th {
 }
 
 .item-cell {
-  max-width: 220px;
+  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (max-width: 390px) {
+  .item-cell {
+    max-width: 120px;
+  }
+
+  th, td {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
 }
 </style>
