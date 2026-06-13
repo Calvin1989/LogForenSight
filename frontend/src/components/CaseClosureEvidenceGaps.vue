@@ -1,42 +1,42 @@
 <template>
-  <section
-    class="evidence-gaps"
-    data-testid="case-closure-evidence-gaps"
-  >
-    <div class="evidence-gaps-header">
-      <h4>{{ t('caseClosureChecklist.evidenceGapsTitle') }}</h4>
-      <p>{{ t('caseClosureChecklist.evidenceGapsSubtitle') }}</p>
-    </div>
+  <Card class="evidence-gaps" data-testid="case-closure-evidence-gaps">
+    <CardContent>
+      <div class="evidence-gaps-header">
+        <h4>{{ t('caseClosureChecklist.evidenceGapsTitle') }}</h4>
+        <p>{{ t('caseClosureChecklist.evidenceGapsSubtitle') }}</p>
+      </div>
 
-    <p
-      v-if="gapItems.length === 0"
-      class="no-gaps"
-      data-testid="case-closure-no-gaps"
-    >
-      {{ t('caseClosureChecklist.noGaps') }}
-    </p>
-
-    <div v-else class="gap-list">
-      <article
-        v-for="gap in gapItems"
-        :key="gap.id"
-        class="gap-item"
-        :class="`is-${gap.tone}`"
-        :data-testid="`case-closure-gap-${gap.id}`"
+      <p
+        v-if="gapItems.length === 0"
+        class="no-gaps"
+        data-testid="case-closure-no-gaps"
       >
-        <div class="gap-item-header">
-          <h5>{{ gap.label }}</h5>
-          <span class="gap-status" :class="`is-${gap.tone}`">
-            {{ gap.value }}
-          </span>
-        </div>
-        <p class="gap-description">{{ gap.description }}</p>
-      </article>
-    </div>
-  </section>
+        {{ t('caseClosureChecklist.noGaps') }}
+      </p>
+
+      <div v-else class="gap-list">
+        <article
+          v-for="gap in gapItems"
+          :key="gap.id"
+          class="gap-item"
+          :class="`is-${gap.tone}`"
+          :data-testid="`case-closure-gap-${gap.id}`"
+        >
+          <div class="gap-item-header">
+            <h5>{{ gap.label }}</h5>
+            <span class="gap-status" :class="`is-${gap.tone}`">
+              {{ gap.value }}
+            </span>
+          </div>
+          <p class="gap-description">{{ gap.description }}</p>
+        </article>
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
+import { Card, CardContent } from '@/components/ui/card'
 import { t } from '../i18n'
 
 defineProps({
@@ -50,10 +50,6 @@ defineProps({
 <style scoped>
 .evidence-gaps {
   margin-top: 1rem;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 1rem;
-  background: #fcfcfd;
 }
 
 .evidence-gaps-header h4 {
