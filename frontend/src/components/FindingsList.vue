@@ -7,8 +7,8 @@
       <!-- Filter Controls -->
       <div class="filter-controls">
         <div class="filter-group">
-          <label>{{ t('common.severity') }}:</label>
-          <select v-model="severityFilter" class="filter-select">
+          <label for="findings-severity-filter">{{ t('common.severity') }}:</label>
+          <select id="findings-severity-filter" v-model="severityFilter" class="filter-select" :aria-label="t('common.severity')">
             <option value="all">{{ t('common.all') }}</option>
             <option value="high">{{ translateSeverity('high') }}</option>
             <option value="medium">{{ translateSeverity('medium') }}</option>
@@ -17,8 +17,8 @@
         </div>
 
         <div class="filter-group">
-          <label>{{ t('common.rule') }}:</label>
-          <select v-model="ruleFilter" class="filter-select">
+          <label for="findings-rule-filter">{{ t('common.rule') }}:</label>
+          <select id="findings-rule-filter" v-model="ruleFilter" class="filter-select" :aria-label="t('common.rule')">
             <option value="all">{{ t('findings.allRules') }}</option>
             <option v-for="rule in availableRules" :key="rule" :value="rule">
               {{ rule }}
@@ -27,12 +27,14 @@
         </div>
 
         <div class="filter-group search">
-          <label>{{ t('common.search') }}:</label>
+          <label for="findings-text-search">{{ t('common.search') }}:</label>
           <Input
+            id="findings-text-search"
             v-model="textSearch"
             type="text"
             :placeholder="t('findings.searchPlaceholder')"
             class="filter-input"
+            :aria-label="t('common.search')"
           />
         </div>
 
@@ -331,17 +333,17 @@ const getVisibleMatchedValues = (finding, index) => {
 const copyJson = async () => {
   if (filteredFindings.value.length === 0) return
   
-  try {
+    try {
     const json = JSON.stringify(filteredFindings.value, null, 2)
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(json)
-      copyStatus.value = 'Copied!'
+      copyStatus.value = t('common.copied')
     } else {
       throw new Error('Clipboard API not available')
     }
   } catch (err) {
     console.error('Failed to copy JSON:', err)
-    copyStatus.value = 'Copy failed'
+    copyStatus.value = t('common.copyFailed')
   } finally {
     setTimeout(() => {
       copyStatus.value = ''

@@ -12,14 +12,15 @@
         <Button variant="outline" size="sm" class="preview-btn" @click="togglePreview">
           {{ isOpen ? t('evidencePackPreview.hidePreview') : t('evidencePackPreview.showPreview') }}
         </Button>
-        <Button variant="outline" size="sm" class="preview-btn copy-btn" @click="copyMarkdown">
-          {{ t('evidencePackPreview.copyMarkdown') }}
+        <Button variant="outline" size="sm" class="preview-btn copy-btn" @click="copyMarkdown" :aria-label="t('evidencePackPreview.copyMarkdown')" data-testid="copy-markdown-btn">
+          {{ copyFeedbackKey === 'evidencePackPreview.copySuccess' ? t('common.copied') : t('evidencePackPreview.copyMarkdown') }}
         </Button>
       </div>
     </div>
 
-    <div v-if="!result" class="empty-state">
-      {{ t('evidencePackPreview.empty') }}
+    <div v-if="!result" class="empty-state" data-testid="evidence-pack-preview-empty">
+      <h4>{{ t('evidencePackPreview.empty') }}</h4>
+      <p>{{ t('evidencePackPreview.emptyHint') }}</p>
     </div>
 
     <template v-else>
@@ -1249,12 +1250,24 @@ onBeforeUnmount(() => {
 
 .empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   color: var(--text-tertiary);
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
   margin-top: 1rem;
   background: var(--surface-subtle);
+}
+
+.empty-state h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--foreground);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 @media (max-width: 768px) {

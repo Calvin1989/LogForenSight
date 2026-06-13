@@ -12,8 +12,8 @@
       <!-- Filter Controls -->
       <div class="filter-controls">
         <div class="filter-group">
-          <label>{{ t('common.severity') }}:</label>
-          <select v-model="severityFilter" class="filter-select">
+          <label for="timeline-severity-filter">{{ t('common.severity') }}:</label>
+          <select id="timeline-severity-filter" v-model="severityFilter" class="filter-select" :aria-label="t('common.severity')">
             <option value="all">{{ t('common.all') }}</option>
             <option value="high">{{ translateSeverity('high') }}</option>
             <option value="medium">{{ translateSeverity('medium') }}</option>
@@ -22,12 +22,14 @@
         </div>
 
         <div class="filter-group">
-          <label>{{ t('common.sourceIp') }}:</label>
+          <label for="timeline-ip-search">{{ t('common.sourceIp') }}:</label>
           <input
+            id="timeline-ip-search"
             v-model="ipSearch"
             type="text"
             :placeholder="t('common.searchPlaceholder')"
             class="filter-input"
+            :aria-label="t('common.sourceIp')"
           />
         </div>
 
@@ -295,6 +297,7 @@ const formatEventType = (type) => {
   color: var(--text-secondary);
   margin: 0 0 0.875rem 0;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .event-evidence {

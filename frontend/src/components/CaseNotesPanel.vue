@@ -42,7 +42,7 @@
       </label>
 
       <div class="editor-actions">
-        <Button class="primary-btn" variant="default" size="sm" @click="submitNote">
+        <Button class="primary-btn" variant="default" size="sm" @click="submitNote" data-testid="save-note-btn">
           {{ t('caseNotes.save') }}
         </Button>
         <Button variant="outline" size="sm" @click="cancelEdit">
@@ -51,8 +51,13 @@
       </div>
     </div>
 
-    <div v-if="notes.length === 0" class="empty-state">
-      {{ t('caseNotes.empty') }}
+    <div class="save-feedback-slot" data-testid="save-feedback">
+      <p v-if="saveFeedback" class="save-feedback">{{ saveFeedback }}</p>
+    </div>
+
+    <div v-if="notes.length === 0" class="empty-state" data-testid="case-notes-empty">
+      <h4>{{ t('caseNotes.empty') }}</h4>
+      <p>{{ t('caseNotes.emptyHint') }}</p>
     </div>
 
     <div v-else class="notes-list">
@@ -110,6 +115,8 @@ const noteTypes = NOTE_TYPES
 
 const notes = ref(loadCaseNotes(props.caseId))
 const editingNoteId = ref('')
+const saveFeedback = ref('')
+let saveFeedbackTimer = null
 const draft = reactive({
   type: 'observation',
   title: '',
@@ -170,6 +177,16 @@ function submitNote() {
 
   persist(nextNotes)
   cancelEdit()
+  showSaveFeedback()
+}
+
+function showSaveFeedback() {
+  saveFeedback.value = t('caseNotes.saved')
+  if (saveFeedbackTimer) clearTimeout(saveFeedbackTimer)
+  saveFeedbackTimer = window.setTimeout(() => {
+    saveFeedback.value = ''
+    saveFeedbackTimer = null
+  }, 1800)
 }
 
 function removeNote(noteId) {
@@ -283,6 +300,26 @@ function formatTimestamp(value) {
 .note-actions {
   display: flex;
   gap: 0.375rem;
+  align-items: center;
+}
+
+.save-feedback-slot {
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.save-feedback {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: oklch(0.4 0.12 145);
+  margin: 0;
+  animation: feedback-fade 1.8s ease forwards;
+}
+
+@keyframes feedback-fade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .empty-state {
@@ -293,6 +330,18 @@ function formatTimestamp(value) {
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
+}
+
+.empty-state h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--foreground);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }
 
 .notes-list {

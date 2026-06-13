@@ -77,14 +77,16 @@ const messages = {
       status: "状态",
       timestamp: "时间戳",
       copied: "已复制！",
-      copyFailed: "复制失败"
+      copyFailed: "复制失败",
+      noMatch: "没有匹配筛选条件的项目。"
     },
     upload: {
       chooseFile: "选择 .log 或 .txt 文件",
       logFormat: "日志格式",
       autoDetect: "自动检测",
       selectedFiles: "已选择 {count} 个文件",
-      analyzeFiles: "分析 {count} 个文件"
+      analyzeFiles: "分析 {count} 个文件",
+      selectFileHint: "选择日志文件后点击「分析」开始"
     },
     history: {
       title: "最近的分析",
@@ -216,6 +218,7 @@ const messages = {
       title: "Markdown 报告",
       downloadReport: "下载报告 (.md)",
       downloadSanitized: "下载脱敏报告 (.md)",
+      sanitizedUnavailable: "需要原始文件才能脱敏",
       downloadSummary: "下载摘要 (.json)",
       downloadEvidencePack: "下载证据包",
       warningBanner: "脱敏下载需要原始文件。请重新上传日志或使用带有缓存脱敏结果的历史记录。",
@@ -357,6 +360,7 @@ const messages = {
     evidencePackPreview: {
       title: "Evidence Pack 导出预览",
       empty: "运行分析后可预览 Evidence Pack 导出内容。",
+      emptyHint: "上传日志并完成分析，即可预览和导出 Evidence Pack。",
       sectionNavigator: "章节导航",
       handoffSummaryTitle: "交接摘要",
       handoffSummaryNote: "仅用于快速复核，不会写入导出 Markdown。",
@@ -708,6 +712,8 @@ const messages = {
     triage: {
       title: "分析师处置工作流 (Analyst Triage)",
       empty: "尚未对任何风险或事件进行处置标记",
+      emptyHint: "分析完成后，此处可对 findings 和 incidents 进行处置标记。",
+      disabledExportHint: "处置数据为空时无法导出",
       status: "状态",
       priority: "优先级",
       notes: "处置备注",
@@ -739,6 +745,7 @@ const messages = {
     caseNotes: {
       title: "案件备注 / 决策日志",
       empty: "暂无案件备注",
+      emptyHint: "在「分诊审查」中添加备注，记录分析过程中的关键观察和决策。",
       add: "新增备注",
       type: "类型",
       observation: "观察",
@@ -756,6 +763,7 @@ const messages = {
       localOnly: "仅本地存储",
       untitled: "未命名备注",
       noBody: "暂无备注内容",
+      saved: "备注已保存",
       evidencePackTitle: "分析师案件备注 / 决策日志",
       noExportNotes: "暂无案件备注。"
     },
@@ -892,14 +900,16 @@ const messages = {
       status: "Status",
       timestamp: "Timestamp",
       copied: "Copied!",
-      copyFailed: "Copy failed"
+      copyFailed: "Copy failed",
+      noMatch: "No items match your filters."
     },
     upload: {
       chooseFile: "Choose a .log or .txt file",
       logFormat: "Log Format",
       autoDetect: "Auto Detect",
       selectedFiles: "{count} files selected",
-      analyzeFiles: "Analyze {count} files"
+      analyzeFiles: "Analyze {count} files",
+      selectFileHint: "Select log files, then click Analyze"
     },
     history: {
       title: "Recent Analyses",
@@ -1031,6 +1041,7 @@ const messages = {
       title: "Markdown Report",
       downloadReport: "Download Report (.md)",
       downloadSanitized: "Download Sanitized (.md)",
+      sanitizedUnavailable: "Original file required for sanitization",
       downloadSummary: "Download Summary (.json)",
       downloadEvidencePack: "Download Evidence Pack",
       warningBanner: "Sanitized download requires the original file. Please re-upload the log or use a history entry with cached sanitized result.",
@@ -1172,6 +1183,7 @@ const messages = {
     evidencePackPreview: {
       title: "Evidence Pack Export Preview",
       empty: "Run an analysis to preview the Evidence Pack export.",
+      emptyHint: "Upload logs and complete analysis to preview and export the Evidence Pack.",
       sectionNavigator: "Section navigator",
       handoffSummaryTitle: "Handoff summary",
       handoffSummaryNote: "Quick preview only, never included in exported Markdown.",
@@ -1523,6 +1535,8 @@ const messages = {
     triage: {
       title: "Analyst Triage Workflow",
       empty: "No findings or incidents triaged yet",
+      emptyHint: "After analysis, triage findings and incidents here.",
+      disabledExportHint: "Export unavailable when no triage data exists",
       status: "Status",
       priority: "Priority",
       notes: "Analyst Notes",
@@ -1554,6 +1568,7 @@ const messages = {
     caseNotes: {
       title: "Case Notes / Decision Log",
       empty: "No case notes yet",
+      emptyHint: "Add notes in Triage Review to record key observations and decisions.",
       add: "Add Note",
       type: "Type",
       observation: "Observation",
@@ -1571,6 +1586,7 @@ const messages = {
       localOnly: "Local storage only",
       untitled: "Untitled note",
       noBody: "No note body provided.",
+      saved: "Note saved",
       evidencePackTitle: "Analyst Case Notes / Decision Log",
       noExportNotes: "No analyst case notes recorded."
     },

@@ -12,8 +12,8 @@
       <!-- Filter Controls -->
       <div class="filter-controls">
         <div class="filter-group">
-          <label>{{ t('common.severity') }}:</label>
-          <select v-model="severityFilter" class="filter-select">
+          <label for="incidents-severity-filter">{{ t('common.severity') }}:</label>
+          <select id="incidents-severity-filter" v-model="severityFilter" class="filter-select" :aria-label="t('common.severity')">
             <option value="all">{{ t('incidents.allSeverities') }}</option>
             <option value="high">{{ translateSeverity('high') }}</option>
             <option value="medium">{{ translateSeverity('medium') }}</option>
@@ -22,12 +22,14 @@
         </div>
 
         <div class="filter-group">
-          <label>{{ t('common.sourceIp') }}:</label>
+          <label for="incidents-ip-search">{{ t('common.sourceIp') }}:</label>
           <Input
+            id="incidents-ip-search"
             v-model="ipSearch"
             type="text"
             :placeholder="t('common.searchPlaceholder')"
             class="filter-input"
+            :aria-label="t('common.sourceIp')"
           />
         </div>
 
@@ -229,17 +231,17 @@ const getVisibleEvidence = (incident) => {
 const copyJson = async () => {
   if (filteredIncidents.value.length === 0) return
   
-  try {
+    try {
     const json = JSON.stringify(filteredIncidents.value, null, 2)
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(json)
-      copyStatus.value = 'Copied!'
+      copyStatus.value = t('common.copied')
     } else {
       throw new Error('Clipboard API not available')
     }
   } catch (err) {
     console.error('Failed to copy JSON:', err)
-    copyStatus.value = 'Copy failed'
+    copyStatus.value = t('common.copyFailed')
   } finally {
     setTimeout(() => {
       copyStatus.value = ''
@@ -439,6 +441,7 @@ const new_date_str = () => {
   margin-bottom: 0.625rem;
   color: var(--foreground);
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .triage-meta {
