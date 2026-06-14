@@ -1,52 +1,33 @@
 # Release Checklist
 
-本清单用于确保 **LogForenSight** 的本地优先发布流程保持稳定、可复核、可回滚。
+This checklist documents the local release workflow used by LogForenSight.
 
 ---
 
-## 1. Baseline
+## 1. Preconditions
 
-- [ ] 从干净的 `main` 创建发布分支。
-- [ ] 执行 `git fetch --prune origin`、`git fetch --tags origin`、`git pull --ff-only origin main`。
-- [ ] 确认 `git status` 干净，禁止在脏工作树上开始版本迭代。
-- [ ] 记录当前 `main` 的 `HEAD`、稳定 tag、release asset 名称与目标版本号。
+- [ ] Work is on a feature branch.
+- [ ] Scope is clear and documented.
+- [ ] No unrelated files are modified.
+- [ ] No package or lockfile changes unless explicitly planned.
+- [ ] No `.agents/`, `skills-lock.json`, or local tool state is staged.
+- [ ] No release tag already exists for the target version.
 
 ```powershell
-git switch main
-git fetch --prune origin
-git fetch --tags origin
-git pull --ff-only origin main
-git status
-git log --oneline --decorate -5
+git status --short --branch
+git log --oneline --decorate -8
 git tag --list "v2.*"
-git switch -c chore/<release-branch>
 ```
 
-## 2. Repo Hygiene
+---
 
-- [ ] 不使用 `git add .`，只精确暂存本次实际修改文件。
-- [ ] 检查旧仓库名 / 旧项目名残留。
-- [ ] 仅修改本次版本允许的文件和范围，不顺手做全仓库格式化。
-- [ ] 提交前执行 `git diff --check` 与 `git diff --cached --check`。
+## 2. Local Validation Gate
 
 ```powershell
-git grep -n "<legacy-repo-slug>"
-git grep -n "<legacy-project-name>"
-git grep -n "<legacy-short-name>"
-git grep -n "<legacy-owner>/<legacy-repo-slug>"
+cd D:\Program\prof\GithubProject\LogForenSight
+
 git diff --check
-git diff --cached --check
-```
 
-## 3. Validation
-
-- [ ] 后端测试通过：`cd backend && python -m pytest`。
-- [ ] 前端测试通过：`cd frontend && npm run test`。
-- [ ] 前端构建通过：`cd frontend && npm run build`。
-- [ ] Docker Compose 配置校验通过：`docker compose config`。
-- [ ] 提交后执行 `git show --check --stat HEAD`，确认无空白错误且提交范围正确。
-
-```powershell
 cd backend
 python -m pytest
 
@@ -56,82 +37,134 @@ npm run build
 
 cd ..
 docker compose config
-git diff --check
-git show --check --stat HEAD
+git status --short --branch
 ```
 
-## 4. Staging And Commit
+For v2.42-local the gate was:
 
-- [ ] 用 `git diff --stat` 和目标文件级 diff 复核改动范围。
-- [ ] 只按文件逐个 `git add`。
-- [ ] 用清晰、低风险的提交信息描述本次发布主题。
-- [ ] 提交后再次确认 `git status`。
+- backend 65 passed
+- frontend 51 files / 368 tests passed
+- build passed
+- Docker Compose config valid
+- git diff --check clean
+
+---
+
+## 3. Forbidden Diff Gate
+
+Run before commit and before release:
 
 ```powershell
-git diff --stat
-git diff -- .github/workflows/ci.yml docs/release_checklist.md README.md CHANGELOG.md docs/release_notes.md .gitignore
+git diff --name-only -- backend docker-compose.yml config samples frontend/src/utils frontend/src/composables frontend/package.json frontend/package-lock.json package.json package-lock.json README.md AGENTS.md CHANGELOG.md .github docs .agents skills-lock.json
+```
 
-git add .github/workflows/ci.yml
-git add docs/release_checklist.md
-git add README.md
-git add CHANGELOG.md docs/release_notes.md
-git add .gitignore
+Expected: no output unless the release intentionally targets one of those areas.
 
-git diff --cached --stat
+If `frontend/src/i18n.js` changes, verify:
+
+- new keys are additive-only
+- zh/en both exist
+- keys are used
+- no existing keys are deleted or modified
+
+---
+
+## 4. Commit and PR
+
+Use precise staging. Do not use `git add .`.
+
+```powershell
+git add <specific-path-1>
+git add <specific-path-2>
 git diff --cached --check
-git commit -m "chore: <release summary>"
-git show --check --stat HEAD
-git status
+git diff --cached --name-only
+git commit -m "<type(scope): summary>"
+git push -u origin <branch>
 ```
 
-如果本次未修改 `.gitignore`，则不要执行对应的 `git add .gitignore`。
-
-## 5. PR And Merge
-
-- [ ] 推送发布分支到 `origin`。
-- [ ] 创建 PR，并在正文中附上 backend / frontend / docker / git 验证结果。
-- [ ] 合并前确认 PR 描述与实际 diff 一致。
-- [ ] 合并后保留分支或删除分支，按本次发布策略执行。
+Create PR:
 
 ```powershell
-git push -u origin chore/<release-branch>
-gh pr create --base main --head chore/<release-branch> --title "<title>"
-gh pr merge --merge --delete-branch=false
+gh pr create --base main --head <branch> --title "<title>" --body-file -
+gh pr view --json number,state,mergeable,headRefName,baseRefName,title,url
+gh pr checks --watch
 ```
 
-## 6. Tag And Archive
+---
 
-- [ ] 回到 `main` 后再次执行完整验证，确保合并结果仍然稳定。
-- [ ] 创建并推送版本 tag。
-- [ ] 生成发布归档 zip，并包含 `PROJECT_STATE.txt`。
-- [ ] 检查归档内是否包含错误条目或不应打包的内容。
-- [ ] 生成并核对归档 `SHA256`。
+## 5. Merge
+
+When PR is mergeable and checks pass:
 
 ```powershell
-git fetch origin
+gh pr merge <number> --merge --delete-branch
+```
+
+Then sync local main:
+
+```powershell
 git switch main
-git pull --ff-only origin main
+git fetch --prune
+git status --short --branch
+git log --oneline --decorate -5
+```
 
-git tag vX.Y-local
+If `gh pr merge` already fast-forwarded local `main`, a later `git pull --ff-only origin main` may be unnecessary.
+
+---
+
+## 6. Release Readiness Gate
+
+Run the full validation gate again on `main` after merge.
+
+Also confirm target tag is absent:
+
+```powershell
+git tag --list "vX.Y-local"
+```
+
+---
+
+## 7. Tag and GitHub Release
+
+Create annotated tag:
+
+```powershell
+git tag -a vX.Y-local -m "vX.Y-local"
 git push origin vX.Y-local
 ```
 
-归档检查要求：
+Create release:
 
-- [ ] zip 文件名与版本、提交哈希一致。
-- [ ] 归档中包含 `PROJECT_STATE.txt`。
-- [ ] 不包含明显错误条目，如缓存、临时文件、无关构建产物或本地 IDE 垃圾文件。
-- [ ] `SHA256` 已记录，可用于 Release 附件校验。
+```powershell
+gh release create vX.Y-local --title "vX.Y-local" --notes-file -
+```
 
-## 7. GitHub Release
+Confirm:
 
-- [ ] 在 GitHub 创建 Release，标题、tag、说明与 `CHANGELOG.md` / `docs/release_notes.md` 保持一致。
-- [ ] 上传 zip 与 `SHA256` 信息。
-- [ ] 确认 Release 页面中的版本主题、验证结论和运行时兼容性描述准确。
+```powershell
+git tag --points-at HEAD
+gh release view vX.Y-local --json tagName,name,isDraft,isPrerelease,url
+git status --short --branch
+git log --oneline --decorate -5
+```
 
-## 8. Post-release Check
+---
 
-- [ ] 再次执行 `git status`，确认工作树干净。
-- [ ] 检查本地 `main`、远端 `origin/main` 与 tag 已同步。
-- [ ] 检查 GitHub Actions、Release 页面和仓库首页链接正常。
-- [ ] 记录 PR 编号、`main HEAD`、tag 推送状态、修改文件清单与最终验证结果。
+## 8. Release Notes Requirements
+
+Release notes should include:
+
+- Summary of changes
+- Validation results
+- Explicit notes on no dependency/package/backend/Docker changes where true
+- i18n additive-only note where applicable
+- No claim of screenshots or assets unless included
+
+---
+
+## 9. Troubleshooting
+
+- If `gh release view` says release not found after tag creation, create the GitHub Release for the existing tag; do not recreate the tag.
+- If `git ls-remote` fails due to TLS, retry or rely on `git push origin <tag>` / `gh release create` confirmation.
+- If frontend tests pass locally but CI fails, inspect CI logs before changing tests.

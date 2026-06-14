@@ -1,11 +1,56 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project are documented in this file.
 
 ## [Unreleased]
+
+## [v2.42-local] - Analysis Error/Loading States + Smoke Guards
+
+- Added clear analysis loading, disabled, and error states in the upload/workspace flow.
+- Added structured error callouts for backend unavailable, failed analysis, empty file, unsupported format, and retry guidance.
+- Kept Evidence Pack and Markdown report actions visible but disabled when data is unavailable.
+- Added success/failed metadata styling for recent analyses.
+- Added `smokeRegression.test.js` covering loading/error states, unavailable export/report states, recent analysis status, and new i18n keys.
+- Validation: backend 65 passed; frontend 51 files / 368 tests passed; build passed; Docker Compose config valid.
+- Frontend/i18n only; no backend, API contract, package, lockfile, Docker, docs, or dependency changes in the release PR.
+
+## [v2.41-local] - Frontend UX States and Accessibility
+
+- Polished analyze, copy, export, download, save, disabled, and feedback states.
+- Unified empty/data-insufficient states across workspace, triage, Evidence Pack, and report surfaces.
+- Added aria-labels, disabled semantics, filter labels, stable feedback targets, and UX regression tests.
+- Added additive bilingual UX translation keys only.
+- Validation: backend 65 passed; frontend 50 files / 345 tests passed; build passed; Docker Compose config valid.
+
+## [v2.40-local] - Frontend Visual System and Dashboard States
+
+- Added compact frontend visual utilities: section headers, compact cards, status rows, bounded scroll panels, empty states, loading blocks, and error callouts.
+- Refined Workspace, Overview, Investigation, Triage/Review, Evidence Pack, and Markdown report surfaces.
+- Improved responsive behavior across desktop, narrow desktop, tablet, and mobile layouts.
+- Added layout regression tests for case-closure sibling flow, executive summary structure, bounded entities, share-safety findings, and report preview containers.
+- Validation: backend 65 passed; frontend 49 files / 321 tests passed; build passed; Docker Compose config valid.
+
+## [v2.39-local] - Investigation Dashboard Layout Refinement
+
+- Refined the shadcn-vue frontend into a denser investigation dashboard layout.
+- Improved overview, executive summary, severity distribution, investigation entities, triage/review, Evidence Pack, and Markdown report layouts.
+- Reduced vertical scrolling with dashboard grids, compact status rows, bounded tables, and scroll-contained evidence/report sections.
+- Split case-closure checklist, evidence gaps, and next actions into sibling sections.
+- Updated tests for closure-data emit flow and layout changes.
+- Validation: backend 65 passed; frontend 48 files / 308 tests passed; build passed; Docker Compose config valid.
+
+## [v2.38-local] - shadcn-vue Interface Migration
+
+- Migrated the interface to official shadcn-vue primitives for core frontend surfaces.
+- Added local UI primitives for alert, badge, button, checkbox, input, select, separator, table, tabs, and textarea.
+- Preserved local-first analysis behavior, export behavior, share-safety behavior, and backend API contracts.
+- Validation: backend 65 passed; frontend 48 files / 307 tests passed; build passed; Docker Compose config valid.
+
+## [v2.37-local] - Frontend Interaction Polish and Guardrails
+
+- Polished interaction panels and documented agent/release guardrails before the shadcn-vue migration work.
+- Kept backend, Docker, package files, and API behavior unchanged.
+
 ## [v2.17-local] - Evidence Pack Share Safety Review
 
 - Added a local-first, deterministic Evidence Pack Share Safety Review based on the final Markdown preview or analysis result.

@@ -1,20 +1,36 @@
-# 项目截图说明 (Screenshots)
+# Screenshots Plan
 
-本目录用于规划 GitHub README、Release 页面和 portfolio 展示时建议准备的截图，不要求在当前版本中实际生成图片。
+This directory is reserved for optional screenshots used in README, GitHub Releases, and portfolio pages.
 
-## Recommended Screenshot List
+No screenshot files are required for the application to run.
 
-1. **Home / Upload**: 首页或上传区，展示 local-first 的入口体验。
-2. **Findings**: `Security Findings` 列表，体现 deterministic detection 的输出。
-3. **Investigation Entities**: 调查实体卡片，展示 IOC extraction 能力。
-4. **Detection Explainability Drilldown**: 某条 finding 展开的 explainability 面板。
-5. **Triage Panel**: 分析师处置面板，展示状态、优先级和备注。
-6. **Evidence Pack Export**: 报告区的 `Download Evidence Pack` / `下载证据包` 入口，或导出的 Markdown 预览。
-7. **Case Workspace**: 本地案例工作区，展示保存后的 case 列表。
+---
 
-## Capture Notes
+## Recommended screenshot set for v2.42-local
 
-- 建议使用 `samples/` 目录中的示例日志，以保证展示效果稳定。
-- 建议优先截取英文 UI 或中英对照场景，便于 GitHub 访客快速理解。
-- 每张截图尽量只突出一个能力点，避免信息过载。
-- 如果准备 GitHub Release 附件，可额外保存统一尺寸的 PNG 文件，便于后续整理。
+| Screenshot | Purpose |
+|---|---|
+| `01-workspace-upload.png` | Upload workspace with loading/error UX states. |
+| `02-overview-dashboard.png` | Executive summary, summary cards, severity distribution, parse stats. |
+| `03-investigation-findings.png` | Findings / incidents / timeline with filters. |
+| `04-investigation-entities.png` | Investigation entities bounded table. |
+| `05-triage-review.png` | Triage, case notes, review readiness, closure checklist. |
+| `06-evidence-pack.png` | Evidence Pack preview, quality score, guardrails, share safety. |
+| `07-markdown-report.png` | Markdown report preview and download actions. |
+| `08-mobile-responsive.png` | 390px or narrow mobile layout. |
+
+---
+
+## Capture guidance
+
+- Use `docker compose up --build` for a reproducible local demo.
+- Prefer `samples/demo_access.log` for the first screenshot pass.
+- Avoid showing real IPs, usernames, tokens, private hostnames, or raw customer logs.
+- Capture both Chinese and English only if needed; Chinese-first screenshots are acceptable for this repository.
+- Keep screenshot filenames stable so README/portfolio references do not break.
+
+---
+
+## Current status
+
+The repository does not require screenshots as release assets. This directory documents a recommended capture plan only.
