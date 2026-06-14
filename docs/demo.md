@@ -1,15 +1,22 @@
-# 演示指南 (Demo Guide)
+# Demo Guide
 
-本指南用于在 5-8 分钟内稳定展示 **LogForenSight** 的完整本地分析链路：上传日志、验证解析质量、查看 findings / incidents、检查 Investigation Entities、展开 Detection Explainability、补充 triage 信息、记录 Case Notes、查看 Review Readiness，并导出 Evidence Pack。
+This guide demonstrates LogForenSight v2.42-local in 5-10 minutes: upload logs, review findings/incidents, inspect entities and explanations, triage results, add case notes, check readiness, and export an Evidence Pack.
 
 ---
 
-## 准备阶段
+## 1. Start the app
 
-### 启动方式
+```powershell
+docker compose up --build
+```
 
-- 一体启动：`docker compose up --build`
-- 或分别启动：
+Open:
+
+```text
+http://localhost:5173
+```
+
+For development mode:
 
 ```powershell
 cd backend
@@ -21,124 +28,93 @@ cd frontend
 npm run dev
 ```
 
-- 前端默认地址：`http://localhost:5173`
-- 推荐目标受众：安全分析师、DFIR 面试官、蓝队负责人、对 local-first 工具感兴趣的工程团队
+---
 
-### 推荐 Demo 样例
+## 2. Recommended sample files
 
-- `samples/demo_access.log`
-  - 适合展示单文件完整链路。
-  - 重点展示 parse quality、敏感路径探测、404 burst、可疑 User-Agent、incident 聚合、Investigation Entities、Detection Explainability、triage 和 Evidence Pack。
-- `samples/demo_batch_part1.log` + `samples/demo_batch_part2.log`
-  - 适合展示 multi-file batch 分析。
-  - 重点展示 `Source Files` 明细、跨文件 source attribution、同一来源 IP 的 findings / incidents 聚合，以及批量 case 的 Investigation Entities。
-- `samples/nginx_access_sample.log` / `samples/apache_access_sample.log`
-  - 适合做 parser smoke check。
-  - 如果只做一次完整演示，优先使用新的 `demo_*.log` 文件。
+| Sample | Use |
+|---|---|
+| `samples/demo_access.log` | Best first demo for single-file analysis. |
+| `samples/demo_batch_part1.log` + `samples/demo_batch_part2.log` | Multi-file batch analysis and source attribution. |
+| `samples/nginx_access_sample.log` | Parser smoke check for Nginx-style logs. |
+| `samples/apache_access_sample.log` | Parser smoke check for Apache-style logs. |
+
+All sample data is synthetic/demo-safe and uses reserved/example-style indicators where applicable.
 
 ---
 
-## 推荐 Demo Path
+## 3. Main demo path
 
-1. 启动后端和前端。
-2. 上传 sample log。
-3. 查看 parse quality。
-4. 查看 findings / incidents。
-5. 查看 Investigation Entities。
-6. 展开 Detection Explainability。
-7. 在 Triage Workflow 中标记状态、优先级和备注。
-8. 在 Analyst Case Notes / Decision Log 中记录一条 Observation 或 Decision。
-9. 查看 Investigation Review Readiness，确认高风险 findings、incidents 和 case notes 状态。
-10. 导出 Analyst Evidence Pack，确认其中包含 Triage Summary、Analyst Case Notes / Decision Log 和 Investigation Review Readiness。
+1. **Upload logs**
+   - Select `samples/demo_access.log`.
+   - Confirm the Analyze button enters loading state and results render without leaving the page.
 
-这条路径适合 README、Portfolio、面试演示和本地试跑，能够在最短时间内串起当前版本最完整、最稳定的分析师工作流。
+2. **Overview**
+   - Show executive summary, risk score, request count, source IP count, incident count, severity distribution, and parse stats.
+   - Explain that LogForenSight uses deterministic local rules rather than an external LLM.
 
----
+3. **Investigation views**
+   - Open findings, incidents, and timeline.
+   - Show filters, severity labels, timestamps, evidence snippets, and compact status metadata.
 
-## 单文件演示脚本
+4. **Investigation Entities**
+   - Show extracted IPs, paths, HTTP methods, HTTP status codes, URLs/accounts when present, and source files.
+   - Emphasize bounded table behavior for large cases.
 
-建议先上传 `samples/demo_access.log`。
+5. **Detection Explainability**
+   - Expand a finding.
+   - Highlight rule context, matched field, matched indicator, evidence, related entities, and recommended action.
 
-### 1. 启动后端和前端
+6. **Triage / Review**
+   - Mark one finding or incident as Investigating or Mitigated.
+   - Add priority and notes.
+   - Show empty-state / disabled-state behavior if no data is available.
 
-- **动作**: 打开页面，确认后端健康、前端可访问。
-- **解说**: “LogForenSight 是一个 local-first security log triage 工具。日志分析、规则命中解释和导出都在本地完成，不依赖外部 API 或 LLM。”
+7. **Case Notes**
+   - Add an Observation, Hypothesis, Action, or Decision.
+   - Confirm the inline save feedback appears without layout jump.
 
-### 2. 上传 sample log
+8. **Review Readiness and Case Closure**
+   - Show readiness summary, checklist, evidence gaps, and next actions.
+   - Confirm checklist, gaps, and next actions are sibling sections, not nested cards.
 
-- **动作**: 上传 `demo_access.log`。
-- **展示点**: 页面无需额外配置即可进入分析结果页。
-- **解说**: “这份样例使用可公开展示的保留地址，适合稳定演示从上传到导出的完整链路。”
+9. **Evidence Pack**
+   - Open Evidence Pack preview.
+   - Show quality score, guardrails, share-safety review, copy buttons, and disabled/unavailable states where applicable.
+   - Download or copy the Markdown handoff.
 
-### 3. 查看 Parse Quality
+10. **Markdown Report**
+    - Show report preview, bounded code/pre sections, and sanitized report availability.
+    - If data is unavailable, show the structured unavailable banner.
 
-- **展示点**: `Parse Stats` / `Parse Quality` 区域。
-- **解说**: “先确认日志被稳定解析。对于真实排查，解析质量永远优先于可视化包装。”
-- **说明**: `demo_access.log` 设计为干净可解析样例，适合展示稳定 parser 行为。
-
-### 4. 查看 Findings / Incidents
-
-- **展示点**: `Security Findings` 和 `Incidents`。
-- **建议强调**:
-  - 可看到敏感路径探测与可疑 User-Agent。
-  - 同一来源 IP 的相关 findings 会被聚合成更便于处置的 incident。
-  - `/login` 的重复访问可帮助展示高频请求和登录探测类分析语境。
-
-### 5. 查看 Investigation Entities
-
-- **展示点**: `Investigation Entities`。
-- **建议强调**:
-  - 可看到 IP、path、HTTP method、HTTP status，以及与 source file 相关的实体。
-  - 这些实体适合用于 analyst handoff、IOC 摘录和后续调查。
-
-### 6. 展开 Detection Explainability
-
-- **动作**: 在一个 finding 下点击 `Show explanation` / `展开解释`。
-- **展示点**: 规则上下文、严重程度依据、命中字段、证据片段、关联实体。
-- **解说**: “这里不是黑盒判断，而是可复核的 deterministic explanation。”
-
-### 7. 添加 Triage Notes
-
-- **展示点**: `Analyst Triage Workflow`。
-- **动作**: 为一个 incident 设置状态为 `Investigating`、优先级为 `Critical`，并添加备注，例如“继续核对源 IP 是否为外部扫描器”。
-- **解说**: “这一步把检测结果变成可跟踪的分析师动作。”
-
-### 8. 记录 Case Notes 并查看 Review Readiness
-
-- **展示点**: `Case Notes / Decision Log`。
-- **动作**: 记录一条 `Observation` 或 `Decision` note，例如“观察到登录端点存在重复失败请求”或“决定暂时封禁该来源 IP 并继续监控”。
-- **解说**: “这一步可以把调查过程、假设和最终决策沉淀成结构化本地备注，并随 Evidence Pack 一起导出。”
-
-### 9. 查看 Review Readiness 并导出 Evidence Pack
-
-- **展示点**: `Investigation Review Readiness`。
-- **动作**: 查看高风险 findings、incidents 和 case notes 的复核状态，确认是否存在 `Attention` / `需关注` 项。
-- **确认点**: 面板应明确提示是否已满足导出 Evidence Pack 前的核心复核要求。
-- **解说**: “这一步帮助分析师在导出前快速发现仍未复核的 high-risk findings、incidents 或缺失的 case notes。”
-
-- **动作**: 点击 `Download Evidence Pack` / `下载证据包`。
-- **确认点**: 导出的 Analyst Evidence Pack 中应同时看到 `Triage Summary`、`Analyst Case Notes / Decision Log` 和 `Investigation Review Readiness`。
-- **解说**: “Evidence Pack 会把 findings、incidents、Investigation Entities、Detection Explainability、triage 信息、analyst case notes 以及导出前的 review readiness 提示整理成便于交接的 Markdown 证据包。”
+11. **Language and responsive check**
+    - Toggle Chinese/English.
+    - Optionally check 390px/768px widths to show mobile-safe wrapping and button stacking.
 
 ---
 
-## 批量演示脚本
+## 4. Failure-state demo
 
-建议第二轮上传 `samples/demo_batch_part1.log` 和 `samples/demo_batch_part2.log`。
+v2.42-local adds UX coverage for failure and unavailable states. You can demonstrate:
 
-- **目标**: 展示多文件作为同一个 case 统一分析。
-- **重点观察**:
-  - `Parse Stats` 中的 `Source Files` 明细。
-  - 同一来源 IP 跨文件累计后的 findings / incidents。
-  - Investigation Entities 中的 `source_file` 关联结果。
-- **推荐话术**: “这更接近真实场景，分析师经常需要把不同时间片或不同来源的 access log 作为同一个事件窗口统一排查。”
+- Analyze with no file selected → muted helper guidance.
+- Backend unavailable → structured error callout.
+- Unsupported or empty file → clear error title, reason, and retry hint.
+- Evidence Pack before analysis → actions remain visible but disabled with helper text.
+- Markdown report without raw data → unavailable banner and disabled download.
+
+Avoid browser alerts in the demo; all user-facing feedback should be inline and recoverable.
 
 ---
 
-## 讲解要点
+## 5. Suggested talk track
 
-- **Local-first**: 日志不默认离开本地。
-- **Deterministic**: 相同输入得到相同结果，便于复核、测试和演示。
-- **Analyst-friendly**: 从 parse quality 到 triage 与 export，链路完整。
-- **Explainable**: 每条 detection 都能说明为什么命中。
-- **Exportable**: 结果可以直接沉淀为可交接证据。
+> “LogForenSight is a local-first security log triage workbench. It parses access logs, applies deterministic detection rules, explains findings, aggregates incidents, extracts investigation entities, and lets an analyst triage and export a Markdown Evidence Pack without sending sensitive logs to external services.”
+
+Key points:
+
+- Local-first and deterministic.
+- Explainable findings.
+- Analyst workflow, not just detection output.
+- Evidence Pack handoff.
+- Productized frontend with loading/error/empty/disabled states.

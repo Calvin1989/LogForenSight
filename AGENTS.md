@@ -1,160 +1,161 @@
 # Agent Workflow Guardrails — LogForenSight
 
-This document defines agent operating rules, validation gates, forbidden actions, and release workflow for the LogForenSight repository.
+This document defines repository-specific operating rules for agents working on LogForenSight.
 
 ---
 
 ## 1. Repository Context
 
-- **LogForenSight** is a Vue 3 / Vite frontend + Python (FastAPI) backend forensics tool.
-- Primary local workflow uses **Windows PowerShell** on win32.
-- The frontend already has an existing **shadcn-vue Card primitive** under `frontend/src/components/ui/card/`.
-- **Do not** reinitialize shadcn-vue, replace the Card primitive, or run `npx shadcn-vue init`.
-- The project uses **npm** for frontend dependency management. Do not introduce alternate package managers.
+- LogForenSight is a local-first security log triage tool.
+- Backend: Python / FastAPI / Pydantic.
+- Frontend: Vue 3 / Vite / npm / shadcn-vue primitives.
+- Latest documented release: `v2.42-local`.
+- Current frontend includes dashboard layout, UX feedback states, accessibility polish, bounded scroll panels, and regression tests.
+- The project is intentionally local-first: no database, no external API, no LLM dependency in the core detection path.
 
 ---
 
-## 2. Default Agent Operating Mode
+## 2. Default Operating Mode
 
-- **Start every task** with boundary checks: `git status --short --branch`, `git log --oneline --decorate -8`.
-- **Prefer a Planning Gate** before any code changes: read-only assessment, risk table, file allowlist.
-- **Do not perform Git write operations** unless the user explicitly instructs:
-  - No `git add`, `git commit`, `git branch`, `git switch`, `git checkout`, `git reset`, `git stash`, `git push`.
-  - No PR creation, no tag creation, no release operations.
-- **Preserve user preference**: accumulate coherent, larger-version-sized batches before commit/PR/push/release.
-- **Use precise path-based `git add`** only when explicitly authorized — never `git add .`.
-- When modifying files, **prefer editing existing files** over creating new ones.
-
----
-
-## 3. Forbidden by Default
-
-The following are forbidden unless the task **explicitly targets** that area:
-
-| Category | Forbidden Actions |
-|---|---|
-| **Dependencies** | No `npm install`, no package/lockfile changes, no new packages |
-| **shadcn CLI** | No `npx shadcn-vue`, no `npx shadcn`, no `shadcn-vue@latest`, no `shadcn@latest` |
-| **Card Primitive** | No modifications to `frontend/src/components/ui/card/**` |
-| **App.vue** | No changes to `frontend/src/App.vue` without explicit Planning Gate approval |
-| **Backend** | No `backend/**`, `docker-compose.yml`, or API changes unless task targets backend |
-| **Config** | No changes to `vite.config.*`, `tailwind.config.*`, `postcss.config.*` unless scoped |
-| **Export/Share/Markdown** | No workflow-critical changes to download, export, or markdown generation logic unless explicitly scoped |
-| **Git Writes** | No add/commit/branch/switch/checkout/reset/stash/push/PR/tag/release |
-| **Lockfiles** | No `package.json`, `package-lock.json`, `frontend/package.json`, `frontend/package-lock.json` |
-| **Docs** | No `README.md` changes unless explicitly requested |
-
----
-
-## 4. Validation Gates
-
-### 4.1 Boundary Check (run at task start)
+- Start with a read-only boundary check before editing:
 
 ```powershell
-cd D:\Program\prof\GithubProject\LogForenSight
 git status --short --branch
 git log --oneline --decorate -8
 git diff --check
 ```
 
-### 4.2 Pre-Commit Gate (run before any commit)
+- Prefer a planning gate before code changes.
+- Do not perform Git write operations unless explicitly instructed by the user:
+  - no `git add`, `git commit`, `git branch`, `git switch`, `git checkout`, `git reset`, `git stash`, `git push`
+  - no PR creation, tag creation, or release creation
+- Never use `git add .`; stage precise paths only.
+- Keep changes cohesive enough for a version-sized PR.
+- Avoid broad, goal-less CSS sweeps.
+
+---
+
+## 3. Forbidden by Default
+
+| Area | Rule |
+|---|---|
+| Dependencies | No `npm install`, package changes, lockfile changes, or alternate package managers unless explicitly requested. |
+| shadcn-vue | Do not reinitialize shadcn-vue or run `npx shadcn-vue init`; existing primitives are already in place. |
+| UI primitives | Do not rewrite `frontend/src/components/ui/**` unless the task targets the design system. |
+| Backend/API | Do not change `backend/**`, schemas, API contracts, or parser/detector behavior unless scoped. |
+| Docker/config/samples | Do not change Docker, config, or samples unless scoped. |
+| Export/Markdown utilities | Do not change export/share/Markdown generation utilities unless explicitly scoped. |
+| i18n | `frontend/src/i18n.js` may be changed only when adding required bilingual UI copy; additive-only is preferred. |
+| Docs | Change docs only when requested. |
+| Skills/tools | Do not commit `.agents/`, `skills-lock.json`, impeccable/taste-skill local installation files, or one-off tool state. |
+
+---
+
+## 4. Validation Gates
+
+### 4.1 Standard Gate
 
 ```powershell
 cd D:\Program\prof\GithubProject\LogForenSight
-git status --short --branch
-git diff --name-only
+
 git diff --check
-```
 
-### 4.3 Test & Build Gate
-
-```powershell
-# Backend tests
-cd D:\Program\prof\GithubProject\LogForenSight\backend
+cd backend
 python -m pytest
 
-# Frontend tests
-cd D:\Program\prof\GithubProject\LogForenSight\frontend
+cd ..\frontend
 npm run test
 npm run build
 
-# Docker config validation
-cd D:\Program\prof\GithubProject\LogForenSight
+cd ..
 docker compose config
+git status --short --branch
 ```
 
-### 4.4 Dependency Sanity Check
+### 4.2 Forbidden Diff Gate
 
 ```powershell
-git grep -n "shadcn-vue@latest"
-git grep -n "shadcn@latest"
+git diff --name-only -- backend docker-compose.yml config samples frontend/src/utils frontend/src/composables frontend/package.json frontend/package-lock.json package.json package-lock.json README.md AGENTS.md CHANGELOG.md .github docs .agents skills-lock.json
 ```
 
-The first two should return **zero matches**. Additionally, verify that no alternate package manager lockfiles exist in the repository root or `frontend/` — both checks should return **False**.
+If `frontend/src/i18n.js` is intentionally changed, verify it is additive-only and bilingual.
+
+### 4.3 Current Release Baseline
+
+For `v2.42-local`:
+
+- Backend: 65 tests passed.
+- Frontend: 51 files / 368 tests passed.
+- Frontend build passed.
+- Docker Compose config valid.
+- Working tree clean at release.
 
 ---
 
-## 5. Release Process
+## 5. Release Workflow
 
-1. **Preconditions**: main is clean, local validation passes, GitHub CI is green, user has explicitly approved.
-2. **Tag preference**: use annotated tags (`git tag -a`) for new releases unless a lightweight tag pattern already exists.
-3. **Never delete or rewrite** already-pushed release tags without explicit user approval.
-4. **Release record** should include:
-   - Scope (what changed)
-   - Validation results (tests, build, grep checks)
-   - Excluded areas (what was intentionally skipped)
+1. Confirm `main...origin/main` is clean.
+2. Confirm target tag does not already exist.
+3. Run the full standard gate.
+4. Create a feature branch and PR for changes.
+5. Wait for GitHub checks to pass.
+6. Merge PR.
+7. Sync local `main`.
+8. Run release readiness gate again.
+9. Create an annotated tag:
 
----
+```powershell
+git tag -a vX.Y-local -m "vX.Y-local"
+git push origin vX.Y-local
+```
 
-## 6. Card Migration Lessons (v2.32 — v2.36)
+10. Create GitHub Release with scope, validation, and notes.
+11. Confirm:
 
-- The shadcn-vue **Card primitive is stable** and battle-tested across 20 components.
-- Card migration is **complete** for all core display/list/summary panels:
-  - SummaryCards, SeverityDistribution, ParseStatsCard, TopList
-  - FindingsList, IncidentsList, TimelineView, RuleCoverage
-  - ExecutiveSummary, FindingExplainability, InvestigationEntities
-  - AnalysisContextBar, ReviewReadinessPanel, RuleConfigPanel
-  - CaseClosureChecklist, CaseClosureEvidenceGaps, CaseClosureNextActions
-  - EvidencePackExportGuardrails, EvidencePackQualityScore, EvidencePackShareSafety
-- **Remaining components should NOT be force-migrated** to Card without a fresh Planning Gate.
-- Remaining workflow-heavy components (CaseNotesPanel, CaseWorkspace, TriagePanel, RuleTuningPanel) need **separate design themes** — they are form/editor components, not display cards.
-- MarkdownReport and EvidencePackExportPreview are **export-critical** — Card migration risks disrupting download/export UX.
-
----
-
-## 7. Future v2.37 Candidate Themes
-
-The following are **candidates only** — no theme has been selected yet. A Planning Gate must choose one before Phase 1 begins.
-
-| Theme | Scope | Risk |
-|---|---|---|
-| **Workflow Primitives** | CaseNotesPanel, CaseWorkspace, TriagePanel, RuleTuningPanel — shadcn Button/Input/Select/Textarea | Medium |
-| **Report & Export Polish** | MarkdownReport, EvidencePackExportPreview — preview UX, download flow refinement | High |
-| **Workspace Layout Polish** | WorkspaceShell, WorkspaceNav, LanguageToggle — layout/nav primitives | Low |
-| **Interaction Panels Polish** | ReportComparison, RecentAnalyses — selection/display UX | Low |
+```powershell
+git tag --points-at HEAD
+gh release view vX.Y-local --json tagName,name,isDraft,isPrerelease,url
+git status --short --branch
+```
 
 ---
 
-## 8. File Change Boundaries
+## 6. Frontend Change Guidance
 
-### Allowed for docs-only tasks
-- `AGENTS.md`
-- `docs/**`
+Allowed for scoped frontend UX/UI work:
 
-### Allowed for frontend component tasks (with Planning Gate)
-- `frontend/src/components/*.vue`
-- `frontend/src/__tests__/*.test.js`
-- `frontend/src/utils/*.js` (read-only reference unless scoped)
-
-### Requires explicit approval
 - `frontend/src/App.vue`
-- `frontend/src/components/ui/**`
-- `frontend/src/composables/**`
-- `frontend/src/i18n.js`
-- `backend/**`
-- `docker-compose.yml`
-- `package.json` / `package-lock.json`
+- `frontend/src/components/*.vue`
+- `frontend/src/styles/globals.css`
+- `frontend/src/__tests__/*.test.js`
+- `frontend/src/i18n.js` when adding required bilingual UI copy
+
+Preserve existing regression coverage:
+
+- `layoutRegression.test.js`
+- `uxRegression.test.js`
+- `smokeRegression.test.js`
+- component-specific tests for Evidence Pack, Markdown, Triage, Case Closure, Findings, Incidents, Timeline, Workspace, and i18n
+
+When polishing UI:
+
+- keep long evidence/report content inside bounded scroll containers
+- keep case-closure checklist, evidence gaps, and next actions as sibling sections
+- keep Evidence Pack copy/export/download actions visible but correctly disabled when unavailable
+- keep focus/disabled/aria behavior meaningful
+- do not hide important information just to reduce page height
 
 ---
 
-*Last updated: v2.37-local Phase 0 — Agent Workflow Guardrails*
+## 7. Documentation Guidance
+
+When docs are explicitly requested:
+
+- Update `README.md` current version, validation counts, and feature summary.
+- Update `CHANGELOG.md` and `docs/release_notes.md` with the latest release scope.
+- Update `docs/demo.md`, `docs/architecture.md`, `docs/portfolio.md`, and `docs/github_listing.md` if product positioning changed.
+- Keep docs truthful: do not claim screenshots, automation, or hosted services that are not present.
+
+---
+
+*Last updated for v2.42-local.*

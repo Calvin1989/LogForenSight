@@ -1,8 +1,68 @@
-# 版本演进 (Release Notes)
+# Release Notes
 
-本文档记录了 **LogForenSight** 从原型到成熟工具的演进过程。
+This file summarizes the release evolution of LogForenSight.
 
----
+## v2.42-local — Analysis Error/Loading States + Smoke Guards
+
+- Improved analysis loading and error states in the upload/workspace flow.
+- Added structured error callouts and compact loading status rows without layout jumps.
+- Kept Evidence Pack and Markdown report actions visible but disabled when data is unavailable.
+- Added compact failed/success status metadata for recent analyses.
+- Added smoke regression tests for loading/error states, unavailable export/report states, recent analysis status, and new i18n keys.
+
+Validation:
+
+- Backend: 65 passed
+- Frontend: 51 files / 368 tests passed
+- Frontend build: passed
+- Docker Compose config: valid
+
+Compatibility:
+
+- No backend/API contract changes.
+- No dependency, package, lockfile, Docker, docs, `.github`, `.agents`, or skills-lock changes in the release PR.
+- i18n changes are additive-only loading/error/unavailable UX keys.
+
+## v2.41-local — Frontend UX States and Accessibility
+
+- Polished analyze, copy, export, download, save, and disabled states.
+- Unified empty/data-insufficient states across workspace, triage, Evidence Pack, and report surfaces.
+- Improved accessibility with aria labels, disabled semantics, filter labels, and stable feedback targets.
+- Tightened responsive behavior for mobile/narrow layouts and long content containers.
+- Added UX regression tests for button states, empty states, accessibility hooks, and bounded preview/detail regions.
+
+Validation: backend 65 passed; frontend 50 files / 345 tests passed; build and Docker config passed.
+
+## v2.40-local — Frontend Visual System and Dashboard States
+
+- Added compact visual utilities, bounded scroll panels, empty states, loading blocks, and error callouts.
+- Refined Workspace, Overview, Investigation, Triage/Review, Evidence Pack, and Markdown report surfaces.
+- Improved responsive behavior across 1280px, 1024px, 768px, and mobile-sized layouts.
+- Added layout regression tests for dashboard and long-content structure.
+
+Validation: backend 65 passed; frontend 49 files / 321 tests passed; build and Docker config passed.
+
+## v2.39-local — Investigation Dashboard Layout Refinement
+
+- Refined the shadcn-vue frontend into a denser investigation-dashboard layout.
+- Improved overview, executive summary, severity distribution, investigation entities, triage/review, Evidence Pack, and Markdown report layouts.
+- Reduced vertical scrolling with dashboard grids, compact rows, bounded tables, and scroll-contained details.
+- Split case-closure checklist, evidence gaps, and next actions into sibling sections.
+
+Validation: backend 65 passed; frontend 48 files / 308 tests passed; build and Docker config passed.
+
+## v2.38-local — shadcn-vue Interface Migration
+
+- Migrated core frontend surfaces to official shadcn-vue primitives.
+- Added UI primitives for alerts, badges, buttons, checkboxes, inputs, selects, separators, tables, tabs, and textareas.
+- Preserved local-first analysis, backend API behavior, export behavior, and share-safety behavior.
+
+Validation: backend 65 passed; frontend 48 files / 307 tests passed; build and Docker config passed.
+
+## v2.37-local — Frontend Interaction Polish and Guardrails
+
+- Polished interaction panels and repository guardrails before the shadcn-vue migration phase.
+- Kept runtime behavior, backend, Docker, and package files stable.
 
 ## v2.17-local - Evidence Pack Share Safety Review
 

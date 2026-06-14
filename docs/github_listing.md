@@ -1,22 +1,14 @@
 # GitHub Listing Guidance
 
-本文件用于整理 **LogForenSight** 在 GitHub 仓库首页、个人 Profile、portfolio 页面和 release 附件中的推荐文案。
+This file provides recommended repository metadata for LogForenSight.
 
-## Repository Description
+---
 
-```text
-Local-first security log triage with IOC extraction, detection explainability, and analyst evidence pack export.
-```
+## Suggested Description
 
-## About / Topics
+Local-first security log triage workbench for deterministic detection, explainable findings, analyst review, and Markdown Evidence Pack export.
 
-### Suggested About Text
-
-```text
-Local-first security log triage with deterministic detection, IOC extraction, detection explainability, and analyst evidence pack export.
-```
-
-### Suggested Topics
+## Suggested Topics
 
 ```text
 security-tools
@@ -28,29 +20,52 @@ ioc-extraction
 detection-engineering
 fastapi
 vue
+vite
+shadcn-vue
 local-first
 ```
 
-## Short Project Intro
+---
 
-LogForenSight is a local-first security log analysis workbench built with FastAPI and Vue. It parses web access logs, runs deterministic detection, aggregates incidents, extracts investigation entities, explains each detection, and exports an analyst evidence pack without relying on external APIs or LLMs.
+## Short Project Summary
 
-## Portfolio / Profile Bullets
+LogForenSight is a local-first Web access log analysis tool. It parses Nginx / Apache logs, applies deterministic security rules, aggregates incidents, extracts investigation entities, explains findings, supports analyst triage and case notes, and exports Markdown Evidence Packs for handoff and review.
 
-- Built a local-first security log triage workflow for incident response, DFIR, and threat hunting scenarios.
-- Turned raw web access logs into findings, incidents, Investigation Entities, explainable detections, and exportable analyst evidence packs.
-- Kept the analysis path deterministic and privacy-friendly by avoiding external APIs, databases, and LLM dependencies.
-- Implemented a case workspace and triage workflow so analysis results can move from discovery to investigation handoff.
-- Packaged the project as a GitHub-ready FastAPI + Vue security tool with docs, demo flow, and release-oriented metadata guidance.
+---
+
+## Portfolio Bullets
+
+- Built a FastAPI + Vue 3 security analysis workbench with deterministic detection and local-first privacy boundaries.
+- Designed an analyst workflow covering findings, incidents, timeline, investigation entities, triage, case notes, review readiness, and Evidence Pack export.
+- Migrated the frontend to shadcn-vue primitives and refined the UI into a dashboard-oriented investigation cockpit.
+- Added UX polish for loading/error/unavailable states, accessibility, responsive layouts, bounded long content, and regression tests.
+- Maintained a strict release gate: backend tests, frontend tests, Vite build, Docker Compose config, whitespace checks, and clean git status.
+
+---
 
 ## Release Snapshot Naming
 
-```text
-LogForenSight-v2.7-local-<shortsha>.zip
-```
-
-## Suggested Release Summary
+Recommended archive naming:
 
 ```text
-Documentation and presentation polish release focused on GitHub discoverability, portfolio readiness, clearer README positioning, and repository listing guidance.
+LogForenSight-v2.42-local-<shortsha>.zip
 ```
+
+For the current release:
+
+```text
+LogForenSight-v2.42-local-dabaaa2.zip
+```
+
+---
+
+## Current Release Summary
+
+`v2.42-local` improves analysis loading and error states, keeps unavailable Evidence Pack / Markdown actions visible but disabled, adds recent-analysis status metadata, and expands smoke regression coverage.
+
+Validation snapshot:
+
+- Backend: 65 tests passed
+- Frontend: 51 files / 368 tests passed
+- Build: passed
+- Docker Compose config: valid
